@@ -57,7 +57,7 @@ namespace Google.GenAI.Tests {
 
     public override IAsyncEnumerable<ApiResponse> RequestStreamAsync(
         HttpMethod httpMethod, string path, string requestJson, HttpOptions? requestHttpOptions,
-        CancellationToken cancellationToken = default) {
+        [EnumeratorCancellation] CancellationToken cancellationToken = default) {
       return GetDummyAsyncEnumerable(cancellationToken);
     }
 
