@@ -170,7 +170,7 @@ namespace Google.GenAI
       }
 
       using (response)
-#if NETSTANDARD2_1
+#if NETSTANDARD2_0_OR_GREATER
       using (var stream = await response.Content.ReadAsStreamAsync())
 #else
       using (var stream = await response.Content.ReadAsStreamAsync(cancellationToken))

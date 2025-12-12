@@ -75,7 +75,7 @@ namespace Google.GenAI
     public virtual ValueTask DisposeAsync()
     {
         Dispose();
-#if NETSTANDARD2_1
+#if NETSTANDARD2_0_OR_GREATER
         return new ValueTask(Task.CompletedTask);
 #else
         return ValueTask.CompletedTask;

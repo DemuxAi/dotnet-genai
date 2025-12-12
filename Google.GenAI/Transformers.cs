@@ -74,7 +74,11 @@ namespace Google.GenAI
         }
         else if (model.Contains("/"))
         {
-          string[] parts = model.Split('/', 2);
+#if NETSTANDARD2_0
+          string[] parts = model.Split(new[] { '/' }, 2, StringSplitOptions.RemoveEmptyEntries);
+#else
+          string[] parts = model.Split('/', 2, StringSplitOptions.RemoveEmptyEntries);
+#endif
           return string.Format("publishers/{0}/models/{1}", parts[0], parts[1]);
         }
         else
@@ -527,7 +531,11 @@ namespace Google.GenAI
 
       if (name.StartsWith("https://"))
       {
+#if NET
         string suffix = name.Split("files/")[1];
+#else
+        string suffix = name.Split(new[] { "files/" }, StringSplitOptions.None)[1];
+#endif
         Match match = Regex.Match(suffix, "[a-z0-9]+");
         if (match.Success)
         {
@@ -540,7 +548,11 @@ namespace Google.GenAI
       }
       else if (name.StartsWith("files/"))
       {
+#if NET
         name = name.Split("files/")[1];
+#else
+        name = name.Split(new[] { "files/" }, StringSplitOptions.None)[1];
+#endif
       }
 
       return name;
