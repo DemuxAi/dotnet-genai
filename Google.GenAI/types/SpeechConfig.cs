@@ -42,8 +42,8 @@ namespace Google.GenAI.Types {
           }
 
     /// <summary>
-    /// Optional. The configuration for the multi-speaker setup. It is mutually exclusive with the
-    /// voice_config field. This field is not supported in Vertex AI.
+    /// The configuration for a multi-speaker text-to-speech request. This field is mutually
+    /// exclusive with `voice_config`.
     /// </summary>
     [JsonPropertyName("multiSpeakerVoiceConfig")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]

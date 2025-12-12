@@ -271,11 +271,8 @@ namespace Google.GenAI {
       }
 
       if (Common.GetValueByPath(fromObject, new string[] { "speechConfig" }) != null) {
-        Common.SetValueByPath(
-            toObject, new string[] { "speechConfig" },
-            SpeechConfigToVertex(JsonNode.Parse(JsonSerializer.Serialize(Common.GetValueByPath(
-                                     fromObject, new string[] { "speechConfig" }))),
-                                 toObject));
+        Common.SetValueByPath(toObject, new string[] { "speechConfig" },
+                              Common.GetValueByPath(fromObject, new string[] { "speechConfig" }));
       }
 
       if (Common.GetValueByPath(fromObject, new string[] { "stopSequences" }) != null) {
@@ -889,12 +886,10 @@ namespace Google.GenAI {
       }
 
       if (Common.GetValueByPath(fromObject, new string[] { "speechConfig" }) != null) {
-        Common.SetValueByPath(
-            parentObject, new string[] { "setup", "generationConfig", "speechConfig" },
-            SpeechConfigToVertex(
-                JsonNode.Parse(JsonSerializer.Serialize(Transformers.TLiveSpeechConfig(
-                    Common.GetValueByPath(fromObject, new string[] { "speechConfig" })))),
-                toObject));
+        Common.SetValueByPath(parentObject,
+                              new string[] { "setup", "generationConfig", "speechConfig" },
+                              Transformers.TLiveSpeechConfig(Common.GetValueByPath(
+                                  fromObject, new string[] { "speechConfig" })));
       }
 
       if (Common.GetValueByPath(fromObject, new string[] { "thinkingConfig" }) != null) {
@@ -1251,28 +1246,6 @@ namespace Google.GenAI {
 
       if (!Common.IsZero(Common.GetValueByPath(fromObject, new string[] { "transparent" }))) {
         throw new NotSupportedException("transparent parameter is not supported in Gemini API.");
-      }
-
-      return toObject;
-    }
-
-    internal JsonNode SpeechConfigToVertex(JsonNode fromObject, JsonObject parentObject) {
-      JsonObject toObject = new JsonObject();
-
-      if (Common.GetValueByPath(fromObject, new string[] { "voiceConfig" }) != null) {
-        Common.SetValueByPath(toObject, new string[] { "voiceConfig" },
-                              Common.GetValueByPath(fromObject, new string[] { "voiceConfig" }));
-      }
-
-      if (Common.GetValueByPath(fromObject, new string[] { "languageCode" }) != null) {
-        Common.SetValueByPath(toObject, new string[] { "languageCode" },
-                              Common.GetValueByPath(fromObject, new string[] { "languageCode" }));
-      }
-
-      if (!Common.IsZero(
-              Common.GetValueByPath(fromObject, new string[] { "multiSpeakerVoiceConfig" }))) {
-        throw new NotSupportedException(
-            "multiSpeakerVoiceConfig parameter is not supported in Vertex AI.");
       }
 
       return toObject;
