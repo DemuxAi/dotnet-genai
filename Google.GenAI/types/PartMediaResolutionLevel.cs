@@ -42,6 +42,11 @@ namespace Google.GenAI.Types {
     /// <summary>
     /// Media resolution set to high.
     /// </summary>
-    [JsonPropertyName("MEDIA_RESOLUTION_HIGH")] MEDIA_RESOLUTION_HIGH
+    [JsonPropertyName("MEDIA_RESOLUTION_HIGH")] MEDIA_RESOLUTION_HIGH,
+
+    /// <summary>
+    /// Media resolution set to ultra high.
+    /// </summary>
+    [JsonPropertyName("MEDIA_RESOLUTION_ULTRA_HIGH")] MEDIA_RESOLUTION_ULTRA_HIGH
   }
 }
