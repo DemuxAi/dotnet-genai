@@ -2545,6 +2545,11 @@ namespace Google.GenAI {
                               Common.GetValueByPath(fromObject, new string[] { "imageSize" }));
       }
 
+      if (!Common.IsZero(Common.GetValueByPath(fromObject, new string[] { "personGeneration" }))) {
+        throw new NotSupportedException(
+            "personGeneration parameter is not supported in Gemini API.");
+      }
+
       if (!Common.IsZero(Common.GetValueByPath(fromObject, new string[] { "outputMimeType" }))) {
         throw new NotSupportedException("outputMimeType parameter is not supported in Gemini API.");
       }
@@ -2569,6 +2574,12 @@ namespace Google.GenAI {
       if (Common.GetValueByPath(fromObject, new string[] { "imageSize" }) != null) {
         Common.SetValueByPath(toObject, new string[] { "imageSize" },
                               Common.GetValueByPath(fromObject, new string[] { "imageSize" }));
+      }
+
+      if (Common.GetValueByPath(fromObject, new string[] { "personGeneration" }) != null) {
+        Common.SetValueByPath(
+            toObject, new string[] { "personGeneration" },
+            Common.GetValueByPath(fromObject, new string[] { "personGeneration" }));
       }
 
       if (Common.GetValueByPath(fromObject, new string[] { "outputMimeType" }) != null) {

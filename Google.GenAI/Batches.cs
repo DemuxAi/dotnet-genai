@@ -1186,6 +1186,11 @@ namespace Google.GenAI {
                               Common.GetValueByPath(fromObject, new string[] { "imageSize" }));
       }
 
+      if (!Common.IsZero(Common.GetValueByPath(fromObject, new string[] { "personGeneration" }))) {
+        throw new NotSupportedException(
+            "personGeneration parameter is not supported in Gemini API.");
+      }
+
       if (!Common.IsZero(Common.GetValueByPath(fromObject, new string[] { "outputMimeType" }))) {
         throw new NotSupportedException("outputMimeType parameter is not supported in Gemini API.");
       }

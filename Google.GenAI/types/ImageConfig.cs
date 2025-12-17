@@ -47,6 +47,16 @@ namespace Google.GenAI.Types {
           }
 
     /// <summary>
+    /// Controls the generation of people. Supported values are: ALLOW_ALL, ALLOW_ADULT, ALLOW_NONE.
+    /// </summary>
+    [JsonPropertyName("personGeneration")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public string
+        ? PersonGeneration {
+            get; set;
+          }
+
+    /// <summary>
     /// MIME type of the generated image. This field is not supported in Gemini API.
     /// </summary>
     [JsonPropertyName("outputMimeType")]
