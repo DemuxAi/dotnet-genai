@@ -28,19 +28,19 @@ namespace Google.GenAI.Types {
 
   public record ToolConfig {
     /// <summary>
-    /// Optional. Function calling config.
-    /// </summary>
-    [JsonPropertyName("functionCallingConfig")]
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public FunctionCallingConfig ? FunctionCallingConfig { get; set; }
-
-    /// <summary>
     /// Optional. Retrieval config.
     /// </summary>
     [JsonPropertyName("retrievalConfig")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public RetrievalConfig
-        ? RetrievalConfig {
+    public RetrievalConfig ? RetrievalConfig { get; set; }
+
+    /// <summary>
+    /// Optional. Function calling config.
+    /// </summary>
+    [JsonPropertyName("functionCallingConfig")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public FunctionCallingConfig
+        ? FunctionCallingConfig {
             get; set;
           }
 

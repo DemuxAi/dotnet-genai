@@ -854,15 +854,15 @@ namespace Google.GenAI {
     internal JsonNode FunctionCallingConfigToMldev(JsonNode fromObject, JsonObject parentObject) {
       JsonObject toObject = new JsonObject();
 
-      if (Common.GetValueByPath(fromObject, new string[] { "mode" }) != null) {
-        Common.SetValueByPath(toObject, new string[] { "mode" },
-                              Common.GetValueByPath(fromObject, new string[] { "mode" }));
-      }
-
       if (Common.GetValueByPath(fromObject, new string[] { "allowedFunctionNames" }) != null) {
         Common.SetValueByPath(
             toObject, new string[] { "allowedFunctionNames" },
             Common.GetValueByPath(fromObject, new string[] { "allowedFunctionNames" }));
+      }
+
+      if (Common.GetValueByPath(fromObject, new string[] { "mode" }) != null) {
+        Common.SetValueByPath(toObject, new string[] { "mode" },
+                              Common.GetValueByPath(fromObject, new string[] { "mode" }));
       }
 
       if (!Common.IsZero(
@@ -876,10 +876,6 @@ namespace Google.GenAI {
 
     internal JsonNode FunctionDeclarationToVertex(JsonNode fromObject, JsonObject parentObject) {
       JsonObject toObject = new JsonObject();
-
-      if (!Common.IsZero(Common.GetValueByPath(fromObject, new string[] { "behavior" }))) {
-        throw new NotSupportedException("behavior parameter is not supported in Vertex AI.");
-      }
 
       if (Common.GetValueByPath(fromObject, new string[] { "description" }) != null) {
         Common.SetValueByPath(toObject, new string[] { "description" },
@@ -911,6 +907,10 @@ namespace Google.GenAI {
         Common.SetValueByPath(
             toObject, new string[] { "responseJsonSchema" },
             Common.GetValueByPath(fromObject, new string[] { "responseJsonSchema" }));
+      }
+
+      if (!Common.IsZero(Common.GetValueByPath(fromObject, new string[] { "behavior" }))) {
+        throw new NotSupportedException("behavior parameter is not supported in Vertex AI.");
       }
 
       return toObject;
@@ -3461,6 +3461,12 @@ namespace Google.GenAI {
     internal JsonNode ToolConfigToMldev(JsonNode fromObject, JsonObject parentObject) {
       JsonObject toObject = new JsonObject();
 
+      if (Common.GetValueByPath(fromObject, new string[] { "retrievalConfig" }) != null) {
+        Common.SetValueByPath(
+            toObject, new string[] { "retrievalConfig" },
+            Common.GetValueByPath(fromObject, new string[] { "retrievalConfig" }));
+      }
+
       if (Common.GetValueByPath(fromObject, new string[] { "functionCallingConfig" }) != null) {
         Common.SetValueByPath(toObject, new string[] { "functionCallingConfig" },
                               FunctionCallingConfigToMldev(
@@ -3469,32 +3475,14 @@ namespace Google.GenAI {
                                   toObject));
       }
 
-      if (Common.GetValueByPath(fromObject, new string[] { "retrievalConfig" }) != null) {
-        Common.SetValueByPath(
-            toObject, new string[] { "retrievalConfig" },
-            Common.GetValueByPath(fromObject, new string[] { "retrievalConfig" }));
-      }
-
       return toObject;
     }
 
     internal JsonNode ToolToMldev(JsonNode fromObject, JsonObject parentObject) {
       JsonObject toObject = new JsonObject();
 
-      if (Common.GetValueByPath(fromObject, new string[] { "functionDeclarations" }) != null) {
-        Common.SetValueByPath(
-            toObject, new string[] { "functionDeclarations" },
-            Common.GetValueByPath(fromObject, new string[] { "functionDeclarations" }));
-      }
-
       if (!Common.IsZero(Common.GetValueByPath(fromObject, new string[] { "retrieval" }))) {
         throw new NotSupportedException("retrieval parameter is not supported in Gemini API.");
-      }
-
-      if (Common.GetValueByPath(fromObject, new string[] { "googleSearchRetrieval" }) != null) {
-        Common.SetValueByPath(
-            toObject, new string[] { "googleSearchRetrieval" },
-            Common.GetValueByPath(fromObject, new string[] { "googleSearchRetrieval" }));
       }
 
       if (Common.GetValueByPath(fromObject, new string[] { "computerUse" }) != null) {
@@ -3513,6 +3501,12 @@ namespace Google.GenAI {
             "enterpriseWebSearch parameter is not supported in Gemini API.");
       }
 
+      if (Common.GetValueByPath(fromObject, new string[] { "functionDeclarations" }) != null) {
+        Common.SetValueByPath(
+            toObject, new string[] { "functionDeclarations" },
+            Common.GetValueByPath(fromObject, new string[] { "functionDeclarations" }));
+      }
+
       if (Common.GetValueByPath(fromObject, new string[] { "googleMaps" }) != null) {
         Common.SetValueByPath(
             toObject, new string[] { "googleMaps" },
@@ -3529,6 +3523,12 @@ namespace Google.GenAI {
                                 toObject));
       }
 
+      if (Common.GetValueByPath(fromObject, new string[] { "googleSearchRetrieval" }) != null) {
+        Common.SetValueByPath(
+            toObject, new string[] { "googleSearchRetrieval" },
+            Common.GetValueByPath(fromObject, new string[] { "googleSearchRetrieval" }));
+      }
+
       if (Common.GetValueByPath(fromObject, new string[] { "urlContext" }) != null) {
         Common.SetValueByPath(toObject, new string[] { "urlContext" },
                               Common.GetValueByPath(fromObject, new string[] { "urlContext" }));
@@ -3540,27 +3540,9 @@ namespace Google.GenAI {
     internal JsonNode ToolToVertex(JsonNode fromObject, JsonObject parentObject) {
       JsonObject toObject = new JsonObject();
 
-      if (Common.GetValueByPath(fromObject, new string[] { "functionDeclarations" }) != null) {
-        JsonArray keyArray =
-            (JsonArray)Common.GetValueByPath(fromObject, new string[] { "functionDeclarations" });
-        JsonArray result = new JsonArray();
-
-        foreach (var record in keyArray) {
-          result.Add(FunctionDeclarationToVertex(JsonNode.Parse(JsonSerializer.Serialize(record)),
-                                                 toObject));
-        }
-        Common.SetValueByPath(toObject, new string[] { "functionDeclarations" }, result);
-      }
-
       if (Common.GetValueByPath(fromObject, new string[] { "retrieval" }) != null) {
         Common.SetValueByPath(toObject, new string[] { "retrieval" },
                               Common.GetValueByPath(fromObject, new string[] { "retrieval" }));
-      }
-
-      if (Common.GetValueByPath(fromObject, new string[] { "googleSearchRetrieval" }) != null) {
-        Common.SetValueByPath(
-            toObject, new string[] { "googleSearchRetrieval" },
-            Common.GetValueByPath(fromObject, new string[] { "googleSearchRetrieval" }));
       }
 
       if (Common.GetValueByPath(fromObject, new string[] { "computerUse" }) != null) {
@@ -3579,6 +3561,18 @@ namespace Google.GenAI {
             Common.GetValueByPath(fromObject, new string[] { "enterpriseWebSearch" }));
       }
 
+      if (Common.GetValueByPath(fromObject, new string[] { "functionDeclarations" }) != null) {
+        JsonArray keyArray =
+            (JsonArray)Common.GetValueByPath(fromObject, new string[] { "functionDeclarations" });
+        JsonArray result = new JsonArray();
+
+        foreach (var record in keyArray) {
+          result.Add(FunctionDeclarationToVertex(JsonNode.Parse(JsonSerializer.Serialize(record)),
+                                                 toObject));
+        }
+        Common.SetValueByPath(toObject, new string[] { "functionDeclarations" }, result);
+      }
+
       if (Common.GetValueByPath(fromObject, new string[] { "googleMaps" }) != null) {
         Common.SetValueByPath(toObject, new string[] { "googleMaps" },
                               Common.GetValueByPath(fromObject, new string[] { "googleMaps" }));
@@ -3587,6 +3581,12 @@ namespace Google.GenAI {
       if (Common.GetValueByPath(fromObject, new string[] { "googleSearch" }) != null) {
         Common.SetValueByPath(toObject, new string[] { "googleSearch" },
                               Common.GetValueByPath(fromObject, new string[] { "googleSearch" }));
+      }
+
+      if (Common.GetValueByPath(fromObject, new string[] { "googleSearchRetrieval" }) != null) {
+        Common.SetValueByPath(
+            toObject, new string[] { "googleSearchRetrieval" },
+            Common.GetValueByPath(fromObject, new string[] { "googleSearchRetrieval" }));
       }
 
       if (Common.GetValueByPath(fromObject, new string[] { "urlContext" }) != null) {

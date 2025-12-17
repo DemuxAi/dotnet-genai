@@ -28,20 +28,20 @@ namespace Google.GenAI.Types {
 
   public record DynamicRetrievalConfig {
     /// <summary>
-    /// The mode of the predictor to be used in dynamic retrieval.
-    /// </summary>
-    [JsonPropertyName("mode")]
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public DynamicRetrievalConfigMode ? Mode { get; set; }
-
-    /// <summary>
     /// Optional. The threshold to be used in dynamic retrieval. If not set, a system default value
     /// is used.
     /// </summary>
     [JsonPropertyName("dynamicThreshold")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public double
-        ? DynamicThreshold {
+    public double ? DynamicThreshold { get; set; }
+
+    /// <summary>
+    /// The mode of the predictor to be used in dynamic retrieval.
+    /// </summary>
+    [JsonPropertyName("mode")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public DynamicRetrievalConfigMode
+        ? Mode {
             get; set;
           }
 

@@ -23,28 +23,21 @@ using Google.GenAI.Serialization;
 
 namespace Google.GenAI.Types {
   /// <summary>
-  /// Defines a function that the model can generate JSON inputs for.  The inputs are based on
-  /// OpenAPI 3.0 specifications (https://spec.openapis.org/oas/v3.0.3).
+  /// Structured representation of a function declaration as defined by the OpenAPI 3.0
+  /// specification (https://spec.openapis.org/oas/v3.0.3). Included in this declaration are the
+  /// function name, description, parameters and response type. This FunctionDeclaration is a
+  /// representation of a block of code that can be used as a `Tool` by the model and executed by
+  /// the client.
   /// </summary>
 
   public record FunctionDeclaration {
-    /// <summary>
-    /// Defines the function behavior.
-    /// </summary>
-    [JsonPropertyName("behavior")]
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public Behavior ? Behavior { get; set; }
-
     /// <summary>
     /// Optional. Description and purpose of the function. Model uses it to decide how and whether
     /// to call the function.
     /// </summary>
     [JsonPropertyName("description")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public string
-        ? Description {
-            get; set;
-          }
+    public string ? Description { get; set; }
 
     /// <summary>
     /// The name of the function to call. Must start with a letter or an underscore. Must be a-z,
@@ -108,6 +101,17 @@ namespace Google.GenAI.Types {
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public object
         ? ResponseJsonSchema {
+            get; set;
+          }
+
+    /// <summary>
+    /// Optional. Specifies the function Behavior. Currently only supported by the
+    /// BidiGenerateContent method. This field is not supported in Vertex AI.
+    /// </summary>
+    [JsonPropertyName("behavior")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public Behavior
+        ? Behavior {
             get; set;
           }
 

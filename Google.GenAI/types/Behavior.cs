@@ -20,7 +20,8 @@ using System.Text.Json.Serialization;
 
 namespace Google.GenAI.Types {
   /// <summary>
-  /// Defines the function behavior. Defaults to `BLOCKING`.
+  /// Specifies the function Behavior. Currently only supported by the BidiGenerateContent method.
+  /// This enum is not supported in Vertex AI.
   /// </summary>
   [JsonConverter(typeof(JsonStringEnumConverter))]
   public enum Behavior {

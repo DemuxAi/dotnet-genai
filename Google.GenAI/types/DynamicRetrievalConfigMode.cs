@@ -20,7 +20,7 @@ using System.Text.Json.Serialization;
 
 namespace Google.GenAI.Types {
   /// <summary>
-  /// Config for the dynamic retrieval config mode.
+  /// The mode of the predictor to be used in dynamic retrieval.
   /// </summary>
   [JsonConverter(typeof(JsonStringEnumConverter))]
   public enum DynamicRetrievalConfigMode {

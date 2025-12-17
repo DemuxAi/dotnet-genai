@@ -28,33 +28,13 @@ namespace Google.GenAI.Types {
 
   public record Tool {
     /// <summary>
-    /// List of function declarations that the tool supports.
-    /// </summary>
-    [JsonPropertyName("functionDeclarations")]
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public List<FunctionDeclaration> ? FunctionDeclarations { get; set; }
-
-    /// <summary>
     /// Optional. Retrieval tool type. System will always execute the provided retrieval tool(s) to
     /// get external knowledge to answer the prompt. Retrieval results are presented to the model
     /// for generation. This field is not supported in Gemini API.
     /// </summary>
     [JsonPropertyName("retrieval")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public Retrieval
-        ? Retrieval {
-            get; set;
-          }
-
-    /// <summary>
-    /// Optional. Specialized retrieval tool that is powered by Google Search.
-    /// </summary>
-    [JsonPropertyName("googleSearchRetrieval")]
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public GoogleSearchRetrieval
-        ? GoogleSearchRetrieval {
-            get; set;
-          }
+    public Retrieval ? Retrieval { get; set; }
 
     /// <summary>
     /// Optional. Tool to support the model interacting directly with the computer. If enabled, it
@@ -89,6 +69,20 @@ namespace Google.GenAI.Types {
           }
 
     /// <summary>
+    /// Optional. Function tool type. One or more function declarations to be passed to the model
+    /// along with the current user query. Model may decide to call a subset of these functions by
+    /// populating FunctionCall in the response. User should provide a FunctionResponse for each
+    /// function call in the next turn. Based on the function responses, Model will generate the
+    /// final response back to the user. Maximum 512 function declarations can be provided.
+    /// </summary>
+    [JsonPropertyName("functionDeclarations")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public List<FunctionDeclaration>
+        ? FunctionDeclarations {
+            get; set;
+          }
+
+    /// <summary>
     /// Optional. GoogleMaps tool type. Tool to support Google Maps in Model.
     /// </summary>
     [JsonPropertyName("googleMaps")]
@@ -105,6 +99,16 @@ namespace Google.GenAI.Types {
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public GoogleSearch
         ? GoogleSearch {
+            get; set;
+          }
+
+    /// <summary>
+    /// Optional. Specialized retrieval tool that is powered by Google Search.
+    /// </summary>
+    [JsonPropertyName("googleSearchRetrieval")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public GoogleSearchRetrieval
+        ? GoogleSearchRetrieval {
             get; set;
           }
 

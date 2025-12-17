@@ -28,21 +28,21 @@ namespace Google.GenAI.Types {
 
   public record FunctionCallingConfig {
     /// <summary>
-    /// Optional. Function calling mode.
-    /// </summary>
-    [JsonPropertyName("mode")]
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public FunctionCallingConfigMode ? Mode { get; set; }
-
-    /// <summary>
     /// Optional. Function names to call. Only set when the Mode is ANY. Function names should match
     /// [FunctionDeclaration.name]. With mode set to ANY, model will predict a function call from
     /// the set of function names provided.
     /// </summary>
     [JsonPropertyName("allowedFunctionNames")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public List<string>
-        ? AllowedFunctionNames {
+    public List<string> ? AllowedFunctionNames { get; set; }
+
+    /// <summary>
+    /// Optional. Function calling mode.
+    /// </summary>
+    [JsonPropertyName("mode")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public FunctionCallingConfigMode
+        ? Mode {
             get; set;
           }
 

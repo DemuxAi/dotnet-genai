@@ -20,12 +20,12 @@ using System.Text.Json.Serialization;
 
 namespace Google.GenAI.Types {
   /// <summary>
-  /// Config for the function calling config mode.
+  /// Function calling mode.
   /// </summary>
   [JsonConverter(typeof(JsonStringEnumConverter))]
   public enum FunctionCallingConfigMode {
     /// <summary>
-    /// The function calling config mode is unspecified. Should not be used.
+    /// Unspecified function calling mode. This value should not be used.
     /// </summary>
     [JsonPropertyName("MODE_UNSPECIFIED")] MODE_UNSPECIFIED,
 
@@ -50,10 +50,10 @@ namespace Google.GenAI.Types {
     [JsonPropertyName("NONE")] NONE,
 
     /// <summary>
-    /// Model decides to predict either a function call or a natural language response, but will
-    /// validate function calls with constrained decoding. If "allowed_function_names" are set, the
-    /// predicted function call will be limited to any one of "allowed_function_names", else the
-    /// predicted function call will be any one of the provided "function_declarations".
+    /// Model is constrained to predict either function calls or natural language response. If
+    /// "allowed_function_names" are set, the predicted function calls will be limited to any one of
+    /// "allowed_function_names", else the predicted function calls will be any one of the provided
+    /// "function_declarations".
     /// </summary>
     [JsonPropertyName("VALIDATED")] VALIDATED
   }
