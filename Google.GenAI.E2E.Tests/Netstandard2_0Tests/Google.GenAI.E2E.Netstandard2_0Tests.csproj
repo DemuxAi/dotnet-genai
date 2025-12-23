@@ -24,13 +24,14 @@
     <PackageReference Include="System.Text.Json" />
     <PackageReference Include="TestServerSdk" />
     <ProjectReference Include="..\..\Google.GenAI\Google.GenAI.csproj">
-      <SetTargetFramework>TargetFramework=netstandard2.1</SetTargetFramework>
+      <SetTargetFramework>TargetFramework=netstandard2.0</SetTargetFramework>
     </ProjectReference>
     <PackageReference Include="Microsoft.NET.Test.Sdk" />
     <PackageReference Include="MSTest.TestFramework" />
     <PackageReference Include="MSTest.TestAdapter" />
     <PackageReference Include="Moq" />
     <PackageReference Include="Microsoft.Testing.Extensions.CodeCoverage" />
+    <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" />
   </ItemGroup>
 
   <!-- Add None ItemGroup to make sure files are tracked by MSBuild -->
@@ -54,6 +55,11 @@
     </ItemGroup>
     <Copy SourceFiles="@(RecordingFiles)" DestinationFolder="$(OutputPath)/../../Recordings/%(RecursiveDir)" />
     <Copy SourceFiles="@(TestAssetFiles)" DestinationFolder="$(OutputPath)/TestAssets/%(RecursiveDir)" />
+  </Target>
+
+  <!-- Cleanup Recordings folder after tests complete -->
+  <Target Name="CleanupRecordings" AfterTargets="VSTest">
+    <RemoveDir Directories="$(ProjectDir)Recordings" Condition="Exists('$(ProjectDir)Recordings')" />
   </Target>
 
 </Project>

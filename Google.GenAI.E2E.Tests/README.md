@@ -44,7 +44,8 @@ Record mode allows you to record request and response payload for new tests or
 update request response payload for existing tests.
 
 1. `export TEST_MODE=record`
-2. `dotnet test --settings test.runsettings`
+2. `dotnet test --settings test.runsettings` for tests against `net8.0` target
+3. `dotnet test --settings test.runsettings ./Netstandard2_0/Google.GenAI.Netstandard2_0Tests.csproj` for tests against `netstandard2.0` target
 
 ## How to run test in replay mode
 Replay mode assumes all the test cases have run through the record mode, so that

@@ -1096,7 +1096,7 @@ namespace Google.GenAI {
       HttpOptions? requestHttpOptions = config?.HttpOptions;
 
       ApiResponse response = await this._apiClient.RequestAsync(
-          HttpMethod.Patch, path, JsonSerializer.Serialize(body), requestHttpOptions);
+          new HttpMethod("PATCH"), path, JsonSerializer.Serialize(body), requestHttpOptions);
       HttpContent httpContent = response.GetEntity();
       string contentString = await httpContent.ReadAsStringAsync();
       JsonNode? httpContentNode = JsonNode.Parse(contentString);
