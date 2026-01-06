@@ -72,7 +72,7 @@ public class EditImageTest {
         new Client(apiKey: apiKey, vertexAI: false, httpOptions: geminiClientHttpOptions);
 
     // Specific setup for this test class
-    generateModelName = "imagen-3.0-generate-001";
+    generateModelName = "imagen-4.0-generate-001";
     capabilityModelName = "imagen-3.0-capability-002";
   }
 

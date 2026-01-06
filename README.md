@@ -281,7 +281,7 @@ public class GenerateImagesSimple {
       OutputMimeType = "image/jpeg",
     };
     var response = await client.Models.GenerateImagesAsync(
-      model: "imagen-3.0-generate-002",
+      model: "imagen-4.0-generate-001",
       prompt: "Red skateboard",
       config: generateImagesConfig
     );

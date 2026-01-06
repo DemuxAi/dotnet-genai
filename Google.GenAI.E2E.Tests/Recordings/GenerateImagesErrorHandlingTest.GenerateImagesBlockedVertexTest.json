@@ -4,8 +4,8 @@
     {
       "request": {
         "method": "POST",
-        "url": "/v1beta1/projects/REDACTED/locations/us-central1/publishers/google/models/imagen-3.0-generate-002:predict",
-        "request": "POST /v1beta1/projects/REDACTED/locations/us-central1/publishers/google/models/imagen-3.0-generate-002:predict HTTP/1.1",
+        "url": "/v1beta1/projects/REDACTED/locations/us-central1/publishers/google/models/imagen-4.0-generate-001:predict",
+        "request": "POST /v1beta1/projects/REDACTED/locations/us-central1/publishers/google/models/imagen-4.0-generate-001:predict HTTP/1.1",
         "headers": {
           "Content-Length": "101",
           "Content-Type": "application/json; charset=utf-8",
@@ -29,12 +29,12 @@
         "port": 443,
         "protocol": "https"
       },
-      "shaSum": "e61a4f1df20aeac1e082eb59f4833d8dc85e60ff2b2ddc761a61c075c98d8a32",
+      "shaSum": "45e115fbb663002c53e733e1c65f0f916e4e9439d60018f49a73cbdf39b9c3f1",
       "response": {
         "statusCode": 200,
         "headers": {
           "Content-Type": "application/json; charset=UTF-8",
-          "Date": "Wed, 10 Sep 2025 23:19:07 GMT",
+          "Date": "Mon, 05 Jan 2026 19:37:12 GMT",
           "Server": "scaffolding on HTTPServer2",
           "Vary": "Origin, X-Origin, Referer",
           "X-Content-Type-Options": "nosniff",

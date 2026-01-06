@@ -31,7 +31,8 @@ public class UpscaleImageErrorHandlingTest {
   private static TestServerProcess? _server;
   private Client vertexClient;
   private Client geminiClient;
-  private string modelName;
+  private string generateModelName;
+  private string upscaleModelName;
   public TestContext TestContext { get; set; }
 
   [ClassInitialize]
@@ -70,14 +71,15 @@ public class UpscaleImageErrorHandlingTest {
         new Client(apiKey: apiKey, vertexAI: false, httpOptions: geminiClientHttpOptions);
 
     // Specific setup for this test class
-    modelName = "imagen-3.0-generate-002";
+    generateModelName = "imagen-4.0-generate-001";
+    upscaleModelName = "imagen-4.0-upscale-preview";
   }
 
   [TestMethod]
   public async Task UpscaleImageWrongModelNameVertexTest() {
     // Generate an image first.
     var vertexResponse = await vertexClient.Models.GenerateImagesAsync(
-        model: modelName, prompt: "Red skateboard", config: null);
+        model: generateModelName, prompt: "Red skateboard", config: null);
 
     Assert.IsNotNull(vertexResponse.GeneratedImages);
     Assert.IsNotNull(vertexResponse.GeneratedImages.First().Image.ImageBytes);
@@ -98,7 +100,7 @@ public class UpscaleImageErrorHandlingTest {
   public async Task UpscaleImageNotSupportedGeminiTest() {
     // Generate an image first.
     var geminiResponse = await geminiClient.Models.GenerateImagesAsync(
-        model: modelName, prompt: "Red skateboard", config: null);
+        model: generateModelName, prompt: "Red skateboard", config: null);
 
     Assert.IsNotNull(geminiResponse.GeneratedImages);
     Assert.IsNotNull(geminiResponse.GeneratedImages.First().Image.ImageBytes);
@@ -106,7 +108,7 @@ public class UpscaleImageErrorHandlingTest {
     // Upscale the image.
     var ex = await Assert.ThrowsExceptionAsync<NotSupportedException>(async () => {
       await geminiClient.Models.UpscaleImageAsync(
-          model: modelName, image: geminiResponse.GeneratedImages.First().Image,
+          model: upscaleModelName, image: geminiResponse.GeneratedImages.First().Image,
           upscaleFactor: "x2", config: null);
     });
 

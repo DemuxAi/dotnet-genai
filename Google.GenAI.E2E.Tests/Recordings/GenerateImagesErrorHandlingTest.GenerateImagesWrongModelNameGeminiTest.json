@@ -30,9 +30,9 @@
         "statusCode": 404,
         "headers": {
           "Content-Type": "application/json; charset=UTF-8",
-          "Date": "Wed, 10 Sep 2025 23:18:59 GMT",
+          "Date": "Mon, 05 Jan 2026 19:37:05 GMT",
           "Server": "scaffolding on HTTPServer2",
-          "Server-Timing": "gfet4t7; dur=245",
+          "Server-Timing": "gfet4t7; dur=57",
           "Vary": "Origin, X-Origin, Referer",
           "X-Content-Type-Options": "nosniff",
           "X-Frame-Options": "SAMEORIGIN",
@@ -45,7 +45,7 @@
               "details": [
                 {
                   "@type": "type.googleapis.com/google.rpc.DebugInfo",
-                  "detail": "[ORIGINAL ERROR] generic::not_found: models/wrong-model-name is not found for API version v1beta, or is not supported for predict. Call ListModels to see the list of available models and their supported methods. [google.rpc.error_details_ext] { message: \"models/wrong-model-name is not found for API version v1beta, or is not supported for predict. Call ListModels to see the list of available models and their supported methods.\" }"
+                  "detail": "[ORIGINAL ERROR] generic::not_found: models/wrong-model-name is not found for API version v1beta, or is not supported for predict. Call ListModels to see the list of available models and their supported methods. [google.rpc.error_details_ext] { message: \"models/wrong-model-name is not found for API version v1beta, or is not supported for predict. Call ListModels to see the list of available models and their supported methods.\" details { type_url: \"type.googleapis.com/language_labs.genai.debug.GeminiApiDebugInfo\" value: \":*\\n\\027models/wrong-model-name\\022\\006v1beta\\032\\007predict\" } }"
                 }
               ],
               "message": "models/wrong-model-name is not found for API version v1beta, or is not supported for predict. Call ListModels to see the list of available models and their supported methods.",

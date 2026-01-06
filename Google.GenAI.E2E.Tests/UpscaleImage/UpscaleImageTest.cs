@@ -31,7 +31,8 @@ public class UpscaleImageTest {
   private static TestServerProcess? _server;
   private Client vertexClient;
   private Client geminiClient;
-  private string modelName;
+  private string generateModelName;
+  private string upscaleModelName;
   public TestContext TestContext { get; set; }
 
   [ClassInitialize]
@@ -71,21 +72,22 @@ public class UpscaleImageTest {
         new Client(apiKey: apiKey, vertexAI: false, httpOptions: geminiClientHttpOptions);
 
     // Specific setup for this test class
-    modelName = "imagen-3.0-generate-002";
+    generateModelName = "imagen-4.0-generate-001";
+    upscaleModelName = "imagen-4.0-upscale-preview";
   }
 
   [TestMethod]
   public async Task UpscaleImageSimpleVertexTest() {
     // Generate an image first.
     var vertexResponse = await vertexClient.Models.GenerateImagesAsync(
-        model: modelName, prompt: "Red skateboard", config: null);
+        model: generateModelName, prompt: "Red skateboard", config: null);
 
     Assert.IsNotNull(vertexResponse.GeneratedImages);
     Assert.IsNotNull(vertexResponse.GeneratedImages.First().Image.ImageBytes);
 
     // Upscale the image.
     var upscaleImageResponse = await vertexClient.Models.UpscaleImageAsync(
-        model: modelName, image: vertexResponse.GeneratedImages.First().Image, upscaleFactor: "x2",
+        model: upscaleModelName, image: vertexResponse.GeneratedImages.First().Image, upscaleFactor: "x2",
         config: null);
 
     Assert.IsNotNull(upscaleImageResponse.GeneratedImages);
@@ -96,7 +98,7 @@ public class UpscaleImageTest {
   public async Task UpscaleImageAllConfigParamsVertexTest() {
     // Generate an image first.
     var vertexResponse = await vertexClient.Models.GenerateImagesAsync(
-        model: modelName, prompt: "Red skateboard", config: new GenerateImagesConfig {
+        model: generateModelName, prompt: "Red skateboard", config: new GenerateImagesConfig {
           NumberOfImages = 1,
         });
 
@@ -110,7 +112,7 @@ public class UpscaleImageTest {
       Labels = new Dictionary<string, string> { ["imagen_label_key"] = "upscale_image" },
     };
     var upscaleImageResponse = await vertexClient.Models.UpscaleImageAsync(
-        model: modelName, image: vertexResponse.GeneratedImages.First().Image, upscaleFactor: "x2",
+        model: upscaleModelName, image: vertexResponse.GeneratedImages.First().Image, upscaleFactor: "x2",
         config: upscaleImageConfig);
 
     Assert.IsNotNull(upscaleImageResponse.GeneratedImages);

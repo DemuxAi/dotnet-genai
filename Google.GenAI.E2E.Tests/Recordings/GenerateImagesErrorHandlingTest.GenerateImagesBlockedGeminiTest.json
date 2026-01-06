@@ -4,8 +4,8 @@
     {
       "request": {
         "method": "POST",
-        "url": "/v1beta/models/imagen-3.0-generate-002:predict",
-        "request": "POST /v1beta/models/imagen-3.0-generate-002:predict HTTP/1.1",
+        "url": "/v1beta/models/imagen-4.0-generate-001:predict",
+        "request": "POST /v1beta/models/imagen-4.0-generate-001:predict HTTP/1.1",
         "headers": {
           "Content-Length": "101",
           "Content-Type": "application/json; charset=utf-8",
@@ -29,14 +29,14 @@
         "port": 443,
         "protocol": "https"
       },
-      "shaSum": "925723c9a5912b0b2caa989178c709ed9edc7d7e3360986590ab9397e655e848",
+      "shaSum": "2bee20f64ccf130cfb31f456428d20f6683fcfad1af00c3cd87a03e77e08acba",
       "response": {
         "statusCode": 200,
         "headers": {
           "Content-Type": "application/json; charset=UTF-8",
-          "Date": "Wed, 10 Sep 2025 23:19:16 GMT",
+          "Date": "Mon, 05 Jan 2026 19:37:18 GMT",
           "Server": "scaffolding on HTTPServer2",
-          "Server-Timing": "gfet4t7; dur=8957",
+          "Server-Timing": "gfet4t7; dur=6237",
           "Vary": "Origin, X-Origin, Referer",
           "X-Content-Type-Options": "nosniff",
           "X-Frame-Options": "SAMEORIGIN",

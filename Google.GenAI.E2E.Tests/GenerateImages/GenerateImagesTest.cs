@@ -73,7 +73,7 @@ public class GenerateImagesTest {
         new Client(apiKey: apiKey, vertexAI: false, httpOptions: geminiClientHttpOptions);
 
     // Specific setup for this test class
-    modelName = "imagen-3.0-generate-002";
+    modelName = "imagen-4.0-generate-001";
   }
 
   [TestMethod]
@@ -112,11 +112,11 @@ public class GenerateImagesTest {
       Seed = 1337,
       Language = ImagePromptLanguage.en,
       EnhancePrompt = true,
-      Labels = new Dictionary<string, string> { ["imagen_label_key"] = "upscale_image" },
+      Labels = new Dictionary<string, string> { ["imagen_label_key"] = "generate_image" },
     };
 
     var vertexResponse = await vertexClient.Models.GenerateImagesAsync(
-        model: modelName, prompt: "Red skateboard", config: generateImagesConfig);
+        model: modelName, prompt: "Night sky", config: generateImagesConfig);
 
     Assert.IsNotNull(vertexResponse.GeneratedImages);
     Assert.AreEqual(vertexResponse.GeneratedImages.Count, 1, "Expected 1 generated image.");

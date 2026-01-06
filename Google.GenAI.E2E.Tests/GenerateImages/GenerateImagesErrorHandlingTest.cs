@@ -71,7 +71,7 @@ public class GenerateImagesErrorHandlingTest {
         new Client(apiKey: apiKey, vertexAI: false, httpOptions: geminiClientHttpOptions);
 
     // Specific setup for this test class
-    modelName = "imagen-3.0-generate-002";
+    modelName = "imagen-4.0-generate-001";
   }
 
   [TestMethod]

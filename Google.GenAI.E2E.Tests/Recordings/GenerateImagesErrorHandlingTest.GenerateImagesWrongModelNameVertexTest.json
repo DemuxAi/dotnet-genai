@@ -30,7 +30,7 @@
         "statusCode": 404,
         "headers": {
           "Content-Type": "application/json; charset=UTF-8",
-          "Date": "Wed, 10 Sep 2025 23:18:59 GMT",
+          "Date": "Mon, 05 Jan 2026 19:37:05 GMT",
           "Server": "scaffolding on HTTPServer2",
           "Vary": "Origin, X-Origin, Referer",
           "X-Content-Type-Options": "nosniff",
@@ -44,10 +44,10 @@
               "details": [
                 {
                   "@type": "type.googleapis.com/google.rpc.DebugInfo",
-                  "detail": "[ORIGINAL ERROR] generic::not_found: Publisher Model `projects/cloud-llm-preview1/locations/us-central1/publishers/google/models/wrong-model-name` not found. [google.rpc.error_details_ext] { message: \"Publisher Model `projects/cloud-llm-preview1/locations/us-central1/publishers/google/models/wrong-model-name` not found.\" }"
+                  "detail": "[ORIGINAL ERROR] generic::not_found: Publisher Model `projects/REDACTED/locations/us-central1/publishers/google/models/wrong-model-name` not found. [google.rpc.error_details_ext] { message: \"Publisher Model `projects/REDACTED/locations/us-central1/publishers/google/models/wrong-model-name` not found.\" }"
                 }
               ],
-              "message": "Publisher Model `projects/cloud-llm-preview1/locations/us-central1/publishers/google/models/wrong-model-name` not found.",
+              "message": "Publisher Model `projects/REDACTED/locations/us-central1/publishers/google/models/wrong-model-name` not found.",
               "status": "NOT_FOUND"
             }
           }
