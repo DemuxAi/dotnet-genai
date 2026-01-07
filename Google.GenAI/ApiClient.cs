@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+using System.Collections.Immutable;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 
@@ -185,10 +186,10 @@ namespace Google.GenAI
         mergedOptions.Timeout = optionsToApply?.Timeout;
       }
 
-      var currentHeaders = this.HttpOptions.Headers ?? new Dictionary<string, string>();
-      var newHeaders = optionsToApply?.Headers ?? new Dictionary<string, string>();
+      var currentHeaders = this.HttpOptions.Headers ?? new Dictionary<string, string>(ImmutableDictionary<string, string>.Empty);
+      var newHeaders = optionsToApply.Headers ?? new Dictionary<string, string>(ImmutableDictionary<string, string>.Empty);
 
-      var headersBuilder = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+      var headersBuilder = ImmutableDictionary.CreateBuilder<string, string>(StringComparer.OrdinalIgnoreCase);
 
       foreach (var header in currentHeaders)
       {
@@ -213,22 +214,21 @@ namespace Google.GenAI
           headersBuilder[header.Key] = header.Value;
         }
       }
-      mergedOptions.Headers = headersBuilder;
+      mergedOptions.Headers = new Dictionary<string, string>(headersBuilder.ToImmutable());
 
       return mergedOptions;
     }
 
     internal static HttpOptions GetDefaultHttpOptions(bool vertexAI, string? location)
     {
+      var defaultHeadersBuilder = ImmutableDictionary.CreateBuilder<string, string>(StringComparer.OrdinalIgnoreCase);
+      defaultHeadersBuilder.Add("Content-Type", "application/json");
+      defaultHeadersBuilder.Add("User-Agent", GetLibraryVersion());
+      defaultHeadersBuilder.Add("x-goog-api-client", GetLibraryVersion());
 
       var defaultHttpOptions = new HttpOptions
       {
-        Headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
-        {
-          { "Content-Type", "application/json" },
-          { "User-Agent", GetLibraryVersion() },
-          { "x-goog-api-client", GetLibraryVersion() }
-        },
+        Headers = new Dictionary<string, string>(defaultHeadersBuilder.ToImmutable()),
       };
 
       if (vertexAI)
