@@ -37,6 +37,11 @@ namespace Google.GenAI.Types {
     /// <summary>
     ///
     /// </summary>
-    [JsonPropertyName("GENERATED")] GENERATED
+    [JsonPropertyName("GENERATED")] GENERATED,
+
+    /// <summary>
+    ///
+    /// </summary>
+    [JsonPropertyName("REGISTERED")] REGISTERED
   }
 }
