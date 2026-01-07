@@ -73,7 +73,7 @@ public class RecontextImageTest {
 
     // Specific setup for this test class
     productRecontextModel = "imagen-product-recontext-preview-06-30";
-    virtualTryOnModel = "virtual-try-on-preview-08-04";
+    virtualTryOnModel = "virtual-try-on-001";
   }
 
   [TestMethod]
