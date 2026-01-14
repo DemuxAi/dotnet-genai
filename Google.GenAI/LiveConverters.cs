@@ -1109,6 +1109,64 @@ namespace Google.GenAI {
       return toObject;
     }
 
+    internal JsonNode LiveServerMessageFromMldev(JsonNode fromObject, JsonObject parentObject) {
+      JsonObject toObject = new JsonObject();
+
+      if (Common.GetValueByPath(fromObject, new string[] { "setupComplete" }) != null) {
+        Common.SetValueByPath(toObject, new string[] { "setupComplete" },
+                              Common.GetValueByPath(fromObject, new string[] { "setupComplete" }));
+      }
+
+      if (Common.GetValueByPath(fromObject, new string[] { "serverContent" }) != null) {
+        Common.SetValueByPath(toObject, new string[] { "serverContent" },
+                              Common.GetValueByPath(fromObject, new string[] { "serverContent" }));
+      }
+
+      if (Common.GetValueByPath(fromObject, new string[] { "toolCall" }) != null) {
+        Common.SetValueByPath(toObject, new string[] { "toolCall" },
+                              Common.GetValueByPath(fromObject, new string[] { "toolCall" }));
+      }
+
+      if (Common.GetValueByPath(fromObject, new string[] { "toolCallCancellation" }) != null) {
+        Common.SetValueByPath(
+            toObject, new string[] { "toolCallCancellation" },
+            Common.GetValueByPath(fromObject, new string[] { "toolCallCancellation" }));
+      }
+
+      if (Common.GetValueByPath(fromObject, new string[] { "usageMetadata" }) != null) {
+        Common.SetValueByPath(toObject, new string[] { "usageMetadata" },
+                              Common.GetValueByPath(fromObject, new string[] { "usageMetadata" }));
+      }
+
+      if (Common.GetValueByPath(fromObject, new string[] { "goAway" }) != null) {
+        Common.SetValueByPath(toObject, new string[] { "goAway" },
+                              Common.GetValueByPath(fromObject, new string[] { "goAway" }));
+      }
+
+      if (Common.GetValueByPath(fromObject, new string[] { "sessionResumptionUpdate" }) != null) {
+        Common.SetValueByPath(
+            toObject, new string[] { "sessionResumptionUpdate" },
+            Common.GetValueByPath(fromObject, new string[] { "sessionResumptionUpdate" }));
+      }
+
+      if (Common.GetValueByPath(fromObject, new string[] { "voiceActivityDetectionSignal" }) !=
+          null) {
+        Common.SetValueByPath(
+            toObject, new string[] { "voiceActivityDetectionSignal" },
+            Common.GetValueByPath(fromObject, new string[] { "voiceActivityDetectionSignal" }));
+      }
+
+      if (Common.GetValueByPath(fromObject, new string[] { "voiceActivity" }) != null) {
+        Common.SetValueByPath(
+            toObject, new string[] { "voiceActivity" },
+            VoiceActivityFromMldev(JsonNode.Parse(JsonSerializer.Serialize(Common.GetValueByPath(
+                                       fromObject, new string[] { "voiceActivity" }))),
+                                   toObject));
+      }
+
+      return toObject;
+    }
+
     internal JsonNode LiveServerMessageFromVertex(JsonNode fromObject, JsonObject parentObject) {
       JsonObject toObject = new JsonObject();
 
@@ -1157,6 +1215,14 @@ namespace Google.GenAI {
         Common.SetValueByPath(
             toObject, new string[] { "voiceActivityDetectionSignal" },
             Common.GetValueByPath(fromObject, new string[] { "voiceActivityDetectionSignal" }));
+      }
+
+      if (Common.GetValueByPath(fromObject, new string[] { "voiceActivity" }) != null) {
+        Common.SetValueByPath(
+            toObject, new string[] { "voiceActivity" },
+            VoiceActivityFromVertex(JsonNode.Parse(JsonSerializer.Serialize(Common.GetValueByPath(
+                                        fromObject, new string[] { "voiceActivity" }))),
+                                    toObject));
       }
 
       return toObject;
@@ -1437,6 +1503,28 @@ namespace Google.GenAI {
       if (Common.GetValueByPath(fromObject, new string[] { "trafficType" }) != null) {
         Common.SetValueByPath(toObject, new string[] { "trafficType" },
                               Common.GetValueByPath(fromObject, new string[] { "trafficType" }));
+      }
+
+      return toObject;
+    }
+
+    internal JsonNode VoiceActivityFromMldev(JsonNode fromObject, JsonObject parentObject) {
+      JsonObject toObject = new JsonObject();
+
+      if (Common.GetValueByPath(fromObject, new string[] { "type" }) != null) {
+        Common.SetValueByPath(toObject, new string[] { "voiceActivityType" },
+                              Common.GetValueByPath(fromObject, new string[] { "type" }));
+      }
+
+      return toObject;
+    }
+
+    internal JsonNode VoiceActivityFromVertex(JsonNode fromObject, JsonObject parentObject) {
+      JsonObject toObject = new JsonObject();
+
+      if (Common.GetValueByPath(fromObject, new string[] { "type" }) != null) {
+        Common.SetValueByPath(toObject, new string[] { "voiceActivityType" },
+                              Common.GetValueByPath(fromObject, new string[] { "type" }));
       }
 
       return toObject;

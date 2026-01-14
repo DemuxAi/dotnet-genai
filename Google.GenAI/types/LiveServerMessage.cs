@@ -97,12 +97,22 @@ namespace Google.GenAI.Types {
           }
 
     /// <summary>
-    /// Voice activity detection signal.
+    /// Voice activity detection signal. Allowlisted only.
     /// </summary>
     [JsonPropertyName("voiceActivityDetectionSignal")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public VoiceActivityDetectionSignal
         ? VoiceActivityDetectionSignal {
+            get; set;
+          }
+
+    /// <summary>
+    /// Voice activity signal.
+    /// </summary>
+    [JsonPropertyName("voiceActivity")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public VoiceActivity
+        ? VoiceActivity {
             get; set;
           }
 
