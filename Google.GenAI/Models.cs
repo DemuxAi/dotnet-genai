@@ -1102,6 +1102,11 @@ namespace Google.GenAI {
             Common.GetValueByPath(fromObject, new string[] { "enableEnhancedCivicAnswers" }));
       }
 
+      if (!Common.IsZero(Common.GetValueByPath(fromObject, new string[] { "modelArmorConfig" }))) {
+        throw new NotSupportedException(
+            "modelArmorConfig parameter is not supported in Gemini API.");
+      }
+
       return toObject;
     }
 
@@ -1278,6 +1283,12 @@ namespace Google.GenAI {
               Common.GetValueByPath(fromObject, new string[] { "enableEnhancedCivicAnswers" }))) {
         throw new NotSupportedException(
             "enableEnhancedCivicAnswers parameter is not supported in Vertex AI.");
+      }
+
+      if (Common.GetValueByPath(fromObject, new string[] { "modelArmorConfig" }) != null) {
+        Common.SetValueByPath(
+            parentObject, new string[] { "modelArmorConfig" },
+            Common.GetValueByPath(fromObject, new string[] { "modelArmorConfig" }));
       }
 
       return toObject;

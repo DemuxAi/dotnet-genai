@@ -1060,6 +1060,11 @@ namespace Google.GenAI {
             Common.GetValueByPath(fromObject, new string[] { "enableEnhancedCivicAnswers" }));
       }
 
+      if (!Common.IsZero(Common.GetValueByPath(fromObject, new string[] { "modelArmorConfig" }))) {
+        throw new NotSupportedException(
+            "modelArmorConfig parameter is not supported in Gemini API.");
+      }
+
       return toObject;
     }
 

@@ -362,6 +362,17 @@ namespace Google.GenAI.Types {
           }
 
     /// <summary>
+    /// Settings for prompt and response sanitization using the Model Armor service. If supplied,
+    /// safety_settings must not be supplied.
+    /// </summary>
+    [JsonPropertyName("modelArmorConfig")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public ModelArmorConfig
+        ? ModelArmorConfig {
+            get; set;
+          }
+
+    /// <summary>
     /// Deserializes a JSON string to a GenerateContentConfig object.
     /// </summary>
     /// <param name="jsonString">The JSON string to deserialize.</param>
