@@ -32,7 +32,7 @@ namespace Google.GenAI.Types {
     public VoiceConfig ? VoiceConfig { get; set; }
 
     /// <summary>
-    /// Optional. The language code (ISO 639-1) for the speech synthesis.
+    /// Optional. Language code (ISO 639. e.g. en-US) for the speech synthesization.
     /// </summary>
     [JsonPropertyName("languageCode")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]

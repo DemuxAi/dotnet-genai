@@ -23,7 +23,7 @@ using Google.GenAI.Serialization;
 
 namespace Google.GenAI.Types {
   /// <summary>
-  /// Author attribution for a photo or review.
+  /// Author attribution for a photo or review. This data type is not supported in Gemini API.
   /// </summary>
 
   public record GroundingChunkMapsPlaceAnswerSourcesAuthorAttribution {

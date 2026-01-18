@@ -23,23 +23,23 @@ using Google.GenAI.Serialization;
 
 namespace Google.GenAI.Types {
   /// <summary>
-  /// URI-based data. A FileData message contains a URI pointing to data of a specific media type.
-  /// It is used to represent images, audio, and video stored in Google Cloud Storage.
+  /// URI based data.
   /// </summary>
 
   public record FileData {
     /// <summary>
-    /// Optional. The display name of the file. Used to provide a label or filename to distinguish
-    /// files. This field is only returned in `PromptMessage` for prompt management. It is used in
-    /// the Gemini calls only when server side tools (`code_execution`, `google_search`, and
-    /// `url_context`) are enabled. This field is not supported in Gemini API.
+    /// Optional. Display name of the file data. Used to provide a label or filename to distinguish
+    /// file datas. This field is only returned in PromptMessage for prompt management. It is
+    /// currently used in the Gemini GenerateContent calls only when server side tools
+    /// (code_execution, google_search, and url_context) are enabled. This field is not supported in
+    /// Gemini API.
     /// </summary>
     [JsonPropertyName("displayName")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public string ? DisplayName { get; set; }
 
     /// <summary>
-    /// The URI of the file in Google Cloud Storage.
+    /// URI.
     /// </summary>
     [JsonPropertyName("fileUri")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]

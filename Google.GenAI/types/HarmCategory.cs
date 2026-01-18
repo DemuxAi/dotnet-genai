@@ -20,33 +20,32 @@ using System.Text.Json.Serialization;
 
 namespace Google.GenAI.Types {
   /// <summary>
-  /// The harm category to be blocked.
+  /// Harm category.
   /// </summary>
   [JsonConverter(typeof(JsonStringEnumConverter))]
   public enum HarmCategory {
     /// <summary>
-    /// Default value. This value is unused.
+    /// The harm category is unspecified.
     /// </summary>
     [JsonPropertyName("HARM_CATEGORY_UNSPECIFIED")] HARM_CATEGORY_UNSPECIFIED,
 
     /// <summary>
-    /// Abusive, threatening, or content intended to bully, torment, or ridicule.
+    /// The harm category is harassment.
     /// </summary>
     [JsonPropertyName("HARM_CATEGORY_HARASSMENT")] HARM_CATEGORY_HARASSMENT,
 
     /// <summary>
-    /// Content that promotes violence or incites hatred against individuals or groups based on
-    /// certain attributes.
+    /// The harm category is hate speech.
     /// </summary>
     [JsonPropertyName("HARM_CATEGORY_HATE_SPEECH")] HARM_CATEGORY_HATE_SPEECH,
 
     /// <summary>
-    /// Content that contains sexually explicit material.
+    /// The harm category is sexually explicit content.
     /// </summary>
     [JsonPropertyName("HARM_CATEGORY_SEXUALLY_EXPLICIT")] HARM_CATEGORY_SEXUALLY_EXPLICIT,
 
     /// <summary>
-    /// Content that promotes, facilitates, or enables dangerous activities.
+    /// The harm category is dangerous content.
     /// </summary>
     [JsonPropertyName("HARM_CATEGORY_DANGEROUS_CONTENT")] HARM_CATEGORY_DANGEROUS_CONTENT,
 
@@ -56,30 +55,31 @@ namespace Google.GenAI.Types {
     [JsonPropertyName("HARM_CATEGORY_CIVIC_INTEGRITY")] HARM_CATEGORY_CIVIC_INTEGRITY,
 
     /// <summary>
-    /// Images that contain hate speech. This enum value is not supported in Gemini API.
+    /// The harm category is image hate. This enum value is not supported in Gemini API.
     /// </summary>
     [JsonPropertyName("HARM_CATEGORY_IMAGE_HATE")] HARM_CATEGORY_IMAGE_HATE,
 
     /// <summary>
-    /// Images that contain dangerous content. This enum value is not supported in Gemini API.
+    /// The harm category is image dangerous content. This enum value is not supported in Gemini
+    /// API.
     /// </summary>
     [JsonPropertyName(
         "HARM_CATEGORY_IMAGE_DANGEROUS_CONTENT")] HARM_CATEGORY_IMAGE_DANGEROUS_CONTENT,
 
     /// <summary>
-    /// Images that contain harassment. This enum value is not supported in Gemini API.
+    /// The harm category is image harassment. This enum value is not supported in Gemini API.
     /// </summary>
     [JsonPropertyName("HARM_CATEGORY_IMAGE_HARASSMENT")] HARM_CATEGORY_IMAGE_HARASSMENT,
 
     /// <summary>
-    /// Images that contain sexually explicit content. This enum value is not supported in Gemini
-    /// API.
+    /// The harm category is image sexually explicit content. This enum value is not supported in
+    /// Gemini API.
     /// </summary>
     [JsonPropertyName(
         "HARM_CATEGORY_IMAGE_SEXUALLY_EXPLICIT")] HARM_CATEGORY_IMAGE_SEXUALLY_EXPLICIT,
 
     /// <summary>
-    /// Prompts designed to bypass safety filters. This enum value is not supported in Gemini API.
+    /// The harm category is for jailbreak prompts. This enum value is not supported in Gemini API.
     /// </summary>
     [JsonPropertyName("HARM_CATEGORY_JAILBREAK")] HARM_CATEGORY_JAILBREAK
   }

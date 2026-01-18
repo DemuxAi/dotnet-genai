@@ -23,28 +23,17 @@ using Google.GenAI.Serialization;
 
 namespace Google.GenAI.Types {
   /// <summary>
-  /// Segment of the content this support belongs to.
+  /// Segment of the content.
   /// </summary>
 
   public record Segment {
     /// <summary>
-    /// Output only. Start index in the given Part, measured in bytes.  Offset from the start of the
-    /// Part, inclusive, starting at zero.
-    /// </summary>
-    [JsonPropertyName("startIndex")]
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public int ? StartIndex { get; set; }
-
-    /// <summary>
-    /// Output only. End index in the given Part, measured in bytes.  Offset from the start of the
+    /// Output only. End index in the given Part, measured in bytes. Offset from the start of the
     /// Part, exclusive, starting at zero.
     /// </summary>
     [JsonPropertyName("endIndex")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public int
-        ? EndIndex {
-            get; set;
-          }
+    public int ? EndIndex { get; set; }
 
     /// <summary>
     /// Output only. The index of a Part object within its parent Content object.
@@ -53,6 +42,17 @@ namespace Google.GenAI.Types {
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public int
         ? PartIndex {
+            get; set;
+          }
+
+    /// <summary>
+    /// Output only. Start index in the given Part, measured in bytes. Offset from the start of the
+    /// Part, inclusive, starting at zero.
+    /// </summary>
+    [JsonPropertyName("startIndex")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public int
+        ? StartIndex {
             get; set;
           }
 

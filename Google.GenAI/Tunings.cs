@@ -779,21 +779,9 @@ namespace Google.GenAI {
             Common.GetValueByPath(fromObject, new string[] { "customBaseModel" }));
       }
 
-      if (Common.GetValueByPath(fromObject, new string[] { "evaluateDatasetRuns" }) != null) {
-        Common.SetValueByPath(
-            toObject, new string[] { "evaluateDatasetRuns" },
-            Common.GetValueByPath(fromObject, new string[] { "evaluateDatasetRuns" }));
-      }
-
       if (Common.GetValueByPath(fromObject, new string[] { "experiment" }) != null) {
         Common.SetValueByPath(toObject, new string[] { "experiment" },
                               Common.GetValueByPath(fromObject, new string[] { "experiment" }));
-      }
-
-      if (Common.GetValueByPath(fromObject, new string[] { "fullFineTuningSpec" }) != null) {
-        Common.SetValueByPath(
-            toObject, new string[] { "fullFineTuningSpec" },
-            Common.GetValueByPath(fromObject, new string[] { "fullFineTuningSpec" }));
       }
 
       if (Common.GetValueByPath(fromObject, new string[] { "labels" }) != null) {
@@ -820,11 +808,6 @@ namespace Google.GenAI {
         Common.SetValueByPath(
             toObject, new string[] { "tunedModelDisplayName" },
             Common.GetValueByPath(fromObject, new string[] { "tunedModelDisplayName" }));
-      }
-
-      if (Common.GetValueByPath(fromObject, new string[] { "tuningJobState" }) != null) {
-        Common.SetValueByPath(toObject, new string[] { "tuningJobState" },
-                              Common.GetValueByPath(fromObject, new string[] { "tuningJobState" }));
       }
 
       if (Common.GetValueByPath(fromObject, new string[] { "veoTuningSpec" }) != null) {

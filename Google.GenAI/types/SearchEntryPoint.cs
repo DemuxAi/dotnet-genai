@@ -23,7 +23,7 @@ using Google.GenAI.Serialization;
 
 namespace Google.GenAI.Types {
   /// <summary>
-  /// The entry point used to search for grounding sources.
+  /// Google search entry point.
   /// </summary>
 
   public record SearchEntryPoint {
@@ -35,7 +35,7 @@ namespace Google.GenAI.Types {
     public string ? RenderedContent { get; set; }
 
     /// <summary>
-    /// Optional. JSON representing array of tuples.
+    /// Optional. Base64 encoded JSON representing array of tuple.
     /// </summary>
     [JsonPropertyName("sdkBlob")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]

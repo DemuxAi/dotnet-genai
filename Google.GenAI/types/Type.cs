@@ -20,7 +20,7 @@ using System.Text.Json.Serialization;
 
 namespace Google.GenAI.Types {
   /// <summary>
-  /// Data type of the schema field.
+  /// The type of the data.
   /// </summary>
   [JsonConverter(typeof(JsonStringEnumConverter))]
   public enum Type {
