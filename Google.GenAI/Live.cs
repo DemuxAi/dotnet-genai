@@ -319,7 +319,22 @@ namespace Google.GenAI
         throw new InvalidOperationException("Received an empty message from the server.");
       }
 
-      var serverMessage = LiveServerMessage.FromJson(messageString);
+      JsonNode? serverMessageNode = JsonNode.Parse(messageString);
+      if (serverMessageNode == null)
+      {
+        throw new InvalidOperationException("Failed to deserialize server message because it is null.");
+      }
+      LiveConverters liveConverters = new LiveConverters(_apiClient);
+      JsonNode transformedNode;
+      if (_apiClient.VertexAI)
+      {
+        transformedNode = liveConverters.LiveServerMessageFromVertex(serverMessageNode, new JsonObject());
+      }
+      else
+      {
+        transformedNode = liveConverters.LiveServerMessageFromMldev(serverMessageNode, new JsonObject());
+      }
+      var serverMessage = JsonSerializer.Deserialize<LiveServerMessage>(transformedNode, JsonConfig.JsonSerializerOptions);
       if (serverMessage == null)
       {
         throw new InvalidOperationException("Failed to deserialize server message because it is null.");
