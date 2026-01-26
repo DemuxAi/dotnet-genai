@@ -50,21 +50,28 @@ namespace Google.GenAI
     public async Task<AsyncSession> ConnectAsync(string model, LiveConnectConfig config, CancellationToken cancellationToken = default)
     {
       var clientWebSocket = new ClientWebSocket();
-      await SetRequestHeadersAsync(clientWebSocket, cancellationToken);
-      Uri serverUri = GetServerUri();
-      await clientWebSocket.ConnectAsync(serverUri, cancellationToken);
-      string setupClientMessage = getSetupMessage(model, config);
-      byte[] buffer = Encoding.UTF8.GetBytes(setupClientMessage);
+      bool success = false;
       try
       {
-        await clientWebSocket.SendAsync(new ArraySegment<byte>(buffer), WebSocketMessageType.Text, true, cancellationToken);
-      }
-      catch (Exception ex)
-      {
-        throw new InvalidOperationException($"Error sending setup message: {ex.Message}", ex);
-      }
+        await SetRequestHeadersAsync(clientWebSocket, cancellationToken);
+        Uri serverUri = GetServerUri();
+        await clientWebSocket.ConnectAsync(serverUri, cancellationToken);
+        string setupClientMessage = getSetupMessage(model, config);
+        byte[] buffer = Encoding.UTF8.GetBytes(setupClientMessage);
 
-      return new AsyncSession(clientWebSocket, _apiClient);
+        await clientWebSocket.SendAsync(new ArraySegment<byte>(buffer), WebSocketMessageType.Text, true, cancellationToken);
+
+        var session = new AsyncSession(clientWebSocket, _apiClient);
+        success = true;
+        return session;
+      }
+      finally
+      {
+        if (!success)
+        {
+          clientWebSocket.Dispose();
+        }
+      }
     }
 
     private async Task SetRequestHeadersAsync(ClientWebSocket clientWebSocket, CancellationToken cancellationToken = default)

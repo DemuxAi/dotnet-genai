@@ -1,0 +1,14 @@
+2026-01-23 23:58:36.835 +00:00 [INF] [ThreadId:29] NBomber 6.0.0 started a new session: 2026-01-23_23.58.83_session_f5aa30f
+2026-01-23 23:58:36.933 +00:00 [INF] [ThreadId:29] NBomber started as single node
+2026-01-23 23:58:36.933 +00:00 [INF] [ThreadId:29] License validation....
+2026-01-23 23:58:36.934 +00:00 [WRN] [ThreadId:29] THIS VERSION IS FREE ONLY FOR PERSONAL USE. You can't use it for an organization.
+2026-01-23 23:58:36.940 +00:00 [INF] [ThreadId:29] Reports folder: /usr/local/google/home/yyyu/.dotnet/../../../Reports/GenerateContent_SingletonClient_Light-20260123-235836
+2026-01-23 23:58:36.940 +00:00 [INF] [ThreadId:29] Plugins: no plugins were loaded
+2026-01-23 23:58:36.941 +00:00 [INF] [ThreadId:29] Reporting sinks: no reporting sinks were loaded
+2026-01-23 23:58:36.941 +00:00 [INF] [ThreadId:29] Starting init...
+2026-01-23 23:58:36.942 +00:00 [INF] [ThreadId:29] Target scenarios: GenerateContent_Singleton_Light
+2026-01-23 23:58:36.942 +00:00 [INF] [ThreadId:29] Init finished
+2026-01-23 23:58:36.943 +00:00 [INF] [ThreadId:29] Starting warm up...
+2026-01-23 23:58:36.943 +00:00 [INF] [ThreadId:29] Warm up for scenarios: GenerateContent_Singleton_Light
+2026-01-23 23:58:36.944 +00:00 [INF] [ThreadId:29] Warm up duration: 00:00:30
+2026-01-23 23:59:08.022 +00:00 [INF] [ThreadId:25] Starting bombing...

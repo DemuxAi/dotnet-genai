@@ -20,5 +20,13 @@
     <PackageVersion Include="NAudio" Version="2.2.1" />
     <PackageVersion Include="TestServerSdk" Version="0.1.5" />
     <PackageVersion Include="Microsoft.Bcl.AsyncInterfaces" Version="10.0.1" />
+    <!-- Stress test dependencies -->
+    <PackageVersion Include="NBomber" Version="6.0.0" />
+    <PackageVersion Include="NBomber.Http" Version="6.0.0" />
+    <PackageVersion Include="Microsoft.Diagnostics.NETCore.Client" Version="0.2.547301" />
+    <PackageVersion Include="System.Diagnostics.PerformanceCounter" Version="9.0.0" />
+    <PackageVersion Include="Microsoft.Extensions.Configuration" Version="9.0.3" />
+    <PackageVersion Include="Microsoft.Extensions.Configuration.Json" Version="9.0.3" />
+    <PackageVersion Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="9.0.3" />
   </ItemGroup>
 </Project>
