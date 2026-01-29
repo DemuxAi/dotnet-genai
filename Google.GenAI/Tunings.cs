@@ -126,6 +126,15 @@ namespace Google.GenAI {
         throw new NotSupportedException("adapterSize parameter is not supported in Gemini API.");
       }
 
+      if (!Common.IsZero(Common.GetValueByPath(fromObject, new string[] { "tuningMode" }))) {
+        throw new NotSupportedException("tuningMode parameter is not supported in Gemini API.");
+      }
+
+      if (!Common.IsZero(Common.GetValueByPath(fromObject, new string[] { "customBaseModel" }))) {
+        throw new NotSupportedException(
+            "customBaseModel parameter is not supported in Gemini API.");
+      }
+
       if (Common.GetValueByPath(fromObject, new string[] { "batchSize" }) != null) {
         Common.SetValueByPath(parentObject,
                               new string[] { "tuningTask", "hyperparameters", "batchSize" },
@@ -329,12 +338,49 @@ namespace Google.GenAI {
               Common.GetValueByPath(fromObject, new string[] { "adapterSize" }));
         }
       }
-      if (!Common.IsZero(Common.GetValueByPath(fromObject, new string[] { "batchSize" }))) {
-        throw new NotSupportedException("batchSize parameter is not supported in Vertex AI.");
+
+      JsonNode discriminatorTuningMode =
+          Common.GetValueByPath(rootObject, new string[] { "config", "method" });
+      string discriminatorValueTuningMode = discriminatorTuningMode == null
+                                                ? "SUPERVISED_FINE_TUNING"
+                                                : discriminatorTuningMode.GetValue<string>();
+      if (discriminatorValueTuningMode == "SUPERVISED_FINE_TUNING") {
+        if (Common.GetValueByPath(fromObject, new string[] { "tuningMode" }) != null) {
+          Common.SetValueByPath(parentObject, new string[] { "supervisedTuningSpec", "tuningMode" },
+                                Common.GetValueByPath(fromObject, new string[] { "tuningMode" }));
+        }
+      }
+      if (Common.GetValueByPath(fromObject, new string[] { "customBaseModel" }) != null) {
+        Common.SetValueByPath(
+            parentObject, new string[] { "customBaseModel" },
+            Common.GetValueByPath(fromObject, new string[] { "customBaseModel" }));
       }
 
-      if (!Common.IsZero(Common.GetValueByPath(fromObject, new string[] { "learningRate" }))) {
-        throw new NotSupportedException("learningRate parameter is not supported in Vertex AI.");
+      JsonNode discriminatorBatchSize =
+          Common.GetValueByPath(rootObject, new string[] { "config", "method" });
+      string discriminatorValueBatchSize = discriminatorBatchSize == null
+                                               ? "SUPERVISED_FINE_TUNING"
+                                               : discriminatorBatchSize.GetValue<string>();
+      if (discriminatorValueBatchSize == "SUPERVISED_FINE_TUNING") {
+        if (Common.GetValueByPath(fromObject, new string[] { "batchSize" }) != null) {
+          Common.SetValueByPath(
+              parentObject, new string[] { "supervisedTuningSpec", "hyperParameters", "batchSize" },
+              Common.GetValueByPath(fromObject, new string[] { "batchSize" }));
+        }
+      }
+
+      JsonNode discriminatorLearningRate =
+          Common.GetValueByPath(rootObject, new string[] { "config", "method" });
+      string discriminatorValueLearningRate = discriminatorLearningRate == null
+                                                  ? "SUPERVISED_FINE_TUNING"
+                                                  : discriminatorLearningRate.GetValue<string>();
+      if (discriminatorValueLearningRate == "SUPERVISED_FINE_TUNING") {
+        if (Common.GetValueByPath(fromObject, new string[] { "learningRate" }) != null) {
+          Common.SetValueByPath(
+              parentObject,
+              new string[] { "supervisedTuningSpec", "hyperParameters", "learningRate" },
+              Common.GetValueByPath(fromObject, new string[] { "learningRate" }));
+        }
       }
 
       if (Common.GetValueByPath(fromObject, new string[] { "labels" }) != null) {

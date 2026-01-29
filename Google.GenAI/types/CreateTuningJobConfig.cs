@@ -87,7 +87,8 @@ namespace Google.GenAI.Types {
           }
 
     /// <summary>
-    /// Multiplier for adjusting the default learning rate.
+    /// Multiplier for adjusting the default learning rate. 1P models only. Mutually exclusive with
+    /// learning_rate.
     /// </summary>
     [JsonPropertyName("learningRateMultiplier")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -128,8 +129,27 @@ namespace Google.GenAI.Types {
           }
 
     /// <summary>
-    /// The batch size hyperparameter for tuning. If not set, a default of 4 or 16 will be used
-    /// based on the number of training examples.
+    /// Tuning mode for SFT tuning.
+    /// </summary>
+    [JsonPropertyName("tuningMode")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public TuningMode
+        ? TuningMode {
+            get; set;
+          }
+
+    /// <summary>
+    /// Custom base model for tuning. This is only supported for OSS models in Vertex.
+    /// </summary>
+    [JsonPropertyName("customBaseModel")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public string
+        ? CustomBaseModel {
+            get; set;
+          }
+
+    /// <summary>
+    /// The batch size hyperparameter for tuning. This is only supported for OSS models in Vertex.
     /// </summary>
     [JsonPropertyName("batchSize")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -139,8 +159,8 @@ namespace Google.GenAI.Types {
           }
 
     /// <summary>
-    /// The learning rate hyperparameter for tuning. If not set, a default of 0.001 or 0.0002 will
-    /// be calculated based on the number of training examples.
+    /// The learning rate for tuning. OSS models only. Mutually exclusive with
+    /// learning_rate_multiplier.
     /// </summary>
     [JsonPropertyName("learningRate")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
