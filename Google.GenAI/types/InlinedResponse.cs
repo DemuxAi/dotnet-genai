@@ -35,6 +35,16 @@ namespace Google.GenAI.Types {
     public GenerateContentResponse ? Response { get; set; }
 
     /// <summary>
+    /// The metadata to be associated with the request.
+    /// </summary>
+    [JsonPropertyName("metadata")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public Dictionary<string, string>
+        ? Metadata {
+            get; set;
+          }
+
+    /// <summary>
     /// The error encountered while processing the request.
     /// </summary>
     [JsonPropertyName("error")]

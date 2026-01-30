@@ -1261,6 +1261,11 @@ namespace Google.GenAI {
                                   toObject));
       }
 
+      if (Common.GetValueByPath(fromObject, new string[] { "metadata" }) != null) {
+        Common.SetValueByPath(toObject, new string[] { "metadata" },
+                              Common.GetValueByPath(fromObject, new string[] { "metadata" }));
+      }
+
       if (Common.GetValueByPath(fromObject, new string[] { "error" }) != null) {
         Common.SetValueByPath(toObject, new string[] { "error" },
                               Common.GetValueByPath(fromObject, new string[] { "error" }));
