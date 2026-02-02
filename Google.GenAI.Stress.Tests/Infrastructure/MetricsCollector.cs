@@ -38,18 +38,28 @@ public class MetricsCollector
     public long MemoryStartBytes { get; set; }
     public long MemoryEndBytes { get; set; }
     public long MemoryPeakBytes { get; set; }
-    public double MemoryGrowthRate { get; set; } // bytes per request
 
     public int ConnectionsStart { get; set; }
     public int ConnectionsEnd { get; set; }
     public int ConnectionsPeak { get; set; }
-    public double ConnectionLeakRate { get; set; }
 
     public int ThreadsStart { get; set; }
     public int ThreadsEnd { get; set; }
 
     public int HandlesStart { get; set; }
     public int HandlesEnd { get; set; }
+
+    // Slope-based metrics (from linear regression: units per request)
+    public double MemorySlope { get; set; } // bytes per request
+    public double ConnectionSlope { get; set; } // connections per request
+    public double HandleSlope { get; set; } // handles per request
+    public double ThreadSlope { get; set; } // threads per request
+
+    // R² values (coefficient of determination: 0 = no trend, 1 = perfect trend)
+    public double MemoryRSquared { get; set; }
+    public double ConnectionRSquared { get; set; }
+    public double HandleRSquared { get; set; }
+    public double ThreadRSquared { get; set; }
 
     // Error tracking
     public int RateLimitErrors { get; set; }
@@ -78,9 +88,9 @@ public class MetricsCollector
     public static MetricsCollector FromNBomberStats(NodeStats stats, LeakAnalysis leakAnalysis,
         Configuration.ThresholdsConfig globalThresholds, string testName, string clientPattern, string loadPattern,
         double? customMemoryThreshold = null,
-        int? customConnectionThreshold = null,
-        int? customHandleThreshold = null,
-        int? customThreadThreshold = null)
+        double? customConnectionThreshold = null,
+        double? customHandleThreshold = null,
+        double? customThreadThreshold = null)
     {
         var scenarioStats = stats.ScenarioStats.FirstOrDefault();
         if (scenarioStats == null)
@@ -122,7 +132,6 @@ public class MetricsCollector
         {
             metrics.MemoryStartBytes = leakAnalysis.FirstSnapshot.ManagedMemoryBytes;
             metrics.MemoryEndBytes = leakAnalysis.LastSnapshot.ManagedMemoryBytes;
-            metrics.MemoryGrowthRate = leakAnalysis.MemoryGrowthRate;
 
             metrics.ConnectionsStart = leakAnalysis.FirstSnapshot.TcpConnectionCount;
             metrics.ConnectionsEnd = leakAnalysis.LastSnapshot.TcpConnectionCount;
@@ -139,33 +148,43 @@ public class MetricsCollector
                 metrics.ConnectionsPeak = leakAnalysis.Snapshots.Max(s => s.TcpConnectionCount);
             }
 
-            var totalRequests = metrics.TotalRequests;
-            metrics.ConnectionLeakRate = totalRequests > 0
-                ? (double)(metrics.ConnectionsEnd - metrics.ConnectionsStart) / totalRequests
-                : 0.0;
+            // Slope-based metrics from linear regression
+            metrics.MemorySlope = leakAnalysis.MemoryTrendSlope;
+            metrics.ConnectionSlope = leakAnalysis.ConnectionTrendSlope;
+            metrics.HandleSlope = leakAnalysis.HandleTrendSlope;
+            metrics.ThreadSlope = leakAnalysis.ThreadTrendSlope;
+
+            // R² values from linear regression
+            metrics.MemoryRSquared = leakAnalysis.MemoryRSquared;
+            metrics.ConnectionRSquared = leakAnalysis.ConnectionRSquared;
+            metrics.HandleRSquared = leakAnalysis.HandleRSquared;
+            metrics.ThreadRSquared = leakAnalysis.ThreadRSquared;
 
             // Determine effective thresholds
-            var memoryThreshold = customMemoryThreshold ?? globalThresholds.MemoryGrowthRateBytesPerRequest;
-            var connectionThreshold = customConnectionThreshold ?? globalThresholds.ConnectionLeakThreshold;
-            var handleThreshold = customHandleThreshold ?? globalThresholds.HandleLeakThreshold;
-            var threadThreshold = customThreadThreshold ?? globalThresholds.ThreadLeakThreshold;
+            var memoryThreshold = customMemoryThreshold ?? globalThresholds.MemorySlopeThreshold;
+            var connectionThreshold = customConnectionThreshold ?? globalThresholds.ConnectionSlopeThreshold;
+            var handleThreshold = customHandleThreshold ?? globalThresholds.HandleSlopeThreshold;
+            var threadThreshold = customThreadThreshold ?? globalThresholds.ThreadSlopeThreshold;
+            var minRSquared = globalThresholds.MinRSquared;
 
             // Store effective thresholds for reference
             metrics.AppliedThresholds = new Configuration.ThresholdsConfig
             {
-                MemoryGrowthRateBytesPerRequest = memoryThreshold,
-                ConnectionLeakThreshold = connectionThreshold,
-                HandleLeakThreshold = handleThreshold,
-                ThreadLeakThreshold = threadThreshold,
+                MemorySlopeThreshold = memoryThreshold,
+                ConnectionSlopeThreshold = connectionThreshold,
+                HandleSlopeThreshold = handleThreshold,
+                ThreadSlopeThreshold = threadThreshold,
+                MinRSquared = minRSquared,
                 // Copy others
-                WebSocketMemoryGrowthRateBytesPerRequest = globalThresholds.WebSocketMemoryGrowthRateBytesPerRequest,
+                WebSocketMemorySlopeThreshold = globalThresholds.WebSocketMemorySlopeThreshold,
                 LatencyP95Milliseconds = globalThresholds.LatencyP95Milliseconds
             };
 
-            metrics.MemoryLeakDetected = leakAnalysis.HasMemoryLeak(memoryThreshold);
-            metrics.ConnectionLeakDetected = leakAnalysis.HasConnectionLeak(connectionThreshold);
-            metrics.HandleLeakDetected = leakAnalysis.HasHandleLeak(handleThreshold);
-            metrics.ThreadLeakDetected = leakAnalysis.HasThreadLeak(threadThreshold);
+            // Leak detection: slope > threshold AND R² >= minRSquared
+            metrics.MemoryLeakDetected = leakAnalysis.HasMemoryLeak(memoryThreshold, minRSquared);
+            metrics.ConnectionLeakDetected = leakAnalysis.HasConnectionLeak(connectionThreshold, minRSquared);
+            metrics.HandleLeakDetected = leakAnalysis.HasHandleLeak(handleThreshold, minRSquared);
+            metrics.ThreadLeakDetected = leakAnalysis.HasThreadLeak(threadThreshold, minRSquared);
         }
 
         return metrics;
@@ -179,6 +198,7 @@ public class MetricsCollector
 
     public string GetSummary()
     {
+        var minR2 = AppliedThresholds?.MinRSquared ?? 0.3;
         return $"""
             Test: {TestName}
             Pattern: {ClientPattern}
@@ -194,20 +214,22 @@ public class MetricsCollector
               Latency P99: {LatencyP99.TotalMilliseconds:F0} ms
 
             Resource Usage:
-              Memory Start: {MemoryStartBytes / 1024.0 / 1024.0:F1} MB
-              Memory End: {MemoryEndBytes / 1024.0 / 1024.0:F1} MB
-              Memory Peak: {MemoryPeakBytes / 1024.0 / 1024.0:F1} MB
-              Memory Growth Rate: {MemoryGrowthRate:F2} bytes/request
-              Connections: {ConnectionsStart} → {ConnectionsEnd} (Peak: {ConnectionsPeak})
-              Connection Leak Rate: {ConnectionLeakRate:F4} connections/request
-              Threads: {ThreadsStart} → {ThreadsEnd}
-              Handles: {HandlesStart} → {HandlesEnd}
+              Memory: {MemoryStartBytes / 1024.0 / 1024.0:F1} MB -> {MemoryEndBytes / 1024.0 / 1024.0:F1} MB (Peak: {MemoryPeakBytes / 1024.0 / 1024.0:F1} MB)
+              Connections: {ConnectionsStart} -> {ConnectionsEnd} (Peak: {ConnectionsPeak})
+              Threads: {ThreadsStart} -> {ThreadsEnd}
+              Handles: {HandlesStart} -> {HandlesEnd}
 
-            Leak Detection:
-              Memory Leak: {(MemoryLeakDetected ? "⚠️  YES" : "✅ No")}
-              Connection Leak: {(ConnectionLeakDetected ? "⚠️  YES" : "✅ No")}
-              Handle Leak: {(HandleLeakDetected ? "⚠️  YES" : "✅ No")}
-              Thread Leak: {(ThreadLeakDetected ? "⚠️  YES" : "✅ No")}
+            Trend Analysis (slope + R2):
+              Memory:     slope={MemorySlope:F2} bytes/req, R2={MemoryRSquared:F3}
+              Connection: slope={ConnectionSlope:F6} conn/req, R2={ConnectionRSquared:F3}
+              Handle:     slope={HandleSlope:F6} handles/req, R2={HandleRSquared:F3}
+              Thread:     slope={ThreadSlope:F6} threads/req, R2={ThreadRSquared:F3}
+
+            Leak Detection (slope > threshold AND R2 >= {minR2}):
+              Memory Leak: {(MemoryLeakDetected ? "YES" : "No")}
+              Connection Leak: {(ConnectionLeakDetected ? "YES" : "No")}
+              Handle Leak: {(HandleLeakDetected ? "YES" : "No")}
+              Thread Leak: {(ThreadLeakDetected ? "YES" : "No")}
             """;
     }
 }

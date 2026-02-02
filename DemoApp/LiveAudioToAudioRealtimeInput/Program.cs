@@ -47,7 +47,7 @@ if (isVertex) {
   string apiKey = System.Environment.GetEnvironmentVariable("GOOGLE_API_KEY") ??
                   throw new ArgumentNullException("GOOGLE_API_KEY not set for Gemini API.");
   client = new Client(apiKey: apiKey);
-  model = "gemini-2.0-flash-live-001";
+  model = "gemini-2.5-flash-native-audio-preview-12-2025";
   mimeType = "audio/pcm";
 }
 

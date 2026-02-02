@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-using Microsoft.Extensions.Configuration;
-
 namespace Google.GenAI.StressTests.Configuration;
 
 public class StressTestConfig
@@ -62,28 +60,11 @@ public class StressTestConfig
 
     private static StressTestConfig Load()
     {
-        var configuration = new ConfigurationBuilder()
-            .SetBasePath(Directory.GetCurrentDirectory())
-            .AddJsonFile("Configuration/appsettings.stress.json", optional: false)
-            .AddEnvironmentVariables()
-            .Build();
-
-        var config = new StressTestConfig();
-        configuration.GetSection("StressTest").Bind(config);
-
-        if (config.ApiKey.StartsWith("env:"))
+        return new StressTestConfig
         {
-            var envVar = config.ApiKey.Substring(4);
-            config.ApiKey = Environment.GetEnvironmentVariable(envVar) ?? string.Empty;
-        }
-
-        if (config.Project.StartsWith("env:"))
-        {
-            var envVar = config.Project.Substring(4);
-            config.Project = Environment.GetEnvironmentVariable(envVar) ?? string.Empty;
-        }
-
-        return config;
+            ApiKey = Environment.GetEnvironmentVariable("GOOGLE_API_KEY") ?? string.Empty,
+            Project = Environment.GetEnvironmentVariable("GOOGLE_CLOUD_PROJECT") ?? string.Empty
+        };
     }
 }
 
@@ -98,31 +79,83 @@ public class LoadPatternConfig
 
 public class LoadPatternsConfig
 {
-    public LoadPatternConfig Light { get; set; } = new();
-    public LoadPatternConfig Medium { get; set; } = new();
-    public LoadPatternConfig Heavy { get; set; } = new();
+    public LoadPatternConfig Light { get; set; } = new()
+    {
+        MaxConcurrent = 50,
+        RampUpMinutes = 1,
+        SustainMinutes = 1
+    };
+
+    public LoadPatternConfig Medium { get; set; } = new()
+    {
+        MaxConcurrent = 500,
+        RampUpMinutes = 1,
+        SustainMinutes = 10
+    };
+
+    public LoadPatternConfig Heavy { get; set; } = new()
+    {
+        MaxConcurrent = 1500,
+        RampUpMinutes = 1,
+        SustainMinutes = 10
+    };
 }
 
 public class ThresholdsConfig
 {
-    /// <summary>
-    /// Memory growth threshold for HTTP scenarios (GenerateContent, etc.)
-    /// </summary>
-    public double MemoryGrowthRateBytesPerRequest { get; set; } = 100;
+    // ============ Slope Thresholds (units per request) ============
 
     /// <summary>
-    /// Memory growth threshold for WebSocket scenarios (Live API).
+    /// Memory growth slope threshold for HTTP scenarios (GenerateContent, etc.)
+    /// Units: bytes per request from linear regression.
+    /// </summary>
+    public double MemorySlopeThreshold { get; set; } = 100;
+
+    /// <summary>
+    /// Memory growth slope threshold for WebSocket scenarios (Live API).
     /// WebSocket operations have higher memory overhead due to:
     /// - Connection state and buffers
     /// - Bidirectional message handling
     /// - Session management
-    /// Typical baseline: 500-1000 bytes/request is acceptable.
+    /// Units: bytes per request.
     /// </summary>
-    public double WebSocketMemoryGrowthRateBytesPerRequest { get; set; } = 1000;
+    public double WebSocketMemorySlopeThreshold { get; set; } = 1000;
 
-    public int ConnectionLeakThreshold { get; set; } = 10;
-    public int HandleLeakThreshold { get; set; } = 50;
-    public int ThreadLeakThreshold { get; set; } = 20;
+    /// <summary>
+    /// Connection leak slope threshold: connections per request.
+    /// A slope of 0.001 means 1 connection leaked per 1000 requests.
+    /// </summary>
+    public double ConnectionSlopeThreshold { get; set; } = 0.001;
+
+    /// <summary>
+    /// Handle leak slope threshold: handles per request.
+    /// A slope of 0.01 means 1 handle leaked per 100 requests.
+    /// </summary>
+    public double HandleSlopeThreshold { get; set; } = 0.01;
+
+    /// <summary>
+    /// Thread leak slope threshold: threads per request.
+    /// A slope of 0.001 means 1 thread leaked per 1000 requests.
+    /// </summary>
+    public double ThreadSlopeThreshold { get; set; } = 0.001;
+
+    // ============ R² Threshold (trend reliability) ============
+
+    /// <summary>
+    /// Minimum R² (coefficient of determination) required to consider a trend reliable.
+    /// R² measures how well the linear model fits the data:
+    /// - R² = 0: No linear relationship (pure noise)
+    /// - R² = 0.3: Weak trend, might be noise
+    /// - R² = 0.5: Moderate trend
+    /// - R² = 1.0: Perfect linear relationship
+    ///
+    /// A leak is only flagged when: slope > threshold AND R² >= MinRSquared
+    /// Default 0.3 filters out random fluctuations while catching real trends.
+    /// </summary>
+    public double MinRSquared { get; set; } = 0.3;
+
+    // ============ Other Thresholds ============
+
     public int LatencyP95Milliseconds { get; set; } = 5000;
 }
 
@@ -134,21 +167,34 @@ public class ScenarioConfig
 
 public class ScenariosConfig
 {
-    public ScenarioConfig GenerateContent { get; set; } = new();
-    public ScenarioConfig GenerateContentStream { get; set; } = new();
-    public ScenarioConfig LiveApi { get; set; } = new();
+    public ScenarioConfig GenerateContent { get; set; } = new()
+    {
+        Model = "gemini-2.0-flash",
+        Prompt = "What is 2+2? Please provide a brief answer."
+    };
+
+    public ScenarioConfig GenerateContentStream { get; set; } = new()
+    {
+        Model = "gemini-2.0-flash",
+        Prompt = "Count from 1 to 10, one number per line."
+    };
+
+    public ScenarioConfig LiveApi { get; set; } = new()
+    {
+        Model = "gemini-2.0-flash-live-preview-04-09"
+    };
 }
 
 public class MonitoringConfig
 {
     public int SnapshotIntervalSeconds { get; set; } = 10;
-    public double CooldownMinutes { get; set; } = 5;
+    public double CooldownMinutes { get; set; } = 0.2;
     public bool ForceGCBeforeFinalSnapshot { get; set; } = true;
 }
 
 public class ReportingConfig
 {
-    public string OutputDirectory { get; set; } = "./reports";
+    public string OutputDirectory { get; set; } = "../../../Reports";
     public bool GenerateHtml { get; set; } = true;
     public bool GenerateMarkdown { get; set; } = true;
     public bool SaveBaseline { get; set; } = true;

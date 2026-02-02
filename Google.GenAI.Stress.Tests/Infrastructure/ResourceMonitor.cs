@@ -26,9 +26,23 @@ public class ResourceMonitor
 {
     private readonly Process _currentProcess;
     private readonly List<ResourceSnapshot> _snapshots;
+    private readonly List<ResourceSnapshot> _inScenarioSnapshots = new();
     private readonly Timer? _snapshotTimer;
     private int _requestCount;
     private int? _mockServerPort;
+    private long _lastCapturedMilestone = 0;
+
+    /// <summary>
+    /// When true, forces a full GC before every resource snapshot.
+    /// This ensures accurate memory measurements by reclaiming garbage before each measurement.
+    /// </summary>
+    public bool ForceGCBeforeSnapshots { get; set; } = true;
+
+    /// <summary>
+    /// The "test end" snapshot captured immediately after the test completes,
+    /// before any post-processing overhead. Used for accurate leak analysis.
+    /// </summary>
+    private ResourceSnapshot? _testEndSnapshot;
 
     public ResourceMonitor()
     {
@@ -54,6 +68,13 @@ public class ResourceMonitor
 
     public ResourceSnapshot CaptureSnapshot()
     {
+        if (ForceGCBeforeSnapshots)
+        {
+            GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced, blocking: true);
+            GC.WaitForPendingFinalizers();
+            GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced, blocking: true);
+        }
+
         _currentProcess.Refresh();
 
         // snapshot resources used by this .NET application, and tcp connections to Google's API or mock server port
@@ -63,8 +84,8 @@ public class ResourceMonitor
             WorkingSetBytes = _currentProcess.WorkingSet64,
             PrivateMemoryBytes = _currentProcess.PrivateMemorySize64,
             ManagedMemoryBytes = GC.GetTotalMemory(forceFullCollection: false),
-            ThreadCount = _currentProcess.Threads.Count,
-            HandleCount = _currentProcess.HandleCount,
+            ThreadCount = GetThreadCountSafe(),
+            HandleCount = GetHandleCountSafe(),
             TcpConnectionCount = GetActiveTcpConnections(),
             RequestCount = _requestCount
         };
@@ -75,6 +96,63 @@ public class ResourceMonitor
         }
 
         return snapshot;
+    }
+
+    /// <summary>
+    /// Gets thread count safely.
+    /// </summary>
+    private int GetThreadCountSafe()
+    {
+        try
+        {
+            if (OperatingSystem.IsLinux())
+            {
+                // On Linux, counting /proc/self/task is much faster and more stable than Process.Threads
+                // which creates a ProcessThread object for every thread and can fail under load.
+                if (Directory.Exists("/proc/self/task"))
+                {
+                    return Directory.GetDirectories("/proc/self/task").Length;
+                }
+            }
+            return _currentProcess.Threads.Count;
+        }
+        catch
+        {
+            return 0;
+        }
+    }
+
+    /// <summary>
+    /// Gets handle/file descriptor count - cross-platform.
+    /// Windows: Process.HandleCount
+    /// Linux: Count entries in /proc/self/fd
+    /// macOS: Falls back to 0
+    /// </summary>
+    private int GetHandleCountSafe()
+    {
+        try
+        {
+            if (OperatingSystem.IsWindows())
+            {
+                return _currentProcess.HandleCount;
+            }
+            else if (OperatingSystem.IsLinux())
+            {
+                // Count open file descriptors from /proc/self/fd
+                // This is more reliable than Process.HandleCount which can crash with NRE on some Linux environments
+                var fdPath = "/proc/self/fd";
+                if (Directory.Exists(fdPath))
+                {
+                    return Directory.GetFiles(fdPath).Length;
+                }
+            }
+            // Fallback for other OS (e.g., macOS)
+            return 0;
+        }
+        catch
+        {
+            return 0;
+        }
     }
 
     public ResourceSnapshot CaptureBaselineSnapshot()
@@ -97,8 +175,97 @@ public class ResourceMonitor
         {
             _snapshots.Clear();
         }
+        lock (_inScenarioSnapshots)
+        {
+            _inScenarioSnapshots.Clear();
+        }
+        _lastCapturedMilestone = 0;
+        _testEndSnapshot = null;
         CaptureBaselineSnapshot();
     }
+
+    /// <summary>
+    /// Capture a snapshot from within the scenario at specific milestones.
+    /// Thread-safe - only one thread captures at each milestone.
+    /// This captures measurements AFTER SDK operations complete but BEFORE returning to NBomber,
+    /// providing more accurate measurements that exclude NBomber's internal tracking overhead.
+    /// </summary>
+    /// <param name="snapshotInterval">Capture a snapshot every N requests (default: 100)</param>
+    public void CaptureInScenarioSnapshot(int snapshotInterval = 100)
+    {
+        var currentRequest = _requestCount;
+        var milestone = (currentRequest / snapshotInterval) * snapshotInterval;
+
+        // Only capture at milestones (100, 200, 300...) and only once per milestone
+        if (milestone == 0 || milestone <= Interlocked.Read(ref _lastCapturedMilestone))
+            return;
+
+        // Atomically claim this milestone
+        var expectedPrevious = milestone - snapshotInterval;
+        if (Interlocked.CompareExchange(ref _lastCapturedMilestone, milestone, expectedPrevious) != expectedPrevious)
+            return;
+
+        // Force GC and capture
+        GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced, blocking: true);
+        GC.WaitForPendingFinalizers();
+        GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced, blocking: true);
+
+        _currentProcess.Refresh();
+
+        var snapshot = new ResourceSnapshot
+        {
+            Timestamp = DateTime.UtcNow,
+            WorkingSetBytes = _currentProcess.WorkingSet64,
+            PrivateMemoryBytes = _currentProcess.PrivateMemorySize64,
+            ManagedMemoryBytes = GC.GetTotalMemory(forceFullCollection: false),
+            ThreadCount = _currentProcess.Threads.Count,
+            HandleCount = _currentProcess.HandleCount,
+            TcpConnectionCount = GetActiveTcpConnections(),
+            RequestCount = currentRequest
+        };
+
+        lock (_inScenarioSnapshots)
+        {
+            _inScenarioSnapshots.Add(snapshot);
+        }
+    }
+
+    /// <summary>
+    /// Captures the "test end" snapshot immediately after the test completes.
+    /// This should be called right after NBomber.Run() returns, before any post-processing.
+    /// The snapshot is stored separately and used for leak analysis to exclude test infrastructure overhead.
+    /// </summary>
+    public ResourceSnapshot CaptureTestEndSnapshot()
+    {
+        // Stop the periodic timer to prevent further snapshots during post-processing
+        _snapshotTimer?.Change(Timeout.Infinite, Timeout.Infinite);
+
+        // Force full GC to reclaim SDK resources and get accurate measurement
+        GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced, blocking: true);
+        GC.WaitForPendingFinalizers();
+        GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced, blocking: true);
+
+        _currentProcess.Refresh();
+
+        _testEndSnapshot = new ResourceSnapshot
+        {
+            Timestamp = DateTime.UtcNow,
+            WorkingSetBytes = _currentProcess.WorkingSet64,
+            PrivateMemoryBytes = _currentProcess.PrivateMemorySize64,
+            ManagedMemoryBytes = GC.GetTotalMemory(forceFullCollection: false),
+            ThreadCount = _currentProcess.Threads.Count,
+            HandleCount = _currentProcess.HandleCount,
+            TcpConnectionCount = GetActiveTcpConnections(),
+            RequestCount = _requestCount
+        };
+
+        return _testEndSnapshot;
+    }
+
+    /// <summary>
+    /// Gets the test end snapshot if captured, otherwise null.
+    /// </summary>
+    public ResourceSnapshot? TestEndSnapshot => _testEndSnapshot;
 
     public List<ResourceSnapshot> GetSnapshots()
     {
@@ -108,47 +275,73 @@ public class ResourceMonitor
         }
     }
 
+    public List<ResourceSnapshot> GetInScenarioSnapshots()
+    {
+        lock (_inScenarioSnapshots)
+        {
+            return new List<ResourceSnapshot>(_inScenarioSnapshots);
+        }
+    }
+
     public LeakAnalysis AnalyzeLeaks(int totalRequests)
     {
-        List<ResourceSnapshot> snapshots;
-        lock (_snapshots)
+        List<ResourceSnapshot> allSnapshots;
+
+        // Use in-scenario snapshots (captured after SDK operations, before NBomber tracking)
+        lock (_inScenarioSnapshots)
         {
-            snapshots = new List<ResourceSnapshot>(_snapshots);
+            allSnapshots = new List<ResourceSnapshot>(_inScenarioSnapshots);
         }
 
-        if (snapshots.Count < 2)
+        // Need at least 2 snapshots for meaningful analysis
+        if (allSnapshots.Count < 2)
         {
             return new LeakAnalysis { InsufficientData = true };
         }
 
-        var first = snapshots.First();
-        var last = snapshots.Last();
+        // Analyze only the last 50% of snapshots to focus on the "sustain" phase and ignore ramp-up.
+        // For Light (1m ramp + 1m sustain), this analyzes the sustain phase.
+        // For Heavy (1m ramp + 10m sustain), this analyzes the last 5m of sustain.
+        // This avoids false positives where the ramp-up slope is interpreted as a leak.
+        var snapshotsToAnalyze = allSnapshots.Count >= 4 
+            ? allSnapshots.Skip(allSnapshots.Count / 2).ToList() 
+            : allSnapshots;
 
-        var memoryGrowth = last.ManagedMemoryBytes - first.ManagedMemoryBytes;
-        var memoryGrowthRate = totalRequests > 0 ? (double)memoryGrowth / totalRequests : 0;
+        var first = allSnapshots.First(); // Report full range stats based on all data
+        var last = allSnapshots.Last();
 
-        var memorySlope = CalculateLinearRegressionSlope(
-            snapshots.Select(s => (double)s.RequestCount).ToList(),
-            snapshots.Select(s => (double)s.ManagedMemoryBytes).ToList());
+        var requestCounts = snapshotsToAnalyze.Select(s => (double)s.RequestCount).ToList();
 
-        var connectionLeak = last.TcpConnectionCount - first.TcpConnectionCount;
+        var (memorySlope, memoryR2) = CalculateLinearRegression(
+            requestCounts,
+            snapshotsToAnalyze.Select(s => (double)s.ManagedMemoryBytes).ToList());
 
-        var handleLeak = last.HandleCount - first.HandleCount;
+        var (connectionSlope, connectionR2) = CalculateLinearRegression(
+            requestCounts,
+            snapshotsToAnalyze.Select(s => (double)s.TcpConnectionCount).ToList());
 
-        var threadLeak = last.ThreadCount - first.ThreadCount;
+        var (handleSlope, handleR2) = CalculateLinearRegression(
+            requestCounts,
+            snapshotsToAnalyze.Select(s => (double)s.HandleCount).ToList());
+
+        var (threadSlope, threadR2) = CalculateLinearRegression(
+            requestCounts,
+            snapshotsToAnalyze.Select(s => (double)s.ThreadCount).ToList());
 
         return new LeakAnalysis
         {
-            MemoryGrowthBytes = memoryGrowth,
-            MemoryGrowthRate = memoryGrowthRate,
             MemoryTrendSlope = memorySlope,
-            ConnectionLeak = connectionLeak,
-            HandleLeak = handleLeak,
-            ThreadLeak = threadLeak,
+            MemoryRSquared = memoryR2,
+            ConnectionTrendSlope = connectionSlope,
+            ConnectionRSquared = connectionR2,
+            HandleTrendSlope = handleSlope,
+            HandleRSquared = handleR2,
+            ThreadTrendSlope = threadSlope,
+            ThreadRSquared = threadR2,
             FirstSnapshot = first,
             LastSnapshot = last,
-            Snapshots = snapshots,
-            SnapshotCount = snapshots.Count
+            Snapshots = allSnapshots,
+            SnapshotCount = allSnapshots.Count
         };
     }
 
@@ -190,24 +383,41 @@ public class ResourceMonitor
     }
 
     /// <summary>
-    /// Calculate linear regression slope for trend analysis
+    /// Calculate linear regression slope and R² (coefficient of determination) for trend analysis.
+    /// R² indicates how well the linear model fits the data (0 = no fit, 1 = perfect fit).
     /// </summary>
-    private double CalculateLinearRegressionSlope(List<double> x, List<double> y)
+    private (double Slope, double RSquared) CalculateLinearRegression(List<double> x, List<double> y)
     {
         if (x.Count != y.Count || x.Count < 2)
-            return 0;
+            return (0, 0);
 
         var n = x.Count;
         var sumX = x.Sum();
         var sumY = y.Sum();
         var sumXY = x.Zip(y, (xi, yi) => xi * yi).Sum();
         var sumX2 = x.Sum(xi => xi * xi);
+        var sumY2 = y.Sum(yi => yi * yi);
 
         var denominator = n * sumX2 - sumX * sumX;
         if (Math.Abs(denominator) < double.Epsilon)
-            return 0.0; // No variance in data
+            return (0, 0); // No variance in X data
+
+        // Calculate slope
         var slope = (n * sumXY - sumX * sumY) / denominator;
-        return slope;
+
+        // Calculate R² (coefficient of determination)
+        // R² = (n * sumXY - sumX * sumY)² / [(n * sumX2 - sumX²) * (n * sumY2 - sumY²)]
+        var numeratorR = n * sumXY - sumX * sumY;
+        var denominatorY = n * sumY2 - sumY * sumY;
+
+        double rSquared = 0;
+        if (Math.Abs(denominatorY) > double.Epsilon)
+        {
+            var r = numeratorR / Math.Sqrt(denominator * denominatorY);
+            rSquared = r * r;
+        }
+
+        return (slope, rSquared);
     }
 
     public void Dispose()
@@ -242,28 +452,57 @@ public class ResourceSnapshot
 public class LeakAnalysis
 {
     public bool InsufficientData { get; set; }
-    public long MemoryGrowthBytes { get; set; }
-    public double MemoryGrowthRate { get; set; } // Bytes per request
-    public double MemoryTrendSlope { get; set; }
-    public int ConnectionLeak { get; set; }
-    public int HandleLeak { get; set; }
-    public int ThreadLeak { get; set; }
+
+    // Slope values (units per request from linear regression)
+    public double MemoryTrendSlope { get; set; } // Bytes per request
+    public double ConnectionTrendSlope { get; set; } // Connections per request
+    public double HandleTrendSlope { get; set; } // Handles per request
+    public double ThreadTrendSlope { get; set; } // Threads per request
+
+    // R² values (coefficient of determination: 0 = no trend, 1 = perfect trend)
+    public double MemoryRSquared { get; set; }
+    public double ConnectionRSquared { get; set; }
+    public double HandleRSquared { get; set; }
+    public double ThreadRSquared { get; set; }
+
     public ResourceSnapshot? FirstSnapshot { get; set; }
     public ResourceSnapshot? LastSnapshot { get; set; }
     public List<ResourceSnapshot>? Snapshots { get; set; }
     public int SnapshotCount { get; set; }
 
-    public bool HasMemoryLeak(double threshold) => MemoryGrowthRate > threshold;
-    public bool HasConnectionLeak(int threshold) => ConnectionLeak > threshold;
-    public bool HasHandleLeak(int threshold) => HandleLeak > threshold;
-    public bool HasThreadLeak(int threshold) => ThreadLeak > threshold;
+    /// <summary>
+    /// Checks for memory leak: slope exceeds threshold AND R² indicates reliable trend.
+    /// </summary>
+    public bool HasMemoryLeak(double slopeThreshold, double minRSquared) =>
+        MemoryTrendSlope > slopeThreshold && MemoryRSquared >= minRSquared;
 
-    public bool HasAnyLeak(double memoryThreshold, int connectionThreshold,
-        int handleThreshold, int threadThreshold)
+    /// <summary>
+    /// Checks for connection leak: slope exceeds threshold AND R² indicates reliable trend.
+    /// </summary>
+    public bool HasConnectionLeak(double slopeThreshold, double minRSquared) =>
+        ConnectionTrendSlope > slopeThreshold && ConnectionRSquared >= minRSquared;
+
+    /// <summary>
+    /// Checks for handle leak: slope exceeds threshold AND R² indicates reliable trend.
+    /// </summary>
+    public bool HasHandleLeak(double slopeThreshold, double minRSquared) =>
+        HandleTrendSlope > slopeThreshold && HandleRSquared >= minRSquared;
+
+    /// <summary>
+    /// Checks for thread leak: slope exceeds threshold AND R² indicates reliable trend.
+    /// </summary>
+    public bool HasThreadLeak(double slopeThreshold, double minRSquared) =>
+        ThreadTrendSlope > slopeThreshold && ThreadRSquared >= minRSquared;
+
+    /// <summary>
+    /// Checks for any leak using slope + R² analysis.
+    /// </summary>
+    public bool HasAnyLeak(double memorySlopeThreshold, double connectionSlopeThreshold,
+        double handleSlopeThreshold, double threadSlopeThreshold, double minRSquared)
     {
-        return HasMemoryLeak(memoryThreshold) ||
-               HasConnectionLeak(connectionThreshold) ||
-               HasHandleLeak(handleThreshold) ||
-               HasThreadLeak(threadThreshold);
+        return HasMemoryLeak(memorySlopeThreshold, minRSquared) ||
+               HasConnectionLeak(connectionSlopeThreshold, minRSquared) ||
+               HasHandleLeak(handleSlopeThreshold, minRSquared) ||
+               HasThreadLeak(threadSlopeThreshold, minRSquared);
     }
 }

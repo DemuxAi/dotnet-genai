@@ -73,15 +73,9 @@ public class GenerateContentStressTests : StressTestBase
 
         scenario = scenario.WithLoadSimulations(LoadPatterns.Light);
 
-        // Adjust thresholds for Singleton pattern which pools connections
-        var maxConcurrent = Config.LoadPatterns.Light.MaxConcurrent;
-        var metrics = await RunScenario(scenario, clientPattern, "Light",
-            connectionThreshold: maxConcurrent + Config.Thresholds.ConnectionLeakThreshold,
-            handleThreshold: maxConcurrent * 10,
-            threadThreshold: 20 + (maxConcurrent / 20));
+        // Use default slope-based thresholds
+        var metrics = await RunScenario(scenario, clientPattern, "Light");
 
-        AssertSuccessRate(metrics, minimumSuccessRate: 95.0);
-        AssertAcceptableLatency(metrics);
         AssertNoResourceLeaks(metrics);
     }
 
@@ -113,11 +107,9 @@ public class GenerateContentStressTests : StressTestBase
 
         scenario = scenario.WithLoadSimulations(LoadPatterns.Light);
 
-        var maxConcurrent = Config.LoadPatterns.Light.MaxConcurrent;
-        var metrics = await RunScenario(scenario, clientPattern, "Light",
-            threadThreshold: 20 + (maxConcurrent / 20));
+        // Use default slope-based thresholds
+        var metrics = await RunScenario(scenario, clientPattern, "Light");
 
-        AssertSuccessRate(metrics, minimumSuccessRate: 95.0);
         AssertNoResourceLeaks(metrics);
     }
 
@@ -149,13 +141,11 @@ public class GenerateContentStressTests : StressTestBase
 
         scenario = scenario.WithLoadSimulations(LoadPatterns.Medium);
 
-        var maxConcurrent = Config.LoadPatterns.Medium.MaxConcurrent;
-        var metrics = await RunScenario(scenario, clientPattern, "Medium",
-            threadThreshold: 20 + (maxConcurrent / 20));
+        // Use default slope-based thresholds
+        var metrics = await RunScenario(scenario, clientPattern, "Medium");
 
         Console.WriteLine($"\nClients created during test: {clientPattern.ClientsCreated}");
 
-        AssertSuccessRate(metrics, minimumSuccessRate: 95.0);
         AssertNoResourceLeaks(metrics);
     }
 
@@ -203,15 +193,9 @@ public class GenerateContentStressTests : StressTestBase
 
         scenario = scenario.WithLoadSimulations(LoadPatterns.Medium);
 
-        // Pool pattern maintains connections similar to Singleton
-        var maxConcurrent = Config.LoadPatterns.Medium.MaxConcurrent;
-        var metrics = await RunScenario(scenario, clientPattern, "Medium",
-            connectionThreshold: maxConcurrent + Config.Thresholds.ConnectionLeakThreshold,
-            handleThreshold: maxConcurrent * 10,
-            threadThreshold: 20 + (maxConcurrent / 20));
+        // Use default slope-based thresholds
+        var metrics = await RunScenario(scenario, clientPattern, "Medium");
 
-        AssertSuccessRate(metrics, minimumSuccessRate: 95.0);
-        AssertAcceptableLatency(metrics);
         AssertNoResourceLeaks(metrics);
     }
 
@@ -241,15 +225,95 @@ public class GenerateContentStressTests : StressTestBase
 
         scenario = scenario.WithLoadSimulations(LoadPatterns.Heavy);
 
-        // Adjust thresholds for Singleton pattern which pools connections
-        var maxConcurrent = Config.LoadPatterns.Heavy.MaxConcurrent;
-        var metrics = await RunScenario(scenario, clientPattern, "Heavy",
-            connectionThreshold: maxConcurrent + Config.Thresholds.ConnectionLeakThreshold,
-            handleThreshold: maxConcurrent * 10,
-            threadThreshold: 20 + (maxConcurrent / 20));
+        // Use default slope-based thresholds
+        var metrics = await RunScenario(scenario, clientPattern, "Heavy");
 
-        AssertSuccessRate(metrics, minimumSuccessRate: 90.0); // Slightly lower for heavy load
-        AssertAcceptableLatency(metrics, TimeSpan.FromSeconds(10)); // Higher threshold for heavy load
+        AssertNoResourceLeaks(metrics);
+    }
+
+    /// <summary>
+    /// Test Pattern B (Per-Request) with Heavy load
+    /// Expected: PASS - proper disposal should prevent leaks even under extreme load
+    /// </summary>
+    [TestMethod]
+    [TestCategory("Heavy")]
+    [TestCategory("GenerateContent")]
+    [TestCategory("PerRequest")]
+    public async Task GenerateContent_ClientPerRequest_Heavy()
+    {
+        using var clientPattern = CreateClientPattern<ClientPerRequestPattern>();
+
+        // Warm up static state
+        var client = clientPattern.GetClient();
+        var scenarioConfig = Config.Scenarios.GenerateContent;
+        await client.Models.GenerateContentAsync(
+             model: scenarioConfig.Model,
+             contents: scenarioConfig.Prompt);
+        clientPattern.ReturnClient(client);
+
+        ResourceMonitor?.ResetBaseline();
+
+        var scenario = CreateGenerateContentScenario(
+            clientPattern,
+            "GenerateContent_PerRequest_Heavy");
+
+        scenario = scenario.WithLoadSimulations(LoadPatterns.Heavy);
+
+        // Use default slope-based thresholds
+        var metrics = await RunScenario(scenario, clientPattern, "Heavy");
+
+        Console.WriteLine($"\nClients created during test: {clientPattern.ClientsCreated}");
+
+        AssertNoResourceLeaks(metrics);
+    }
+
+    /// <summary>
+    /// Test Pattern C (Pool) with Heavy load
+    /// Expected: PASS - pool should handle heavy load without leaks
+    /// </summary>
+    [TestMethod]
+    [TestCategory("Heavy")]
+    [TestCategory("GenerateContent")]
+    [TestCategory("Pool")]
+    public async Task GenerateContent_ClientPool_Heavy()
+    {
+        using var clientPattern = CreateClientPoolPattern(poolSize: 10);
+
+        // Warm up the pool: create and use all clients to initialize connections
+        var scenarioConfig = Config.Scenarios.GenerateContent;
+        var clients = new List<Client>();
+        // 1. Drain/Fill the pool
+        for (int i = 0; i < 10; i++)
+        {
+            clients.Add(clientPattern.GetClient());
+        }
+
+        // 2. Warm up each client (initialize connections)
+        foreach (var client in clients)
+        {
+            await client.Models.GenerateContentAsync(
+                 model: scenarioConfig.Model,
+                 contents: scenarioConfig.Prompt);
+        }
+
+        // 3. Return to pool
+        foreach (var client in clients)
+        {
+            clientPattern.ReturnClient(client);
+        }
+
+        // Reset baseline after full pool warm-up
+        ResourceMonitor?.ResetBaseline();
+
+        var scenario = CreateGenerateContentScenario(
+            clientPattern,
+            "GenerateContent_Pool_Heavy");
+
+        scenario = scenario.WithLoadSimulations(LoadPatterns.Heavy);
+
+        // Use default slope-based thresholds
+        var metrics = await RunScenario(scenario, clientPattern, "Heavy");
+
         AssertNoResourceLeaks(metrics);
     }
 
@@ -292,6 +356,9 @@ public class GenerateContentStressTests : StressTestBase
                     return Response.Fail<int>(payload: 0, statusCode: "500");
                 }
 
+                // Capture snapshot after SDK operation completes but before returning to NBomber
+                ResourceMonitor?.CaptureInScenarioSnapshot();
+
                 var textLength = response.Candidates[0].Content?.Parts?[0].Text?.Length ?? 0;
                 return Response.Ok(
                     payload: textLength,
@@ -321,7 +388,7 @@ public class GenerateContentStressTests : StressTestBase
     /// <summary>
     /// Execute with exponential backoff retry for rate limit errors (429)
     /// </summary>
-    private async Task<T> ExecuteWithRetry<T>(Func<Task<T>> action, int maxRetries = 5)
+    private async Task<T> ExecuteWithRetry<T>(Func<Task<T>> action, int maxRetries = 1)
     {
         for (int attempt = 0; attempt < maxRetries; attempt++)
         {

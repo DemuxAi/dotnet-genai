@@ -25,6 +25,26 @@ using Google.GenAI.StressTests.MockServer;
 namespace Google.GenAI.StressTests.Infrastructure;
 
 /// <summary>
+/// Per-test configuration overrides for RunScenario.
+/// All properties are optional - null means use global config default.
+/// </summary>
+public class RunScenarioOptions
+{
+    // Threshold overrides (slope-based: units per request from linear regression)
+    public double? MemoryThreshold { get; set; }
+    public double? ConnectionThreshold { get; set; }
+    public double? HandleThreshold { get; set; }
+    public double? ThreadThreshold { get; set; }
+
+    /// <summary>
+    /// Force GC before every resource snapshot (default: true).
+    /// This ensures accurate memory measurements throughout the test
+    /// by reclaiming garbage before each measurement.
+    /// </summary>
+    public bool ForceGCBeforeSnapshots { get; set; } = true;
+}
+
+/// <summary>
 /// Base class for all stress test scenarios
 /// Provides common functionality for resource monitoring, scenario execution, and reporting
 /// </summary>
@@ -109,10 +129,6 @@ public abstract class StressTestBase
     [TestInitialize]
     public void BaseSetup()
     {
-        Console.WriteLine($"\n{'='} Starting Stress Test {'='}\n");
-        Console.WriteLine($"Test: {TestContext?.TestName ?? "Unknown"}");
-        Console.WriteLine($"Configuration loaded: API Key present = {!string.IsNullOrEmpty(Config.ApiKey)}");
-
         // Initialize resource monitor with configured snapshot interval
         ResourceMonitor = new ResourceMonitor(Config.Monitoring.SnapshotIntervalSeconds);
 
@@ -122,14 +138,12 @@ public abstract class StressTestBase
         }
 
         // Capture baseline
-        var baseline = ResourceMonitor.CaptureBaselineSnapshot();
-        Console.WriteLine($"Baseline: {baseline}");
+        ResourceMonitor.CaptureBaselineSnapshot();
     }
 
     [TestCleanup]
     public void BaseCleanup()
     {
-        Console.WriteLine($"\n{'='} Test Complete {'='}\n");
         ResourceMonitor?.Dispose();
     }
 
@@ -142,42 +156,35 @@ public abstract class StressTestBase
         ScenarioProps scenario,
         IClientPattern clientPattern,
         string loadPattern,
-        double? memoryThreshold = null,
-        int? connectionThreshold = null,
-        int? handleThreshold = null,
-        int? threadThreshold = null)
+        RunScenarioOptions? options = null)
     {
         if (ResourceMonitor == null)
         {
             throw new InvalidOperationException("ResourceMonitor not initialized");
         }
 
+        options ??= new RunScenarioOptions();
+
+        // Configure ResourceMonitor with options
+        ResourceMonitor.ForceGCBeforeSnapshots = options.ForceGCBeforeSnapshots;
+
         var testName = TestContext?.TestName ?? "Unknown";
         var timestamp = DateTime.UtcNow.ToString("yyyyMMdd-HHmmss");
         var reportName = $"{testName}-{timestamp}";
         var reportFolder = Path.Combine(Config.Reporting.OutputDirectory, reportName);
-        var logFileName = Path.Combine(reportFolder, $"{reportName}.log");
 
+        // Create report folder
+        Directory.CreateDirectory(reportFolder);
+
+        // Run NBomber without its built-in reports (we generate our own)
         var stats = NBomberRunner
             .RegisterScenarios(scenario)
-            .WithReportFolder(reportFolder)
-            .WithReportFileName(reportName)
-            .WithReportFormats(ReportFormat.Html, ReportFormat.Md)
-
+            .WithoutReports()
             .Run();
 
-        Console.WriteLine($"\nCooldown period: {Config.Monitoring.CooldownMinutes} minutes...");
-        await Task.Delay(TimeSpan.FromMinutes(Config.Monitoring.CooldownMinutes));
-
-        if (Config.Monitoring.ForceGCBeforeFinalSnapshot)
-        {
-            GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced, blocking: true);
-            GC.WaitForPendingFinalizers();
-            GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced, blocking: true);
-        }
-
-        var finalSnapshot = ResourceMonitor.CaptureSnapshot();
-        Console.WriteLine($"Final: {finalSnapshot}");
+        // Immediately capture test end snapshot after NBomber finishes
+        // This excludes post-processing overhead from leak analysis
+        ResourceMonitor.CaptureTestEndSnapshot();
 
         var totalRequests = stats.ScenarioStats.FirstOrDefault()?.Ok.Request.Count ?? 0;
         var leakAnalysis = ResourceMonitor.AnalyzeLeaks(totalRequests);
@@ -189,12 +196,19 @@ public abstract class StressTestBase
             testName,
             clientPattern.PatternName,
             loadPattern,
-            memoryThreshold,
-            connectionThreshold,
-            handleThreshold,
-            threadThreshold);
+            options.MemoryThreshold,
+            options.ConnectionThreshold,
+            options.HandleThreshold,
+            options.ThreadThreshold);
 
         Console.WriteLine("\n" + metrics.GetSummary());
+
+        // Generate our custom HTML report with resource charts
+        var snapshots = ResourceMonitor.GetInScenarioSnapshots();
+        var reportHtml = ReportGenerator.GenerateHtml(metrics, snapshots, leakAnalysis);
+        var reportPath = Path.Combine(reportFolder, $"{reportName}.html");
+        await File.WriteAllTextAsync(reportPath, reportHtml);
+        Console.WriteLine($"Report saved: {reportPath}");
 
         if (Config.Reporting.SaveBaseline)
         {
@@ -210,19 +224,20 @@ public abstract class StressTestBase
     /// </summary>
     protected void AssertNoResourceLeaksWebSocket(MetricsCollector metrics)
     {
-        AssertNoResourceLeaks(metrics, memoryThreshold: Config.Thresholds.WebSocketMemoryGrowthRateBytesPerRequest);
+        AssertNoResourceLeaks(metrics, memoryThreshold: Config.Thresholds.WebSocketMemorySlopeThreshold);
     }
 
     /// <summary>
     /// Assert that no resource leaks were detected with customizable thresholds.
-    /// Uses thresholds from metrics (if set during RunScenario) or falls back to args/config.
+    /// Uses slope + R² analysis: leak detected when slope > threshold AND R² >= minRSquared.
+    /// Thresholds from metrics (if set during RunScenario) or falls back to args/config.
     /// </summary>
     protected void AssertNoResourceLeaks(
         MetricsCollector metrics,
         double? memoryThreshold = null,
-        int? connectionThreshold = null,
-        int? handleThreshold = null,
-        int? threadThreshold = null)
+        double? connectionThreshold = null,
+        double? handleThreshold = null,
+        double? threadThreshold = null)
     {
         var failures = new List<string>();
 
@@ -231,50 +246,50 @@ public abstract class StressTestBase
         // 2. Thresholds recorded in metrics (from RunScenario)
         // 3. Global config
         var effectiveMemoryThreshold = memoryThreshold
-            ?? metrics.AppliedThresholds?.MemoryGrowthRateBytesPerRequest
-            ?? Config.Thresholds.MemoryGrowthRateBytesPerRequest;
+            ?? metrics.AppliedThresholds?.MemorySlopeThreshold
+            ?? Config.Thresholds.MemorySlopeThreshold;
 
         var effectiveConnectionThreshold = connectionThreshold
-            ?? metrics.AppliedThresholds?.ConnectionLeakThreshold
-            ?? Config.Thresholds.ConnectionLeakThreshold;
+            ?? metrics.AppliedThresholds?.ConnectionSlopeThreshold
+            ?? Config.Thresholds.ConnectionSlopeThreshold;
 
-        var effectiveHandleThreshold = handleThreshold 
-            ?? metrics.AppliedThresholds?.HandleLeakThreshold
-            ?? Config.Thresholds.HandleLeakThreshold;
+        var effectiveHandleThreshold = handleThreshold
+            ?? metrics.AppliedThresholds?.HandleSlopeThreshold
+            ?? Config.Thresholds.HandleSlopeThreshold;
 
         var effectiveThreadThreshold = threadThreshold
-            ?? metrics.AppliedThresholds?.ThreadLeakThreshold
-            ?? Config.Thresholds.ThreadLeakThreshold;
+            ?? metrics.AppliedThresholds?.ThreadSlopeThreshold
+            ?? Config.Thresholds.ThreadSlopeThreshold;
 
-        // Check memory leak
-        if (metrics.MemoryGrowthRate > effectiveMemoryThreshold)
+        var minRSquared = metrics.AppliedThresholds?.MinRSquared
+            ?? Config.Thresholds.MinRSquared;
+
+        // Check memory leak (slope > threshold AND R² >= minRSquared)
+        if (metrics.MemorySlope > effectiveMemoryThreshold && metrics.MemoryRSquared >= minRSquared)
         {
-            failures.Add($"Memory leak detected: {metrics.MemoryGrowthRate:F2} bytes/request " +
-                        $"(threshold: {effectiveMemoryThreshold})");
+            failures.Add($"Memory leak detected: slope={metrics.MemorySlope:F2} bytes/req, R2={metrics.MemoryRSquared:F3} " +
+                        $"(threshold: slope>{effectiveMemoryThreshold}, R2>={minRSquared})");
         }
 
         // Check connection leak
-        var connectionLeak = metrics.ConnectionsEnd - metrics.ConnectionsStart;
-        if (connectionLeak > effectiveConnectionThreshold)
+        if (metrics.ConnectionSlope > effectiveConnectionThreshold && metrics.ConnectionRSquared >= minRSquared)
         {
-            failures.Add($"Connection leak detected: {connectionLeak} leaked " +
-                        $"(threshold: {effectiveConnectionThreshold})");
+            failures.Add($"Connection leak detected: slope={metrics.ConnectionSlope:F6} conn/req, R2={metrics.ConnectionRSquared:F3} " +
+                        $"(threshold: slope>{effectiveConnectionThreshold}, R2>={minRSquared})");
         }
 
         // Check handle leak
-        var handleLeak = metrics.HandlesEnd - metrics.HandlesStart;
-        if (handleLeak > effectiveHandleThreshold)
+        if (metrics.HandleSlope > effectiveHandleThreshold && metrics.HandleRSquared >= minRSquared)
         {
-            failures.Add($"Handle leak detected: {handleLeak} leaked " +
-                        $"(threshold: {effectiveHandleThreshold})");
+            failures.Add($"Handle leak detected: slope={metrics.HandleSlope:F6} handles/req, R2={metrics.HandleRSquared:F3} " +
+                        $"(threshold: slope>{effectiveHandleThreshold}, R2>={minRSquared})");
         }
 
         // Check thread leak
-        var threadLeak = metrics.ThreadsEnd - metrics.ThreadsStart;
-        if (threadLeak > effectiveThreadThreshold)
+        if (metrics.ThreadSlope > effectiveThreadThreshold && metrics.ThreadRSquared >= minRSquared)
         {
-            failures.Add($"Thread leak detected: {threadLeak} leaked " +
-                        $"(threshold: {effectiveThreadThreshold})");
+            failures.Add($"Thread leak detected: slope={metrics.ThreadSlope:F6} threads/req, R2={metrics.ThreadRSquared:F3} " +
+                        $"(threshold: slope>{effectiveThreadThreshold}, R2>={minRSquared})");
         }
 
         if (failures.Any())

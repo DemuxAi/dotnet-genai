@@ -53,7 +53,7 @@ public static class LiveTextToTextClientContent {
         throw new InvalidOperationException(
             "API key is not set in the environment variable GOOGLE_API_KEY.");
       client = new Client(apiKey: apiKey, vertexAI: false);
-      model = "gemini-2.0-flash-live-001";
+      model = "gemini-2.5-flash-native-audio-preview-12-2025";
     }
     textCaptureCts = new CancellationTokenSource();
 

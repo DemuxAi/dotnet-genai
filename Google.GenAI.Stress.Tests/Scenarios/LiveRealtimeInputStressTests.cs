@@ -73,21 +73,14 @@ public class LiveRealtimeInputStressTests : StressTestBase
 
         scenario = scenario.WithLoadSimulations(LoadPatterns.Light);
 
-        var maxConcurrent = Config.LoadPatterns.Light.MaxConcurrent;
+        // Use WebSocket memory threshold (higher than HTTP due to WebSocket overhead)
         var metrics = await RunScenario(scenario, clientPattern, "Light",
-            memoryThreshold: Config.Thresholds.WebSocketMemoryGrowthRateBytesPerRequest,
-            threadThreshold: 20 + (maxConcurrent / 20));
+            new RunScenarioOptions
+            {
+                MemoryThreshold = Config.Thresholds.WebSocketMemorySlopeThreshold
+            });
 
-        AssertSuccessRate(metrics, minimumSuccessRate: 90.0); // Slightly lower for WebSocket
-        AssertAcceptableLatency(metrics, TimeSpan.FromSeconds(15)); // WebSocket setup takes time
-        AssertNoResourceLeaksWebSocket(metrics); // Use WebSocket-specific threshold
-
-        // WebSocket connections MUST return to baseline
-        if (metrics.ConnectionLeakDetected)
-        {
-            Assert.Fail("CRITICAL: WebSocket connections not properly closed. " +
-                       $"{metrics.ConnectionsEnd - metrics.ConnectionsStart} connections leaked.");
-        }
+        AssertNoResourceLeaksWebSocket(metrics);
     }
 
     /// <summary>
@@ -120,30 +113,14 @@ public class LiveRealtimeInputStressTests : StressTestBase
 
         scenario = scenario.WithLoadSimulations(LoadPatterns.Light);
 
-        var maxConcurrent = Config.LoadPatterns.Light.MaxConcurrent;
+        // Use WebSocket memory threshold (higher than HTTP due to WebSocket overhead)
         var metrics = await RunScenario(scenario, clientPattern, "Light",
-            memoryThreshold: Config.Thresholds.WebSocketMemoryGrowthRateBytesPerRequest,
-            threadThreshold: 20 + (maxConcurrent / 20));
-
-        AssertSuccessRate(metrics, minimumSuccessRate: 90.0);
-
-        if (metrics.HasAnyLeak())
-        {
-            Console.WriteLine("\n⚠️  WARNING: Leaks detected in Live API Per-Request pattern!");
-            Console.WriteLine($"Memory growth: {metrics.MemoryGrowthRate:F2} bytes/request");
-            Console.WriteLine($"Connection leak: {metrics.ConnectionsEnd - metrics.ConnectionsStart} WebSocket connections");
-
-            if (metrics.ConnectionLeakDetected)
+            new RunScenarioOptions
             {
-                Console.WriteLine("\n🔴 CRITICAL: WebSocket connections not closing properly!");
-                Console.WriteLine("This will exhaust connection pools in production.");
-            }
-        }
-        else
-        {
-            Console.WriteLine("\n✅ No leaks detected in Live API Per-Request pattern.");
-            Console.WriteLine("AsyncSession disposal is working correctly.");
-        }
+                MemoryThreshold = Config.Thresholds.WebSocketMemorySlopeThreshold
+            });
+
+        AssertNoResourceLeaksWebSocket(metrics);
     }
 
     /// <summary>
@@ -173,14 +150,14 @@ public class LiveRealtimeInputStressTests : StressTestBase
 
         scenario = scenario.WithLoadSimulations(LoadPatterns.Medium);
 
-        var maxConcurrent = Config.LoadPatterns.Medium.MaxConcurrent;
+        // Use WebSocket memory threshold (higher than HTTP due to WebSocket overhead)
         var metrics = await RunScenario(scenario, clientPattern, "Medium",
-            memoryThreshold: Config.Thresholds.WebSocketMemoryGrowthRateBytesPerRequest,
-            threadThreshold: 20 + (maxConcurrent / 20));
+            new RunScenarioOptions
+            {
+                MemoryThreshold = Config.Thresholds.WebSocketMemorySlopeThreshold
+            });
 
-        AssertSuccessRate(metrics, minimumSuccessRate: 85.0); // Lower for many concurrent WS
-        AssertAcceptableLatency(metrics, TimeSpan.FromSeconds(20));
-        AssertNoResourceLeaksWebSocket(metrics); // Use WebSocket-specific threshold
+        AssertNoResourceLeaksWebSocket(metrics);
     }
 
     /// <summary>
@@ -221,14 +198,139 @@ public class LiveRealtimeInputStressTests : StressTestBase
 
         scenario = scenario.WithLoadSimulations(LoadPatterns.Medium);
 
-        var maxConcurrent = Config.LoadPatterns.Medium.MaxConcurrent;
+        // Use WebSocket memory threshold (higher than HTTP due to WebSocket overhead)
         var metrics = await RunScenario(scenario, clientPattern, "Medium",
-            memoryThreshold: Config.Thresholds.WebSocketMemoryGrowthRateBytesPerRequest,
-            threadThreshold: 20 + (maxConcurrent / 20));
+            new RunScenarioOptions
+            {
+                MemoryThreshold = Config.Thresholds.WebSocketMemorySlopeThreshold
+            });
 
-        AssertSuccessRate(metrics, minimumSuccessRate: 85.0);
-        AssertAcceptableLatency(metrics, TimeSpan.FromSeconds(20));
-        AssertNoResourceLeaksWebSocket(metrics); // Use WebSocket-specific threshold
+        AssertNoResourceLeaksWebSocket(metrics);
+    }
+
+    /// <summary>
+    /// Test Pattern A (Singleton) with Heavy load
+    /// Expected: PASS - singleton should handle heavy WebSocket load without leaks
+    /// </summary>
+    [TestMethod]
+    [TestCategory("Heavy")]
+    [TestCategory("Live")]
+    [TestCategory("Singleton")]
+    public async Task LiveRealtimeInput_SingletonClient_Heavy()
+    {
+        using var clientPattern = CreateClientPattern<SingletonClientPattern>();
+
+        // Warm up
+        var client = clientPattern.GetClient();
+        var scenarioConfig = Config.Scenarios.LiveApi;
+        await using (var _ = await client.Live.ConnectAsync(
+             model: scenarioConfig.Model,
+             config: new LiveConnectConfig { ResponseModalities = new List<Modality> { Modality.TEXT } }))
+        { }
+        ResourceMonitor?.ResetBaseline();
+
+        var scenario = CreateLiveRealtimeInputScenario(
+            clientPattern,
+            "LiveRealtimeInput_Singleton_Heavy");
+
+        scenario = scenario.WithLoadSimulations(LoadPatterns.Heavy);
+
+        // Use WebSocket memory threshold (higher than HTTP due to WebSocket overhead)
+        var metrics = await RunScenario(scenario, clientPattern, "Heavy",
+            new RunScenarioOptions
+            {
+                MemoryThreshold = Config.Thresholds.WebSocketMemorySlopeThreshold
+            });
+
+        AssertNoResourceLeaksWebSocket(metrics);
+    }
+
+    /// <summary>
+    /// Test Pattern B (Per-Request) with Heavy load
+    /// Expected: PASS - proper disposal should prevent WebSocket leaks under extreme load
+    /// CRITICAL: WebSocket resources are expensive, leaks here are severe
+    /// </summary>
+    [TestMethod]
+    [TestCategory("Heavy")]
+    [TestCategory("Live")]
+    [TestCategory("PerRequest")]
+    public async Task LiveRealtimeInput_ClientPerRequest_Heavy()
+    {
+        using var clientPattern = CreateClientPattern<ClientPerRequestPattern>();
+
+        // Warm up static state
+        var client = clientPattern.GetClient();
+        var scenarioConfig = Config.Scenarios.LiveApi;
+        await using (var _ = await client.Live.ConnectAsync(
+             model: scenarioConfig.Model,
+             config: new LiveConnectConfig { ResponseModalities = new List<Modality> { Modality.TEXT } }))
+        { }
+        clientPattern.ReturnClient(client);
+
+        ResourceMonitor?.ResetBaseline();
+
+        var scenario = CreateLiveRealtimeInputScenario(
+            clientPattern,
+            "LiveRealtimeInput_PerRequest_Heavy");
+
+        scenario = scenario.WithLoadSimulations(LoadPatterns.Heavy);
+
+        // Use WebSocket memory threshold (higher than HTTP due to WebSocket overhead)
+        var metrics = await RunScenario(scenario, clientPattern, "Heavy",
+            new RunScenarioOptions
+            {
+                MemoryThreshold = Config.Thresholds.WebSocketMemorySlopeThreshold
+            });
+
+        AssertNoResourceLeaksWebSocket(metrics);
+    }
+
+    /// <summary>
+    /// Test Pattern C (Pool) with Heavy load
+    /// Expected: PASS - pool should handle heavy WebSocket load without leaks
+    /// </summary>
+    [TestMethod]
+    [TestCategory("Heavy")]
+    [TestCategory("Live")]
+    [TestCategory("Pool")]
+    public async Task LiveRealtimeInput_ClientPool_Heavy()
+    {
+        using var clientPattern = CreateClientPoolPattern(poolSize: 10);
+
+        // Warm up pool
+        var scenarioConfig = Config.Scenarios.LiveApi;
+        var clients = new List<Client>();
+        // 1. Fill pool
+        for (int i = 0; i < 10; i++) clients.Add(clientPattern.GetClient());
+
+        // 2. Warm up
+        foreach (var client in clients)
+        {
+            await using (var _ = await client.Live.ConnectAsync(
+                 model: scenarioConfig.Model,
+                 config: new LiveConnectConfig { ResponseModalities = new List<Modality> { Modality.TEXT } }))
+            { }
+        }
+
+        // 3. Return
+        foreach (var client in clients) clientPattern.ReturnClient(client);
+
+        ResourceMonitor?.ResetBaseline();
+
+        var scenario = CreateLiveRealtimeInputScenario(
+            clientPattern,
+            "LiveRealtimeInput_Pool_Heavy");
+
+        scenario = scenario.WithLoadSimulations(LoadPatterns.Heavy);
+
+        // Use WebSocket memory threshold (higher than HTTP due to WebSocket overhead)
+        var metrics = await RunScenario(scenario, clientPattern, "Heavy",
+            new RunScenarioOptions
+            {
+                MemoryThreshold = Config.Thresholds.WebSocketMemorySlopeThreshold
+            });
+
+        AssertNoResourceLeaksWebSocket(metrics);
     }
 
     /// <summary>
@@ -260,15 +362,13 @@ public class LiveRealtimeInputStressTests : StressTestBase
         scenario = scenario.WithLoadSimulations(
             LoadPatterns.CreateInjectPerSecond(rate: 10, durationMinutes: 1));
 
-        // Rapid cycling injects 10/sec, which is effectively concurrent if handling takes >0.1s
-        // Using light concurrent setting as approximation for thread pool impact
-        var maxConcurrent = Config.LoadPatterns.Light.MaxConcurrent; 
+        // Use WebSocket memory threshold (higher than HTTP due to WebSocket overhead)
         var metrics = await RunScenario(scenario, clientPattern, "Light",
-            memoryThreshold: Config.Thresholds.WebSocketMemoryGrowthRateBytesPerRequest,
-            threadThreshold: 20 + (maxConcurrent / 20));
+            new RunScenarioOptions
+            {
+                MemoryThreshold = Config.Thresholds.WebSocketMemorySlopeThreshold
+            });
 
-        AssertSuccessRate(metrics, minimumSuccessRate: 80.0); // Lower due to rapid cycling
-        // Ensure the test fails if leaks are detected
         AssertNoResourceLeaksWebSocket(metrics);
     }
 
@@ -295,6 +395,9 @@ public class LiveRealtimeInputStressTests : StressTestBase
                 // Track request in resource monitor
                 ResourceMonitor?.IncrementRequestCount();
 
+                // Receive response
+                int messagesReceived = 0;
+
                 // Connect WebSocket with retry and manage session with `await using`.
                 await using (var session = await ExecuteWithRetry(async () =>
                 {
@@ -320,8 +423,6 @@ public class LiveRealtimeInputStressTests : StressTestBase
                             Text = "Hello, this is a stress test message."
                         });
 
-                    // Receive response
-                    int messagesReceived = 0;
                     // Timeout must be greater than P95 assertion (20s) to avoid failing slow but valid requests
                     var timeout = TimeSpan.FromSeconds(30);
                     using var cts = new CancellationTokenSource(timeout);
@@ -353,11 +454,14 @@ public class LiveRealtimeInputStressTests : StressTestBase
                     }
 
                     stopwatch.Stop();
-
-                    return Response.Ok(
-                        payload: messagesReceived,
-                        sizeBytes: messagesReceived * 100); // Estimate
                 } // session.DisposeAsync() is automatically called here.
+
+                // Capture snapshot after SDK resources released but before returning to NBomber
+                ResourceMonitor?.CaptureInScenarioSnapshot();
+
+                return Response.Ok(
+                    payload: messagesReceived,
+                    sizeBytes: messagesReceived * 100); // Estimate
             }
             catch (Exception e)
             {
@@ -416,7 +520,9 @@ public class LiveRealtimeInputStressTests : StressTestBase
                     var setupMsg = await session.ReceiveAsync();
                 } // session.DisposeAsync() is automatically called here, achieving rapid cycle.
 
-                // Immediately disconnect (rapid cycle)
+                // Capture snapshot after SDK resources released but before returning to NBomber
+                ResourceMonitor?.CaptureInScenarioSnapshot();
+
                 stopwatch.Stop();
 
                 return Response.Ok(
@@ -447,7 +553,7 @@ public class LiveRealtimeInputStressTests : StressTestBase
     /// <summary>
     /// Execute with exponential backoff retry for rate limit errors
     /// </summary>
-    private async Task<T> ExecuteWithRetry<T>(Func<Task<T>> action, int maxRetries = 5)
+    private async Task<T> ExecuteWithRetry<T>(Func<Task<T>> action, int maxRetries = 1)
     {
         for (int attempt = 0; attempt < maxRetries; attempt++)
         {

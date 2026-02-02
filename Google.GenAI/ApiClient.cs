@@ -29,7 +29,27 @@ namespace Google.GenAI
   {
     private static readonly string SdkVersion = GetSdkVersion();
 
-    protected HttpMessageInvoker HttpClient { get; }
+    private HttpMessageInvoker? _httpClient;
+    private readonly object _httpClientLock = new object();
+
+    protected HttpMessageInvoker HttpClient
+    {
+        get
+        {
+            if (_httpClient == null)
+            {
+                lock (_httpClientLock)
+                {
+                    if (Interlocked.CompareExchange(ref _disposed, 0, 0) != 0)
+                    {
+                        throw new ObjectDisposedException(nameof(ApiClient));
+                    }
+                    _httpClient ??= CreateHttpClient(this.HttpOptions);
+                }
+            }
+            return _httpClient;
+        }
+    }
 
     public string? ApiKey { get; }
 
@@ -65,8 +85,6 @@ namespace Google.GenAI
       {
         this.HttpOptions = MergeHttpOptions(customHttpOptions);
       }
-
-      this.HttpClient = CreateHttpClient(this.HttpOptions);
     }
 
     /// <summary>
@@ -104,7 +122,6 @@ namespace Google.GenAI
 
       this.ApiKey = null;
       this.VertexAI = true;
-      this.HttpClient = CreateHttpClient(this.HttpOptions);
     }
 
     private static HttpClient CreateHttpClient(HttpOptions httpOptions)
@@ -285,7 +302,7 @@ namespace Google.GenAI
       }
       if (disposing)
       {
-        HttpClient?.Dispose();
+        _httpClient?.Dispose();
       }
     }
 
