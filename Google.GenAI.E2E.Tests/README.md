@@ -47,6 +47,19 @@ update request response payload for existing tests.
 2. `dotnet test --settings test.runsettings` for tests against `net8.0` target
 3. `dotnet test --settings test.runsettings ./Netstandard2_0/Google.GenAI.Netstandard2_0Tests.csproj` for tests against `netstandard2.0` target
 
+### Test Recording Redaction
+If your JSON test recordings contain the numerical GCP project ID, this ID must
+be specified in the `TestServerSecrets` at `TestServer.cs` prior to recording the
+replay files.
+
+```
+var _project_id = "987654321";
+TestServerSecrets = $"{_project},{_apiKey},{_project_id}"
+```
+
+Once the tests have been recorded, you must remove the numerical
+project ID from the `TestServerSecrets`.
+
 ## How to run test in replay mode
 Replay mode assumes all the test cases have run through the record mode, so that
 there is a json file in the `Recordings` folder for the request and response.

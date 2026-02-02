@@ -28,7 +28,8 @@ public class TestServer {
       ConfigPath = Path.GetFullPath("../test-server.yml"),
       RecordingDir = Path.GetFullPath("../../Recordings"),
       Mode = IsReplayMode ? "replay" : "record",
-      BinaryPath = Path.GetFullPath("./test-server"), TestServerSecrets = $"{_project},{_apiKey}"
+      BinaryPath = Path.GetFullPath("./test-server"),
+      TestServerSecrets = $"{_project},{_apiKey}"
     };
 
     var server = new TestServerProcess(options);
