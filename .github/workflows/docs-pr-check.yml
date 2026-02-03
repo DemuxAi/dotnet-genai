@@ -18,18 +18,23 @@ jobs:
           dotnet-version: '8.0.x'
 
       - name: Install DocFX 🛠️
+        if: github.repository == 'googleapis/dotnet-genai'
         run: dotnet tool update -g docfx
 
       - name: Create index.md from README.md
+        if: github.repository == 'googleapis/dotnet-genai'
         run: cp README.md index.md
 
       - name: Generate DocFx metadata
+        if: github.repository == 'googleapis/dotnet-genai'
         run: docfx metadata docfx.json
 
       - name: Build Documentation 📖
+        if: github.repository == 'googleapis/dotnet-genai'
         run: docfx build docfx.json --warningsAsErrors
 
       - name: Verify build output
+        if: github.repository == 'googleapis/dotnet-genai'
         run: |
           if [ ! -d "./_site" ]; then
             echo "❌ Error: _site directory not found"

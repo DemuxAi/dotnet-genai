@@ -18,13 +18,17 @@ jobs:
           dotnet-version: '8.x'
 
       - name: Restore dependencies
+        if: github.repository == 'googleapis/dotnet-genai'
         run: dotnet restore Google.GenAI/Google.GenAI.csproj
 
       - name: Build
+        if: github.repository == 'googleapis/dotnet-genai'
         run: dotnet build Google.GenAI/Google.GenAI.csproj --configuration Release --no-restore
 
       - name: Pack NuGet package
+        if: github.repository == 'googleapis/dotnet-genai'
         run: dotnet pack Google.GenAI/Google.GenAI.csproj --configuration Release --no-build --output ./nuget
 
       - name: Publish to NuGet
+        if: github.repository == 'googleapis/dotnet-genai'
         run: dotnet nuget push "./nuget/Google.GenAI.*.nupkg" --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json
