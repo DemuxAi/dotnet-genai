@@ -97,7 +97,7 @@ public class LoadPatternsConfig
     {
         MaxConcurrent = 1500,
         RampUpMinutes = 1,
-        SustainMinutes = 10
+        SustainMinutes = 720
     };
 }
 
