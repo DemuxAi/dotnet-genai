@@ -32,7 +32,7 @@ namespace Google.GenAI.Types {
     public ReplicatedVoiceConfig ? ReplicatedVoiceConfig { get; set; }
 
     /// <summary>
-    /// The configuration for a prebuilt voice.
+    /// The configuration for the prebuilt voice to use.
     /// </summary>
     [JsonPropertyName("prebuiltVoiceConfig")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]

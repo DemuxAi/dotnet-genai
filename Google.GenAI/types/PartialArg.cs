@@ -28,32 +28,11 @@ namespace Google.GenAI.Types {
 
   public record PartialArg {
     /// <summary>
-    /// Optional. Represents a boolean value.
-    /// </summary>
-    [JsonPropertyName("boolValue")]
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public bool ? BoolValue { get; set; }
-
-    /// <summary>
-    /// A JSON Path (RFC 9535) to the argument being streamed.
-    /// https://datatracker.ietf.org/doc/html/rfc9535. e.g. "$.foo.bar[0].data".
-    /// </summary>
-    [JsonPropertyName("jsonPath")]
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public string
-        ? JsonPath {
-            get; set;
-          }
-
-    /// <summary>
     /// Optional. Represents a null value.
     /// </summary>
     [JsonPropertyName("nullValue")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public string
-        ? NullValue {
-            get; set;
-          }
+    public string ? NullValue { get; set; }
 
     /// <summary>
     /// Optional. Represents a double value.
@@ -72,6 +51,27 @@ namespace Google.GenAI.Types {
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public string
         ? StringValue {
+            get; set;
+          }
+
+    /// <summary>
+    /// Optional. Represents a boolean value.
+    /// </summary>
+    [JsonPropertyName("boolValue")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public bool
+        ? BoolValue {
+            get; set;
+          }
+
+    /// <summary>
+    /// A JSON Path (RFC 9535) to the argument being streamed.
+    /// https://datatracker.ietf.org/doc/html/rfc9535. e.g. "$.foo.bar[0].data".
+    /// </summary>
+    [JsonPropertyName("jsonPath")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public string
+        ? JsonPath {
             get; set;
           }
 

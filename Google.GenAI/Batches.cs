@@ -33,45 +33,6 @@ namespace Google.GenAI {
   public sealed class Batches {
     private readonly ApiClient _apiClient;
 
-    internal JsonNode AuthConfigToMldev(JsonNode fromObject, JsonObject parentObject) {
-      JsonObject toObject = new JsonObject();
-
-      if (Common.GetValueByPath(fromObject, new string[] { "apiKey" }) != null) {
-        Common.SetValueByPath(toObject, new string[] { "apiKey" },
-                              Common.GetValueByPath(fromObject, new string[] { "apiKey" }));
-      }
-
-      if (!Common.IsZero(Common.GetValueByPath(fromObject, new string[] { "apiKeyConfig" }))) {
-        throw new NotSupportedException("apiKeyConfig parameter is not supported in Gemini API.");
-      }
-
-      if (!Common.IsZero(Common.GetValueByPath(fromObject, new string[] { "authType" }))) {
-        throw new NotSupportedException("authType parameter is not supported in Gemini API.");
-      }
-
-      if (!Common.IsZero(
-              Common.GetValueByPath(fromObject, new string[] { "googleServiceAccountConfig" }))) {
-        throw new NotSupportedException(
-            "googleServiceAccountConfig parameter is not supported in Gemini API.");
-      }
-
-      if (!Common.IsZero(
-              Common.GetValueByPath(fromObject, new string[] { "httpBasicAuthConfig" }))) {
-        throw new NotSupportedException(
-            "httpBasicAuthConfig parameter is not supported in Gemini API.");
-      }
-
-      if (!Common.IsZero(Common.GetValueByPath(fromObject, new string[] { "oauthConfig" }))) {
-        throw new NotSupportedException("oauthConfig parameter is not supported in Gemini API.");
-      }
-
-      if (!Common.IsZero(Common.GetValueByPath(fromObject, new string[] { "oidcConfig" }))) {
-        throw new NotSupportedException("oidcConfig parameter is not supported in Gemini API.");
-      }
-
-      return toObject;
-    }
-
     internal JsonNode BatchJobDestinationFromMldev(JsonNode fromObject, JsonObject parentObject) {
       JsonObject toObject = new JsonObject();
 
@@ -462,15 +423,15 @@ namespace Google.GenAI {
                               Common.GetValueByPath(fromObject, new string[] { "finishReason" }));
       }
 
+      if (Common.GetValueByPath(fromObject, new string[] { "avgLogprobs" }) != null) {
+        Common.SetValueByPath(toObject, new string[] { "avgLogprobs" },
+                              Common.GetValueByPath(fromObject, new string[] { "avgLogprobs" }));
+      }
+
       if (Common.GetValueByPath(fromObject, new string[] { "groundingMetadata" }) != null) {
         Common.SetValueByPath(
             toObject, new string[] { "groundingMetadata" },
             Common.GetValueByPath(fromObject, new string[] { "groundingMetadata" }));
-      }
-
-      if (Common.GetValueByPath(fromObject, new string[] { "avgLogprobs" }) != null) {
-        Common.SetValueByPath(toObject, new string[] { "avgLogprobs" },
-                              Common.GetValueByPath(fromObject, new string[] { "avgLogprobs" }));
       }
 
       if (Common.GetValueByPath(fromObject, new string[] { "index" }) != null) {
@@ -1149,11 +1110,6 @@ namespace Google.GenAI {
                               Common.GetValueByPath(fromObject, new string[] { "usageMetadata" }));
       }
 
-      if (Common.GetValueByPath(fromObject, new string[] { "modelStatus" }) != null) {
-        Common.SetValueByPath(toObject, new string[] { "modelStatus" },
-                              Common.GetValueByPath(fromObject, new string[] { "modelStatus" }));
-      }
-
       return toObject;
     }
 
@@ -1188,12 +1144,8 @@ namespace Google.GenAI {
     internal JsonNode GoogleMapsToMldev(JsonNode fromObject, JsonObject parentObject) {
       JsonObject toObject = new JsonObject();
 
-      if (Common.GetValueByPath(fromObject, new string[] { "authConfig" }) != null) {
-        Common.SetValueByPath(
-            toObject, new string[] { "authConfig" },
-            AuthConfigToMldev(JsonNode.Parse(JsonSerializer.Serialize(Common.GetValueByPath(
-                                  fromObject, new string[] { "authConfig" }))),
-                              toObject));
+      if (!Common.IsZero(Common.GetValueByPath(fromObject, new string[] { "authConfig" }))) {
+        throw new NotSupportedException("authConfig parameter is not supported in Gemini API.");
       }
 
       if (Common.GetValueByPath(fromObject, new string[] { "enableWidget" }) != null) {
@@ -1207,14 +1159,14 @@ namespace Google.GenAI {
     internal JsonNode GoogleSearchToMldev(JsonNode fromObject, JsonObject parentObject) {
       JsonObject toObject = new JsonObject();
 
+      if (!Common.IsZero(Common.GetValueByPath(fromObject, new string[] { "excludeDomains" }))) {
+        throw new NotSupportedException("excludeDomains parameter is not supported in Gemini API.");
+      }
+
       if (!Common.IsZero(
               Common.GetValueByPath(fromObject, new string[] { "blockingConfidence" }))) {
         throw new NotSupportedException(
             "blockingConfidence parameter is not supported in Gemini API.");
-      }
-
-      if (!Common.IsZero(Common.GetValueByPath(fromObject, new string[] { "excludeDomains" }))) {
-        throw new NotSupportedException("excludeDomains parameter is not supported in Gemini API.");
       }
 
       if (Common.GetValueByPath(fromObject, new string[] { "timeRangeFilter" }) != null) {
@@ -1252,12 +1204,6 @@ namespace Google.GenAI {
               Common.GetValueByPath(fromObject, new string[] { "outputCompressionQuality" }))) {
         throw new NotSupportedException(
             "outputCompressionQuality parameter is not supported in Gemini API.");
-      }
-
-      if (!Common.IsZero(
-              Common.GetValueByPath(fromObject, new string[] { "imageOutputOptions" }))) {
-        throw new NotSupportedException(
-            "imageOutputOptions parameter is not supported in Gemini API.");
       }
 
       return toObject;
@@ -1525,11 +1471,6 @@ namespace Google.GenAI {
                               Common.GetValueByPath(fromObject, new string[] { "videoMetadata" }));
       }
 
-      if (Common.GetValueByPath(fromObject, new string[] { "partMetadata" }) != null) {
-        Common.SetValueByPath(toObject, new string[] { "partMetadata" },
-                              Common.GetValueByPath(fromObject, new string[] { "partMetadata" }));
-      }
-
       return toObject;
     }
 
@@ -1585,14 +1526,6 @@ namespace Google.GenAI {
                               Common.GetValueByPath(fromObject, new string[] { "computerUse" }));
       }
 
-      if (Common.GetValueByPath(fromObject, new string[] { "googleMaps" }) != null) {
-        Common.SetValueByPath(
-            toObject, new string[] { "googleMaps" },
-            GoogleMapsToMldev(JsonNode.Parse(JsonSerializer.Serialize(Common.GetValueByPath(
-                                  fromObject, new string[] { "googleMaps" }))),
-                              toObject));
-      }
-
       if (Common.GetValueByPath(fromObject, new string[] { "codeExecution" }) != null) {
         Common.SetValueByPath(toObject, new string[] { "codeExecution" },
                               Common.GetValueByPath(fromObject, new string[] { "codeExecution" }));
@@ -1610,6 +1543,14 @@ namespace Google.GenAI {
             Common.GetValueByPath(fromObject, new string[] { "functionDeclarations" }));
       }
 
+      if (Common.GetValueByPath(fromObject, new string[] { "googleMaps" }) != null) {
+        Common.SetValueByPath(
+            toObject, new string[] { "googleMaps" },
+            GoogleMapsToMldev(JsonNode.Parse(JsonSerializer.Serialize(Common.GetValueByPath(
+                                  fromObject, new string[] { "googleMaps" }))),
+                              toObject));
+      }
+
       if (Common.GetValueByPath(fromObject, new string[] { "googleSearch" }) != null) {
         Common.SetValueByPath(
             toObject, new string[] { "googleSearch" },
@@ -1624,19 +1565,9 @@ namespace Google.GenAI {
             Common.GetValueByPath(fromObject, new string[] { "googleSearchRetrieval" }));
       }
 
-      if (!Common.IsZero(Common.GetValueByPath(fromObject, new string[] { "parallelAiSearch" }))) {
-        throw new NotSupportedException(
-            "parallelAiSearch parameter is not supported in Gemini API.");
-      }
-
       if (Common.GetValueByPath(fromObject, new string[] { "urlContext" }) != null) {
         Common.SetValueByPath(toObject, new string[] { "urlContext" },
                               Common.GetValueByPath(fromObject, new string[] { "urlContext" }));
-      }
-
-      if (Common.GetValueByPath(fromObject, new string[] { "mcpServers" }) != null) {
-        Common.SetValueByPath(toObject, new string[] { "mcpServers" },
-                              Common.GetValueByPath(fromObject, new string[] { "mcpServers" }));
       }
 
       return toObject;

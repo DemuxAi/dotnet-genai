@@ -23,12 +23,12 @@ using Google.GenAI.Serialization;
 
 namespace Google.GenAI.Types {
   /// <summary>
-  /// Configuration for a prebuilt voice.
+  /// The configuration for the prebuilt speaker to use.
   /// </summary>
 
   public record PrebuiltVoiceConfig {
     /// <summary>
-    /// The name of the prebuilt voice to use.
+    /// The name of the preset voice to use.
     /// </summary>
     [JsonPropertyName("voiceName")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]

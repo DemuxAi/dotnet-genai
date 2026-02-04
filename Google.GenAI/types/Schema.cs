@@ -63,8 +63,8 @@ namespace Google.GenAI.Types {
           }
 
     /// <summary>
-    /// Optional. The instance must be valid against any (one or more) of the subschemas listed in
-    /// `any_of`.
+    /// Optional. The value should be validated against any (one or more) of the subschemas in the
+    /// list.
     /// </summary>
     [JsonPropertyName("anyOf")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -74,7 +74,7 @@ namespace Google.GenAI.Types {
           }
 
     /// <summary>
-    /// Optional. Default value to use if the field is not specified.
+    /// Optional. Default value of the data.
     /// </summary>
     [JsonPropertyName("default")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -84,7 +84,7 @@ namespace Google.GenAI.Types {
           }
 
     /// <summary>
-    /// Optional. Description of the schema.
+    /// Optional. The description of the data.
     /// </summary>
     [JsonPropertyName("description")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -94,11 +94,10 @@ namespace Google.GenAI.Types {
           }
 
     /// <summary>
-    /// Optional. Possible values of the field. This field can be used to restrict a value to a
-    /// fixed set of values. To mark a field as an enum, set `format` to `enum` and provide the list
-    /// of possible values in `enum`. For example: 1. To define directions: `{type:STRING,
-    /// format:enum, enum:["EAST", "NORTH", "SOUTH", "WEST"]}` 2. To define apartment numbers:
-    /// `{type:INTEGER, format:enum, enum:["101", "201", "301"]}`
+    /// Optional. Possible values of the element of primitive type with enum format. Examples: 1. We
+    /// can define direction as : {type:STRING, format:enum, enum:["EAST", NORTH", "SOUTH",
+    /// "WEST"]} 2. We can define apartment number as : {type:INTEGER, format:enum, enum:["101",
+    /// "201", "301"]}
     /// </summary>
     [JsonPropertyName("enum")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -108,7 +107,7 @@ namespace Google.GenAI.Types {
           }
 
     /// <summary>
-    /// Optional. Example of an instance of this schema.
+    /// Optional. Example of the object. Will only populated when the object is the root.
     /// </summary>
     [JsonPropertyName("example")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -118,9 +117,8 @@ namespace Google.GenAI.Types {
           }
 
     /// <summary>
-    /// Optional. The format of the data. For `NUMBER` type, format can be `float` or `double`. For
-    /// `INTEGER` type, format can be `int32` or `int64`. For `STRING` type, format can be `email`,
-    /// `byte`, `date`, `date-time`, `password`, and other formats to further refine the data type.
+    /// Optional. The format of the data. Supported formats: for NUMBER type: "float", "double" for
+    /// INTEGER type: "int32", "int64" for STRING type: "email", "byte", etc
     /// </summary>
     [JsonPropertyName("format")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -130,7 +128,7 @@ namespace Google.GenAI.Types {
           }
 
     /// <summary>
-    /// Optional. If type is `ARRAY`, `items` specifies the schema of elements in the array.
+    /// Optional. SCHEMA FIELDS FOR TYPE ARRAY Schema of the elements of Type.ARRAY.
     /// </summary>
     [JsonPropertyName("items")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -140,7 +138,7 @@ namespace Google.GenAI.Types {
           }
 
     /// <summary>
-    /// Optional. If type is `ARRAY`, `max_items` specifies the maximum number of items in an array.
+    /// Optional. Maximum number of the elements for Type.ARRAY.
     /// </summary>
     [JsonPropertyName("maxItems")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -151,7 +149,7 @@ namespace Google.GenAI.Types {
           }
 
     /// <summary>
-    /// Optional. If type is `STRING`, `max_length` specifies the maximum length of the string.
+    /// Optional. Maximum length of the Type.STRING
     /// </summary>
     [JsonPropertyName("maxLength")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -162,8 +160,7 @@ namespace Google.GenAI.Types {
           }
 
     /// <summary>
-    /// Optional. If type is `OBJECT`, `max_properties` specifies the maximum number of properties
-    /// that can be provided.
+    /// Optional. Maximum number of the properties for Type.OBJECT.
     /// </summary>
     [JsonPropertyName("maxProperties")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -174,7 +171,7 @@ namespace Google.GenAI.Types {
           }
 
     /// <summary>
-    /// Optional. If type is `INTEGER` or `NUMBER`, `maximum` specifies the maximum allowed value.
+    /// Optional. Maximum value of the Type.INTEGER and Type.NUMBER
     /// </summary>
     [JsonPropertyName("maximum")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -184,7 +181,7 @@ namespace Google.GenAI.Types {
           }
 
     /// <summary>
-    /// Optional. If type is `ARRAY`, `min_items` specifies the minimum number of items in an array.
+    /// Optional. Minimum number of the elements for Type.ARRAY.
     /// </summary>
     [JsonPropertyName("minItems")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -195,7 +192,7 @@ namespace Google.GenAI.Types {
           }
 
     /// <summary>
-    /// Optional. If type is `STRING`, `min_length` specifies the minimum length of the string.
+    /// Optional. SCHEMA FIELDS FOR TYPE STRING Minimum length of the Type.STRING
     /// </summary>
     [JsonPropertyName("minLength")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -206,8 +203,7 @@ namespace Google.GenAI.Types {
           }
 
     /// <summary>
-    /// Optional. If type is `OBJECT`, `min_properties` specifies the minimum number of properties
-    /// that can be provided.
+    /// Optional. Minimum number of the properties for Type.OBJECT.
     /// </summary>
     [JsonPropertyName("minProperties")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -218,7 +214,8 @@ namespace Google.GenAI.Types {
           }
 
     /// <summary>
-    /// Optional. If type is `INTEGER` or `NUMBER`, `minimum` specifies the minimum allowed value.
+    /// Optional. SCHEMA FIELDS FOR TYPE INTEGER and NUMBER Minimum value of the Type.INTEGER and
+    /// Type.NUMBER
     /// </summary>
     [JsonPropertyName("minimum")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -228,7 +225,7 @@ namespace Google.GenAI.Types {
           }
 
     /// <summary>
-    /// Optional. Indicates if the value of this field can be null.
+    /// Optional. Indicates if the value may be null.
     /// </summary>
     [JsonPropertyName("nullable")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -238,8 +235,7 @@ namespace Google.GenAI.Types {
           }
 
     /// <summary>
-    /// Optional. If type is `STRING`, `pattern` specifies a regular expression that the string must
-    /// match.
+    /// Optional. Pattern of the Type.STRING to restrict a string to a regular expression.
     /// </summary>
     [JsonPropertyName("pattern")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -249,8 +245,7 @@ namespace Google.GenAI.Types {
           }
 
     /// <summary>
-    /// Optional. If type is `OBJECT`, `properties` is a map of property names to schema definitions
-    /// for each property of the object.
+    /// Optional. SCHEMA FIELDS FOR TYPE OBJECT Properties of Type.OBJECT.
     /// </summary>
     [JsonPropertyName("properties")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -260,8 +255,8 @@ namespace Google.GenAI.Types {
           }
 
     /// <summary>
-    /// Optional. Order of properties displayed or used where order matters. This is not a standard
-    /// field in OpenAPI specification, but can be used to control the order of properties.
+    /// Optional. The order of the properties. Not a standard field in open api spec. Only used to
+    /// support the order of the properties.
     /// </summary>
     [JsonPropertyName("propertyOrdering")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -271,8 +266,7 @@ namespace Google.GenAI.Types {
           }
 
     /// <summary>
-    /// Optional. If type is `OBJECT`, `required` lists the names of properties that must be
-    /// present.
+    /// Optional. Required properties of Type.OBJECT.
     /// </summary>
     [JsonPropertyName("required")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -282,7 +276,7 @@ namespace Google.GenAI.Types {
           }
 
     /// <summary>
-    /// Optional. Title for the schema.
+    /// Optional. The title of the Schema.
     /// </summary>
     [JsonPropertyName("title")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -292,7 +286,7 @@ namespace Google.GenAI.Types {
           }
 
     /// <summary>
-    /// Optional. Data type of the schema field.
+    /// Optional. The type of the data.
     /// </summary>
     [JsonPropertyName("type")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]

@@ -23,20 +23,19 @@ using Google.GenAI.Serialization;
 
 namespace Google.GenAI.Types {
   /// <summary>
-  /// A safety rating for a piece of content. The safety rating contains the harm category and the
-  /// harm probability level.
+  /// Safety rating corresponding to the generated content.
   /// </summary>
 
   public record SafetyRating {
     /// <summary>
-    /// Output only. Indicates whether the content was blocked because of this rating.
+    /// Output only. Indicates whether the content was filtered out because of this rating.
     /// </summary>
     [JsonPropertyName("blocked")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public bool ? Blocked { get; set; }
 
     /// <summary>
-    /// Output only. The harm category of this rating.
+    /// Output only. Harm category.
     /// </summary>
     [JsonPropertyName("category")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -58,7 +57,7 @@ namespace Google.GenAI.Types {
           }
 
     /// <summary>
-    /// Output only. The probability of harm for this category.
+    /// Output only. Harm probability levels in the content.
     /// </summary>
     [JsonPropertyName("probability")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -68,8 +67,7 @@ namespace Google.GenAI.Types {
           }
 
     /// <summary>
-    /// Output only. The probability score of harm for this category. This field is not supported in
-    /// Gemini API.
+    /// Output only. Harm probability score. This field is not supported in Gemini API.
     /// </summary>
     [JsonPropertyName("probabilityScore")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -79,8 +77,7 @@ namespace Google.GenAI.Types {
           }
 
     /// <summary>
-    /// Output only. The severity of harm for this category. This field is not supported in Gemini
-    /// API.
+    /// Output only. Harm severity levels in the content. This field is not supported in Gemini API.
     /// </summary>
     [JsonPropertyName("severity")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -90,8 +87,7 @@ namespace Google.GenAI.Types {
           }
 
     /// <summary>
-    /// Output only. The severity score of harm for this category. This field is not supported in
-    /// Gemini API.
+    /// Output only. Harm severity score. This field is not supported in Gemini API.
     /// </summary>
     [JsonPropertyName("severityScore")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]

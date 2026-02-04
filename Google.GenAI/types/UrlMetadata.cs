@@ -23,19 +23,19 @@ using Google.GenAI.Serialization;
 
 namespace Google.GenAI.Types {
   /// <summary>
-  /// The metadata for a single URL retrieval.
+  /// Context of the a single url retrieval.
   /// </summary>
 
   public record UrlMetadata {
     /// <summary>
-    /// The URL retrieved by the tool.
+    /// Retrieved url by the tool.
     /// </summary>
     [JsonPropertyName("retrievedUrl")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public string ? RetrievedUrl { get; set; }
 
     /// <summary>
-    /// The status of the URL retrieval.
+    /// Status of the url retrieval.
     /// </summary>
     [JsonPropertyName("urlRetrievalStatus")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]

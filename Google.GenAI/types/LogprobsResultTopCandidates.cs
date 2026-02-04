@@ -23,13 +23,12 @@ using Google.GenAI.Serialization;
 
 namespace Google.GenAI.Types {
   /// <summary>
-  /// A list of the top candidate tokens and their log probabilities at each decoding step. This can
-  /// be used to see what other tokens the model considered.
+  /// Candidates with top log probabilities at each decoding step.
   /// </summary>
 
   public record LogprobsResultTopCandidates {
     /// <summary>
-    /// The list of candidate tokens, sorted by log probability in descending order.
+    /// Sorted by log probability in descending order.
     /// </summary>
     [JsonPropertyName("candidates")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]

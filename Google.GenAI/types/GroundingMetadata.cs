@@ -28,14 +28,26 @@ namespace Google.GenAI.Types {
 
   public record GroundingMetadata {
     /// <summary>
+    /// Optional. Output only. Resource name of the Google Maps widget context token to be used with
+    /// the PlacesContextElement widget to render contextual data. This is populated only for Google
+    /// Maps grounding. This field is not supported in Gemini API.
+    /// </summary>
+    [JsonPropertyName("googleMapsWidgetContextToken")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public string ? GoogleMapsWidgetContextToken { get; set; }
+
+    /// <summary>
     /// List of supporting references retrieved from specified grounding source.
     /// </summary>
     [JsonPropertyName("groundingChunks")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public List<GroundingChunk> ? GroundingChunks { get; set; }
+    public List<GroundingChunk>
+        ? GroundingChunks {
+            get; set;
+          }
 
     /// <summary>
-    /// List of grounding support.
+    /// Optional. List of grounding support.
     /// </summary>
     [JsonPropertyName("groundingSupports")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -45,12 +57,23 @@ namespace Google.GenAI.Types {
           }
 
     /// <summary>
-    /// Metadata related to retrieval in the grounding flow.
+    /// Optional. Output only. Retrieval metadata.
     /// </summary>
     [JsonPropertyName("retrievalMetadata")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public RetrievalMetadata
         ? RetrievalMetadata {
+            get; set;
+          }
+
+    /// <summary>
+    /// Optional. Queries executed by the retrieval tools. This field is not supported in Gemini
+    /// API.
+    /// </summary>
+    [JsonPropertyName("retrievalQueries")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public List<string>
+        ? RetrievalQueries {
             get; set;
           }
 
@@ -65,47 +88,23 @@ namespace Google.GenAI.Types {
           }
 
     /// <summary>
-    /// Web search queries for the following-up web search.
-    /// </summary>
-    [JsonPropertyName("webSearchQueries")]
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public List<string>
-        ? WebSearchQueries {
-            get; set;
-          }
-
-    /// <summary>
-    /// Optional. Output only. A token that can be used to render a Google Maps widget with the
-    /// contextual data. This field is populated only when the grounding source is Google Maps.
-    /// </summary>
-    [JsonPropertyName("googleMapsWidgetContextToken")]
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public string
-        ? GoogleMapsWidgetContextToken {
-            get; set;
-          }
-
-    /// <summary>
-    /// Optional. The queries that were executed by the retrieval tools. This field is populated
-    /// only when the grounding source is a retrieval tool, such as Vertex AI Search. This field is
-    /// not supported in Gemini API.
-    /// </summary>
-    [JsonPropertyName("retrievalQueries")]
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public List<string>
-        ? RetrievalQueries {
-            get; set;
-          }
-
-    /// <summary>
-    /// Optional. Output only. A list of URIs that can be used to flag a place or review for
-    /// inappropriate content. This field is populated only when the grounding source is Google
-    /// Maps. This field is not supported in Gemini API.
+    /// Optional. Output only. List of source flagging uris. This is currently populated only for
+    /// Google Maps grounding. This field is not supported in Gemini API.
     /// </summary>
     [JsonPropertyName("sourceFlaggingUris")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public List<GroundingMetadataSourceFlaggingUri>
         ? SourceFlaggingUris {
+            get; set;
+          }
+
+    /// <summary>
+    /// Optional. Web search queries for the following-up web search.
+    /// </summary>
+    [JsonPropertyName("webSearchQueries")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public List<string>
+        ? WebSearchQueries {
             get; set;
           }
 

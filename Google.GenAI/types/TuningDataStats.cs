@@ -28,8 +28,7 @@ namespace Google.GenAI.Types {
 
   public record TuningDataStats {
     /// <summary>
-    /// Output only. Statistics for distillation prompt dataset. These statistics do not include the
-    /// responses sampled from the teacher model.
+    /// Output only. Statistics for distillation.
     /// </summary>
     [JsonPropertyName("distillationDataStats")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
