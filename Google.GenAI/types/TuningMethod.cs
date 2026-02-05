@@ -17,26 +17,74 @@
 // Auto-generated code. Do not edit.
 
 using System.Text.Json.Serialization;
+using System.Collections.Generic;
+using System.Text.Json;
 
 namespace Google.GenAI.Types {
   /// <summary>
   /// Enum representing the tuning method.
   /// </summary>
-  [JsonConverter(typeof(JsonStringEnumConverter))]
-  public enum TuningMethod {
+
+  [JsonConverter(typeof(TuningMethodConverter))]
+  public readonly record struct TuningMethod : IEquatable<TuningMethod> {
+    public string Value { get; }
+
+    private TuningMethod(string value) {
+      Value = value;
+    }
+
     /// <summary>
     /// Supervised fine tuning.
     /// </summary>
-    [JsonPropertyName("SUPERVISED_FINE_TUNING")] SUPERVISED_FINE_TUNING,
+    public static TuningMethod SupervisedFineTuning { get; } = new("SUPERVISED_FINE_TUNING");
 
     /// <summary>
     /// Preference optimization tuning.
     /// </summary>
-    [JsonPropertyName("PREFERENCE_TUNING")] PREFERENCE_TUNING,
+    public static TuningMethod PreferenceTuning { get; } = new("PREFERENCE_TUNING");
 
     /// <summary>
     /// Distillation tuning.
     /// </summary>
-    [JsonPropertyName("DISTILLATION")] DISTILLATION
+    public static TuningMethod Distillation { get; } = new("DISTILLATION");
+
+    public static IReadOnlyList<TuningMethod> AllValues {
+      get;
+    } = new[] { SupervisedFineTuning, PreferenceTuning, Distillation };
+
+    public static TuningMethod FromString(string value) {
+      if (string.IsNullOrEmpty(value)) {
+        return new TuningMethod("UNSPECIFIED");
+      }
+
+      foreach (var known in AllValues) {
+        if (known.Value == value) {
+          return known;
+        }
+      }
+
+      return new TuningMethod(value);
+    }
+
+    public override string ToString() => Value ?? string.Empty;
+
+    public static implicit operator TuningMethod(string value) => FromString(value);
+
+    public bool Equals(TuningMethod other) => Value == other.Value;
+
+    public override int GetHashCode() => Value?.GetHashCode() ?? 0;
+  }
+
+  public class TuningMethodConverter : JsonConverter<TuningMethod> {
+    public override TuningMethod Read(ref Utf8JsonReader reader, System.Type typeToConvert,
+                                      JsonSerializerOptions options) {
+      var value = reader.GetString();
+      return TuningMethod.FromString(value);
+    }
+
+    public override void Write(Utf8JsonWriter writer, TuningMethod value,
+                               JsonSerializerOptions options) {
+      writer.WriteStringValue(value.Value);
+    }
   }
 }

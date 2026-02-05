@@ -17,70 +17,133 @@
 // Auto-generated code. Do not edit.
 
 using System.Text.Json.Serialization;
+using System.Collections.Generic;
+using System.Text.Json;
 
 namespace Google.GenAI.Types {
   /// <summary>
   /// Harm category.
   /// </summary>
-  [JsonConverter(typeof(JsonStringEnumConverter))]
-  public enum HarmCategory {
+
+  [JsonConverter(typeof(HarmCategoryConverter))]
+  public readonly record struct HarmCategory : IEquatable<HarmCategory> {
+    public string Value { get; }
+
+    private HarmCategory(string value) {
+      Value = value;
+    }
+
     /// <summary>
     /// The harm category is unspecified.
     /// </summary>
-    [JsonPropertyName("HARM_CATEGORY_UNSPECIFIED")] HARM_CATEGORY_UNSPECIFIED,
+    public static HarmCategory HarmCategoryUnspecified { get; } = new("HARM_CATEGORY_UNSPECIFIED");
 
     /// <summary>
     /// The harm category is harassment.
     /// </summary>
-    [JsonPropertyName("HARM_CATEGORY_HARASSMENT")] HARM_CATEGORY_HARASSMENT,
+    public static HarmCategory HarmCategoryHarassment { get; } = new("HARM_CATEGORY_HARASSMENT");
 
     /// <summary>
     /// The harm category is hate speech.
     /// </summary>
-    [JsonPropertyName("HARM_CATEGORY_HATE_SPEECH")] HARM_CATEGORY_HATE_SPEECH,
+    public static HarmCategory HarmCategoryHateSpeech { get; } = new("HARM_CATEGORY_HATE_SPEECH");
 
     /// <summary>
     /// The harm category is sexually explicit content.
     /// </summary>
-    [JsonPropertyName("HARM_CATEGORY_SEXUALLY_EXPLICIT")] HARM_CATEGORY_SEXUALLY_EXPLICIT,
+    public static HarmCategory HarmCategorySexuallyExplicit {
+      get;
+    } = new("HARM_CATEGORY_SEXUALLY_EXPLICIT");
 
     /// <summary>
     /// The harm category is dangerous content.
     /// </summary>
-    [JsonPropertyName("HARM_CATEGORY_DANGEROUS_CONTENT")] HARM_CATEGORY_DANGEROUS_CONTENT,
+    public static HarmCategory HarmCategoryDangerousContent {
+      get;
+    } = new("HARM_CATEGORY_DANGEROUS_CONTENT");
 
     /// <summary>
     /// Deprecated: Election filter is not longer supported. The harm category is civic integrity.
     /// </summary>
-    [JsonPropertyName("HARM_CATEGORY_CIVIC_INTEGRITY")] HARM_CATEGORY_CIVIC_INTEGRITY,
+    public static HarmCategory HarmCategoryCivicIntegrity {
+      get;
+    } = new("HARM_CATEGORY_CIVIC_INTEGRITY");
 
     /// <summary>
     /// The harm category is image hate. This enum value is not supported in Gemini API.
     /// </summary>
-    [JsonPropertyName("HARM_CATEGORY_IMAGE_HATE")] HARM_CATEGORY_IMAGE_HATE,
+    public static HarmCategory HarmCategoryImageHate { get; } = new("HARM_CATEGORY_IMAGE_HATE");
 
     /// <summary>
     /// The harm category is image dangerous content. This enum value is not supported in Gemini
     /// API.
     /// </summary>
-    [JsonPropertyName(
-        "HARM_CATEGORY_IMAGE_DANGEROUS_CONTENT")] HARM_CATEGORY_IMAGE_DANGEROUS_CONTENT,
+    public static HarmCategory HarmCategoryImageDangerousContent {
+      get;
+    } = new("HARM_CATEGORY_IMAGE_DANGEROUS_CONTENT");
 
     /// <summary>
     /// The harm category is image harassment. This enum value is not supported in Gemini API.
     /// </summary>
-    [JsonPropertyName("HARM_CATEGORY_IMAGE_HARASSMENT")] HARM_CATEGORY_IMAGE_HARASSMENT,
+    public static HarmCategory HarmCategoryImageHarassment {
+      get;
+    } = new("HARM_CATEGORY_IMAGE_HARASSMENT");
 
     /// <summary>
     /// The harm category is image sexually explicit content. This enum value is not supported in
     /// Gemini API.
     /// </summary>
-    [JsonPropertyName(
-        "HARM_CATEGORY_IMAGE_SEXUALLY_EXPLICIT")] HARM_CATEGORY_IMAGE_SEXUALLY_EXPLICIT,
+    public static HarmCategory HarmCategoryImageSexuallyExplicit {
+      get;
+    } = new("HARM_CATEGORY_IMAGE_SEXUALLY_EXPLICIT");
 
     /// <summary>
     /// The harm category is for jailbreak prompts. This enum value is not supported in Gemini API.
     /// </summary>
-    [JsonPropertyName("HARM_CATEGORY_JAILBREAK")] HARM_CATEGORY_JAILBREAK
+    public static HarmCategory HarmCategoryJailbreak { get; } = new("HARM_CATEGORY_JAILBREAK");
+
+    public static IReadOnlyList<HarmCategory> AllValues {
+      get;
+    } = new[] { HarmCategoryUnspecified,      HarmCategoryHarassment,
+                HarmCategoryHateSpeech,       HarmCategorySexuallyExplicit,
+                HarmCategoryDangerousContent, HarmCategoryCivicIntegrity,
+                HarmCategoryImageHate,        HarmCategoryImageDangerousContent,
+                HarmCategoryImageHarassment,  HarmCategoryImageSexuallyExplicit,
+                HarmCategoryJailbreak };
+
+    public static HarmCategory FromString(string value) {
+      if (string.IsNullOrEmpty(value)) {
+        return new HarmCategory("HARM_CATEGORY_UNSPECIFIED");
+      }
+
+      foreach (var known in AllValues) {
+        if (known.Value == value) {
+          return known;
+        }
+      }
+
+      return new HarmCategory(value);
+    }
+
+    public override string ToString() => Value ?? string.Empty;
+
+    public static implicit operator HarmCategory(string value) => FromString(value);
+
+    public bool Equals(HarmCategory other) => Value == other.Value;
+
+    public override int GetHashCode() => Value?.GetHashCode() ?? 0;
+  }
+
+  public class HarmCategoryConverter : JsonConverter<HarmCategory> {
+    public override HarmCategory Read(ref Utf8JsonReader reader, System.Type typeToConvert,
+                                      JsonSerializerOptions options) {
+      var value = reader.GetString();
+      return HarmCategory.FromString(value);
+    }
+
+    public override void Write(Utf8JsonWriter writer, HarmCategory value,
+                               JsonSerializerOptions options) {
+      writer.WriteStringValue(value.Value);
+    }
   }
 }

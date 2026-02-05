@@ -99,9 +99,9 @@ public class GenerateImagesTest {
     var generateImagesConfig = new GenerateImagesConfig {
       AspectRatio = "1:1",
       GuidanceScale = 15.0,
-      SafetyFilterLevel = SafetyFilterLevel.BLOCK_MEDIUM_AND_ABOVE,
+      SafetyFilterLevel = SafetyFilterLevel.BlockMediumAndAbove,
       NumberOfImages = 1,
-      PersonGeneration = PersonGeneration.DONT_ALLOW,
+      PersonGeneration = PersonGeneration.AllowAll,
       IncludeSafetyAttributes = true,
       IncludeRaiReason = true,
       OutputMimeType = "image/jpeg",
@@ -110,7 +110,7 @@ public class GenerateImagesTest {
       NegativePrompt = "human",
       AddWatermark = false,
       Seed = 1337,
-      Language = ImagePromptLanguage.en,
+      Language = ImagePromptLanguage.En,
       EnhancePrompt = true,
       Labels = new Dictionary<string, string> { ["imagen_label_key"] = "generate_image" },
     };
@@ -129,9 +129,9 @@ public class GenerateImagesTest {
     var generateImagesConfig = new GenerateImagesConfig {
       AspectRatio = "1:1",
       GuidanceScale = 15.0,
-      SafetyFilterLevel = SafetyFilterLevel.BLOCK_LOW_AND_ABOVE,
+      SafetyFilterLevel = SafetyFilterLevel.BlockLowAndAbove,
       NumberOfImages = 1,
-      PersonGeneration = PersonGeneration.DONT_ALLOW,
+      PersonGeneration = PersonGeneration.DontAllow,
       IncludeSafetyAttributes = true,
       IncludeRaiReason = true,
       OutputMimeType = "image/jpeg",

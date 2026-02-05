@@ -17,31 +17,82 @@
 // Auto-generated code. Do not edit.
 
 using System.Text.Json.Serialization;
+using System.Collections.Generic;
+using System.Text.Json;
 
 namespace Google.GenAI.Types {
   /// <summary>
   /// The media resolution to use.
   /// </summary>
-  [JsonConverter(typeof(JsonStringEnumConverter))]
-  public enum MediaResolution {
+
+  [JsonConverter(typeof(MediaResolutionConverter))]
+  public readonly record struct MediaResolution : IEquatable<MediaResolution> {
+    public string Value { get; }
+
+    private MediaResolution(string value) {
+      Value = value;
+    }
+
     /// <summary>
     /// Media resolution has not been set
     /// </summary>
-    [JsonPropertyName("MEDIA_RESOLUTION_UNSPECIFIED")] MEDIA_RESOLUTION_UNSPECIFIED,
+    public static MediaResolution MediaResolutionUnspecified {
+      get;
+    } = new("MEDIA_RESOLUTION_UNSPECIFIED");
 
     /// <summary>
     /// Media resolution set to low (64 tokens).
     /// </summary>
-    [JsonPropertyName("MEDIA_RESOLUTION_LOW")] MEDIA_RESOLUTION_LOW,
+    public static MediaResolution MediaResolutionLow { get; } = new("MEDIA_RESOLUTION_LOW");
 
     /// <summary>
     /// Media resolution set to medium (256 tokens).
     /// </summary>
-    [JsonPropertyName("MEDIA_RESOLUTION_MEDIUM")] MEDIA_RESOLUTION_MEDIUM,
+    public static MediaResolution MediaResolutionMedium { get; } = new("MEDIA_RESOLUTION_MEDIUM");
 
     /// <summary>
     /// Media resolution set to high (zoomed reframing with 256 tokens).
     /// </summary>
-    [JsonPropertyName("MEDIA_RESOLUTION_HIGH")] MEDIA_RESOLUTION_HIGH
+    public static MediaResolution MediaResolutionHigh { get; } = new("MEDIA_RESOLUTION_HIGH");
+
+    public static IReadOnlyList<MediaResolution> AllValues {
+      get;
+    } = new[] { MediaResolutionUnspecified, MediaResolutionLow, MediaResolutionMedium,
+                MediaResolutionHigh };
+
+    public static MediaResolution FromString(string value) {
+      if (string.IsNullOrEmpty(value)) {
+        return new MediaResolution("MEDIA_RESOLUTION_UNSPECIFIED");
+      }
+
+      foreach (var known in AllValues) {
+        if (known.Value == value) {
+          return known;
+        }
+      }
+
+      return new MediaResolution(value);
+    }
+
+    public override string ToString() => Value ?? string.Empty;
+
+    public static implicit operator MediaResolution(string value) => FromString(value);
+
+    public bool Equals(MediaResolution other) => Value == other.Value;
+
+    public override int GetHashCode() => Value?.GetHashCode() ?? 0;
+  }
+
+  public class MediaResolutionConverter : JsonConverter<MediaResolution> {
+    public override MediaResolution Read(ref Utf8JsonReader reader, System.Type typeToConvert,
+                                         JsonSerializerOptions options) {
+      var value = reader.GetString();
+      return MediaResolution.FromString(value);
+    }
+
+    public override void Write(Utf8JsonWriter writer, MediaResolution value,
+                               JsonSerializerOptions options) {
+      writer.WriteStringValue(value.Value);
+    }
   }
 }

@@ -17,41 +17,96 @@
 // Auto-generated code. Do not edit.
 
 using System.Text.Json.Serialization;
+using System.Collections.Generic;
+using System.Text.Json;
 
 namespace Google.GenAI.Types {
   /// <summary>
   /// The harm block threshold.
   /// </summary>
-  [JsonConverter(typeof(JsonStringEnumConverter))]
-  public enum HarmBlockThreshold {
+
+  [JsonConverter(typeof(HarmBlockThresholdConverter))]
+  public readonly record struct HarmBlockThreshold : IEquatable<HarmBlockThreshold> {
+    public string Value { get; }
+
+    private HarmBlockThreshold(string value) {
+      Value = value;
+    }
+
     /// <summary>
     /// Unspecified harm block threshold.
     /// </summary>
-    [JsonPropertyName("HARM_BLOCK_THRESHOLD_UNSPECIFIED")] HARM_BLOCK_THRESHOLD_UNSPECIFIED,
+    public static HarmBlockThreshold HarmBlockThresholdUnspecified {
+      get;
+    } = new("HARM_BLOCK_THRESHOLD_UNSPECIFIED");
 
     /// <summary>
     /// Block low threshold and above (i.e. block more).
     /// </summary>
-    [JsonPropertyName("BLOCK_LOW_AND_ABOVE")] BLOCK_LOW_AND_ABOVE,
+    public static HarmBlockThreshold BlockLowAndAbove { get; } = new("BLOCK_LOW_AND_ABOVE");
 
     /// <summary>
     /// Block medium threshold and above.
     /// </summary>
-    [JsonPropertyName("BLOCK_MEDIUM_AND_ABOVE")] BLOCK_MEDIUM_AND_ABOVE,
+    public static HarmBlockThreshold BlockMediumAndAbove { get; } = new("BLOCK_MEDIUM_AND_ABOVE");
 
     /// <summary>
     /// Block only high threshold (i.e. block less).
     /// </summary>
-    [JsonPropertyName("BLOCK_ONLY_HIGH")] BLOCK_ONLY_HIGH,
+    public static HarmBlockThreshold BlockOnlyHigh { get; } = new("BLOCK_ONLY_HIGH");
 
     /// <summary>
     /// Block none.
     /// </summary>
-    [JsonPropertyName("BLOCK_NONE")] BLOCK_NONE,
+    public static HarmBlockThreshold BlockNone { get; } = new("BLOCK_NONE");
 
     /// <summary>
     /// Turn off the safety filter.
     /// </summary>
-    [JsonPropertyName("OFF")] OFF
+    public static HarmBlockThreshold Off { get; } = new("OFF");
+
+    public static IReadOnlyList<HarmBlockThreshold> AllValues {
+      get;
+    } = new[] { HarmBlockThresholdUnspecified,
+                BlockLowAndAbove,
+                BlockMediumAndAbove,
+                BlockOnlyHigh,
+                BlockNone,
+                Off };
+
+    public static HarmBlockThreshold FromString(string value) {
+      if (string.IsNullOrEmpty(value)) {
+        return new HarmBlockThreshold("HARM_BLOCK_THRESHOLD_UNSPECIFIED");
+      }
+
+      foreach (var known in AllValues) {
+        if (known.Value == value) {
+          return known;
+        }
+      }
+
+      return new HarmBlockThreshold(value);
+    }
+
+    public override string ToString() => Value ?? string.Empty;
+
+    public static implicit operator HarmBlockThreshold(string value) => FromString(value);
+
+    public bool Equals(HarmBlockThreshold other) => Value == other.Value;
+
+    public override int GetHashCode() => Value?.GetHashCode() ?? 0;
+  }
+
+  public class HarmBlockThresholdConverter : JsonConverter<HarmBlockThreshold> {
+    public override HarmBlockThreshold Read(ref Utf8JsonReader reader, System.Type typeToConvert,
+                                            JsonSerializerOptions options) {
+      var value = reader.GetString();
+      return HarmBlockThreshold.FromString(value);
+    }
+
+    public override void Write(Utf8JsonWriter writer, HarmBlockThreshold value,
+                               JsonSerializerOptions options) {
+      writer.WriteStringValue(value.Value);
+    }
   }
 }

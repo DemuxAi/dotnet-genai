@@ -17,46 +17,95 @@
 // Auto-generated code. Do not edit.
 
 using System.Text.Json.Serialization;
+using System.Collections.Generic;
+using System.Text.Json;
 
 namespace Google.GenAI.Types {
   /// <summary>
   /// Adapter size for tuning. This enum is not supported in Gemini API.
   /// </summary>
-  [JsonConverter(typeof(JsonStringEnumConverter))]
-  public enum AdapterSize {
+
+  [JsonConverter(typeof(AdapterSizeConverter))]
+  public readonly record struct AdapterSize : IEquatable<AdapterSize> {
+    public string Value { get; }
+
+    private AdapterSize(string value) {
+      Value = value;
+    }
+
     /// <summary>
     /// Adapter size is unspecified.
     /// </summary>
-    [JsonPropertyName("ADAPTER_SIZE_UNSPECIFIED")] ADAPTER_SIZE_UNSPECIFIED,
+    public static AdapterSize AdapterSizeUnspecified { get; } = new("ADAPTER_SIZE_UNSPECIFIED");
 
     /// <summary>
     /// Adapter size 1.
     /// </summary>
-    [JsonPropertyName("ADAPTER_SIZE_ONE")] ADAPTER_SIZE_ONE,
+    public static AdapterSize AdapterSizeOne { get; } = new("ADAPTER_SIZE_ONE");
 
     /// <summary>
     /// Adapter size 2.
     /// </summary>
-    [JsonPropertyName("ADAPTER_SIZE_TWO")] ADAPTER_SIZE_TWO,
+    public static AdapterSize AdapterSizeTwo { get; } = new("ADAPTER_SIZE_TWO");
 
     /// <summary>
     /// Adapter size 4.
     /// </summary>
-    [JsonPropertyName("ADAPTER_SIZE_FOUR")] ADAPTER_SIZE_FOUR,
+    public static AdapterSize AdapterSizeFour { get; } = new("ADAPTER_SIZE_FOUR");
 
     /// <summary>
     /// Adapter size 8.
     /// </summary>
-    [JsonPropertyName("ADAPTER_SIZE_EIGHT")] ADAPTER_SIZE_EIGHT,
+    public static AdapterSize AdapterSizeEight { get; } = new("ADAPTER_SIZE_EIGHT");
 
     /// <summary>
     /// Adapter size 16.
     /// </summary>
-    [JsonPropertyName("ADAPTER_SIZE_SIXTEEN")] ADAPTER_SIZE_SIXTEEN,
+    public static AdapterSize AdapterSizeSixteen { get; } = new("ADAPTER_SIZE_SIXTEEN");
 
     /// <summary>
     /// Adapter size 32.
     /// </summary>
-    [JsonPropertyName("ADAPTER_SIZE_THIRTY_TWO")] ADAPTER_SIZE_THIRTY_TWO
+    public static AdapterSize AdapterSizeThirtyTwo { get; } = new("ADAPTER_SIZE_THIRTY_TWO");
+
+    public static IReadOnlyList<AdapterSize> AllValues {
+      get;
+    } = new[] { AdapterSizeUnspecified, AdapterSizeOne,     AdapterSizeTwo,      AdapterSizeFour,
+                AdapterSizeEight,       AdapterSizeSixteen, AdapterSizeThirtyTwo };
+
+    public static AdapterSize FromString(string value) {
+      if (string.IsNullOrEmpty(value)) {
+        return new AdapterSize("ADAPTER_SIZE_UNSPECIFIED");
+      }
+
+      foreach (var known in AllValues) {
+        if (known.Value == value) {
+          return known;
+        }
+      }
+
+      return new AdapterSize(value);
+    }
+
+    public override string ToString() => Value ?? string.Empty;
+
+    public static implicit operator AdapterSize(string value) => FromString(value);
+
+    public bool Equals(AdapterSize other) => Value == other.Value;
+
+    public override int GetHashCode() => Value?.GetHashCode() ?? 0;
+  }
+
+  public class AdapterSizeConverter : JsonConverter<AdapterSize> {
+    public override AdapterSize Read(ref Utf8JsonReader reader, System.Type typeToConvert,
+                                     JsonSerializerOptions options) {
+      var value = reader.GetString();
+      return AdapterSize.FromString(value);
+    }
+
+    public override void Write(Utf8JsonWriter writer, AdapterSize value,
+                               JsonSerializerOptions options) {
+      writer.WriteStringValue(value.Value);
+    }
   }
 }

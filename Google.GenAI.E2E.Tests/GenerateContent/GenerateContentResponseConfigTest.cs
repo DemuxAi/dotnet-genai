@@ -37,33 +37,33 @@ public class GenerateContentResponseConfigTest {
   private GoogleType.Schema countryInfo = new GoogleType.Schema {
     Properties =
         new Dictionary<string, GoogleType.Schema> {
-          { "title", new GoogleType.Schema { Type = GoogleType.Type.STRING, Title = "Title" } },
+          { "title", new GoogleType.Schema { Type = GoogleType.Type.String, Title = "Title" } },
           { "population",
-            new GoogleType.Schema { Type = GoogleType.Type.INTEGER, Title = "Population" } },
-          { "capital", new GoogleType.Schema { Type = GoogleType.Type.STRING, Title = "Capital" } },
+            new GoogleType.Schema { Type = GoogleType.Type.Integer, Title = "Population" } },
+          { "capital", new GoogleType.Schema { Type = GoogleType.Type.String, Title = "Capital" } },
           { "continent",
-            new GoogleType.Schema { Type = GoogleType.Type.STRING, Title = "Continent" } },
+            new GoogleType.Schema { Type = GoogleType.Type.String, Title = "Continent" } },
           { "language",
-            new GoogleType.Schema { Type = GoogleType.Type.STRING, Title = "Language" } }
+            new GoogleType.Schema { Type = GoogleType.Type.String, Title = "Language" } }
         },
     PropertyOrdering =
         new List<string> { "title", "population", "capital", "continent", "language" },
     Required = new List<string> { "title", "population", "capital", "continent", "language" },
-    Title = "CountryInfo", Type = GoogleType.Type.OBJECT
+    Title = "CountryInfo", Type = GoogleType.Type.Object
   };
   private GoogleType.Schema restaurantInfo = new GoogleType.Schema {
     Properties =
         new Dictionary<string, GoogleType.Schema> {
-          { "name", new GoogleType.Schema { Type = GoogleType.Type.STRING, Title = "Name" } },
-          { "city", new GoogleType.Schema { Type = GoogleType.Type.STRING, Title = "City",
+          { "name", new GoogleType.Schema { Type = GoogleType.Type.String, Title = "Name" } },
+          { "city", new GoogleType.Schema { Type = GoogleType.Type.String, Title = "City",
                                             Default = "New York" } },
-          { "address", new GoogleType.Schema { Type = GoogleType.Type.STRING, Title = "Address" } },
-          { "rating", new GoogleType.Schema { Type = GoogleType.Type.NUMBER, Title = "Rating",
+          { "address", new GoogleType.Schema { Type = GoogleType.Type.String, Title = "Address" } },
+          { "rating", new GoogleType.Schema { Type = GoogleType.Type.Number, Title = "Rating",
                                               Default = 3.0 } }
         },
     PropertyOrdering = new List<string> { "name", "city", "address", "rating" },
     Required = new List<string> { "name", "city", "address", "rating" }, Title = "restaurantInfo",
-    Type = GoogleType.Type.OBJECT
+    Type = GoogleType.Type.Object
   };
   public TestContext TestContext { get; set; }
 

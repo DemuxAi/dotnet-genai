@@ -17,31 +17,79 @@
 // Auto-generated code. Do not edit.
 
 using System.Text.Json.Serialization;
+using System.Collections.Generic;
+using System.Text.Json;
 
 namespace Google.GenAI.Types {
   /// <summary>
   /// Enum that controls the safety filter level for objectionable content.
   /// </summary>
-  [JsonConverter(typeof(JsonStringEnumConverter))]
-  public enum SafetyFilterLevel {
-    /// <summary>
-    ///
-    /// </summary>
-    [JsonPropertyName("BLOCK_LOW_AND_ABOVE")] BLOCK_LOW_AND_ABOVE,
+
+  [JsonConverter(typeof(SafetyFilterLevelConverter))]
+  public readonly record struct SafetyFilterLevel : IEquatable<SafetyFilterLevel> {
+    public string Value { get; }
+
+    private SafetyFilterLevel(string value) {
+      Value = value;
+    }
 
     /// <summary>
     ///
     /// </summary>
-    [JsonPropertyName("BLOCK_MEDIUM_AND_ABOVE")] BLOCK_MEDIUM_AND_ABOVE,
+    public static SafetyFilterLevel BlockLowAndAbove { get; } = new("BLOCK_LOW_AND_ABOVE");
 
     /// <summary>
     ///
     /// </summary>
-    [JsonPropertyName("BLOCK_ONLY_HIGH")] BLOCK_ONLY_HIGH,
+    public static SafetyFilterLevel BlockMediumAndAbove { get; } = new("BLOCK_MEDIUM_AND_ABOVE");
 
     /// <summary>
     ///
     /// </summary>
-    [JsonPropertyName("BLOCK_NONE")] BLOCK_NONE
+    public static SafetyFilterLevel BlockOnlyHigh { get; } = new("BLOCK_ONLY_HIGH");
+
+    /// <summary>
+    ///
+    /// </summary>
+    public static SafetyFilterLevel BlockNone { get; } = new("BLOCK_NONE");
+
+    public static IReadOnlyList<SafetyFilterLevel> AllValues {
+      get;
+    } = new[] { BlockLowAndAbove, BlockMediumAndAbove, BlockOnlyHigh, BlockNone };
+
+    public static SafetyFilterLevel FromString(string value) {
+      if (string.IsNullOrEmpty(value)) {
+        return new SafetyFilterLevel("UNSPECIFIED");
+      }
+
+      foreach (var known in AllValues) {
+        if (known.Value == value) {
+          return known;
+        }
+      }
+
+      return new SafetyFilterLevel(value);
+    }
+
+    public override string ToString() => Value ?? string.Empty;
+
+    public static implicit operator SafetyFilterLevel(string value) => FromString(value);
+
+    public bool Equals(SafetyFilterLevel other) => Value == other.Value;
+
+    public override int GetHashCode() => Value?.GetHashCode() ?? 0;
+  }
+
+  public class SafetyFilterLevelConverter : JsonConverter<SafetyFilterLevel> {
+    public override SafetyFilterLevel Read(ref Utf8JsonReader reader, System.Type typeToConvert,
+                                           JsonSerializerOptions options) {
+      var value = reader.GetString();
+      return SafetyFilterLevel.FromString(value);
+    }
+
+    public override void Write(Utf8JsonWriter writer, SafetyFilterLevel value,
+                               JsonSerializerOptions options) {
+      writer.WriteStringValue(value.Value);
+    }
   }
 }

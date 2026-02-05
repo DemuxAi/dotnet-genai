@@ -133,7 +133,7 @@ public class SendClientContentTest {
               Text = "You are a helpful chatbot that specializes in providing fun facts."
             } }
           },
-      ResponseModalities = new List<GoogleType.Modality> { GoogleType.Modality.TEXT }
+      ResponseModalities = new List<GoogleType.Modality> { GoogleType.Modality.Text }
     };
     var geminiSession = new SessionWithQueue(geminiClient, geminiModelName, config);
     await geminiSession.InitializeSessionAsync();
@@ -173,7 +173,7 @@ public class SendClientContentTest {
               Text = "You are a helpful chatbot that specializes in providing fun facts."
             } }
           },
-      ResponseModalities = new List<GoogleType.Modality> { GoogleType.Modality.TEXT }
+      ResponseModalities = new List<GoogleType.Modality> { GoogleType.Modality.Text }
     };
     var vertexSession = new SessionWithQueue(vertexClient, vertexModelName, config);
     await vertexSession.InitializeSessionAsync();
@@ -215,11 +215,11 @@ public class SendClientContentTest {
                   Description = "Get the current weather in a given location",
                   Parameters =
                       new GoogleType
-                          .Schema { Type = GoogleType.Type.OBJECT,
+                          .Schema { Type = GoogleType.Type.Object,
                                     Properties = new Dictionary<string, GoogleType.Schema> { { "location", new GoogleType
                                                                                                                .Schema { Type = GoogleType
                                                                                                                                     .Type
-                                                                                                                                    .STRING,
+                                                                                                                                    .String,
                                                                                                                          Description = "The city and state, e.g. San Francisco, CA" } } },
                                     Required = new List<string> { "location" } }
                 } }
@@ -263,11 +263,11 @@ public class SendClientContentTest {
                   Description = "Get the current weather in a given location",
                   Parameters =
                       new GoogleType
-                          .Schema { Type = GoogleType.Type.OBJECT,
+                          .Schema { Type = GoogleType.Type.Object,
                                     Properties = new Dictionary<string, GoogleType.Schema> { { "location", new GoogleType
                                                                                                                .Schema { Type = GoogleType
                                                                                                                                     .Type
-                                                                                                                                    .STRING,
+                                                                                                                                    .String,
                                                                                                                          Description = "The city and state, e.g. San Francisco, CA" } } },
                                     Required = new List<string> { "location" } }
                 } }

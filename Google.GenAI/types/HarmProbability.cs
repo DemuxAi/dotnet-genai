@@ -17,36 +17,86 @@
 // Auto-generated code. Do not edit.
 
 using System.Text.Json.Serialization;
+using System.Collections.Generic;
+using System.Text.Json;
 
 namespace Google.GenAI.Types {
   /// <summary>
   /// Output only. Harm probability levels in the content.
   /// </summary>
-  [JsonConverter(typeof(JsonStringEnumConverter))]
-  public enum HarmProbability {
+
+  [JsonConverter(typeof(HarmProbabilityConverter))]
+  public readonly record struct HarmProbability : IEquatable<HarmProbability> {
+    public string Value { get; }
+
+    private HarmProbability(string value) {
+      Value = value;
+    }
+
     /// <summary>
     /// Harm probability unspecified.
     /// </summary>
-    [JsonPropertyName("HARM_PROBABILITY_UNSPECIFIED")] HARM_PROBABILITY_UNSPECIFIED,
+    public static HarmProbability HarmProbabilityUnspecified {
+      get;
+    } = new("HARM_PROBABILITY_UNSPECIFIED");
 
     /// <summary>
     /// Negligible level of harm.
     /// </summary>
-    [JsonPropertyName("NEGLIGIBLE")] NEGLIGIBLE,
+    public static HarmProbability Negligible { get; } = new("NEGLIGIBLE");
 
     /// <summary>
     /// Low level of harm.
     /// </summary>
-    [JsonPropertyName("LOW")] LOW,
+    public static HarmProbability Low { get; } = new("LOW");
 
     /// <summary>
     /// Medium level of harm.
     /// </summary>
-    [JsonPropertyName("MEDIUM")] MEDIUM,
+    public static HarmProbability Medium { get; } = new("MEDIUM");
 
     /// <summary>
     /// High level of harm.
     /// </summary>
-    [JsonPropertyName("HIGH")] HIGH
+    public static HarmProbability High { get; } = new("HIGH");
+
+    public static IReadOnlyList<HarmProbability> AllValues {
+      get;
+    } = new[] { HarmProbabilityUnspecified, Negligible, Low, Medium, High };
+
+    public static HarmProbability FromString(string value) {
+      if (string.IsNullOrEmpty(value)) {
+        return new HarmProbability("HARM_PROBABILITY_UNSPECIFIED");
+      }
+
+      foreach (var known in AllValues) {
+        if (known.Value == value) {
+          return known;
+        }
+      }
+
+      return new HarmProbability(value);
+    }
+
+    public override string ToString() => Value ?? string.Empty;
+
+    public static implicit operator HarmProbability(string value) => FromString(value);
+
+    public bool Equals(HarmProbability other) => Value == other.Value;
+
+    public override int GetHashCode() => Value?.GetHashCode() ?? 0;
+  }
+
+  public class HarmProbabilityConverter : JsonConverter<HarmProbability> {
+    public override HarmProbability Read(ref Utf8JsonReader reader, System.Type typeToConvert,
+                                         JsonSerializerOptions options) {
+      var value = reader.GetString();
+      return HarmProbability.FromString(value);
+    }
+
+    public override void Write(Utf8JsonWriter writer, HarmProbability value,
+                               JsonSerializerOptions options) {
+      writer.WriteStringValue(value.Value);
+    }
   }
 }

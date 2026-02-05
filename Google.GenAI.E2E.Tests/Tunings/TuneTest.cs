@@ -98,7 +98,7 @@ public class TuneTest {
     var config = new CreateTuningJobConfig {
       TunedModelDisplayName = "Model display name",
       EpochCount = 1,
-      Method = TuningMethod.PREFERENCE_TUNING,
+      Method = TuningMethod.PreferenceTuning,
     };
     var tuningJob = await vertexClient.Tunings.TuneAsync(modelName, trainingDataset, config);
     Assert.IsNotNull(tuningJob);
@@ -112,7 +112,7 @@ public class TuneTest {
     var config = new CreateTuningJobConfig {
       TunedModelDisplayName = "Model display name",
       EpochCount = 1,
-      Method = TuningMethod.PREFERENCE_TUNING,
+      Method = TuningMethod.PreferenceTuning,
     };
     var ex = await Assert.ThrowsExceptionAsync<NotSupportedException>(async () => {
       await geminiClient.Tunings.TuneAsync(modelName, trainingDataset, config);
@@ -129,7 +129,7 @@ public class TuneTest {
     var config = new CreateTuningJobConfig {
       TunedModelDisplayName = "Model display name",
       EpochCount = 1,
-      Method = TuningMethod.PREFERENCE_TUNING,
+      Method = TuningMethod.PreferenceTuning,
       Beta = 0.5,
     };
     var tuningJob = await vertexClient.Tunings.TuneAsync(modelName, trainingDataset, config);
@@ -144,7 +144,7 @@ public class TuneTest {
     var config = new CreateTuningJobConfig {
       TunedModelDisplayName = "Model display name",
       EpochCount = 1,
-      Method = TuningMethod.PREFERENCE_TUNING,
+      Method = TuningMethod.PreferenceTuning,
       Beta = 0.5,
     };
     var ex = await Assert.ThrowsExceptionAsync<NotSupportedException>(async () => {
@@ -221,7 +221,7 @@ public class TuneTest {
       GcsUri = "gs://nathreya-oss-tuning-sdk-test/distillation-val-openai-opposites.jsonl"
     };
     var config = new CreateTuningJobConfig {
-      Method = TuningMethod.DISTILLATION,
+      Method = TuningMethod.Distillation,
       BaseTeacherModel = "deepseek-ai/deepseek-v3.1-maas",
       EpochCount = 20,
       ValidationDataset = validationDataset,
@@ -244,7 +244,7 @@ public class TuneTest {
       GcsUri = "gs://nathreya-oss-tuning-sdk-test/distillation-openai-opposites.jsonl"
     };
     var config = new CreateTuningJobConfig {
-      Method = TuningMethod.DISTILLATION,
+      Method = TuningMethod.Distillation,
       BaseTeacherModel = "deepseek-ai/deepseek-v3.1-maas",
     };
 

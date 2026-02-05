@@ -153,7 +153,7 @@ public class GenerateVideosTest {
       PersonGeneration = "allow_adult",
       NegativePrompt = "ugly, low quality",
       EnhancePrompt = true,
-      CompressionQuality = VideoCompressionQuality.LOSSLESS,
+      CompressionQuality = VideoCompressionQuality.Lossless,
     };
 
     var operation = await vertexClient.Models.GenerateVideosAsync(
@@ -448,7 +448,7 @@ public class GenerateVideosTest {
     List<VideoGenerationReferenceImage> referenceImages = new List<VideoGenerationReferenceImage>();
     referenceImages.Add(new VideoGenerationReferenceImage {
       Image = Image.FromFile("TestAssets/man.jpg"),
-      ReferenceType = VideoGenerationReferenceType.ASSET,
+      ReferenceType = VideoGenerationReferenceType.Asset,
     });
     var config = new GenerateVideosConfig {
       NumberOfVideos = 1,
@@ -483,7 +483,7 @@ public class GenerateVideosTest {
     List<VideoGenerationReferenceImage> referenceImages = new List<VideoGenerationReferenceImage>();
     referenceImages.Add(new VideoGenerationReferenceImage {
       Image = Image.FromFile("TestAssets/man.jpg"),
-      ReferenceType = VideoGenerationReferenceType.ASSET,
+      ReferenceType = VideoGenerationReferenceType.Asset,
     });
     var config = new GenerateVideosConfig {
       NumberOfVideos = 1,
@@ -532,7 +532,7 @@ public class GenerateVideosTest {
           GcsUri = "gs://genai-sdk-tests/inputs/videos/video_outpaint_mask.png",
           MimeType = "image/png",
         },
-        MaskMode = VideoGenerationMaskMode.OUTPAINT,
+        MaskMode = VideoGenerationMaskMode.Outpaint,
       },
     };
     var operation = await vertexClient.Models.GenerateVideosAsync(
@@ -569,7 +569,7 @@ public class GenerateVideosTest {
       AspectRatio = "16:9",
       Mask = new VideoGenerationMask {
         Image = Image.FromFile("TestAssets/google_small.png"),
-        MaskMode = VideoGenerationMaskMode.OUTPAINT,
+        MaskMode = VideoGenerationMaskMode.Outpaint,
       },
     };
 

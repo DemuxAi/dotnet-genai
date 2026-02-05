@@ -39,14 +39,14 @@ public class GenerateContentStreamToolsTest {
         Name = "GetWeather", Description = "return the real time weather of the location",
         Parameters =
             new GoogleTypes.Schema {
-              Type = GoogleTypes.Type.OBJECT,
+              Type = GoogleTypes.Type.Object,
               Properties =
                   new Dictionary<string, GoogleTypes.Schema> {
-                    { "location", new GoogleTypes.Schema { Type = GoogleTypes.Type.STRING } }
+                    { "location", new GoogleTypes.Schema { Type = GoogleTypes.Type.String } }
                   },
               Required = new List<string> { "location" }
             },
-        Response = new GoogleTypes.Schema { Type = GoogleTypes.Type.STRING }
+        Response = new GoogleTypes.Schema { Type = GoogleTypes.Type.String }
       };
 
   public TestContext TestContext { get; set; }

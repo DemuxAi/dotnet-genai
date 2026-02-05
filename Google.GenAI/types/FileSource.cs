@@ -17,31 +17,79 @@
 // Auto-generated code. Do not edit.
 
 using System.Text.Json.Serialization;
+using System.Collections.Generic;
+using System.Text.Json;
 
 namespace Google.GenAI.Types {
   /// <summary>
   /// Source of the File.
   /// </summary>
-  [JsonConverter(typeof(JsonStringEnumConverter))]
-  public enum FileSource {
-    /// <summary>
-    ///
-    /// </summary>
-    [JsonPropertyName("SOURCE_UNSPECIFIED")] SOURCE_UNSPECIFIED,
+
+  [JsonConverter(typeof(FileSourceConverter))]
+  public readonly record struct FileSource : IEquatable<FileSource> {
+    public string Value { get; }
+
+    private FileSource(string value) {
+      Value = value;
+    }
 
     /// <summary>
     ///
     /// </summary>
-    [JsonPropertyName("UPLOADED")] UPLOADED,
+    public static FileSource SourceUnspecified { get; } = new("SOURCE_UNSPECIFIED");
 
     /// <summary>
     ///
     /// </summary>
-    [JsonPropertyName("GENERATED")] GENERATED,
+    public static FileSource Uploaded { get; } = new("UPLOADED");
 
     /// <summary>
     ///
     /// </summary>
-    [JsonPropertyName("REGISTERED")] REGISTERED
+    public static FileSource Generated { get; } = new("GENERATED");
+
+    /// <summary>
+    ///
+    /// </summary>
+    public static FileSource Registered { get; } = new("REGISTERED");
+
+    public static IReadOnlyList<FileSource> AllValues {
+      get;
+    } = new[] { SourceUnspecified, Uploaded, Generated, Registered };
+
+    public static FileSource FromString(string value) {
+      if (string.IsNullOrEmpty(value)) {
+        return new FileSource("SOURCE_UNSPECIFIED");
+      }
+
+      foreach (var known in AllValues) {
+        if (known.Value == value) {
+          return known;
+        }
+      }
+
+      return new FileSource(value);
+    }
+
+    public override string ToString() => Value ?? string.Empty;
+
+    public static implicit operator FileSource(string value) => FromString(value);
+
+    public bool Equals(FileSource other) => Value == other.Value;
+
+    public override int GetHashCode() => Value?.GetHashCode() ?? 0;
+  }
+
+  public class FileSourceConverter : JsonConverter<FileSource> {
+    public override FileSource Read(ref Utf8JsonReader reader, System.Type typeToConvert,
+                                    JsonSerializerOptions options) {
+      var value = reader.GetString();
+      return FileSource.FromString(value);
+    }
+
+    public override void Write(Utf8JsonWriter writer, FileSource value,
+                               JsonSerializerOptions options) {
+      writer.WriteStringValue(value.Value);
+    }
   }
 }

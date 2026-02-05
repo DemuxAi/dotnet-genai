@@ -17,36 +17,96 @@
 // Auto-generated code. Do not edit.
 
 using System.Text.Json.Serialization;
+using System.Collections.Generic;
+using System.Text.Json;
 
 namespace Google.GenAI.Types {
   /// <summary>
   /// The tokenization quality used for given media.
   /// </summary>
-  [JsonConverter(typeof(JsonStringEnumConverter))]
-  public enum PartMediaResolutionLevel {
+
+  [JsonConverter(typeof(PartMediaResolutionLevelConverter))]
+  public readonly record struct PartMediaResolutionLevel : IEquatable<PartMediaResolutionLevel> {
+    public string Value { get; }
+
+    private PartMediaResolutionLevel(string value) {
+      Value = value;
+    }
+
     /// <summary>
     /// Media resolution has not been set.
     /// </summary>
-    [JsonPropertyName("MEDIA_RESOLUTION_UNSPECIFIED")] MEDIA_RESOLUTION_UNSPECIFIED,
+    public static PartMediaResolutionLevel MediaResolutionUnspecified {
+      get;
+    } = new("MEDIA_RESOLUTION_UNSPECIFIED");
 
     /// <summary>
     /// Media resolution set to low.
     /// </summary>
-    [JsonPropertyName("MEDIA_RESOLUTION_LOW")] MEDIA_RESOLUTION_LOW,
+    public static PartMediaResolutionLevel MediaResolutionLow {
+      get;
+    } = new("MEDIA_RESOLUTION_LOW");
 
     /// <summary>
     /// Media resolution set to medium.
     /// </summary>
-    [JsonPropertyName("MEDIA_RESOLUTION_MEDIUM")] MEDIA_RESOLUTION_MEDIUM,
+    public static PartMediaResolutionLevel MediaResolutionMedium {
+      get;
+    } = new("MEDIA_RESOLUTION_MEDIUM");
 
     /// <summary>
     /// Media resolution set to high.
     /// </summary>
-    [JsonPropertyName("MEDIA_RESOLUTION_HIGH")] MEDIA_RESOLUTION_HIGH,
+    public static PartMediaResolutionLevel MediaResolutionHigh {
+      get;
+    } = new("MEDIA_RESOLUTION_HIGH");
 
     /// <summary>
     /// Media resolution set to ultra high.
     /// </summary>
-    [JsonPropertyName("MEDIA_RESOLUTION_ULTRA_HIGH")] MEDIA_RESOLUTION_ULTRA_HIGH
+    public static PartMediaResolutionLevel MediaResolutionUltraHigh {
+      get;
+    } = new("MEDIA_RESOLUTION_ULTRA_HIGH");
+
+    public static IReadOnlyList<PartMediaResolutionLevel> AllValues {
+      get;
+    } = new[] { MediaResolutionUnspecified, MediaResolutionLow, MediaResolutionMedium,
+                MediaResolutionHigh, MediaResolutionUltraHigh };
+
+    public static PartMediaResolutionLevel FromString(string value) {
+      if (string.IsNullOrEmpty(value)) {
+        return new PartMediaResolutionLevel("MEDIA_RESOLUTION_UNSPECIFIED");
+      }
+
+      foreach (var known in AllValues) {
+        if (known.Value == value) {
+          return known;
+        }
+      }
+
+      return new PartMediaResolutionLevel(value);
+    }
+
+    public override string ToString() => Value ?? string.Empty;
+
+    public static implicit operator PartMediaResolutionLevel(string value) => FromString(value);
+
+    public bool Equals(PartMediaResolutionLevel other) => Value == other.Value;
+
+    public override int GetHashCode() => Value?.GetHashCode() ?? 0;
+  }
+
+  public class PartMediaResolutionLevelConverter : JsonConverter<PartMediaResolutionLevel> {
+    public override PartMediaResolutionLevel Read(ref Utf8JsonReader reader,
+                                                  System.Type typeToConvert,
+                                                  JsonSerializerOptions options) {
+      var value = reader.GetString();
+      return PartMediaResolutionLevel.FromString(value);
+    }
+
+    public override void Write(Utf8JsonWriter writer, PartMediaResolutionLevel value,
+                               JsonSerializerOptions options) {
+      writer.WriteStringValue(value.Value);
+    }
   }
 }

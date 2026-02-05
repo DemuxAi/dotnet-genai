@@ -17,26 +17,74 @@
 // Auto-generated code. Do not edit.
 
 using System.Text.Json.Serialization;
+using System.Collections.Generic;
+using System.Text.Json;
 
 namespace Google.GenAI.Types {
   /// <summary>
   /// Enum that controls the generation of people.
   /// </summary>
-  [JsonConverter(typeof(JsonStringEnumConverter))]
-  public enum PersonGeneration {
+
+  [JsonConverter(typeof(PersonGenerationConverter))]
+  public readonly record struct PersonGeneration : IEquatable<PersonGeneration> {
+    public string Value { get; }
+
+    private PersonGeneration(string value) {
+      Value = value;
+    }
+
     /// <summary>
     /// Block generation of images of people.
     /// </summary>
-    [JsonPropertyName("DONT_ALLOW")] DONT_ALLOW,
+    public static PersonGeneration DontAllow { get; } = new("DONT_ALLOW");
 
     /// <summary>
     /// Generate images of adults, but not children.
     /// </summary>
-    [JsonPropertyName("ALLOW_ADULT")] ALLOW_ADULT,
+    public static PersonGeneration AllowAdult { get; } = new("ALLOW_ADULT");
 
     /// <summary>
     /// Generate images that include adults and children.
     /// </summary>
-    [JsonPropertyName("ALLOW_ALL")] ALLOW_ALL
+    public static PersonGeneration AllowAll { get; } = new("ALLOW_ALL");
+
+    public static IReadOnlyList<PersonGeneration> AllValues {
+      get;
+    } = new[] { DontAllow, AllowAdult, AllowAll };
+
+    public static PersonGeneration FromString(string value) {
+      if (string.IsNullOrEmpty(value)) {
+        return new PersonGeneration("UNSPECIFIED");
+      }
+
+      foreach (var known in AllValues) {
+        if (known.Value == value) {
+          return known;
+        }
+      }
+
+      return new PersonGeneration(value);
+    }
+
+    public override string ToString() => Value ?? string.Empty;
+
+    public static implicit operator PersonGeneration(string value) => FromString(value);
+
+    public bool Equals(PersonGeneration other) => Value == other.Value;
+
+    public override int GetHashCode() => Value?.GetHashCode() ?? 0;
+  }
+
+  public class PersonGenerationConverter : JsonConverter<PersonGeneration> {
+    public override PersonGeneration Read(ref Utf8JsonReader reader, System.Type typeToConvert,
+                                          JsonSerializerOptions options) {
+      var value = reader.GetString();
+      return PersonGeneration.FromString(value);
+    }
+
+    public override void Write(Utf8JsonWriter writer, PersonGeneration value,
+                               JsonSerializerOptions options) {
+      writer.WriteStringValue(value.Value);
+    }
   }
 }

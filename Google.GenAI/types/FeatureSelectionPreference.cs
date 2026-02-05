@@ -17,32 +17,84 @@
 // Auto-generated code. Do not edit.
 
 using System.Text.Json.Serialization;
+using System.Collections.Generic;
+using System.Text.Json;
 
 namespace Google.GenAI.Types {
   /// <summary>
   /// Options for feature selection preference.
   /// </summary>
-  [JsonConverter(typeof(JsonStringEnumConverter))]
-  public enum FeatureSelectionPreference {
-    /// <summary>
-    ///
-    /// </summary>
-    [JsonPropertyName(
-        "FEATURE_SELECTION_PREFERENCE_UNSPECIFIED")] FEATURE_SELECTION_PREFERENCE_UNSPECIFIED,
+
+  [JsonConverter(typeof(FeatureSelectionPreferenceConverter))]
+  public readonly record struct FeatureSelectionPreference
+      : IEquatable<FeatureSelectionPreference> {
+    public string Value { get; }
+
+    private FeatureSelectionPreference(string value) {
+      Value = value;
+    }
 
     /// <summary>
     ///
     /// </summary>
-    [JsonPropertyName("PRIORITIZE_QUALITY")] PRIORITIZE_QUALITY,
+    public static FeatureSelectionPreference FeatureSelectionPreferenceUnspecified {
+      get;
+    } = new("FEATURE_SELECTION_PREFERENCE_UNSPECIFIED");
 
     /// <summary>
     ///
     /// </summary>
-    [JsonPropertyName("BALANCED")] BALANCED,
+    public static FeatureSelectionPreference PrioritizeQuality { get; } = new("PRIORITIZE_QUALITY");
 
     /// <summary>
     ///
     /// </summary>
-    [JsonPropertyName("PRIORITIZE_COST")] PRIORITIZE_COST
+    public static FeatureSelectionPreference Balanced { get; } = new("BALANCED");
+
+    /// <summary>
+    ///
+    /// </summary>
+    public static FeatureSelectionPreference PrioritizeCost { get; } = new("PRIORITIZE_COST");
+
+    public static IReadOnlyList<FeatureSelectionPreference> AllValues {
+      get;
+    } = new[] { FeatureSelectionPreferenceUnspecified, PrioritizeQuality, Balanced,
+                PrioritizeCost };
+
+    public static FeatureSelectionPreference FromString(string value) {
+      if (string.IsNullOrEmpty(value)) {
+        return new FeatureSelectionPreference("FEATURE_SELECTION_PREFERENCE_UNSPECIFIED");
+      }
+
+      foreach (var known in AllValues) {
+        if (known.Value == value) {
+          return known;
+        }
+      }
+
+      return new FeatureSelectionPreference(value);
+    }
+
+    public override string ToString() => Value ?? string.Empty;
+
+    public static implicit operator FeatureSelectionPreference(string value) => FromString(value);
+
+    public bool Equals(FeatureSelectionPreference other) => Value == other.Value;
+
+    public override int GetHashCode() => Value?.GetHashCode() ?? 0;
+  }
+
+  public class FeatureSelectionPreferenceConverter : JsonConverter<FeatureSelectionPreference> {
+    public override FeatureSelectionPreference Read(ref Utf8JsonReader reader,
+                                                    System.Type typeToConvert,
+                                                    JsonSerializerOptions options) {
+      var value = reader.GetString();
+      return FeatureSelectionPreference.FromString(value);
+    }
+
+    public override void Write(Utf8JsonWriter writer, FeatureSelectionPreference value,
+                               JsonSerializerOptions options) {
+      writer.WriteStringValue(value.Value);
+    }
   }
 }

@@ -273,15 +273,15 @@ internal sealed class GoogleGenAIChatClient : IChatClient
         switch (toolMode)
         {
           case NoneChatToolMode:
-            config.ToolConfig = new() { FunctionCallingConfig = new() { Mode = FunctionCallingConfigMode.NONE } };
+            config.ToolConfig = new() { FunctionCallingConfig = new() { Mode = FunctionCallingConfigMode.None } };
             break;
 
           case AutoChatToolMode:
-            config.ToolConfig = new() { FunctionCallingConfig = new() { Mode = FunctionCallingConfigMode.AUTO } };
+            config.ToolConfig = new() { FunctionCallingConfig = new() { Mode = FunctionCallingConfigMode.Auto } };
             break;
 
           case RequiredChatToolMode required:
-            config.ToolConfig = new() { FunctionCallingConfig = new() { Mode = FunctionCallingConfigMode.ANY } };
+            config.ToolConfig = new() { FunctionCallingConfig = new() { Mode = FunctionCallingConfigMode.Any } };
             if (required.RequiredFunctionName is not null)
             {
               ((config.ToolConfig.FunctionCallingConfig ??= new()).AllowedFunctionNames ??= new()).Add(required.RequiredFunctionName);
@@ -571,7 +571,7 @@ internal sealed class GoogleGenAIChatClient : IChatClient
           {
             new DataContent(Encoding.UTF8.GetBytes(executableCode.Code), executableCode.Language switch
             {
-              Language.PYTHON => "text/x-python",
+              var lang when lang == Language.Python => "text/x-python",
               _ => "text/x-source-code",
             })
           },
@@ -583,7 +583,7 @@ internal sealed class GoogleGenAIChatClient : IChatClient
         {
           Outputs = new List<AIContent>()
            {
-             codeExecutionResult.Outcome is Outcome.OUTCOME_OK ?
+             codeExecutionResult.Outcome == Outcome.OutcomeOk ?
               new TextContent(codeOutput) :
               new ErrorContent(codeOutput) { ErrorCode = codeExecutionResult.Outcome.ToString() }
            },
@@ -666,16 +666,16 @@ internal sealed class GoogleGenAIChatClient : IChatClient
     {
       null => null,
 
-      FinishReason.MAX_TOKENS =>
-        ChatFinishReason.Length,
+      var fr when fr == FinishReason.MaxTokens =>
+            ChatFinishReason.Length,
 
-      FinishReason.MALFORMED_FUNCTION_CALL or
-      FinishReason.UNEXPECTED_TOOL_CALL =>
-        ChatFinishReason.ToolCalls,
+      var fr when fr == FinishReason.MalformedFunctionCall ||
+                  fr == FinishReason.UnexpectedToolCall =>
+            ChatFinishReason.ToolCalls,
 
-      FinishReason.FINISH_REASON_UNSPECIFIED or
-      FinishReason.STOP =>
-        ChatFinishReason.Stop,
+      var fr when fr == FinishReason.FinishReasonUnspecified ||
+                  fr == FinishReason.Stop =>
+            ChatFinishReason.Stop,
 
       _ => ChatFinishReason.ContentFilter,
     };

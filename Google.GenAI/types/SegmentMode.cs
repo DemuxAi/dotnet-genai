@@ -17,36 +17,84 @@
 // Auto-generated code. Do not edit.
 
 using System.Text.Json.Serialization;
+using System.Collections.Generic;
+using System.Text.Json;
 
 namespace Google.GenAI.Types {
   /// <summary>
   /// Enum that represents the segmentation mode.
   /// </summary>
-  [JsonConverter(typeof(JsonStringEnumConverter))]
-  public enum SegmentMode {
-    /// <summary>
-    ///
-    /// </summary>
-    [JsonPropertyName("FOREGROUND")] FOREGROUND,
+
+  [JsonConverter(typeof(SegmentModeConverter))]
+  public readonly record struct SegmentMode : IEquatable<SegmentMode> {
+    public string Value { get; }
+
+    private SegmentMode(string value) {
+      Value = value;
+    }
 
     /// <summary>
     ///
     /// </summary>
-    [JsonPropertyName("BACKGROUND")] BACKGROUND,
+    public static SegmentMode Foreground { get; } = new("FOREGROUND");
 
     /// <summary>
     ///
     /// </summary>
-    [JsonPropertyName("PROMPT")] PROMPT,
+    public static SegmentMode Background { get; } = new("BACKGROUND");
 
     /// <summary>
     ///
     /// </summary>
-    [JsonPropertyName("SEMANTIC")] SEMANTIC,
+    public static SegmentMode Prompt { get; } = new("PROMPT");
 
     /// <summary>
     ///
     /// </summary>
-    [JsonPropertyName("INTERACTIVE")] INTERACTIVE
+    public static SegmentMode Semantic { get; } = new("SEMANTIC");
+
+    /// <summary>
+    ///
+    /// </summary>
+    public static SegmentMode Interactive { get; } = new("INTERACTIVE");
+
+    public static IReadOnlyList<SegmentMode> AllValues {
+      get;
+    } = new[] { Foreground, Background, Prompt, Semantic, Interactive };
+
+    public static SegmentMode FromString(string value) {
+      if (string.IsNullOrEmpty(value)) {
+        return new SegmentMode("UNSPECIFIED");
+      }
+
+      foreach (var known in AllValues) {
+        if (known.Value == value) {
+          return known;
+        }
+      }
+
+      return new SegmentMode(value);
+    }
+
+    public override string ToString() => Value ?? string.Empty;
+
+    public static implicit operator SegmentMode(string value) => FromString(value);
+
+    public bool Equals(SegmentMode other) => Value == other.Value;
+
+    public override int GetHashCode() => Value?.GetHashCode() ?? 0;
+  }
+
+  public class SegmentModeConverter : JsonConverter<SegmentMode> {
+    public override SegmentMode Read(ref Utf8JsonReader reader, System.Type typeToConvert,
+                                     JsonSerializerOptions options) {
+      var value = reader.GetString();
+      return SegmentMode.FromString(value);
+    }
+
+    public override void Write(Utf8JsonWriter writer, SegmentMode value,
+                               JsonSerializerOptions options) {
+      writer.WriteStringValue(value.Value);
+    }
   }
 }

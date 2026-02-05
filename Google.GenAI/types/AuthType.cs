@@ -17,46 +17,95 @@
 // Auto-generated code. Do not edit.
 
 using System.Text.Json.Serialization;
+using System.Collections.Generic;
+using System.Text.Json;
 
 namespace Google.GenAI.Types {
   /// <summary>
   /// Type of auth scheme. This enum is not supported in Gemini API.
   /// </summary>
-  [JsonConverter(typeof(JsonStringEnumConverter))]
-  public enum AuthType {
+
+  [JsonConverter(typeof(AuthTypeConverter))]
+  public readonly record struct AuthType : IEquatable<AuthType> {
+    public string Value { get; }
+
+    private AuthType(string value) {
+      Value = value;
+    }
+
     /// <summary>
     ///
     /// </summary>
-    [JsonPropertyName("AUTH_TYPE_UNSPECIFIED")] AUTH_TYPE_UNSPECIFIED,
+    public static AuthType AuthTypeUnspecified { get; } = new("AUTH_TYPE_UNSPECIFIED");
 
     /// <summary>
     /// No Auth.
     /// </summary>
-    [JsonPropertyName("NO_AUTH")] NO_AUTH,
+    public static AuthType NoAuth { get; } = new("NO_AUTH");
 
     /// <summary>
     /// API Key Auth.
     /// </summary>
-    [JsonPropertyName("API_KEY_AUTH")] API_KEY_AUTH,
+    public static AuthType ApiKeyAuth { get; } = new("API_KEY_AUTH");
 
     /// <summary>
     /// HTTP Basic Auth.
     /// </summary>
-    [JsonPropertyName("HTTP_BASIC_AUTH")] HTTP_BASIC_AUTH,
+    public static AuthType HttpBasicAuth { get; } = new("HTTP_BASIC_AUTH");
 
     /// <summary>
     /// Google Service Account Auth.
     /// </summary>
-    [JsonPropertyName("GOOGLE_SERVICE_ACCOUNT_AUTH")] GOOGLE_SERVICE_ACCOUNT_AUTH,
+    public static AuthType GoogleServiceAccountAuth { get; } = new("GOOGLE_SERVICE_ACCOUNT_AUTH");
 
     /// <summary>
     /// OAuth auth.
     /// </summary>
-    [JsonPropertyName("OAUTH")] OAUTH,
+    public static AuthType Oauth { get; } = new("OAUTH");
 
     /// <summary>
     /// OpenID Connect (OIDC) Auth.
     /// </summary>
-    [JsonPropertyName("OIDC_AUTH")] OIDC_AUTH
+    public static AuthType OidcAuth { get; } = new("OIDC_AUTH");
+
+    public static IReadOnlyList<AuthType> AllValues {
+      get;
+    } = new[] { AuthTypeUnspecified,      NoAuth, ApiKeyAuth, HttpBasicAuth,
+                GoogleServiceAccountAuth, Oauth,  OidcAuth };
+
+    public static AuthType FromString(string value) {
+      if (string.IsNullOrEmpty(value)) {
+        return new AuthType("AUTH_TYPE_UNSPECIFIED");
+      }
+
+      foreach (var known in AllValues) {
+        if (known.Value == value) {
+          return known;
+        }
+      }
+
+      return new AuthType(value);
+    }
+
+    public override string ToString() => Value ?? string.Empty;
+
+    public static implicit operator AuthType(string value) => FromString(value);
+
+    public bool Equals(AuthType other) => Value == other.Value;
+
+    public override int GetHashCode() => Value?.GetHashCode() ?? 0;
+  }
+
+  public class AuthTypeConverter : JsonConverter<AuthType> {
+    public override AuthType Read(ref Utf8JsonReader reader, System.Type typeToConvert,
+                                  JsonSerializerOptions options) {
+      var value = reader.GetString();
+      return AuthType.FromString(value);
+    }
+
+    public override void Write(Utf8JsonWriter writer, AuthType value,
+                               JsonSerializerOptions options) {
+      writer.WriteStringValue(value.Value);
+    }
   }
 }

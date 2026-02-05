@@ -1399,7 +1399,7 @@ namespace Google.GenAI {
           tunedModelName =
               operation.Name.Split(new string[] { "/operations/" }, StringSplitOptions.None)[0];
         }
-        return new TuningJob { Name = tunedModelName, State = JobState.JOB_STATE_QUEUED };
+        return new TuningJob { Name = tunedModelName, State = JobState.JobStateQueued };
       }
     }
   }

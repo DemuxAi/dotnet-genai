@@ -17,26 +17,76 @@
 // Auto-generated code. Do not edit.
 
 using System.Text.Json.Serialization;
+using System.Collections.Generic;
+using System.Text.Json;
 
 namespace Google.GenAI.Types {
   /// <summary>
   /// End of speech sensitivity.
   /// </summary>
-  [JsonConverter(typeof(JsonStringEnumConverter))]
-  public enum EndSensitivity {
+
+  [JsonConverter(typeof(EndSensitivityConverter))]
+  public readonly record struct EndSensitivity : IEquatable<EndSensitivity> {
+    public string Value { get; }
+
+    private EndSensitivity(string value) {
+      Value = value;
+    }
+
     /// <summary>
     /// The default is END_SENSITIVITY_LOW.
     /// </summary>
-    [JsonPropertyName("END_SENSITIVITY_UNSPECIFIED")] END_SENSITIVITY_UNSPECIFIED,
+    public static EndSensitivity EndSensitivityUnspecified {
+      get;
+    } = new("END_SENSITIVITY_UNSPECIFIED");
 
     /// <summary>
     /// Automatic detection ends speech more often.
     /// </summary>
-    [JsonPropertyName("END_SENSITIVITY_HIGH")] END_SENSITIVITY_HIGH,
+    public static EndSensitivity EndSensitivityHigh { get; } = new("END_SENSITIVITY_HIGH");
 
     /// <summary>
     /// Automatic detection ends speech less often.
     /// </summary>
-    [JsonPropertyName("END_SENSITIVITY_LOW")] END_SENSITIVITY_LOW
+    public static EndSensitivity EndSensitivityLow { get; } = new("END_SENSITIVITY_LOW");
+
+    public static IReadOnlyList<EndSensitivity> AllValues {
+      get;
+    } = new[] { EndSensitivityUnspecified, EndSensitivityHigh, EndSensitivityLow };
+
+    public static EndSensitivity FromString(string value) {
+      if (string.IsNullOrEmpty(value)) {
+        return new EndSensitivity("END_SENSITIVITY_UNSPECIFIED");
+      }
+
+      foreach (var known in AllValues) {
+        if (known.Value == value) {
+          return known;
+        }
+      }
+
+      return new EndSensitivity(value);
+    }
+
+    public override string ToString() => Value ?? string.Empty;
+
+    public static implicit operator EndSensitivity(string value) => FromString(value);
+
+    public bool Equals(EndSensitivity other) => Value == other.Value;
+
+    public override int GetHashCode() => Value?.GetHashCode() ?? 0;
+  }
+
+  public class EndSensitivityConverter : JsonConverter<EndSensitivity> {
+    public override EndSensitivity Read(ref Utf8JsonReader reader, System.Type typeToConvert,
+                                        JsonSerializerOptions options) {
+      var value = reader.GetString();
+      return EndSensitivity.FromString(value);
+    }
+
+    public override void Write(Utf8JsonWriter writer, EndSensitivity value,
+                               JsonSerializerOptions options) {
+      writer.WriteStringValue(value.Value);
+    }
   }
 }

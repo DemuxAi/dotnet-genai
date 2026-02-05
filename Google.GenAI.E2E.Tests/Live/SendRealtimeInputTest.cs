@@ -78,7 +78,7 @@ public class SendRealtimeInputTest {
   [TestMethod]
   public async Task SendRealtimeInputTextGeminiTest() {
     var config = new GoogleType.LiveConnectConfig {
-      ResponseModalities = new List<GoogleType.Modality> { GoogleType.Modality.TEXT }
+      ResponseModalities = new List<GoogleType.Modality> { GoogleType.Modality.Text }
     };
     var geminiSession = new SessionWithQueue(geminiClient, geminiModelName, config);
     await geminiSession.InitializeSessionAsync();
@@ -99,7 +99,7 @@ public class SendRealtimeInputTest {
   [TestMethod]
   public async Task SendRealtimeInputTextVertexTest() {
     var config = new GoogleType.LiveConnectConfig {
-      ResponseModalities = new List<GoogleType.Modality> { GoogleType.Modality.TEXT }
+      ResponseModalities = new List<GoogleType.Modality> { GoogleType.Modality.Text }
     };
     var vertexSession = new SessionWithQueue(vertexClient, vertexModelName, config);
     await vertexSession.InitializeSessionAsync();
@@ -122,7 +122,7 @@ public class SendRealtimeInputTest {
     var audioBytes = await File.ReadAllBytesAsync("TestAssets/hello_are_you_there.pcm");
 
     var config = new GoogleType.LiveConnectConfig {
-      ResponseModalities = new List<GoogleType.Modality> { GoogleType.Modality.TEXT }
+      ResponseModalities = new List<GoogleType.Modality> { GoogleType.Modality.Text }
     };
     var geminiSession = new SessionWithQueue(geminiClient, geminiModelName, config);
     await geminiSession.InitializeSessionAsync();
@@ -146,7 +146,7 @@ public class SendRealtimeInputTest {
     var audioBytes = await File.ReadAllBytesAsync("TestAssets/hello_are_you_there.pcm");
 
     var config = new GoogleType.LiveConnectConfig {
-      ResponseModalities = new List<GoogleType.Modality> { GoogleType.Modality.TEXT }
+      ResponseModalities = new List<GoogleType.Modality> { GoogleType.Modality.Text }
     };
     var vertexSession = new SessionWithQueue(vertexClient, vertexModelName, config);
     await vertexSession.InitializeSessionAsync();

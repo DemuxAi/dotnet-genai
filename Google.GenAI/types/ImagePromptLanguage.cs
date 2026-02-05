@@ -17,51 +17,99 @@
 // Auto-generated code. Do not edit.
 
 using System.Text.Json.Serialization;
+using System.Collections.Generic;
+using System.Text.Json;
 
 namespace Google.GenAI.Types {
   /// <summary>
   /// Enum that specifies the language of the text in the prompt.
   /// </summary>
-  [JsonConverter(typeof(JsonStringEnumConverter))]
-  public enum ImagePromptLanguage {
+
+  [JsonConverter(typeof(ImagePromptLanguageConverter))]
+  public readonly record struct ImagePromptLanguage : IEquatable<ImagePromptLanguage> {
+    public string Value { get; }
+
+    private ImagePromptLanguage(string value) {
+      Value = value;
+    }
+
     /// <summary>
     /// Auto-detect the language.
     /// </summary>
-    [JsonPropertyName("auto")] auto,
+    public static ImagePromptLanguage Auto { get; } = new("auto");
 
     /// <summary>
     /// English
     /// </summary>
-    [JsonPropertyName("en")] en,
+    public static ImagePromptLanguage En { get; } = new("en");
 
     /// <summary>
     /// Japanese
     /// </summary>
-    [JsonPropertyName("ja")] ja,
+    public static ImagePromptLanguage Ja { get; } = new("ja");
 
     /// <summary>
     /// Korean
     /// </summary>
-    [JsonPropertyName("ko")] ko,
+    public static ImagePromptLanguage Ko { get; } = new("ko");
 
     /// <summary>
     /// Hindi
     /// </summary>
-    [JsonPropertyName("hi")] hi,
+    public static ImagePromptLanguage Hi { get; } = new("hi");
 
     /// <summary>
     /// Chinese
     /// </summary>
-    [JsonPropertyName("zh")] zh,
+    public static ImagePromptLanguage Zh { get; } = new("zh");
 
     /// <summary>
     /// Portuguese
     /// </summary>
-    [JsonPropertyName("pt")] pt,
+    public static ImagePromptLanguage Pt { get; } = new("pt");
 
     /// <summary>
     /// Spanish
     /// </summary>
-    [JsonPropertyName("es")] es
+    public static ImagePromptLanguage Es { get; } = new("es");
+
+    public static IReadOnlyList<ImagePromptLanguage> AllValues {
+      get;
+    } = new[] { Auto, En, Ja, Ko, Hi, Zh, Pt, Es };
+
+    public static ImagePromptLanguage FromString(string value) {
+      if (string.IsNullOrEmpty(value)) {
+        return new ImagePromptLanguage("UNSPECIFIED");
+      }
+
+      foreach (var known in AllValues) {
+        if (known.Value == value) {
+          return known;
+        }
+      }
+
+      return new ImagePromptLanguage(value);
+    }
+
+    public override string ToString() => Value ?? string.Empty;
+
+    public static implicit operator ImagePromptLanguage(string value) => FromString(value);
+
+    public bool Equals(ImagePromptLanguage other) => Value == other.Value;
+
+    public override int GetHashCode() => Value?.GetHashCode() ?? 0;
+  }
+
+  public class ImagePromptLanguageConverter : JsonConverter<ImagePromptLanguage> {
+    public override ImagePromptLanguage Read(ref Utf8JsonReader reader, System.Type typeToConvert,
+                                             JsonSerializerOptions options) {
+      var value = reader.GetString();
+      return ImagePromptLanguage.FromString(value);
+    }
+
+    public override void Write(Utf8JsonWriter writer, ImagePromptLanguage value,
+                               JsonSerializerOptions options) {
+      writer.WriteStringValue(value.Value);
+    }
   }
 }

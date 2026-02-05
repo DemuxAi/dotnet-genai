@@ -17,26 +17,76 @@
 // Auto-generated code. Do not edit.
 
 using System.Text.Json.Serialization;
+using System.Collections.Generic;
+using System.Text.Json;
 
 namespace Google.GenAI.Types {
   /// <summary>
   /// The type of the VAD signal.
   /// </summary>
-  [JsonConverter(typeof(JsonStringEnumConverter))]
-  public enum VadSignalType {
+
+  [JsonConverter(typeof(VadSignalTypeConverter))]
+  public readonly record struct VadSignalType : IEquatable<VadSignalType> {
+    public string Value { get; }
+
+    private VadSignalType(string value) {
+      Value = value;
+    }
+
     /// <summary>
     /// The default is VAD_SIGNAL_TYPE_UNSPECIFIED.
     /// </summary>
-    [JsonPropertyName("VAD_SIGNAL_TYPE_UNSPECIFIED")] VAD_SIGNAL_TYPE_UNSPECIFIED,
+    public static VadSignalType VadSignalTypeUnspecified {
+      get;
+    } = new("VAD_SIGNAL_TYPE_UNSPECIFIED");
 
     /// <summary>
     /// Start of sentence signal.
     /// </summary>
-    [JsonPropertyName("VAD_SIGNAL_TYPE_SOS")] VAD_SIGNAL_TYPE_SOS,
+    public static VadSignalType VadSignalTypeSos { get; } = new("VAD_SIGNAL_TYPE_SOS");
 
     /// <summary>
     /// End of sentence signal.
     /// </summary>
-    [JsonPropertyName("VAD_SIGNAL_TYPE_EOS")] VAD_SIGNAL_TYPE_EOS
+    public static VadSignalType VadSignalTypeEos { get; } = new("VAD_SIGNAL_TYPE_EOS");
+
+    public static IReadOnlyList<VadSignalType> AllValues {
+      get;
+    } = new[] { VadSignalTypeUnspecified, VadSignalTypeSos, VadSignalTypeEos };
+
+    public static VadSignalType FromString(string value) {
+      if (string.IsNullOrEmpty(value)) {
+        return new VadSignalType("VAD_SIGNAL_TYPE_UNSPECIFIED");
+      }
+
+      foreach (var known in AllValues) {
+        if (known.Value == value) {
+          return known;
+        }
+      }
+
+      return new VadSignalType(value);
+    }
+
+    public override string ToString() => Value ?? string.Empty;
+
+    public static implicit operator VadSignalType(string value) => FromString(value);
+
+    public bool Equals(VadSignalType other) => Value == other.Value;
+
+    public override int GetHashCode() => Value?.GetHashCode() ?? 0;
+  }
+
+  public class VadSignalTypeConverter : JsonConverter<VadSignalType> {
+    public override VadSignalType Read(ref Utf8JsonReader reader, System.Type typeToConvert,
+                                       JsonSerializerOptions options) {
+      var value = reader.GetString();
+      return VadSignalType.FromString(value);
+    }
+
+    public override void Write(Utf8JsonWriter writer, VadSignalType value,
+                               JsonSerializerOptions options) {
+      writer.WriteStringValue(value.Value);
+    }
   }
 }

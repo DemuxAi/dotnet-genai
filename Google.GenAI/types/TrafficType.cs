@@ -17,26 +17,74 @@
 // Auto-generated code. Do not edit.
 
 using System.Text.Json.Serialization;
+using System.Collections.Generic;
+using System.Text.Json;
 
 namespace Google.GenAI.Types {
   /// <summary>
   /// Output only. The traffic type for this request. This enum is not supported in Gemini API.
   /// </summary>
-  [JsonConverter(typeof(JsonStringEnumConverter))]
-  public enum TrafficType {
+
+  [JsonConverter(typeof(TrafficTypeConverter))]
+  public readonly record struct TrafficType : IEquatable<TrafficType> {
+    public string Value { get; }
+
+    private TrafficType(string value) {
+      Value = value;
+    }
+
     /// <summary>
     /// Unspecified request traffic type.
     /// </summary>
-    [JsonPropertyName("TRAFFIC_TYPE_UNSPECIFIED")] TRAFFIC_TYPE_UNSPECIFIED,
+    public static TrafficType TrafficTypeUnspecified { get; } = new("TRAFFIC_TYPE_UNSPECIFIED");
 
     /// <summary>
     /// The request was processed using Pay-As-You-Go quota.
     /// </summary>
-    [JsonPropertyName("ON_DEMAND")] ON_DEMAND,
+    public static TrafficType OnDemand { get; } = new("ON_DEMAND");
 
     /// <summary>
     /// Type for Provisioned Throughput traffic.
     /// </summary>
-    [JsonPropertyName("PROVISIONED_THROUGHPUT")] PROVISIONED_THROUGHPUT
+    public static TrafficType ProvisionedThroughput { get; } = new("PROVISIONED_THROUGHPUT");
+
+    public static IReadOnlyList<TrafficType> AllValues {
+      get;
+    } = new[] { TrafficTypeUnspecified, OnDemand, ProvisionedThroughput };
+
+    public static TrafficType FromString(string value) {
+      if (string.IsNullOrEmpty(value)) {
+        return new TrafficType("TRAFFIC_TYPE_UNSPECIFIED");
+      }
+
+      foreach (var known in AllValues) {
+        if (known.Value == value) {
+          return known;
+        }
+      }
+
+      return new TrafficType(value);
+    }
+
+    public override string ToString() => Value ?? string.Empty;
+
+    public static implicit operator TrafficType(string value) => FromString(value);
+
+    public bool Equals(TrafficType other) => Value == other.Value;
+
+    public override int GetHashCode() => Value?.GetHashCode() ?? 0;
+  }
+
+  public class TrafficTypeConverter : JsonConverter<TrafficType> {
+    public override TrafficType Read(ref Utf8JsonReader reader, System.Type typeToConvert,
+                                     JsonSerializerOptions options) {
+      var value = reader.GetString();
+      return TrafficType.FromString(value);
+    }
+
+    public override void Write(Utf8JsonWriter writer, TrafficType value,
+                               JsonSerializerOptions options) {
+      writer.WriteStringValue(value.Value);
+    }
   }
 }

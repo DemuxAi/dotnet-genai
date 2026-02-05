@@ -17,38 +17,97 @@
 // Auto-generated code. Do not edit.
 
 using System.Text.Json.Serialization;
+using System.Collections.Generic;
+using System.Text.Json;
 
 namespace Google.GenAI.Types {
   /// <summary>
   /// Status of the url retrieval.
   /// </summary>
-  [JsonConverter(typeof(JsonStringEnumConverter))]
-  public enum UrlRetrievalStatus {
+
+  [JsonConverter(typeof(UrlRetrievalStatusConverter))]
+  public readonly record struct UrlRetrievalStatus : IEquatable<UrlRetrievalStatus> {
+    public string Value { get; }
+
+    private UrlRetrievalStatus(string value) {
+      Value = value;
+    }
+
     /// <summary>
     /// Default value. This value is unused.
     /// </summary>
-    [JsonPropertyName("URL_RETRIEVAL_STATUS_UNSPECIFIED")] URL_RETRIEVAL_STATUS_UNSPECIFIED,
+    public static UrlRetrievalStatus UrlRetrievalStatusUnspecified {
+      get;
+    } = new("URL_RETRIEVAL_STATUS_UNSPECIFIED");
 
     /// <summary>
     /// Url retrieval is successful.
     /// </summary>
-    [JsonPropertyName("URL_RETRIEVAL_STATUS_SUCCESS")] URL_RETRIEVAL_STATUS_SUCCESS,
+    public static UrlRetrievalStatus UrlRetrievalStatusSuccess {
+      get;
+    } = new("URL_RETRIEVAL_STATUS_SUCCESS");
 
     /// <summary>
     /// Url retrieval is failed due to error.
     /// </summary>
-    [JsonPropertyName("URL_RETRIEVAL_STATUS_ERROR")] URL_RETRIEVAL_STATUS_ERROR,
+    public static UrlRetrievalStatus UrlRetrievalStatusError {
+      get;
+    } = new("URL_RETRIEVAL_STATUS_ERROR");
 
     /// <summary>
     /// Url retrieval is failed because the content is behind paywall. This enum value is not
     /// supported in Vertex AI.
     /// </summary>
-    [JsonPropertyName("URL_RETRIEVAL_STATUS_PAYWALL")] URL_RETRIEVAL_STATUS_PAYWALL,
+    public static UrlRetrievalStatus UrlRetrievalStatusPaywall {
+      get;
+    } = new("URL_RETRIEVAL_STATUS_PAYWALL");
 
     /// <summary>
     /// Url retrieval is failed because the content is unsafe. This enum value is not supported in
     /// Vertex AI.
     /// </summary>
-    [JsonPropertyName("URL_RETRIEVAL_STATUS_UNSAFE")] URL_RETRIEVAL_STATUS_UNSAFE
+    public static UrlRetrievalStatus UrlRetrievalStatusUnsafe {
+      get;
+    } = new("URL_RETRIEVAL_STATUS_UNSAFE");
+
+    public static IReadOnlyList<UrlRetrievalStatus> AllValues {
+      get;
+    } = new[] { UrlRetrievalStatusUnspecified, UrlRetrievalStatusSuccess, UrlRetrievalStatusError,
+                UrlRetrievalStatusPaywall, UrlRetrievalStatusUnsafe };
+
+    public static UrlRetrievalStatus FromString(string value) {
+      if (string.IsNullOrEmpty(value)) {
+        return new UrlRetrievalStatus("URL_RETRIEVAL_STATUS_UNSPECIFIED");
+      }
+
+      foreach (var known in AllValues) {
+        if (known.Value == value) {
+          return known;
+        }
+      }
+
+      return new UrlRetrievalStatus(value);
+    }
+
+    public override string ToString() => Value ?? string.Empty;
+
+    public static implicit operator UrlRetrievalStatus(string value) => FromString(value);
+
+    public bool Equals(UrlRetrievalStatus other) => Value == other.Value;
+
+    public override int GetHashCode() => Value?.GetHashCode() ?? 0;
+  }
+
+  public class UrlRetrievalStatusConverter : JsonConverter<UrlRetrievalStatus> {
+    public override UrlRetrievalStatus Read(ref Utf8JsonReader reader, System.Type typeToConvert,
+                                            JsonSerializerOptions options) {
+      var value = reader.GetString();
+      return UrlRetrievalStatus.FromString(value);
+    }
+
+    public override void Write(Utf8JsonWriter writer, UrlRetrievalStatus value,
+                               JsonSerializerOptions options) {
+      writer.WriteStringValue(value.Value);
+    }
   }
 }

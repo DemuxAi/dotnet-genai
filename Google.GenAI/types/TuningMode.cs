@@ -17,26 +17,74 @@
 // Auto-generated code. Do not edit.
 
 using System.Text.Json.Serialization;
+using System.Collections.Generic;
+using System.Text.Json;
 
 namespace Google.GenAI.Types {
   /// <summary>
   /// Tuning mode. This enum is not supported in Gemini API.
   /// </summary>
-  [JsonConverter(typeof(JsonStringEnumConverter))]
-  public enum TuningMode {
+
+  [JsonConverter(typeof(TuningModeConverter))]
+  public readonly record struct TuningMode : IEquatable<TuningMode> {
+    public string Value { get; }
+
+    private TuningMode(string value) {
+      Value = value;
+    }
+
     /// <summary>
     /// Tuning mode is unspecified.
     /// </summary>
-    [JsonPropertyName("TUNING_MODE_UNSPECIFIED")] TUNING_MODE_UNSPECIFIED,
+    public static TuningMode TuningModeUnspecified { get; } = new("TUNING_MODE_UNSPECIFIED");
 
     /// <summary>
     /// Full fine-tuning mode.
     /// </summary>
-    [JsonPropertyName("TUNING_MODE_FULL")] TUNING_MODE_FULL,
+    public static TuningMode TuningModeFull { get; } = new("TUNING_MODE_FULL");
 
     /// <summary>
     /// PEFT adapter tuning mode.
     /// </summary>
-    [JsonPropertyName("TUNING_MODE_PEFT_ADAPTER")] TUNING_MODE_PEFT_ADAPTER
+    public static TuningMode TuningModePeftAdapter { get; } = new("TUNING_MODE_PEFT_ADAPTER");
+
+    public static IReadOnlyList<TuningMode> AllValues {
+      get;
+    } = new[] { TuningModeUnspecified, TuningModeFull, TuningModePeftAdapter };
+
+    public static TuningMode FromString(string value) {
+      if (string.IsNullOrEmpty(value)) {
+        return new TuningMode("TUNING_MODE_UNSPECIFIED");
+      }
+
+      foreach (var known in AllValues) {
+        if (known.Value == value) {
+          return known;
+        }
+      }
+
+      return new TuningMode(value);
+    }
+
+    public override string ToString() => Value ?? string.Empty;
+
+    public static implicit operator TuningMode(string value) => FromString(value);
+
+    public bool Equals(TuningMode other) => Value == other.Value;
+
+    public override int GetHashCode() => Value?.GetHashCode() ?? 0;
+  }
+
+  public class TuningModeConverter : JsonConverter<TuningMode> {
+    public override TuningMode Read(ref Utf8JsonReader reader, System.Type typeToConvert,
+                                    JsonSerializerOptions options) {
+      var value = reader.GetString();
+      return TuningMode.FromString(value);
+    }
+
+    public override void Write(Utf8JsonWriter writer, TuningMode value,
+                               JsonSerializerOptions options) {
+      writer.WriteStringValue(value.Value);
+    }
   }
 }

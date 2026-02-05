@@ -17,41 +17,89 @@
 // Auto-generated code. Do not edit.
 
 using System.Text.Json.Serialization;
+using System.Collections.Generic;
+using System.Text.Json;
 
 namespace Google.GenAI.Types {
   /// <summary>
   /// Server content modalities.
   /// </summary>
-  [JsonConverter(typeof(JsonStringEnumConverter))]
-  public enum MediaModality {
+
+  [JsonConverter(typeof(MediaModalityConverter))]
+  public readonly record struct MediaModality : IEquatable<MediaModality> {
+    public string Value { get; }
+
+    private MediaModality(string value) {
+      Value = value;
+    }
+
     /// <summary>
     /// The modality is unspecified.
     /// </summary>
-    [JsonPropertyName("MODALITY_UNSPECIFIED")] MODALITY_UNSPECIFIED,
+    public static MediaModality ModalityUnspecified { get; } = new("MODALITY_UNSPECIFIED");
 
     /// <summary>
     /// Plain text.
     /// </summary>
-    [JsonPropertyName("TEXT")] TEXT,
+    public static MediaModality Text { get; } = new("TEXT");
 
     /// <summary>
     /// Images.
     /// </summary>
-    [JsonPropertyName("IMAGE")] IMAGE,
+    public static MediaModality Image { get; } = new("IMAGE");
 
     /// <summary>
     /// Video.
     /// </summary>
-    [JsonPropertyName("VIDEO")] VIDEO,
+    public static MediaModality Video { get; } = new("VIDEO");
 
     /// <summary>
     /// Audio.
     /// </summary>
-    [JsonPropertyName("AUDIO")] AUDIO,
+    public static MediaModality Audio { get; } = new("AUDIO");
 
     /// <summary>
     /// Document, e.g. PDF.
     /// </summary>
-    [JsonPropertyName("DOCUMENT")] DOCUMENT
+    public static MediaModality Document { get; } = new("DOCUMENT");
+
+    public static IReadOnlyList<MediaModality> AllValues {
+      get;
+    } = new[] { ModalityUnspecified, Text, Image, Video, Audio, Document };
+
+    public static MediaModality FromString(string value) {
+      if (string.IsNullOrEmpty(value)) {
+        return new MediaModality("MODALITY_UNSPECIFIED");
+      }
+
+      foreach (var known in AllValues) {
+        if (known.Value == value) {
+          return known;
+        }
+      }
+
+      return new MediaModality(value);
+    }
+
+    public override string ToString() => Value ?? string.Empty;
+
+    public static implicit operator MediaModality(string value) => FromString(value);
+
+    public bool Equals(MediaModality other) => Value == other.Value;
+
+    public override int GetHashCode() => Value?.GetHashCode() ?? 0;
+  }
+
+  public class MediaModalityConverter : JsonConverter<MediaModality> {
+    public override MediaModality Read(ref Utf8JsonReader reader, System.Type typeToConvert,
+                                       JsonSerializerOptions options) {
+      var value = reader.GetString();
+      return MediaModality.FromString(value);
+    }
+
+    public override void Write(Utf8JsonWriter writer, MediaModality value,
+                               JsonSerializerOptions options) {
+      writer.WriteStringValue(value.Value);
+    }
   }
 }

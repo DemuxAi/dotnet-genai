@@ -17,51 +17,100 @@
 // Auto-generated code. Do not edit.
 
 using System.Text.Json.Serialization;
+using System.Collections.Generic;
+using System.Text.Json;
 
 namespace Google.GenAI.Types {
   /// <summary>
   /// The type of the data.
   /// </summary>
-  [JsonConverter(typeof(JsonStringEnumConverter))]
-  public enum Type {
+
+  [JsonConverter(typeof(TypeConverter))]
+  public readonly record struct Type : IEquatable<Type> {
+    public string Value { get; }
+
+    private Type(string value) {
+      Value = value;
+    }
+
     /// <summary>
     /// Not specified, should not be used.
     /// </summary>
-    [JsonPropertyName("TYPE_UNSPECIFIED")] TYPE_UNSPECIFIED,
+    public static Type TypeUnspecified { get; } = new("TYPE_UNSPECIFIED");
 
     /// <summary>
     /// OpenAPI string type
     /// </summary>
-    [JsonPropertyName("STRING")] STRING,
+    public static Type String { get; } = new("STRING");
 
     /// <summary>
     /// OpenAPI number type
     /// </summary>
-    [JsonPropertyName("NUMBER")] NUMBER,
+    public static Type Number { get; } = new("NUMBER");
 
     /// <summary>
     /// OpenAPI integer type
     /// </summary>
-    [JsonPropertyName("INTEGER")] INTEGER,
+    public static Type Integer { get; } = new("INTEGER");
 
     /// <summary>
     /// OpenAPI boolean type
     /// </summary>
-    [JsonPropertyName("BOOLEAN")] BOOLEAN,
+    public static Type Boolean { get; } = new("BOOLEAN");
 
     /// <summary>
     /// OpenAPI array type
     /// </summary>
-    [JsonPropertyName("ARRAY")] ARRAY,
+    public static Type Array { get; } = new("ARRAY");
 
     /// <summary>
     /// OpenAPI object type
     /// </summary>
-    [JsonPropertyName("OBJECT")] OBJECT,
+    public static Type Object { get; } = new("OBJECT");
 
     /// <summary>
     /// Null type
     /// </summary>
-    [JsonPropertyName("NULL")] NULL
+    public static Type Null { get; } = new("NULL");
+
+    public static IReadOnlyList<Type> AllValues {
+      get;
+    } = new[] { TypeUnspecified, String, Number, Integer, Boolean, Array, Object, Null };
+
+    public static Type FromString(string value) {
+      if (string.IsNullOrEmpty(value)) {
+        return new Type("TYPE_UNSPECIFIED");
+      }
+
+      foreach (var known in AllValues) {
+        if (known.Value == value) {
+          return known;
+        }
+      }
+
+      return new Type(value);
+    }
+
+    public override string ToString() => Value ?? string.Empty;
+
+    public static implicit operator Type(string value) => FromString(value);
+
+    public bool Equals(Type other) => Value == other.Value;
+
+    public override int GetHashCode() => Value?.GetHashCode() ?? 0;
+  }
+
+  public class TypeConverter : JsonConverter<Google.GenAI.Types.Type> {
+    public override Google.GenAI.Types.Type Read(ref Utf8JsonReader reader,
+                                                 System.Type typeToConvert,
+                                                 JsonSerializerOptions options) {
+      var value = reader.GetString();
+      return Google.GenAI.Types.Type.FromString(value);
+    }
+
+    public override void Write(Utf8JsonWriter writer, Google.GenAI.Types.Type value,
+                               JsonSerializerOptions options) {
+      writer.WriteStringValue(value.Value);
+    }
   }
 }

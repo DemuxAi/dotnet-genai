@@ -82,8 +82,8 @@ public class CreateBatchTest
     {
         var safetySettings = new List<SafetySetting>
         {
-            new SafetySetting { Category = HarmCategory.HARM_CATEGORY_HATE_SPEECH, Threshold = HarmBlockThreshold.BLOCK_ONLY_HIGH },
-            new SafetySetting { Category = HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT, Threshold = HarmBlockThreshold.BLOCK_LOW_AND_ABOVE },
+            new SafetySetting { Category = HarmCategory.HarmCategoryHateSpeech, Threshold = HarmBlockThreshold.BlockOnlyHigh },
+            new SafetySetting { Category = HarmCategory.HarmCategoryDangerousContent, Threshold = HarmBlockThreshold.BlockLowAndAbove },
         };
         var inlineRequest = new InlinedRequest
         {

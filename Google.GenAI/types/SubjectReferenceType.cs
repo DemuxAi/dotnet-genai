@@ -17,31 +17,79 @@
 // Auto-generated code. Do not edit.
 
 using System.Text.Json.Serialization;
+using System.Collections.Generic;
+using System.Text.Json;
 
 namespace Google.GenAI.Types {
   /// <summary>
   /// Enum representing the subject type of a subject reference image.
   /// </summary>
-  [JsonConverter(typeof(JsonStringEnumConverter))]
-  public enum SubjectReferenceType {
-    /// <summary>
-    ///
-    /// </summary>
-    [JsonPropertyName("SUBJECT_TYPE_DEFAULT")] SUBJECT_TYPE_DEFAULT,
+
+  [JsonConverter(typeof(SubjectReferenceTypeConverter))]
+  public readonly record struct SubjectReferenceType : IEquatable<SubjectReferenceType> {
+    public string Value { get; }
+
+    private SubjectReferenceType(string value) {
+      Value = value;
+    }
 
     /// <summary>
     ///
     /// </summary>
-    [JsonPropertyName("SUBJECT_TYPE_PERSON")] SUBJECT_TYPE_PERSON,
+    public static SubjectReferenceType SubjectTypeDefault { get; } = new("SUBJECT_TYPE_DEFAULT");
 
     /// <summary>
     ///
     /// </summary>
-    [JsonPropertyName("SUBJECT_TYPE_ANIMAL")] SUBJECT_TYPE_ANIMAL,
+    public static SubjectReferenceType SubjectTypePerson { get; } = new("SUBJECT_TYPE_PERSON");
 
     /// <summary>
     ///
     /// </summary>
-    [JsonPropertyName("SUBJECT_TYPE_PRODUCT")] SUBJECT_TYPE_PRODUCT
+    public static SubjectReferenceType SubjectTypeAnimal { get; } = new("SUBJECT_TYPE_ANIMAL");
+
+    /// <summary>
+    ///
+    /// </summary>
+    public static SubjectReferenceType SubjectTypeProduct { get; } = new("SUBJECT_TYPE_PRODUCT");
+
+    public static IReadOnlyList<SubjectReferenceType> AllValues {
+      get;
+    } = new[] { SubjectTypeDefault, SubjectTypePerson, SubjectTypeAnimal, SubjectTypeProduct };
+
+    public static SubjectReferenceType FromString(string value) {
+      if (string.IsNullOrEmpty(value)) {
+        return new SubjectReferenceType("UNSPECIFIED");
+      }
+
+      foreach (var known in AllValues) {
+        if (known.Value == value) {
+          return known;
+        }
+      }
+
+      return new SubjectReferenceType(value);
+    }
+
+    public override string ToString() => Value ?? string.Empty;
+
+    public static implicit operator SubjectReferenceType(string value) => FromString(value);
+
+    public bool Equals(SubjectReferenceType other) => Value == other.Value;
+
+    public override int GetHashCode() => Value?.GetHashCode() ?? 0;
+  }
+
+  public class SubjectReferenceTypeConverter : JsonConverter<SubjectReferenceType> {
+    public override SubjectReferenceType Read(ref Utf8JsonReader reader, System.Type typeToConvert,
+                                              JsonSerializerOptions options) {
+      var value = reader.GetString();
+      return SubjectReferenceType.FromString(value);
+    }
+
+    public override void Write(Utf8JsonWriter writer, SubjectReferenceType value,
+                               JsonSerializerOptions options) {
+      writer.WriteStringValue(value.Value);
+    }
   }
 }

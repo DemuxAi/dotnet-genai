@@ -17,21 +17,69 @@
 // Auto-generated code. Do not edit.
 
 using System.Text.Json.Serialization;
+using System.Collections.Generic;
+using System.Text.Json;
 
 namespace Google.GenAI.Types {
   /// <summary>
   /// The environment being operated.
   /// </summary>
-  [JsonConverter(typeof(JsonStringEnumConverter))]
-  public enum Environment {
+
+  [JsonConverter(typeof(EnvironmentConverter))]
+  public readonly record struct Environment : IEquatable<Environment> {
+    public string Value { get; }
+
+    private Environment(string value) {
+      Value = value;
+    }
+
     /// <summary>
     /// Defaults to browser.
     /// </summary>
-    [JsonPropertyName("ENVIRONMENT_UNSPECIFIED")] ENVIRONMENT_UNSPECIFIED,
+    public static Environment EnvironmentUnspecified { get; } = new("ENVIRONMENT_UNSPECIFIED");
 
     /// <summary>
     /// Operates in a web browser.
     /// </summary>
-    [JsonPropertyName("ENVIRONMENT_BROWSER")] ENVIRONMENT_BROWSER
+    public static Environment EnvironmentBrowser { get; } = new("ENVIRONMENT_BROWSER");
+
+    public static IReadOnlyList<Environment> AllValues {
+      get;
+    } = new[] { EnvironmentUnspecified, EnvironmentBrowser };
+
+    public static Environment FromString(string value) {
+      if (string.IsNullOrEmpty(value)) {
+        return new Environment("ENVIRONMENT_UNSPECIFIED");
+      }
+
+      foreach (var known in AllValues) {
+        if (known.Value == value) {
+          return known;
+        }
+      }
+
+      return new Environment(value);
+    }
+
+    public override string ToString() => Value ?? string.Empty;
+
+    public static implicit operator Environment(string value) => FromString(value);
+
+    public bool Equals(Environment other) => Value == other.Value;
+
+    public override int GetHashCode() => Value?.GetHashCode() ?? 0;
+  }
+
+  public class EnvironmentConverter : JsonConverter<Environment> {
+    public override Environment Read(ref Utf8JsonReader reader, System.Type typeToConvert,
+                                     JsonSerializerOptions options) {
+      var value = reader.GetString();
+      return Environment.FromString(value);
+    }
+
+    public override void Write(Utf8JsonWriter writer, Environment value,
+                               JsonSerializerOptions options) {
+      writer.WriteStringValue(value.Value);
+    }
   }
 }

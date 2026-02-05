@@ -92,19 +92,19 @@ public class EditImageTest {
       ReferenceId = 2,
       Config =
           new MaskReferenceConfig {
-            MaskMode = MaskReferenceMode.MASK_MODE_BACKGROUND,
+            MaskMode = MaskReferenceMode.MaskModeBackground,
             MaskDilation = 0.06,
           }
     };
     referenceImages.Add(maskReferenceImage);
 
     var editImageConfig = new EditImageConfig {
-      EditMode = EditMode.EDIT_MODE_INPAINT_INSERTION,
+      EditMode = EditMode.EditModeInpaintInsertion,
       NumberOfImages = 1,
       NegativePrompt = "human",
       GuidanceScale = 15.0,
-      SafetyFilterLevel = SafetyFilterLevel.BLOCK_LOW_AND_ABOVE,
-      PersonGeneration = PersonGeneration.DONT_ALLOW,
+      SafetyFilterLevel = SafetyFilterLevel.BlockLowAndAbove,
+      PersonGeneration = PersonGeneration.DontAllow,
       IncludeSafetyAttributes = false,
       IncludeRaiReason = true,
       OutputMimeType = "image/jpeg",
@@ -140,14 +140,14 @@ public class EditImageTest {
       ReferenceId = 2,
       Config =
           new MaskReferenceConfig {
-            MaskMode = MaskReferenceMode.MASK_MODE_USER_PROVIDED,
+            MaskMode = MaskReferenceMode.MaskModeUserProvided,
             MaskDilation = 0.06,
           }
     };
     referenceImages.Add(maskReferenceImage);
 
     var editImageConfig = new EditImageConfig {
-      EditMode = EditMode.EDIT_MODE_INPAINT_INSERTION,
+      EditMode = EditMode.EditModeInpaintInsertion,
       NumberOfImages = 1,
       OutputMimeType = "image/jpeg",
     };
@@ -179,7 +179,7 @@ public class EditImageTest {
       ReferenceId = 2,
       Config =
           new ControlReferenceConfig {
-            ControlType = ControlReferenceType.CONTROL_TYPE_SCRIBBLE,
+            ControlType = ControlReferenceType.ControlTypeScribble,
             EnableControlImageComputation = false,
           }
     };
@@ -240,7 +240,7 @@ public class EditImageTest {
       ReferenceId = 1,
       Config =
           new SubjectReferenceConfig {
-            SubjectType = SubjectReferenceType.SUBJECT_TYPE_PRODUCT,
+            SubjectType = SubjectReferenceType.SubjectTypeProduct,
             SubjectDescription = "A product logo that is a multi-colored letter G",
           }
     };

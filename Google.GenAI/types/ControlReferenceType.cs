@@ -17,31 +17,79 @@
 // Auto-generated code. Do not edit.
 
 using System.Text.Json.Serialization;
+using System.Collections.Generic;
+using System.Text.Json;
 
 namespace Google.GenAI.Types {
   /// <summary>
   /// Enum representing the control type of a control reference image.
   /// </summary>
-  [JsonConverter(typeof(JsonStringEnumConverter))]
-  public enum ControlReferenceType {
-    /// <summary>
-    ///
-    /// </summary>
-    [JsonPropertyName("CONTROL_TYPE_DEFAULT")] CONTROL_TYPE_DEFAULT,
+
+  [JsonConverter(typeof(ControlReferenceTypeConverter))]
+  public readonly record struct ControlReferenceType : IEquatable<ControlReferenceType> {
+    public string Value { get; }
+
+    private ControlReferenceType(string value) {
+      Value = value;
+    }
 
     /// <summary>
     ///
     /// </summary>
-    [JsonPropertyName("CONTROL_TYPE_CANNY")] CONTROL_TYPE_CANNY,
+    public static ControlReferenceType ControlTypeDefault { get; } = new("CONTROL_TYPE_DEFAULT");
 
     /// <summary>
     ///
     /// </summary>
-    [JsonPropertyName("CONTROL_TYPE_SCRIBBLE")] CONTROL_TYPE_SCRIBBLE,
+    public static ControlReferenceType ControlTypeCanny { get; } = new("CONTROL_TYPE_CANNY");
 
     /// <summary>
     ///
     /// </summary>
-    [JsonPropertyName("CONTROL_TYPE_FACE_MESH")] CONTROL_TYPE_FACE_MESH
+    public static ControlReferenceType ControlTypeScribble { get; } = new("CONTROL_TYPE_SCRIBBLE");
+
+    /// <summary>
+    ///
+    /// </summary>
+    public static ControlReferenceType ControlTypeFaceMesh { get; } = new("CONTROL_TYPE_FACE_MESH");
+
+    public static IReadOnlyList<ControlReferenceType> AllValues {
+      get;
+    } = new[] { ControlTypeDefault, ControlTypeCanny, ControlTypeScribble, ControlTypeFaceMesh };
+
+    public static ControlReferenceType FromString(string value) {
+      if (string.IsNullOrEmpty(value)) {
+        return new ControlReferenceType("UNSPECIFIED");
+      }
+
+      foreach (var known in AllValues) {
+        if (known.Value == value) {
+          return known;
+        }
+      }
+
+      return new ControlReferenceType(value);
+    }
+
+    public override string ToString() => Value ?? string.Empty;
+
+    public static implicit operator ControlReferenceType(string value) => FromString(value);
+
+    public bool Equals(ControlReferenceType other) => Value == other.Value;
+
+    public override int GetHashCode() => Value?.GetHashCode() ?? 0;
+  }
+
+  public class ControlReferenceTypeConverter : JsonConverter<ControlReferenceType> {
+    public override ControlReferenceType Read(ref Utf8JsonReader reader, System.Type typeToConvert,
+                                              JsonSerializerOptions options) {
+      var value = reader.GetString();
+      return ControlReferenceType.FromString(value);
+    }
+
+    public override void Write(Utf8JsonWriter writer, ControlReferenceType value,
+                               JsonSerializerOptions options) {
+      writer.WriteStringValue(value.Value);
+    }
   }
 }

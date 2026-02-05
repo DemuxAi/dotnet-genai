@@ -17,36 +17,85 @@
 // Auto-generated code. Do not edit.
 
 using System.Text.Json.Serialization;
+using System.Collections.Generic;
+using System.Text.Json;
 
 namespace Google.GenAI.Types {
   /// <summary>
   /// Enum representing the mask mode of a mask reference image.
   /// </summary>
-  [JsonConverter(typeof(JsonStringEnumConverter))]
-  public enum MaskReferenceMode {
-    /// <summary>
-    ///
-    /// </summary>
-    [JsonPropertyName("MASK_MODE_DEFAULT")] MASK_MODE_DEFAULT,
+
+  [JsonConverter(typeof(MaskReferenceModeConverter))]
+  public readonly record struct MaskReferenceMode : IEquatable<MaskReferenceMode> {
+    public string Value { get; }
+
+    private MaskReferenceMode(string value) {
+      Value = value;
+    }
 
     /// <summary>
     ///
     /// </summary>
-    [JsonPropertyName("MASK_MODE_USER_PROVIDED")] MASK_MODE_USER_PROVIDED,
+    public static MaskReferenceMode MaskModeDefault { get; } = new("MASK_MODE_DEFAULT");
 
     /// <summary>
     ///
     /// </summary>
-    [JsonPropertyName("MASK_MODE_BACKGROUND")] MASK_MODE_BACKGROUND,
+    public static MaskReferenceMode MaskModeUserProvided { get; } = new("MASK_MODE_USER_PROVIDED");
 
     /// <summary>
     ///
     /// </summary>
-    [JsonPropertyName("MASK_MODE_FOREGROUND")] MASK_MODE_FOREGROUND,
+    public static MaskReferenceMode MaskModeBackground { get; } = new("MASK_MODE_BACKGROUND");
 
     /// <summary>
     ///
     /// </summary>
-    [JsonPropertyName("MASK_MODE_SEMANTIC")] MASK_MODE_SEMANTIC
+    public static MaskReferenceMode MaskModeForeground { get; } = new("MASK_MODE_FOREGROUND");
+
+    /// <summary>
+    ///
+    /// </summary>
+    public static MaskReferenceMode MaskModeSemantic { get; } = new("MASK_MODE_SEMANTIC");
+
+    public static IReadOnlyList<MaskReferenceMode> AllValues {
+      get;
+    } = new[] { MaskModeDefault, MaskModeUserProvided, MaskModeBackground, MaskModeForeground,
+                MaskModeSemantic };
+
+    public static MaskReferenceMode FromString(string value) {
+      if (string.IsNullOrEmpty(value)) {
+        return new MaskReferenceMode("UNSPECIFIED");
+      }
+
+      foreach (var known in AllValues) {
+        if (known.Value == value) {
+          return known;
+        }
+      }
+
+      return new MaskReferenceMode(value);
+    }
+
+    public override string ToString() => Value ?? string.Empty;
+
+    public static implicit operator MaskReferenceMode(string value) => FromString(value);
+
+    public bool Equals(MaskReferenceMode other) => Value == other.Value;
+
+    public override int GetHashCode() => Value?.GetHashCode() ?? 0;
+  }
+
+  public class MaskReferenceModeConverter : JsonConverter<MaskReferenceMode> {
+    public override MaskReferenceMode Read(ref Utf8JsonReader reader, System.Type typeToConvert,
+                                           JsonSerializerOptions options) {
+      var value = reader.GetString();
+      return MaskReferenceMode.FromString(value);
+    }
+
+    public override void Write(Utf8JsonWriter writer, MaskReferenceMode value,
+                               JsonSerializerOptions options) {
+      writer.WriteStringValue(value.Value);
+    }
   }
 }

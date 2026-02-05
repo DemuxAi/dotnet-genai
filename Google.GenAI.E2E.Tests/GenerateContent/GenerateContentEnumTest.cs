@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 Google LLC
+ * Copyright 2026 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,7 +27,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TestServerSdk;
 
 [TestClass]
-public class GenerateContentSimpleTest {
+public class GenerateContentEnumTest {
   private static TestServerProcess? _server;
   private Client vertexClient;
   private Client geminiClient;
@@ -77,77 +77,14 @@ public class GenerateContentSimpleTest {
   }
 
   [TestMethod]
-  public async Task GenerateContentSimpleTextVertexTest() {
-    var vertexResponse = await vertexClient.Models.GenerateContentAsync(
-        model: modelName, contents: "What is the capital of France?");
-
-    Assert.IsNotNull(vertexResponse.Candidates);
-    StringAssert.Contains(vertexResponse.Candidates.First().Content.Parts.First().Text, "Paris");
-  }
-
-  [TestMethod]
-  public async Task GenerateContentSimpleTextGeminiTest() {
-    var geminiResponse = await geminiClient.Models.GenerateContentAsync(
-        model: modelName, contents: "What is the capital of France?");
-
-    Assert.IsNotNull(geminiResponse.Candidates);
-    StringAssert.Contains(geminiResponse.Candidates.First().Content.Parts.First().Text, "Paris");
-  }
-
-  [TestMethod]
-  public async Task GenerateContentSystemInstructionVertexTest() {
-    var generateContentConfig = new GenerateContentConfig { SystemInstruction = new Content {
-      Parts = new List<Part> { new Part { Text = "I say high you say low." } }
-    } };
-    var vertexResponse = await vertexClient.Models.GenerateContentAsync(
-        model: modelName, contents: "high", config: generateContentConfig);
-
-    Assert.IsNotNull(vertexResponse.Candidates);
-    StringAssert.Contains(vertexResponse.Candidates.First().Content.Parts.First().Text, "low");
-  }
-
-  [TestMethod]
-  public async Task GenerateContentSystemInstructionGeminiTest() {
-    var generateContentConfig = new GenerateContentConfig { SystemInstruction = new Content {
-      Parts = new List<Part> { new Part { Text = "I say high you say low." } }
-    } };
-    var geminiResponse = await geminiClient.Models.GenerateContentAsync(
-        model: modelName, contents: "high", config: generateContentConfig);
-
-    Assert.IsNotNull(geminiResponse.Candidates);
-    StringAssert.Contains(geminiResponse.Candidates.First().Content.Parts.First().Text, "low");
-  }
-
-  [TestMethod]
-  public async Task GenerateContentGenerationConfigVertexTest() {
-    var generateContentConfig =
-        new GenerateContentConfig { Temperature = 0.5, TopP = 0.9, MaxOutputTokens = 100,
-                                    ResponseModalities = new List<string> { "TEXT" } };
-    var vertexResponse = await vertexClient.Models.GenerateContentAsync(
-        model: modelName, contents: "Why is the sky blue?", config: generateContentConfig);
-
-    Assert.IsNotNull(vertexResponse.Candidates);
-    Assert.IsTrue(vertexResponse.Candidates.Count >= 1);
-  }
-
-  [TestMethod]
-  public async Task GenerateContentGenerationConfigGeminiTest() {
-    var generateContentConfig =
-        new GenerateContentConfig { Temperature = 0.5, TopP = 0.9, MaxOutputTokens = 100,
-                                    ResponseModalities = new List<string> { "TEXT" } };
-    var geminiResponse = await geminiClient.Models.GenerateContentAsync(
-        model: modelName, contents: "Why is the sky blue?", config: generateContentConfig);
-
-    Assert.IsNotNull(geminiResponse.Candidates);
-    Assert.IsTrue(geminiResponse.Candidates.Count >= 1);
-  }
-
-  [TestMethod]
   public async Task GenerateContentSafetySettingsGeminiTest() {
     var safetySettings = new List<SafetySetting> {
-      new SafetySetting { Category = HarmCategory.HarmCategoryHateSpeech,
-                          Threshold = HarmBlockThreshold.BlockLowAndAbove }
+      new SafetySetting { Category = "HARM_CATEGORY_HATE_SPEECH",
+                          Threshold = "BLOCK_LOW_AND_ABOVE" }
     };
+    Assert.IsTrue(safetySettings.First().Category == HarmCategory.HarmCategoryHateSpeech);
+    Assert.IsTrue(safetySettings.First().Threshold == HarmBlockThreshold.BlockLowAndAbove);
+
     var generateContentConfig =
         new GenerateContentConfig { SafetySettings = new List<SafetySetting>(safetySettings) };
 
@@ -164,9 +101,12 @@ public class GenerateContentSimpleTest {
   [TestMethod]
   public async Task GenerateContentSafetySettingsVertexTest() {
     var safetySettings = new List<SafetySetting> {
-      new SafetySetting { Category = HarmCategory.HarmCategoryHateSpeech,
-                          Threshold = HarmBlockThreshold.BlockLowAndAbove }
+      new SafetySetting { Category = "HARM_CATEGORY_HATE_SPEECH",
+                          Threshold = "BLOCK_LOW_AND_ABOVE" }
     };
+    Assert.IsTrue(safetySettings.First().Category == HarmCategory.HarmCategoryHateSpeech);
+    Assert.IsTrue(safetySettings.First().Threshold == HarmBlockThreshold.BlockLowAndAbove);
+
     var generateContentConfig =
         new GenerateContentConfig { SafetySettings = new List<SafetySetting>(safetySettings) };
 

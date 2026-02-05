@@ -17,36 +17,86 @@
 // Auto-generated code. Do not edit.
 
 using System.Text.Json.Serialization;
+using System.Collections.Generic;
+using System.Text.Json;
 
 namespace Google.GenAI.Types {
   /// <summary>
   /// The number of thoughts tokens that the model should generate.
   /// </summary>
-  [JsonConverter(typeof(JsonStringEnumConverter))]
-  public enum ThinkingLevel {
+
+  [JsonConverter(typeof(ThinkingLevelConverter))]
+  public readonly record struct ThinkingLevel : IEquatable<ThinkingLevel> {
+    public string Value { get; }
+
+    private ThinkingLevel(string value) {
+      Value = value;
+    }
+
     /// <summary>
     /// Unspecified thinking level.
     /// </summary>
-    [JsonPropertyName("THINKING_LEVEL_UNSPECIFIED")] THINKING_LEVEL_UNSPECIFIED,
+    public static ThinkingLevel ThinkingLevelUnspecified {
+      get;
+    } = new("THINKING_LEVEL_UNSPECIFIED");
 
     /// <summary>
     /// Low thinking level.
     /// </summary>
-    [JsonPropertyName("LOW")] LOW,
+    public static ThinkingLevel Low { get; } = new("LOW");
 
     /// <summary>
     /// Medium thinking level.
     /// </summary>
-    [JsonPropertyName("MEDIUM")] MEDIUM,
+    public static ThinkingLevel Medium { get; } = new("MEDIUM");
 
     /// <summary>
     /// High thinking level.
     /// </summary>
-    [JsonPropertyName("HIGH")] HIGH,
+    public static ThinkingLevel High { get; } = new("HIGH");
 
     /// <summary>
     /// MINIMAL thinking level.
     /// </summary>
-    [JsonPropertyName("MINIMAL")] MINIMAL
+    public static ThinkingLevel Minimal { get; } = new("MINIMAL");
+
+    public static IReadOnlyList<ThinkingLevel> AllValues {
+      get;
+    } = new[] { ThinkingLevelUnspecified, Low, Medium, High, Minimal };
+
+    public static ThinkingLevel FromString(string value) {
+      if (string.IsNullOrEmpty(value)) {
+        return new ThinkingLevel("THINKING_LEVEL_UNSPECIFIED");
+      }
+
+      foreach (var known in AllValues) {
+        if (known.Value == value) {
+          return known;
+        }
+      }
+
+      return new ThinkingLevel(value);
+    }
+
+    public override string ToString() => Value ?? string.Empty;
+
+    public static implicit operator ThinkingLevel(string value) => FromString(value);
+
+    public bool Equals(ThinkingLevel other) => Value == other.Value;
+
+    public override int GetHashCode() => Value?.GetHashCode() ?? 0;
+  }
+
+  public class ThinkingLevelConverter : JsonConverter<ThinkingLevel> {
+    public override ThinkingLevel Read(ref Utf8JsonReader reader, System.Type typeToConvert,
+                                       JsonSerializerOptions options) {
+      var value = reader.GetString();
+      return ThinkingLevel.FromString(value);
+    }
+
+    public override void Write(Utf8JsonWriter writer, ThinkingLevel value,
+                               JsonSerializerOptions options) {
+      writer.WriteStringValue(value.Value);
+    }
   }
 }

@@ -17,31 +17,79 @@
 // Auto-generated code. Do not edit.
 
 using System.Text.Json.Serialization;
+using System.Collections.Generic;
+using System.Text.Json;
 
 namespace Google.GenAI.Types {
   /// <summary>
   /// Server content modalities.
   /// </summary>
-  [JsonConverter(typeof(JsonStringEnumConverter))]
-  public enum Modality {
+
+  [JsonConverter(typeof(ModalityConverter))]
+  public readonly record struct Modality : IEquatable<Modality> {
+    public string Value { get; }
+
+    private Modality(string value) {
+      Value = value;
+    }
+
     /// <summary>
     /// The modality is unspecified.
     /// </summary>
-    [JsonPropertyName("MODALITY_UNSPECIFIED")] MODALITY_UNSPECIFIED,
+    public static Modality ModalityUnspecified { get; } = new("MODALITY_UNSPECIFIED");
 
     /// <summary>
     /// Indicates the model should return text
     /// </summary>
-    [JsonPropertyName("TEXT")] TEXT,
+    public static Modality Text { get; } = new("TEXT");
 
     /// <summary>
     /// Indicates the model should return images.
     /// </summary>
-    [JsonPropertyName("IMAGE")] IMAGE,
+    public static Modality Image { get; } = new("IMAGE");
 
     /// <summary>
     /// Indicates the model should return audio.
     /// </summary>
-    [JsonPropertyName("AUDIO")] AUDIO
+    public static Modality Audio { get; } = new("AUDIO");
+
+    public static IReadOnlyList<Modality> AllValues {
+      get;
+    } = new[] { ModalityUnspecified, Text, Image, Audio };
+
+    public static Modality FromString(string value) {
+      if (string.IsNullOrEmpty(value)) {
+        return new Modality("MODALITY_UNSPECIFIED");
+      }
+
+      foreach (var known in AllValues) {
+        if (known.Value == value) {
+          return known;
+        }
+      }
+
+      return new Modality(value);
+    }
+
+    public override string ToString() => Value ?? string.Empty;
+
+    public static implicit operator Modality(string value) => FromString(value);
+
+    public bool Equals(Modality other) => Value == other.Value;
+
+    public override int GetHashCode() => Value?.GetHashCode() ?? 0;
+  }
+
+  public class ModalityConverter : JsonConverter<Modality> {
+    public override Modality Read(ref Utf8JsonReader reader, System.Type typeToConvert,
+                                  JsonSerializerOptions options) {
+      var value = reader.GetString();
+      return Modality.FromString(value);
+    }
+
+    public override void Write(Utf8JsonWriter writer, Modality value,
+                               JsonSerializerOptions options) {
+      writer.WriteStringValue(value.Value);
+    }
   }
 }

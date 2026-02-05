@@ -17,31 +17,79 @@
 // Auto-generated code. Do not edit.
 
 using System.Text.Json.Serialization;
+using System.Collections.Generic;
+using System.Text.Json;
 
 namespace Google.GenAI.Types {
   /// <summary>
   /// State for the lifecycle of a File.
   /// </summary>
-  [JsonConverter(typeof(JsonStringEnumConverter))]
-  public enum FileState {
-    /// <summary>
-    ///
-    /// </summary>
-    [JsonPropertyName("STATE_UNSPECIFIED")] STATE_UNSPECIFIED,
+
+  [JsonConverter(typeof(FileStateConverter))]
+  public readonly record struct FileState : IEquatable<FileState> {
+    public string Value { get; }
+
+    private FileState(string value) {
+      Value = value;
+    }
 
     /// <summary>
     ///
     /// </summary>
-    [JsonPropertyName("PROCESSING")] PROCESSING,
+    public static FileState StateUnspecified { get; } = new("STATE_UNSPECIFIED");
 
     /// <summary>
     ///
     /// </summary>
-    [JsonPropertyName("ACTIVE")] ACTIVE,
+    public static FileState Processing { get; } = new("PROCESSING");
 
     /// <summary>
     ///
     /// </summary>
-    [JsonPropertyName("FAILED")] FAILED
+    public static FileState Active { get; } = new("ACTIVE");
+
+    /// <summary>
+    ///
+    /// </summary>
+    public static FileState Failed { get; } = new("FAILED");
+
+    public static IReadOnlyList<FileState> AllValues {
+      get;
+    } = new[] { StateUnspecified, Processing, Active, Failed };
+
+    public static FileState FromString(string value) {
+      if (string.IsNullOrEmpty(value)) {
+        return new FileState("STATE_UNSPECIFIED");
+      }
+
+      foreach (var known in AllValues) {
+        if (known.Value == value) {
+          return known;
+        }
+      }
+
+      return new FileState(value);
+    }
+
+    public override string ToString() => Value ?? string.Empty;
+
+    public static implicit operator FileState(string value) => FromString(value);
+
+    public bool Equals(FileState other) => Value == other.Value;
+
+    public override int GetHashCode() => Value?.GetHashCode() ?? 0;
+  }
+
+  public class FileStateConverter : JsonConverter<FileState> {
+    public override FileState Read(ref Utf8JsonReader reader, System.Type typeToConvert,
+                                   JsonSerializerOptions options) {
+      var value = reader.GetString();
+      return FileState.FromString(value);
+    }
+
+    public override void Write(Utf8JsonWriter writer, FileState value,
+                               JsonSerializerOptions options) {
+      writer.WriteStringValue(value.Value);
+    }
   }
 }

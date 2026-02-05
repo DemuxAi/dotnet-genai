@@ -17,36 +17,85 @@
 // Auto-generated code. Do not edit.
 
 using System.Text.Json.Serialization;
+using System.Collections.Generic;
+using System.Text.Json;
 
 namespace Google.GenAI.Types {
   /// <summary>
   /// Output only. Harm severity levels in the content. This enum is not supported in Gemini API.
   /// </summary>
-  [JsonConverter(typeof(JsonStringEnumConverter))]
-  public enum HarmSeverity {
+
+  [JsonConverter(typeof(HarmSeverityConverter))]
+  public readonly record struct HarmSeverity : IEquatable<HarmSeverity> {
+    public string Value { get; }
+
+    private HarmSeverity(string value) {
+      Value = value;
+    }
+
     /// <summary>
     /// Harm severity unspecified.
     /// </summary>
-    [JsonPropertyName("HARM_SEVERITY_UNSPECIFIED")] HARM_SEVERITY_UNSPECIFIED,
+    public static HarmSeverity HarmSeverityUnspecified { get; } = new("HARM_SEVERITY_UNSPECIFIED");
 
     /// <summary>
     /// Negligible level of harm severity.
     /// </summary>
-    [JsonPropertyName("HARM_SEVERITY_NEGLIGIBLE")] HARM_SEVERITY_NEGLIGIBLE,
+    public static HarmSeverity HarmSeverityNegligible { get; } = new("HARM_SEVERITY_NEGLIGIBLE");
 
     /// <summary>
     /// Low level of harm severity.
     /// </summary>
-    [JsonPropertyName("HARM_SEVERITY_LOW")] HARM_SEVERITY_LOW,
+    public static HarmSeverity HarmSeverityLow { get; } = new("HARM_SEVERITY_LOW");
 
     /// <summary>
     /// Medium level of harm severity.
     /// </summary>
-    [JsonPropertyName("HARM_SEVERITY_MEDIUM")] HARM_SEVERITY_MEDIUM,
+    public static HarmSeverity HarmSeverityMedium { get; } = new("HARM_SEVERITY_MEDIUM");
 
     /// <summary>
     /// High level of harm severity.
     /// </summary>
-    [JsonPropertyName("HARM_SEVERITY_HIGH")] HARM_SEVERITY_HIGH
+    public static HarmSeverity HarmSeverityHigh { get; } = new("HARM_SEVERITY_HIGH");
+
+    public static IReadOnlyList<HarmSeverity> AllValues {
+      get;
+    } = new[] { HarmSeverityUnspecified, HarmSeverityNegligible, HarmSeverityLow,
+                HarmSeverityMedium, HarmSeverityHigh };
+
+    public static HarmSeverity FromString(string value) {
+      if (string.IsNullOrEmpty(value)) {
+        return new HarmSeverity("HARM_SEVERITY_UNSPECIFIED");
+      }
+
+      foreach (var known in AllValues) {
+        if (known.Value == value) {
+          return known;
+        }
+      }
+
+      return new HarmSeverity(value);
+    }
+
+    public override string ToString() => Value ?? string.Empty;
+
+    public static implicit operator HarmSeverity(string value) => FromString(value);
+
+    public bool Equals(HarmSeverity other) => Value == other.Value;
+
+    public override int GetHashCode() => Value?.GetHashCode() ?? 0;
+  }
+
+  public class HarmSeverityConverter : JsonConverter<HarmSeverity> {
+    public override HarmSeverity Read(ref Utf8JsonReader reader, System.Type typeToConvert,
+                                      JsonSerializerOptions options) {
+      var value = reader.GetString();
+      return HarmSeverity.FromString(value);
+    }
+
+    public override void Write(Utf8JsonWriter writer, HarmSeverity value,
+                               JsonSerializerOptions options) {
+      writer.WriteStringValue(value.Value);
+    }
   }
 }

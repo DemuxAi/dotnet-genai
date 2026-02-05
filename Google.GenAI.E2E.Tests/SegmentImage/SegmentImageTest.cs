@@ -77,7 +77,7 @@ public class SegmentImageTest {
   [TestMethod]
   public async Task SegmentImageGeminiTest() {
     var segmentImageConfig = new SegmentImageConfig {
-      Mode = SegmentMode.FOREGROUND,
+      Mode = SegmentMode.Foreground,
       MaxPredictions = 1,
     };
 
@@ -96,7 +96,7 @@ public class SegmentImageTest {
   [TestMethod]
   public async Task SegmentImageForegroundVertexTest() {
     var segmentImageConfig = new SegmentImageConfig {
-      Mode = SegmentMode.FOREGROUND,
+      Mode = SegmentMode.Foreground,
       MaxPredictions = 1,
       ConfidenceThreshold = 0.02,
       MaskDilation = 0.02,
@@ -119,7 +119,7 @@ public class SegmentImageTest {
   [TestMethod]
   public async Task SegmentImageBackgroundVertexTest() {
     var segmentImageConfig = new SegmentImageConfig {
-      Mode = SegmentMode.BACKGROUND,
+      Mode = SegmentMode.Background,
       MaxPredictions = 1,
     };
 
@@ -138,7 +138,7 @@ public class SegmentImageTest {
   [TestMethod]
   public async Task SegmentImagePromptVertexTest() {
     var segmentImageConfig = new SegmentImageConfig {
-      Mode = SegmentMode.PROMPT,
+      Mode = SegmentMode.Prompt,
       MaxPredictions = 1,
     };
 
@@ -158,7 +158,7 @@ public class SegmentImageTest {
   [TestMethod]
   public async Task SegmentImageSemanticVertexTest() {
     var segmentImageConfig = new SegmentImageConfig {
-      Mode = SegmentMode.SEMANTIC,
+      Mode = SegmentMode.Semantic,
       MaxPredictions = 1,
     };
 
@@ -178,7 +178,7 @@ public class SegmentImageTest {
   [TestMethod]
   public async Task SegmentImageInteractiveVertexTest() {
     var segmentImageConfig = new SegmentImageConfig {
-      Mode = SegmentMode.INTERACTIVE,
+      Mode = SegmentMode.Interactive,
       MaxPredictions = 1,
     };
 

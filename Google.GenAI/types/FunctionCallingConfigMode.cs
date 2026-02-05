@@ -17,23 +17,32 @@
 // Auto-generated code. Do not edit.
 
 using System.Text.Json.Serialization;
+using System.Collections.Generic;
+using System.Text.Json;
 
 namespace Google.GenAI.Types {
   /// <summary>
   /// Function calling mode.
   /// </summary>
-  [JsonConverter(typeof(JsonStringEnumConverter))]
-  public enum FunctionCallingConfigMode {
+
+  [JsonConverter(typeof(FunctionCallingConfigModeConverter))]
+  public readonly record struct FunctionCallingConfigMode : IEquatable<FunctionCallingConfigMode> {
+    public string Value { get; }
+
+    private FunctionCallingConfigMode(string value) {
+      Value = value;
+    }
+
     /// <summary>
     /// Unspecified function calling mode. This value should not be used.
     /// </summary>
-    [JsonPropertyName("MODE_UNSPECIFIED")] MODE_UNSPECIFIED,
+    public static FunctionCallingConfigMode ModeUnspecified { get; } = new("MODE_UNSPECIFIED");
 
     /// <summary>
     /// Default model behavior, model decides to predict either function calls or natural language
     /// response.
     /// </summary>
-    [JsonPropertyName("AUTO")] AUTO,
+    public static FunctionCallingConfigMode Auto { get; } = new("AUTO");
 
     /// <summary>
     /// Model is constrained to always predicting function calls only. If "allowed_function_names"
@@ -41,13 +50,13 @@ namespace Google.GenAI.Types {
     /// "allowed_function_names", else the predicted function calls will be any one of the provided
     /// "function_declarations".
     /// </summary>
-    [JsonPropertyName("ANY")] ANY,
+    public static FunctionCallingConfigMode Any { get; } = new("ANY");
 
     /// <summary>
     /// Model will not predict any function calls. Model behavior is same as when not passing any
     /// function declarations.
     /// </summary>
-    [JsonPropertyName("NONE")] NONE,
+    public static FunctionCallingConfigMode None { get; } = new("NONE");
 
     /// <summary>
     /// Model is constrained to predict either function calls or natural language response. If
@@ -55,6 +64,46 @@ namespace Google.GenAI.Types {
     /// "allowed_function_names", else the predicted function calls will be any one of the provided
     /// "function_declarations".
     /// </summary>
-    [JsonPropertyName("VALIDATED")] VALIDATED
+    public static FunctionCallingConfigMode Validated { get; } = new("VALIDATED");
+
+    public static IReadOnlyList<FunctionCallingConfigMode> AllValues {
+      get;
+    } = new[] { ModeUnspecified, Auto, Any, None, Validated };
+
+    public static FunctionCallingConfigMode FromString(string value) {
+      if (string.IsNullOrEmpty(value)) {
+        return new FunctionCallingConfigMode("MODE_UNSPECIFIED");
+      }
+
+      foreach (var known in AllValues) {
+        if (known.Value == value) {
+          return known;
+        }
+      }
+
+      return new FunctionCallingConfigMode(value);
+    }
+
+    public override string ToString() => Value ?? string.Empty;
+
+    public static implicit operator FunctionCallingConfigMode(string value) => FromString(value);
+
+    public bool Equals(FunctionCallingConfigMode other) => Value == other.Value;
+
+    public override int GetHashCode() => Value?.GetHashCode() ?? 0;
+  }
+
+  public class FunctionCallingConfigModeConverter : JsonConverter<FunctionCallingConfigMode> {
+    public override FunctionCallingConfigMode Read(ref Utf8JsonReader reader,
+                                                   System.Type typeToConvert,
+                                                   JsonSerializerOptions options) {
+      var value = reader.GetString();
+      return FunctionCallingConfigMode.FromString(value);
+    }
+
+    public override void Write(Utf8JsonWriter writer, FunctionCallingConfigMode value,
+                               JsonSerializerOptions options) {
+      writer.WriteStringValue(value.Value);
+    }
   }
 }

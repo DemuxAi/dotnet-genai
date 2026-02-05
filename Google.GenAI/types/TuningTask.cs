@@ -17,31 +17,79 @@
 // Auto-generated code. Do not edit.
 
 using System.Text.Json.Serialization;
+using System.Collections.Generic;
+using System.Text.Json;
 
 namespace Google.GenAI.Types {
   /// <summary>
   /// The tuning task. Either I2V or T2V. This enum is not supported in Gemini API.
   /// </summary>
-  [JsonConverter(typeof(JsonStringEnumConverter))]
-  public enum TuningTask {
+
+  [JsonConverter(typeof(TuningTaskConverter))]
+  public readonly record struct TuningTask : IEquatable<TuningTask> {
+    public string Value { get; }
+
+    private TuningTask(string value) {
+      Value = value;
+    }
+
     /// <summary>
     /// Default value. This value is unused.
     /// </summary>
-    [JsonPropertyName("TUNING_TASK_UNSPECIFIED")] TUNING_TASK_UNSPECIFIED,
+    public static TuningTask TuningTaskUnspecified { get; } = new("TUNING_TASK_UNSPECIFIED");
 
     /// <summary>
     /// Tuning task for image to video.
     /// </summary>
-    [JsonPropertyName("TUNING_TASK_I2V")] TUNING_TASK_I2V,
+    public static TuningTask TuningTaskI2v { get; } = new("TUNING_TASK_I2V");
 
     /// <summary>
     /// Tuning task for text to video.
     /// </summary>
-    [JsonPropertyName("TUNING_TASK_T2V")] TUNING_TASK_T2V,
+    public static TuningTask TuningTaskT2v { get; } = new("TUNING_TASK_T2V");
 
     /// <summary>
     /// Tuning task for reference to video.
     /// </summary>
-    [JsonPropertyName("TUNING_TASK_R2V")] TUNING_TASK_R2V
+    public static TuningTask TuningTaskR2v { get; } = new("TUNING_TASK_R2V");
+
+    public static IReadOnlyList<TuningTask> AllValues {
+      get;
+    } = new[] { TuningTaskUnspecified, TuningTaskI2v, TuningTaskT2v, TuningTaskR2v };
+
+    public static TuningTask FromString(string value) {
+      if (string.IsNullOrEmpty(value)) {
+        return new TuningTask("TUNING_TASK_UNSPECIFIED");
+      }
+
+      foreach (var known in AllValues) {
+        if (known.Value == value) {
+          return known;
+        }
+      }
+
+      return new TuningTask(value);
+    }
+
+    public override string ToString() => Value ?? string.Empty;
+
+    public static implicit operator TuningTask(string value) => FromString(value);
+
+    public bool Equals(TuningTask other) => Value == other.Value;
+
+    public override int GetHashCode() => Value?.GetHashCode() ?? 0;
+  }
+
+  public class TuningTaskConverter : JsonConverter<TuningTask> {
+    public override TuningTask Read(ref Utf8JsonReader reader, System.Type typeToConvert,
+                                    JsonSerializerOptions options) {
+      var value = reader.GetString();
+      return TuningTask.FromString(value);
+    }
+
+    public override void Write(Utf8JsonWriter writer, TuningTask value,
+                               JsonSerializerOptions options) {
+      writer.WriteStringValue(value.Value);
+    }
   }
 }

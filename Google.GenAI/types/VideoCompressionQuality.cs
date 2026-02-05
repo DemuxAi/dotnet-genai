@@ -17,22 +17,71 @@
 // Auto-generated code. Do not edit.
 
 using System.Text.Json.Serialization;
+using System.Collections.Generic;
+using System.Text.Json;
 
 namespace Google.GenAI.Types {
   /// <summary>
   /// Enum that controls the compression quality of the generated videos.
   /// </summary>
-  [JsonConverter(typeof(JsonStringEnumConverter))]
-  public enum VideoCompressionQuality {
+
+  [JsonConverter(typeof(VideoCompressionQualityConverter))]
+  public readonly record struct VideoCompressionQuality : IEquatable<VideoCompressionQuality> {
+    public string Value { get; }
+
+    private VideoCompressionQuality(string value) {
+      Value = value;
+    }
+
     /// <summary>
     /// Optimized video compression quality. This will produce videos with a compressed, smaller
     /// file size.
     /// </summary>
-    [JsonPropertyName("OPTIMIZED")] OPTIMIZED,
+    public static VideoCompressionQuality Optimized { get; } = new("OPTIMIZED");
 
     /// <summary>
     /// Lossless video compression quality. This will produce videos with a larger file size.
     /// </summary>
-    [JsonPropertyName("LOSSLESS")] LOSSLESS
+    public static VideoCompressionQuality Lossless { get; } = new("LOSSLESS");
+
+    public static IReadOnlyList<VideoCompressionQuality> AllValues {
+      get;
+    } = new[] { Optimized, Lossless };
+
+    public static VideoCompressionQuality FromString(string value) {
+      if (string.IsNullOrEmpty(value)) {
+        return new VideoCompressionQuality("UNSPECIFIED");
+      }
+
+      foreach (var known in AllValues) {
+        if (known.Value == value) {
+          return known;
+        }
+      }
+
+      return new VideoCompressionQuality(value);
+    }
+
+    public override string ToString() => Value ?? string.Empty;
+
+    public static implicit operator VideoCompressionQuality(string value) => FromString(value);
+
+    public bool Equals(VideoCompressionQuality other) => Value == other.Value;
+
+    public override int GetHashCode() => Value?.GetHashCode() ?? 0;
+  }
+
+  public class VideoCompressionQualityConverter : JsonConverter<VideoCompressionQuality> {
+    public override VideoCompressionQuality Read(ref Utf8JsonReader reader,
+                                                 System.Type typeToConvert,
+                                                 JsonSerializerOptions options) {
+      var value = reader.GetString();
+      return VideoCompressionQuality.FromString(value);
+    }
+
+    public override void Write(Utf8JsonWriter writer, VideoCompressionQuality value,
+                               JsonSerializerOptions options) {
+      writer.WriteStringValue(value.Value);
+    }
   }
 }

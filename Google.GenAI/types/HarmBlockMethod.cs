@@ -17,27 +17,77 @@
 // Auto-generated code. Do not edit.
 
 using System.Text.Json.Serialization;
+using System.Collections.Generic;
+using System.Text.Json;
 
 namespace Google.GenAI.Types {
   /// <summary>
   /// Specify if the threshold is used for probability or severity score. If not specified, the
   /// threshold is used for probability score. This enum is not supported in Gemini API.
   /// </summary>
-  [JsonConverter(typeof(JsonStringEnumConverter))]
-  public enum HarmBlockMethod {
+
+  [JsonConverter(typeof(HarmBlockMethodConverter))]
+  public readonly record struct HarmBlockMethod : IEquatable<HarmBlockMethod> {
+    public string Value { get; }
+
+    private HarmBlockMethod(string value) {
+      Value = value;
+    }
+
     /// <summary>
     /// The harm block method is unspecified.
     /// </summary>
-    [JsonPropertyName("HARM_BLOCK_METHOD_UNSPECIFIED")] HARM_BLOCK_METHOD_UNSPECIFIED,
+    public static HarmBlockMethod HarmBlockMethodUnspecified {
+      get;
+    } = new("HARM_BLOCK_METHOD_UNSPECIFIED");
 
     /// <summary>
     /// The harm block method uses both probability and severity scores.
     /// </summary>
-    [JsonPropertyName("SEVERITY")] SEVERITY,
+    public static HarmBlockMethod Severity { get; } = new("SEVERITY");
 
     /// <summary>
     /// The harm block method uses the probability score.
     /// </summary>
-    [JsonPropertyName("PROBABILITY")] PROBABILITY
+    public static HarmBlockMethod Probability { get; } = new("PROBABILITY");
+
+    public static IReadOnlyList<HarmBlockMethod> AllValues {
+      get;
+    } = new[] { HarmBlockMethodUnspecified, Severity, Probability };
+
+    public static HarmBlockMethod FromString(string value) {
+      if (string.IsNullOrEmpty(value)) {
+        return new HarmBlockMethod("HARM_BLOCK_METHOD_UNSPECIFIED");
+      }
+
+      foreach (var known in AllValues) {
+        if (known.Value == value) {
+          return known;
+        }
+      }
+
+      return new HarmBlockMethod(value);
+    }
+
+    public override string ToString() => Value ?? string.Empty;
+
+    public static implicit operator HarmBlockMethod(string value) => FromString(value);
+
+    public bool Equals(HarmBlockMethod other) => Value == other.Value;
+
+    public override int GetHashCode() => Value?.GetHashCode() ?? 0;
+  }
+
+  public class HarmBlockMethodConverter : JsonConverter<HarmBlockMethod> {
+    public override HarmBlockMethod Read(ref Utf8JsonReader reader, System.Type typeToConvert,
+                                         JsonSerializerOptions options) {
+      var value = reader.GetString();
+      return HarmBlockMethod.FromString(value);
+    }
+
+    public override void Write(Utf8JsonWriter writer, HarmBlockMethod value,
+                               JsonSerializerOptions options) {
+      writer.WriteStringValue(value.Value);
+    }
   }
 }
