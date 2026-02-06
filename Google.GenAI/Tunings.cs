@@ -177,6 +177,10 @@ namespace Google.GenAI {
         throw new NotSupportedException("outputUri parameter is not supported in Gemini API.");
       }
 
+      if (!Common.IsZero(Common.GetValueByPath(fromObject, new string[] { "encryptionSpec" }))) {
+        throw new NotSupportedException("encryptionSpec parameter is not supported in Gemini API.");
+      }
+
       return toObject;
     }
 
@@ -417,6 +421,11 @@ namespace Google.GenAI {
       if (Common.GetValueByPath(fromObject, new string[] { "outputUri" }) != null) {
         Common.SetValueByPath(parentObject, new string[] { "outputUri" },
                               Common.GetValueByPath(fromObject, new string[] { "outputUri" }));
+      }
+
+      if (Common.GetValueByPath(fromObject, new string[] { "encryptionSpec" }) != null) {
+        Common.SetValueByPath(parentObject, new string[] { "encryptionSpec" },
+                              Common.GetValueByPath(fromObject, new string[] { "encryptionSpec" }));
       }
 
       return toObject;

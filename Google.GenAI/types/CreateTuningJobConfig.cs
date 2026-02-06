@@ -234,6 +234,18 @@ namespace Google.GenAI.Types {
           }
 
     /// <summary>
+    /// The encryption spec of the tuning job. Customer-managed encryption key options for a
+    /// TuningJob. If this is set, then all resources created by the TuningJob will be encrypted
+    /// with provided encryption key.
+    /// </summary>
+    [JsonPropertyName("encryptionSpec")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public EncryptionSpec
+        ? EncryptionSpec {
+            get; set;
+          }
+
+    /// <summary>
     /// Deserializes a JSON string to a CreateTuningJobConfig object.
     /// </summary>
     /// <param name="jsonString">The JSON string to deserialize.</param>
