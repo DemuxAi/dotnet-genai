@@ -376,6 +376,15 @@ namespace Google.GenAI {
       return responseNode;
     }
 
+    /// <summary>
+    /// Gets the status of a long-running operation.
+    /// </summary>
+    /// <typeparam name="TOperation">The type of the operation.</typeparam>
+    /// <param name="operation">An operation instance to get the status for.</param>
+    /// <param name="config">A <see cref="GetOperationConfig"/> instance that specifies the optional
+    /// configurations.</param> <returns>A <see cref="Task{TOperation}"/> that represents the
+    /// asynchronous operation. The task result contains the updated <typeparamref
+    /// name="TOperation"/> instance with the latest status or result.</returns>
     public async Task<TOperation> GetAsync<TOperation>(TOperation operation,
                                                        GetOperationConfig? config)
         where TOperation : Operation<TOperation> {
