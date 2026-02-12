@@ -1719,6 +1719,7 @@ namespace Google.GenAI {
     /// or "456" when project and location are initialized in the
     /// Vertex AI client. Or "batches/abc" using the Gemini Developer AI client.</param>
     /// <param name="config">A <see cref="GetBatchJobConfig"/> for configuring the get
+    /// request.</param> <param name="cancellationToken">The <see cref="CancellationToken"/> for the
     /// request.</param> <returns>A <see cref="BatchJob"/> object that contains the info of the
     /// batch job.</returns>
 
@@ -1792,6 +1793,7 @@ namespace Google.GenAI {
     /// or "456" when project and location are initialized in the
     /// Vertex AI client. Or "batches/abc" using the Gemini Developer AI client.</param>
     /// <param name="config">A <see cref="CancelBatchJobConfig"/> for configuring the cancel
+    /// request.</param> <param name="cancellationToken">The <see cref="CancellationToken"/> for the
     /// request.</param> <returns>A <see cref="Task"/> that represents the asynchronous
     /// operation.</returns>
 
@@ -1924,6 +1926,7 @@ namespace Google.GenAI {
     /// or "456" when project and location are initialized in the
     /// Vertex AI client. Or "batches/abc" using the Gemini Developer AI client.</param>
     /// <param name="config">A <see cref="DeleteBatchJobConfig"/> for configuring the delete
+    /// request.</param> <param name="cancellationToken">The <see cref="CancellationToken"/> for the
     /// request.</param> <returns>A <see cref="DeleteResourceJob"/> object that shows the status of
     /// the deletion.</returns>
 
@@ -1994,6 +1997,7 @@ namespace Google.GenAI {
     /// Makes an API request to list the available batch jobs.
     /// </summary>
     /// <param name="config">A <see cref="ListBatchJobsConfig"/> for configuring the list
+    /// request.</param> <param name="cancellationToken">The <see cref="CancellationToken"/> for the
     /// request.</param> <returns>A <see cref="Pager{BatchJob}"/> object that contains the list of
     /// batch jobs. The pager is an
     ///     iterable and automatically queries the next page once the current page is

@@ -1207,9 +1207,10 @@ namespace Google.GenAI {
     /// Lists cached contents asynchronously.
     /// </summary>
     /// <param name="config">A <see cref="ListCachedContentsConfig"/> instance that specifies the
-    /// optional configuration for the list request.</param> <returns>A Pager object that contains
-    /// one page of cached contents. When iterating over the pager, it automatically fetches the
-    /// next page if there are more.</returns>
+    /// optional configuration for the list request.</param> <param name="cancellationToken">The
+    /// <see cref="CancellationToken"/> for the request.</param> <returns>A Pager object that
+    /// contains one page of cached contents. When iterating over the pager, it automatically
+    /// fetches the next page if there are more.</returns>
 
     public async Task<Pager<CachedContent, ListCachedContentsConfig, ListCachedContentsResponse>>
     ListAsync(ListCachedContentsConfig? config = null,
