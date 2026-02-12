@@ -17,6 +17,7 @@
 // Auto-generated code. Do not edit.
 
 using System;
+using System.Runtime.CompilerServices;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
@@ -1030,7 +1031,8 @@ namespace Google.GenAI {
       _apiClient = apiClient;
     }
 
-    private async Task<TuningJob> PrivateGetAsync(string name, GetTuningJobConfig? config) {
+    private async Task<TuningJob> PrivateGetAsync(string name, GetTuningJobConfig? config,
+                                                  CancellationToken cancellationToken = default) {
       GetTuningJobParameters parameter = new GetTuningJobParameters();
 
       if (!Common.IsZero(name)) {
@@ -1064,10 +1066,15 @@ namespace Google.GenAI {
       }
       HttpOptions? requestHttpOptions = config?.HttpOptions;
 
-      ApiResponse response = await this._apiClient.RequestAsync(
-          HttpMethod.Get, path, JsonSerializer.Serialize(body), requestHttpOptions);
+      ApiResponse response =
+          await this._apiClient.RequestAsync(HttpMethod.Get, path, JsonSerializer.Serialize(body),
+                                             requestHttpOptions, cancellationToken);
       HttpContent httpContent = response.GetEntity();
+#if NETSTANDARD2_0
       string contentString = await httpContent.ReadAsStringAsync();
+#else
+      string contentString = await httpContent.ReadAsStringAsync(cancellationToken);
+#endif
       JsonNode? httpContentNode = JsonNode.Parse(contentString);
       if (httpContentNode == null) {
         throw new NotSupportedException("Failed to parse response to JsonNode.");
@@ -1086,7 +1093,8 @@ namespace Google.GenAI {
              throw new InvalidOperationException("Failed to deserialize Task<TuningJob>.");
     }
 
-    private async Task<ListTuningJobsResponse> PrivateListAsync(ListTuningJobsConfig? config) {
+    private async Task<ListTuningJobsResponse> PrivateListAsync(
+        ListTuningJobsConfig? config, CancellationToken cancellationToken = default) {
       ListTuningJobsParameters parameter = new ListTuningJobsParameters();
 
       if (!Common.IsZero(config)) {
@@ -1117,10 +1125,15 @@ namespace Google.GenAI {
       }
       HttpOptions? requestHttpOptions = config?.HttpOptions;
 
-      ApiResponse response = await this._apiClient.RequestAsync(
-          HttpMethod.Get, path, JsonSerializer.Serialize(body), requestHttpOptions);
+      ApiResponse response =
+          await this._apiClient.RequestAsync(HttpMethod.Get, path, JsonSerializer.Serialize(body),
+                                             requestHttpOptions, cancellationToken);
       HttpContent httpContent = response.GetEntity();
+#if NETSTANDARD2_0
       string contentString = await httpContent.ReadAsStringAsync();
+#else
+      string contentString = await httpContent.ReadAsStringAsync(cancellationToken);
+#endif
       JsonNode? httpContentNode = JsonNode.Parse(contentString);
       if (httpContentNode == null) {
         throw new NotSupportedException("Failed to parse response to JsonNode.");
@@ -1147,10 +1160,12 @@ namespace Google.GenAI {
     /// </summary>
     /// <param name="name">The resource name of the tuning job. For Vertex, this is the full
     /// resource name or `tuningJobs/{id}`.</param> <param name="config">A <see
-    /// cref="CancelTuningJobConfig"/> for configuring the cancel request.</param>
+    /// cref="CancelTuningJobConfig"/> for configuring the cancel request.</param> <param
+    /// name="cancellationToken">A <see cref="CancellationToken"/> to cancel the operation.</param>
 
-    public async Task<CancelTuningJobResponse> CancelAsync(string name,
-                                                           CancelTuningJobConfig? config = null) {
+    public async Task<CancelTuningJobResponse> CancelAsync(
+        string name, CancelTuningJobConfig? config = null,
+        CancellationToken cancellationToken = default) {
       CancelTuningJobParameters parameter = new CancelTuningJobParameters();
 
       if (!Common.IsZero(name)) {
@@ -1184,10 +1199,15 @@ namespace Google.GenAI {
       }
       HttpOptions? requestHttpOptions = config?.HttpOptions;
 
-      ApiResponse response = await this._apiClient.RequestAsync(
-          HttpMethod.Post, path, JsonSerializer.Serialize(body), requestHttpOptions);
+      ApiResponse response =
+          await this._apiClient.RequestAsync(HttpMethod.Post, path, JsonSerializer.Serialize(body),
+                                             requestHttpOptions, cancellationToken);
       HttpContent httpContent = response.GetEntity();
+#if NETSTANDARD2_0
       string contentString = await httpContent.ReadAsStringAsync();
+#else
+      string contentString = await httpContent.ReadAsStringAsync(cancellationToken);
+#endif
       JsonNode? httpContentNode = JsonNode.Parse(contentString);
       if (httpContentNode == null) {
         throw new NotSupportedException("Failed to parse response to JsonNode.");
@@ -1211,7 +1231,8 @@ namespace Google.GenAI {
 
     private async Task<TuningJob> PrivateTuneAsync(string? baseModel, PreTunedModel? preTunedModel,
                                                    TuningDataset trainingDataset,
-                                                   CreateTuningJobConfig? config) {
+                                                   CreateTuningJobConfig? config,
+                                                   CancellationToken cancellationToken = default) {
       CreateTuningJobParametersPrivate parameter = new CreateTuningJobParametersPrivate();
 
       if (!Common.IsZero(baseModel)) {
@@ -1252,10 +1273,15 @@ namespace Google.GenAI {
       }
       HttpOptions? requestHttpOptions = config?.HttpOptions;
 
-      ApiResponse response = await this._apiClient.RequestAsync(
-          HttpMethod.Post, path, JsonSerializer.Serialize(body), requestHttpOptions);
+      ApiResponse response =
+          await this._apiClient.RequestAsync(HttpMethod.Post, path, JsonSerializer.Serialize(body),
+                                             requestHttpOptions, cancellationToken);
       HttpContent httpContent = response.GetEntity();
+#if NETSTANDARD2_0
       string contentString = await httpContent.ReadAsStringAsync();
+#else
+      string contentString = await httpContent.ReadAsStringAsync(cancellationToken);
+#endif
       JsonNode? httpContentNode = JsonNode.Parse(contentString);
       if (httpContentNode == null) {
         throw new NotSupportedException("Failed to parse response to JsonNode.");
@@ -1274,10 +1300,9 @@ namespace Google.GenAI {
              throw new InvalidOperationException("Failed to deserialize Task<TuningJob>.");
     }
 
-    private async Task<TuningOperation> PrivateTuneMldevAsync(string? baseModel,
-                                                              PreTunedModel? preTunedModel,
-                                                              TuningDataset trainingDataset,
-                                                              CreateTuningJobConfig? config) {
+    private async Task<TuningOperation> PrivateTuneMldevAsync(
+        string? baseModel, PreTunedModel? preTunedModel, TuningDataset trainingDataset,
+        CreateTuningJobConfig? config, CancellationToken cancellationToken = default) {
       CreateTuningJobParametersPrivate parameter = new CreateTuningJobParametersPrivate();
 
       if (!Common.IsZero(baseModel)) {
@@ -1319,10 +1344,15 @@ namespace Google.GenAI {
       }
       HttpOptions? requestHttpOptions = config?.HttpOptions;
 
-      ApiResponse response = await this._apiClient.RequestAsync(
-          HttpMethod.Post, path, JsonSerializer.Serialize(body), requestHttpOptions);
+      ApiResponse response =
+          await this._apiClient.RequestAsync(HttpMethod.Post, path, JsonSerializer.Serialize(body),
+                                             requestHttpOptions, cancellationToken);
       HttpContent httpContent = response.GetEntity();
+#if NETSTANDARD2_0
       string contentString = await httpContent.ReadAsStringAsync();
+#else
+      string contentString = await httpContent.ReadAsStringAsync(cancellationToken);
+#endif
       JsonNode? httpContentNode = JsonNode.Parse(contentString);
       if (httpContentNode == null) {
         throw new NotSupportedException("Failed to parse response to JsonNode.");
@@ -1346,17 +1376,18 @@ namespace Google.GenAI {
     /// Lists tuning jobs.
     /// </summary>
     /// <param name="config">A <see cref="ListTuningJobsConfig"/> instance that specifies the
-    /// optional configuration for the list request.</param> <returns>A Pager object that contains
-    /// one page of tuning jobs. When iterating over the pager, it automatically fetches the next
-    /// page if there are more.</returns>
+    /// optional configuration for the list request.</param> <param name="cancellationToken">A <see
+    /// cref="CancellationToken"/> to cancel the operation.</param> <returns>A Pager object that
+    /// contains one page of tuning jobs. When iterating over the pager, it automatically fetches
+    /// the next page if there are more.</returns>
 
     public async Task<Pager<TuningJob, ListTuningJobsConfig, ListTuningJobsResponse>> ListAsync(
-        ListTuningJobsConfig? config = null) {
+        ListTuningJobsConfig? config = null, CancellationToken cancellationToken = default) {
       config ??= new ListTuningJobsConfig();
-      var initialResponse = await PrivateListAsync(config);
+      var initialResponse = await PrivateListAsync(config, cancellationToken);
 
       return new Pager<TuningJob, ListTuningJobsConfig, ListTuningJobsResponse>(
-          requestFunc: async cfg => await PrivateListAsync(cfg),
+          requestFunc: async cfg => await PrivateListAsync(cfg, cancellationToken),
           extractItems: response => response.TuningJobs,
           extractNextPageToken: response => response.NextPageToken,
           extractHttpResponse: response => response.SdkHttpResponse,
@@ -1371,9 +1402,11 @@ namespace Google.GenAI {
     /// </summary>
     /// <param name="name">The resource name of the tuning job.</param>
     /// <param name="config">A <see cref="GetTuningJobConfig"/> for configuring the get
+    /// request.</param> <param name="cancellationToken">The cancellation token for the
     /// request.</param> <returns>A <see cref="TuningJob"/> object.</returns>
-    public async Task<TuningJob> GetAsync(string name, GetTuningJobConfig? config = null) {
-      return await this.PrivateGetAsync(name, config);
+    public async Task<TuningJob> GetAsync(string name, GetTuningJobConfig? config = null,
+                                          CancellationToken cancellationToken = default) {
+      return await this.PrivateGetAsync(name, config, cancellationToken);
     }
 
     /// <summary>
@@ -1382,22 +1415,26 @@ namespace Google.GenAI {
     /// <param name="baseModel">The base model to tune.</param>
     /// <param name="trainingDataset">The training dataset to use for tuning.</param>
     /// <param name="config">A <see cref="CreateTuningJobConfig"/> for configuring the create
+    /// request.</param> <param name="cancellationToken">The cancellation token for the
     /// request.</param> <returns>A <see cref="TuningJob"/> object.</returns>
     public async Task<TuningJob> TuneAsync(string baseModel, TuningDataset trainingDataset,
-                                           CreateTuningJobConfig? config = null) {
+                                           CreateTuningJobConfig? config = null,
+                                           CancellationToken cancellationToken = default) {
       if (this._apiClient.VertexAI) {
         if (baseModel.StartsWith("projects/")) {
           PreTunedModel preTunedModel = new PreTunedModel { TunedModelName = baseModel };
           if (config != null && config.PreTunedModelCheckpointId != null) {
             preTunedModel.CheckpointId = config.PreTunedModelCheckpointId;
           }
-          return await this.PrivateTuneAsync(null, preTunedModel, trainingDataset, config);
+          return await this.PrivateTuneAsync(null, preTunedModel, trainingDataset, config,
+                                             cancellationToken);
         } else {
-          return await this.PrivateTuneAsync(baseModel, null, trainingDataset, config);
+          return await this.PrivateTuneAsync(baseModel, null, trainingDataset, config,
+                                             cancellationToken);
         }
       } else {
-        TuningOperation operation =
-            await this.PrivateTuneMldevAsync(baseModel, null, trainingDataset, config);
+        TuningOperation operation = await this.PrivateTuneMldevAsync(
+            baseModel, null, trainingDataset, config, cancellationToken);
         string tunedModelName = "";
         if (operation.Metadata != null && operation.Metadata.ContainsKey("tunedModel")) {
           tunedModelName = (string)operation.Metadata["tunedModel"];

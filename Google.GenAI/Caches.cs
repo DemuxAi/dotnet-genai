@@ -17,6 +17,7 @@
 // Auto-generated code. Do not edit.
 
 using System;
+using System.Runtime.CompilerServices;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
@@ -881,7 +882,8 @@ namespace Google.GenAI {
     }
 
     public async Task<CachedContent> CreateAsync(string model,
-                                                 CreateCachedContentConfig? config = null) {
+                                                 CreateCachedContentConfig? config = null,
+                                                 CancellationToken cancellationToken = default) {
       CreateCachedContentParameters parameter = new CreateCachedContentParameters();
 
       if (!Common.IsZero(model)) {
@@ -918,10 +920,15 @@ namespace Google.GenAI {
       }
       HttpOptions? requestHttpOptions = config?.HttpOptions;
 
-      ApiResponse response = await this._apiClient.RequestAsync(
-          HttpMethod.Post, path, JsonSerializer.Serialize(body), requestHttpOptions);
+      ApiResponse response =
+          await this._apiClient.RequestAsync(HttpMethod.Post, path, JsonSerializer.Serialize(body),
+                                             requestHttpOptions, cancellationToken);
       HttpContent httpContent = response.GetEntity();
+#if NETSTANDARD2_0
       string contentString = await httpContent.ReadAsStringAsync();
+#else
+      string contentString = await httpContent.ReadAsStringAsync(cancellationToken);
+#endif
       JsonNode? httpContentNode = JsonNode.Parse(contentString);
       if (httpContentNode == null) {
         throw new NotSupportedException("Failed to parse response to JsonNode.");
@@ -940,7 +947,8 @@ namespace Google.GenAI {
              throw new InvalidOperationException("Failed to deserialize Task<CachedContent>.");
     }
 
-    public async Task<CachedContent> GetAsync(string name, GetCachedContentConfig? config = null) {
+    public async Task<CachedContent> GetAsync(string name, GetCachedContentConfig? config = null,
+                                              CancellationToken cancellationToken = default) {
       GetCachedContentParameters parameter = new GetCachedContentParameters();
 
       if (!Common.IsZero(name)) {
@@ -974,10 +982,15 @@ namespace Google.GenAI {
       }
       HttpOptions? requestHttpOptions = config?.HttpOptions;
 
-      ApiResponse response = await this._apiClient.RequestAsync(
-          HttpMethod.Get, path, JsonSerializer.Serialize(body), requestHttpOptions);
+      ApiResponse response =
+          await this._apiClient.RequestAsync(HttpMethod.Get, path, JsonSerializer.Serialize(body),
+                                             requestHttpOptions, cancellationToken);
       HttpContent httpContent = response.GetEntity();
+#if NETSTANDARD2_0
       string contentString = await httpContent.ReadAsStringAsync();
+#else
+      string contentString = await httpContent.ReadAsStringAsync(cancellationToken);
+#endif
       JsonNode? httpContentNode = JsonNode.Parse(contentString);
       if (httpContentNode == null) {
         throw new NotSupportedException("Failed to parse response to JsonNode.");
@@ -997,7 +1010,8 @@ namespace Google.GenAI {
     }
 
     public async Task<DeleteCachedContentResponse> DeleteAsync(
-        string name, DeleteCachedContentConfig? config = null) {
+        string name, DeleteCachedContentConfig? config = null,
+        CancellationToken cancellationToken = default) {
       DeleteCachedContentParameters parameter = new DeleteCachedContentParameters();
 
       if (!Common.IsZero(name)) {
@@ -1035,9 +1049,14 @@ namespace Google.GenAI {
       HttpOptions? requestHttpOptions = config?.HttpOptions;
 
       ApiResponse response = await this._apiClient.RequestAsync(
-          HttpMethod.Delete, path, JsonSerializer.Serialize(body), requestHttpOptions);
+          HttpMethod.Delete, path, JsonSerializer.Serialize(body), requestHttpOptions,
+          cancellationToken);
       HttpContent httpContent = response.GetEntity();
+#if NETSTANDARD2_0
       string contentString = await httpContent.ReadAsStringAsync();
+#else
+      string contentString = await httpContent.ReadAsStringAsync(cancellationToken);
+#endif
       JsonNode? httpContentNode = JsonNode.Parse(contentString);
       if (httpContentNode == null) {
         throw new NotSupportedException("Failed to parse response to JsonNode.");
@@ -1058,7 +1077,8 @@ namespace Google.GenAI {
     }
 
     public async Task<CachedContent> UpdateAsync(string name,
-                                                 UpdateCachedContentConfig? config = null) {
+                                                 UpdateCachedContentConfig? config = null,
+                                                 CancellationToken cancellationToken = default) {
       UpdateCachedContentParameters parameter = new UpdateCachedContentParameters();
 
       if (!Common.IsZero(name)) {
@@ -1096,9 +1116,14 @@ namespace Google.GenAI {
       HttpOptions? requestHttpOptions = config?.HttpOptions;
 
       ApiResponse response = await this._apiClient.RequestAsync(
-          new HttpMethod("PATCH"), path, JsonSerializer.Serialize(body), requestHttpOptions);
+          new HttpMethod("PATCH"), path, JsonSerializer.Serialize(body), requestHttpOptions,
+          cancellationToken);
       HttpContent httpContent = response.GetEntity();
+#if NETSTANDARD2_0
       string contentString = await httpContent.ReadAsStringAsync();
+#else
+      string contentString = await httpContent.ReadAsStringAsync(cancellationToken);
+#endif
       JsonNode? httpContentNode = JsonNode.Parse(contentString);
       if (httpContentNode == null) {
         throw new NotSupportedException("Failed to parse response to JsonNode.");
@@ -1118,7 +1143,7 @@ namespace Google.GenAI {
     }
 
     private async Task<ListCachedContentsResponse> PrivateListAsync(
-        ListCachedContentsConfig? config) {
+        ListCachedContentsConfig? config, CancellationToken cancellationToken = default) {
       ListCachedContentsParameters parameter = new ListCachedContentsParameters();
 
       if (!Common.IsZero(config)) {
@@ -1150,10 +1175,15 @@ namespace Google.GenAI {
       }
       HttpOptions? requestHttpOptions = config?.HttpOptions;
 
-      ApiResponse response = await this._apiClient.RequestAsync(
-          HttpMethod.Get, path, JsonSerializer.Serialize(body), requestHttpOptions);
+      ApiResponse response =
+          await this._apiClient.RequestAsync(HttpMethod.Get, path, JsonSerializer.Serialize(body),
+                                             requestHttpOptions, cancellationToken);
       HttpContent httpContent = response.GetEntity();
+#if NETSTANDARD2_0
       string contentString = await httpContent.ReadAsStringAsync();
+#else
+      string contentString = await httpContent.ReadAsStringAsync(cancellationToken);
+#endif
       JsonNode? httpContentNode = JsonNode.Parse(contentString);
       if (httpContentNode == null) {
         throw new NotSupportedException("Failed to parse response to JsonNode.");
@@ -1182,12 +1212,13 @@ namespace Google.GenAI {
     /// next page if there are more.</returns>
 
     public async Task<Pager<CachedContent, ListCachedContentsConfig, ListCachedContentsResponse>>
-    ListAsync(ListCachedContentsConfig? config = null) {
+    ListAsync(ListCachedContentsConfig? config = null,
+              CancellationToken cancellationToken = default) {
       config ??= new ListCachedContentsConfig();
-      var initialResponse = await PrivateListAsync(config);
+      var initialResponse = await PrivateListAsync(config, cancellationToken);
 
       return new Pager<CachedContent, ListCachedContentsConfig, ListCachedContentsResponse>(
-          requestFunc: async cfg => await PrivateListAsync(cfg),
+          requestFunc: async cfg => await PrivateListAsync(cfg, cancellationToken),
           extractItems: response => response.CachedContents,
           extractNextPageToken: response => response.NextPageToken,
           extractHttpResponse: response => response.SdkHttpResponse,

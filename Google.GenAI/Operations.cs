@@ -17,6 +17,7 @@
 // Auto-generated code. Do not edit.
 
 using System;
+using System.Runtime.CompilerServices;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
@@ -277,8 +278,9 @@ namespace Google.GenAI {
       _apiClient = apiClient;
     }
 
-    internal async Task<JsonNode> PrivateGetVideosOperationAsync(string operationName,
-                                                                 GetOperationConfig? config) {
+    internal async Task<JsonNode> PrivateGetVideosOperationAsync(
+        string operationName, GetOperationConfig? config,
+        CancellationToken cancellationToken = default) {
       GetOperationParameters parameter = new GetOperationParameters();
 
       if (!Common.IsZero(operationName)) {
@@ -312,10 +314,15 @@ namespace Google.GenAI {
       }
       HttpOptions? requestHttpOptions = config?.HttpOptions;
 
-      ApiResponse response = await this._apiClient.RequestAsync(
-          HttpMethod.Get, path, JsonSerializer.Serialize(body), requestHttpOptions);
+      ApiResponse response =
+          await this._apiClient.RequestAsync(HttpMethod.Get, path, JsonSerializer.Serialize(body),
+                                             requestHttpOptions, cancellationToken);
       HttpContent httpContent = response.GetEntity();
+#if NETSTANDARD2_0
       string contentString = await httpContent.ReadAsStringAsync();
+#else
+      string contentString = await httpContent.ReadAsStringAsync(cancellationToken);
+#endif
       JsonNode? httpContentNode = JsonNode.Parse(contentString);
       if (httpContentNode == null) {
         throw new NotSupportedException("Failed to parse response to JsonNode.");
@@ -326,7 +333,8 @@ namespace Google.GenAI {
     }
 
     internal async Task<JsonNode> PrivateFetchPredictVideosOperationAsync(
-        string operationName, string resourceName, FetchPredictOperationConfig? config) {
+        string operationName, string resourceName, FetchPredictOperationConfig? config,
+        CancellationToken cancellationToken = default) {
       FetchPredictOperationParameters parameter = new FetchPredictOperationParameters();
 
       if (!Common.IsZero(operationName)) {
@@ -363,10 +371,15 @@ namespace Google.GenAI {
       }
       HttpOptions? requestHttpOptions = config?.HttpOptions;
 
-      ApiResponse response = await this._apiClient.RequestAsync(
-          HttpMethod.Post, path, JsonSerializer.Serialize(body), requestHttpOptions);
+      ApiResponse response =
+          await this._apiClient.RequestAsync(HttpMethod.Post, path, JsonSerializer.Serialize(body),
+                                             requestHttpOptions, cancellationToken);
       HttpContent httpContent = response.GetEntity();
+#if NETSTANDARD2_0
       string contentString = await httpContent.ReadAsStringAsync();
+#else
+      string contentString = await httpContent.ReadAsStringAsync(cancellationToken);
+#endif
       JsonNode? httpContentNode = JsonNode.Parse(contentString);
       if (httpContentNode == null) {
         throw new NotSupportedException("Failed to parse response to JsonNode.");
@@ -382,11 +395,13 @@ namespace Google.GenAI {
     /// <typeparam name="TOperation">The type of the operation.</typeparam>
     /// <param name="operation">An operation instance to get the status for.</param>
     /// <param name="config">A <see cref="GetOperationConfig"/> instance that specifies the optional
-    /// configurations.</param> <returns>A <see cref="Task{TOperation}"/> that represents the
-    /// asynchronous operation. The task result contains the updated <typeparamref
-    /// name="TOperation"/> instance with the latest status or result.</returns>
-    public async Task<TOperation> GetAsync<TOperation>(TOperation operation,
-                                                       GetOperationConfig? config)
+    /// configurations.</param> <param name="cancellationToken">A <see cref="CancellationToken"/>
+    /// that can be used to cancel the operation.</param> <returns>A <see cref="Task{TOperation}"/>
+    /// that represents the asynchronous operation. The task result contains the updated
+    /// <typeparamref name="TOperation"/> instance with the latest status or result.</returns>
+    public async Task<TOperation> GetAsync<TOperation>(
+        TOperation operation, GetOperationConfig? config,
+        CancellationToken cancellationToken = default)
         where TOperation : Operation<TOperation> {
       if (string.IsNullOrEmpty(operation.Name)) {
         throw new ArgumentException("Operation name is required.", nameof(operation));
@@ -402,11 +417,12 @@ namespace Google.GenAI {
           fetchConfig.HttpOptions = config.HttpOptions;
         }
         JsonNode response = await this.PrivateFetchPredictVideosOperationAsync(
-            operationName, resourceName, fetchConfig);
+            operationName, resourceName, fetchConfig, cancellationToken);
 
         return operation.FromApiResponse(response, true);
       } else {
-        JsonNode response = await this.PrivateGetVideosOperationAsync(operationName, config);
+        JsonNode response =
+            await this.PrivateGetVideosOperationAsync(operationName, config, cancellationToken);
         return operation.FromApiResponse(response, false);
       }
     }

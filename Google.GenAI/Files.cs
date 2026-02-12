@@ -17,6 +17,7 @@
 // Auto-generated code. Do not edit.
 
 using System;
+using System.Runtime.CompilerServices;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
@@ -147,7 +148,8 @@ namespace Google.GenAI {
       }
     }
 
-    private async Task<ListFilesResponse> PrivateListAsync(ListFilesConfig? config) {
+    private async Task<ListFilesResponse> PrivateListAsync(
+        ListFilesConfig? config, CancellationToken cancellationToken = default) {
       ListFilesParameters parameter = new ListFilesParameters();
 
       if (!Common.IsZero(config)) {
@@ -178,10 +180,15 @@ namespace Google.GenAI {
       }
       HttpOptions? requestHttpOptions = config?.HttpOptions;
 
-      ApiResponse response = await this._apiClient.RequestAsync(
-          HttpMethod.Get, path, JsonSerializer.Serialize(body), requestHttpOptions);
+      ApiResponse response =
+          await this._apiClient.RequestAsync(HttpMethod.Get, path, JsonSerializer.Serialize(body),
+                                             requestHttpOptions, cancellationToken);
       HttpContent httpContent = response.GetEntity();
+#if NETSTANDARD2_0
       string contentString = await httpContent.ReadAsStringAsync();
+#else
+      string contentString = await httpContent.ReadAsStringAsync(cancellationToken);
+#endif
       JsonNode? httpContentNode = JsonNode.Parse(contentString);
       if (httpContentNode == null) {
         throw new NotSupportedException("Failed to parse response to JsonNode.");
@@ -201,8 +208,9 @@ namespace Google.GenAI {
              throw new InvalidOperationException("Failed to deserialize Task<ListFilesResponse>.");
     }
 
-    private async Task<CreateFileResponse> PrivateCreateAsync(Google.GenAI.Types.File file,
-                                                              CreateFileConfig? config) {
+    private async Task<CreateFileResponse> PrivateCreateAsync(
+        Google.GenAI.Types.File file, CreateFileConfig? config,
+        CancellationToken cancellationToken = default) {
       CreateFileParameters parameter = new CreateFileParameters();
 
       if (!Common.IsZero(file)) {
@@ -236,10 +244,15 @@ namespace Google.GenAI {
       }
       HttpOptions? requestHttpOptions = config?.HttpOptions;
 
-      ApiResponse response = await this._apiClient.RequestAsync(
-          HttpMethod.Post, path, JsonSerializer.Serialize(body), requestHttpOptions);
+      ApiResponse response =
+          await this._apiClient.RequestAsync(HttpMethod.Post, path, JsonSerializer.Serialize(body),
+                                             requestHttpOptions, cancellationToken);
       HttpContent httpContent = response.GetEntity();
+#if NETSTANDARD2_0
       string contentString = await httpContent.ReadAsStringAsync();
+#else
+      string contentString = await httpContent.ReadAsStringAsync(cancellationToken);
+#endif
 
       if (config?.ShouldReturnHttpResponse == true) {
         var httpHeaders = response.GetHeaders();
@@ -276,7 +289,8 @@ namespace Google.GenAI {
              throw new InvalidOperationException("Failed to deserialize Task<CreateFileResponse>.");
     }
 
-    public async Task<Google.GenAI.Types.File> GetAsync(string name, GetFileConfig? config = null) {
+    public async Task<Google.GenAI.Types.File> GetAsync(
+        string name, GetFileConfig? config = null, CancellationToken cancellationToken = default) {
       GetFileParameters parameter = new GetFileParameters();
 
       if (!Common.IsZero(name)) {
@@ -310,10 +324,15 @@ namespace Google.GenAI {
       }
       HttpOptions? requestHttpOptions = config?.HttpOptions;
 
-      ApiResponse response = await this._apiClient.RequestAsync(
-          HttpMethod.Get, path, JsonSerializer.Serialize(body), requestHttpOptions);
+      ApiResponse response =
+          await this._apiClient.RequestAsync(HttpMethod.Get, path, JsonSerializer.Serialize(body),
+                                             requestHttpOptions, cancellationToken);
       HttpContent httpContent = response.GetEntity();
+#if NETSTANDARD2_0
       string contentString = await httpContent.ReadAsStringAsync();
+#else
+      string contentString = await httpContent.ReadAsStringAsync(cancellationToken);
+#endif
       JsonNode? httpContentNode = JsonNode.Parse(contentString);
       if (httpContentNode == null) {
         throw new NotSupportedException("Failed to parse response to JsonNode.");
@@ -334,8 +353,9 @@ namespace Google.GenAI {
                  "Failed to deserialize Task<Google.GenAI.Types.File>.");
     }
 
-    public async Task<DeleteFileResponse> DeleteAsync(string name,
-                                                      DeleteFileConfig? config = null) {
+    public async Task<DeleteFileResponse> DeleteAsync(
+        string name, DeleteFileConfig? config = null,
+        CancellationToken cancellationToken = default) {
       DeleteFileParameters parameter = new DeleteFileParameters();
 
       if (!Common.IsZero(name)) {
@@ -370,9 +390,14 @@ namespace Google.GenAI {
       HttpOptions? requestHttpOptions = config?.HttpOptions;
 
       ApiResponse response = await this._apiClient.RequestAsync(
-          HttpMethod.Delete, path, JsonSerializer.Serialize(body), requestHttpOptions);
+          HttpMethod.Delete, path, JsonSerializer.Serialize(body), requestHttpOptions,
+          cancellationToken);
       HttpContent httpContent = response.GetEntity();
+#if NETSTANDARD2_0
       string contentString = await httpContent.ReadAsStringAsync();
+#else
+      string contentString = await httpContent.ReadAsStringAsync(cancellationToken);
+#endif
       JsonNode? httpContentNode = JsonNode.Parse(contentString);
       if (httpContentNode == null) {
         throw new NotSupportedException("Failed to parse response to JsonNode.");
@@ -393,12 +418,12 @@ namespace Google.GenAI {
     }
 
     public async Task<Pager<Google.GenAI.Types.File, ListFilesConfig, ListFilesResponse>> ListAsync(
-        ListFilesConfig? config = null) {
+        ListFilesConfig? config = null, CancellationToken cancellationToken = default) {
       config ??= new ListFilesConfig();
-      var initialResponse = await PrivateListAsync(config);
+      var initialResponse = await PrivateListAsync(config, cancellationToken);
 
       return new Pager<Google.GenAI.Types.File, ListFilesConfig, ListFilesResponse>(
-          requestFunc: async cfg => await PrivateListAsync(cfg),
+          requestFunc: async cfg => await PrivateListAsync(cfg, cancellationToken),
           extractItems: response => response.Files,
           extractNextPageToken: response => response.NextPageToken,
           extractHttpResponse: response => response.SdkHttpResponse,
@@ -413,11 +438,13 @@ namespace Google.GenAI {
     /// </summary>
     /// <param name="filePath">The path to the file to upload.</param>
     /// <param name="config">A <see cref="UploadFileConfig"/> instance that specifies the optional
-    /// configurations.</param> <returns>A <see cref="Task{Google.GenAI.Types.File}"/> that
+    /// configurations.</param> <param name="cancellationToken">A <see cref="CancellationToken"/> to
+    /// cancel the operation.</param> <returns>A <see cref="Task{Google.GenAI.Types.File}"/> that
     /// represents the asynchronous operation. The task result contains the uploaded <see
     /// cref="Google.GenAI.Types.File"/> metadata.</returns>
-    public async Task<Google.GenAI.Types.File> UploadAsync(string filePath,
-                                                           UploadFileConfig? config = null) {
+    public async Task<Google.GenAI.Types.File> UploadAsync(
+        string filePath, UploadFileConfig? config = null,
+        CancellationToken cancellationToken = default) {
       if (this._apiClient.VertexAI) {
         throw new NotSupportedException(
             "This method is only supported in the Gemini Developer API client.");
@@ -426,7 +453,8 @@ namespace Google.GenAI {
       using var stream = fileInfo.OpenRead();
       string mimeType = MimeTypes.GetMimeType(Path.GetExtension(filePath));
 
-      return await UploadAsync(stream, fileInfo.Length, fileInfo.Name, mimeType, config);
+      return await UploadAsync(stream, fileInfo.Length, fileInfo.Name, mimeType, config,
+                               cancellationToken);
     }
 
     /// <summary>
@@ -435,17 +463,19 @@ namespace Google.GenAI {
     /// <param name="bytes">The file content as a byte array.</param>
     /// <param name="fileName">Optional file name to use.</param>
     /// <param name="config">A <see cref="UploadFileConfig"/> instance that specifies the optional
-    /// configurations.</param> <returns>A <see cref="Task{Google.GenAI.Types.File}"/> that
+    /// configurations.</param> <param name="cancellationToken">A <see cref="CancellationToken"/> to
+    /// cancel the operation.</param> <returns>A <see cref="Task{Google.GenAI.Types.File}"/> that
     /// represents the asynchronous operation. The task result contains the uploaded <see
     /// cref="Google.GenAI.Types.File"/> metadata.</returns>
-    public async Task<Google.GenAI.Types.File> UploadAsync(byte[] bytes, string? fileName = null,
-                                                           UploadFileConfig? config = null) {
+    public async Task<Google.GenAI.Types.File> UploadAsync(
+        byte[] bytes, string? fileName = null, UploadFileConfig? config = null,
+        CancellationToken cancellationToken = default) {
       if (this._apiClient.VertexAI) {
         throw new NotSupportedException(
             "This method is only supported in the Gemini Developer API client.");
       }
       using var stream = new MemoryStream(bytes);
-      return await UploadAsync(stream, bytes.Length, fileName, null, config);
+      return await UploadAsync(stream, bytes.Length, fileName, null, config, cancellationToken);
     }
 
     /// <summary>
@@ -456,19 +486,22 @@ namespace Google.GenAI {
     /// <param name="fileName">Optional file name to use.</param>
     /// <param name="mimeType">Optional MIME type. If not provided, defaults to
     /// application/octet-stream.</param> <param name="config">A <see cref="UploadFileConfig"/>
-    /// instance that specifies the optional configurations.</param> <returns>A <see
-    /// cref="Task{Google.GenAI.Types.File}"/> that represents the asynchronous operation. The task
-    /// result contains the uploaded <see cref="Google.GenAI.Types.File"/> metadata.</returns>
-    public async Task<Google.GenAI.Types.File> UploadAsync(Stream stream, long size,
-                                                           string? fileName = null,
-                                                           string? mimeType = null,
-                                                           UploadFileConfig? config = null) {
+    /// instance that specifies the optional configurations.</param> <param
+    /// name="cancellationToken">A <see cref="CancellationToken"/> to cancel the operation.</param>
+    /// <returns>A <see cref="Task{Google.GenAI.Types.File}"/> that represents the asynchronous
+    /// operation. The task result contains the uploaded <see cref="Google.GenAI.Types.File"/>
+    /// metadata.</returns>
+    public async Task<Google.GenAI.Types.File> UploadAsync(
+        Stream stream, long size, string? fileName = null, string? mimeType = null,
+        UploadFileConfig? config = null, CancellationToken cancellationToken = default) {
       if (this._apiClient.VertexAI) {
         throw new NotSupportedException(
             "This method is only supported in the Gemini Developer API client.");
       }
-      string uploadUrl = await CreateFileInApiAsync(config, mimeType, fileName, size);
-      HttpContent responseContent = await _uploadClient.UploadAsync(uploadUrl, stream, size);
+      string uploadUrl =
+          await CreateFileInApiAsync(config, mimeType, fileName, size, cancellationToken);
+      HttpContent responseContent =
+          await _uploadClient.UploadAsync(uploadUrl, stream, size, cancellationToken);
       return await FileFromUploadResponseBodyAsync(responseContent);
     }
 
@@ -478,16 +511,18 @@ namespace Google.GenAI {
     /// </summary>
     /// <param name="fileName">The name of the file to download (e.g., "files/abc123" or
     /// "abc123").</param> <param name="config">A <see cref="DownloadFileConfig"/> instance that
-    /// specifies the optional configurations.</param> <returns>A <see cref="Task{Stream}"/> that
-    /// represents the asynchronous operation. The task result contains a <see cref="Stream"/> with
-    /// the file data.</returns>
-    public async Task<Stream> DownloadAsync(string fileName, DownloadFileConfig? config = null) {
+    /// specifies the optional configurations.</param> <param name="cancellationToken">A <see
+    /// cref="CancellationToken"/> to cancel the operation.</param> <returns>A <see
+    /// cref="Task{Stream}"/> that represents the asynchronous operation. The task result contains a
+    /// <see cref="Stream"/> with the file data.</returns>
+    public async Task<Stream> DownloadAsync(string fileName, DownloadFileConfig? config = null,
+                                            CancellationToken cancellationToken = default) {
       if (this._apiClient.VertexAI) {
         throw new NotSupportedException(
             "This method is only supported in the Gemini Developer API client.");
       }
       string extractedFileName = Transformers.TFileName(fileName);
-      return await DownloadStreamAsync(extractedFileName, config);
+      return await DownloadStreamAsync(extractedFileName, config, cancellationToken);
     }
 
     /// <summary>
@@ -496,11 +531,13 @@ namespace Google.GenAI {
     /// </summary>
     /// <param name="file">The <see cref="Google.GenAI.Types.File"/> object to download.</param>
     /// <param name="config">A <see cref="DownloadFileConfig"/> instance that specifies the optional
-    /// configurations.</param> <returns>A <see cref="Task{Stream}"/> that represents the
+    /// configurations.</param> <param name="cancellationToken">A <see cref="CancellationToken"/> to
+    /// cancel the operation.</param> <returns>A <see cref="Task{Stream}"/> that represents the
     /// asynchronous operation. The task result contains a <see cref="Stream"/> with the file
     /// data.</returns>
     public async Task<Stream> DownloadAsync(Google.GenAI.Types.File file,
-                                            DownloadFileConfig? config = null) {
+                                            DownloadFileConfig? config = null,
+                                            CancellationToken cancellationToken = default) {
       if (this._apiClient.VertexAI) {
         throw new NotSupportedException(
             "This method is only supported in the Gemini Developer API client.");
@@ -508,7 +545,7 @@ namespace Google.GenAI {
       if (string.IsNullOrEmpty(file.Name))
         throw new ArgumentException("Google.GenAI.Types.File.Name is required", nameof(file));
 
-      return await DownloadAsync(file.Name, config);
+      return await DownloadAsync(file.Name, config, cancellationToken);
     }
 
     /// <summary>
@@ -517,11 +554,13 @@ namespace Google.GenAI {
     /// </summary>
     /// <param name="file">The <see cref="Google.GenAI.Types.Video"/> object to download.</param>
     /// <param name="config">A <see cref="DownloadFileConfig"/> instance that specifies the optional
-    /// configurations.</param> <returns>A <see cref="Task{Stream}"/> that represents the
+    /// configurations.</param> <param name="cancellationToken">A <see cref="CancellationToken"/> to
+    /// cancel the operation.</param> <returns>A <see cref="Task{Stream}"/> that represents the
     /// asynchronous operation. The task result contains a <see cref="Stream"/> with the file
     /// data.</returns>
     public async Task<Stream> DownloadAsync(Google.GenAI.Types.Video video,
-                                            DownloadFileConfig? config = null) {
+                                            DownloadFileConfig? config = null,
+                                            CancellationToken cancellationToken = default) {
       if (this._apiClient.VertexAI) {
         throw new NotSupportedException(
             "This method is only supported in the Gemini Developer API client.");
@@ -529,7 +568,7 @@ namespace Google.GenAI {
       if (string.IsNullOrEmpty(video.Uri))
         throw new ArgumentException("Google.GenAI.Types.Video.Uri is required", nameof(video));
 
-      return await DownloadAsync(video.Uri, config);
+      return await DownloadAsync(video.Uri, config, cancellationToken);
     }
 
     /// <summary>
@@ -538,11 +577,13 @@ namespace Google.GenAI {
     /// </summary>
     /// <param name="file">The <see cref="Google.GenAI.Types.GeneratedVideo"/> object to
     /// download.</param> <param name="config">A <see cref="DownloadFileConfig"/> instance that
-    /// specifies the optional configurations.</param> <returns>A <see cref="Task{Stream}"/> that
-    /// represents the asynchronous operation. The task result contains a <see cref="Stream"/> with
-    /// the file data.</returns>
+    /// specifies the optional configurations.</param> <param name="cancellationToken">A <see
+    /// cref="CancellationToken"/> to cancel the operation.</param> <returns>A <see
+    /// cref="Task{Stream}"/> that represents the asynchronous operation. The task result contains a
+    /// <see cref="Stream"/> with the file data.</returns>
     public async Task<Stream> DownloadAsync(Google.GenAI.Types.GeneratedVideo generatedVideo,
-                                            DownloadFileConfig? config = null) {
+                                            DownloadFileConfig? config = null,
+                                            CancellationToken cancellationToken = default) {
       if (this._apiClient.VertexAI) {
         throw new NotSupportedException(
             "This method is only supported in the Gemini Developer API client.");
@@ -550,7 +591,7 @@ namespace Google.GenAI {
       if (generatedVideo.Video == null)
         throw new ArgumentException("Google.GenAI.Types.Video is empty", nameof(generatedVideo));
 
-      return await DownloadAsync(generatedVideo.Video, config);
+      return await DownloadAsync(generatedVideo.Video, config, cancellationToken);
     }
 
     /// <summary>
@@ -559,20 +600,26 @@ namespace Google.GenAI {
     /// <param name="fileName">The name of the file to download (e.g., "files/abc123" or
     /// "abc123").</param> <param name="outputPath">The path where the file should be saved.</param>
     /// <param name="config">A <see cref="DownloadFileConfig"/> instance that specifies the optional
-    /// configurations.</param> <returns>A <see cref="Task"/> that represents the asynchronous
+    /// configurations.</param> <param name="cancellationToken">A <see cref="CancellationToken"/> to
+    /// cancel the operation.</param> <returns>A <see cref="Task"/> that represents the asynchronous
     /// operation.</returns>
     public async Task DownloadToFileAsync(string fileName, string outputPath,
-                                          DownloadFileConfig? config = null) {
+                                          DownloadFileConfig? config = null,
+                                          CancellationToken cancellationToken = default) {
       if (this._apiClient.VertexAI) {
         throw new NotSupportedException(
             "This method is only supported in the Gemini Developer API client.");
       }
-      using var stream = await DownloadAsync(fileName, config);
+      using var stream = await DownloadAsync(fileName, config, cancellationToken);
       using var fileStream =
           new FileStream(outputPath, FileMode.Create, FileAccess.Write, FileShare.None,
                          bufferSize: UploadClient.DEFAULT_CHUNK_SIZE, useAsync: true);
 
-      await stream.CopyToAsync(fileStream);
+#if NETSTANDARD2_0
+      await stream.CopyToAsync(fileStream, bufferSize: 81920, cancellationToken);
+#else
+      await stream.CopyToAsync(fileStream, cancellationToken);
+#endif
     }
 
     /// <summary>
@@ -581,10 +628,12 @@ namespace Google.GenAI {
     /// <param name="file">The <see cref="File"/> object to download.</param>
     /// <param name="outputPath">The path where the file should be saved.</param>
     /// <param name="config">A <see cref="DownloadFileConfig"/> instance that specifies the optional
-    /// configurations.</param> <returns>A <see cref="Task"/> that represents the asynchronous
+    /// configurations.</param> <param name="cancellationToken">A <see cref="CancellationToken"/> to
+    /// cancel the operation.</param> <returns>A <see cref="Task"/> that represents the asynchronous
     /// operation.</returns>
     public async Task DownloadToFileAsync(Google.GenAI.Types.File file, string outputPath,
-                                          DownloadFileConfig? config = null) {
+                                          DownloadFileConfig? config = null,
+                                          CancellationToken cancellationToken = default) {
       if (this._apiClient.VertexAI) {
         throw new NotSupportedException(
             "This method is only supported in the Gemini Developer API client.");
@@ -592,7 +641,7 @@ namespace Google.GenAI {
       if (string.IsNullOrEmpty(file.Name))
         throw new ArgumentException("Google.GenAI.Types.File.Name is required", nameof(file));
 
-      await DownloadToFileAsync(file.Name, outputPath, config);
+      await DownloadToFileAsync(file.Name, outputPath, config, cancellationToken);
     }
 
     /// <summary>
@@ -601,10 +650,12 @@ namespace Google.GenAI {
     /// <param name="file">The <see cref="GeneratedVideo"/> object to download.</param>
     /// <param name="outputPath">The path where the Video should be saved.</param>
     /// <param name="config">A <see cref="DownloadFileConfig"/> instance that specifies the optional
-    /// configurations.</param> <returns>A <see cref="Task"/> that represents the asynchronous
+    /// configurations.</param> <param name="cancellationToken">A <see cref="CancellationToken"/> to
+    /// cancel the operation.</param> <returns>A <see cref="Task"/> that represents the asynchronous
     /// operation.</returns>
     public async Task DownloadToFileAsync(Google.GenAI.Types.GeneratedVideo generatedVideo,
-                                          string outputPath, DownloadFileConfig? config = null) {
+                                          string outputPath, DownloadFileConfig? config = null,
+                                          CancellationToken cancellationToken = default) {
       if (this._apiClient.VertexAI) {
         throw new NotSupportedException(
             "This method is only supported in the Gemini Developer API client.");
@@ -612,7 +663,7 @@ namespace Google.GenAI {
       if (generatedVideo.Video == null)
         throw new ArgumentException("Google.GenAI.Types.Video is empty", nameof(generatedVideo));
 
-      await DownloadToFileAsync(generatedVideo.Video, outputPath, config);
+      await DownloadToFileAsync(generatedVideo.Video, outputPath, config, cancellationToken);
     }
 
     /// <summary>
@@ -621,10 +672,12 @@ namespace Google.GenAI {
     /// <param name="file">The <see cref="Video"/> object to download.</param>
     /// <param name="outputPath">The path where the Video should be saved.</param>
     /// <param name="config">A <see cref="DownloadFileConfig"/> instance that specifies the optional
-    /// configurations.</param> <returns>A <see cref="Task"/> that represents the asynchronous
+    /// configurations.</param> <param name="cancellationToken">A <see cref="CancellationToken"/> to
+    /// cancel the operation.</param> <returns>A <see cref="Task"/> that represents the asynchronous
     /// operation.</returns>
     public async Task DownloadToFileAsync(Google.GenAI.Types.Video video, string outputPath,
-                                          DownloadFileConfig? config = null) {
+                                          DownloadFileConfig? config = null,
+                                          CancellationToken cancellationToken = default) {
       if (this._apiClient.VertexAI) {
         throw new NotSupportedException(
             "This method is only supported in the Gemini Developer API client.");
@@ -632,7 +685,7 @@ namespace Google.GenAI {
       if (string.IsNullOrEmpty(video.Uri))
         throw new ArgumentException("Google.GenAI.Types.Video.Uri is required", nameof(video));
 
-      await DownloadToFileAsync(video.Uri, outputPath, config);
+      await DownloadToFileAsync(video.Uri, outputPath, config, cancellationToken);
     }
 
     private async Task<Google.GenAI.Types.File> FileFromUploadResponseBodyAsync(
@@ -649,7 +702,8 @@ namespace Google.GenAI {
     }
 
     private async Task<string> CreateFileInApiAsync(UploadFileConfig? config, string? mimeType,
-                                                    string? fileName, long size) {
+                                                    string? fileName, long size,
+                                                    CancellationToken cancellationToken = default) {
       var fileBuilder = new Google.GenAI.Types.File();
 
       if (config != null) {
@@ -671,7 +725,8 @@ namespace Google.GenAI {
       var createFileConfig = new CreateFileConfig { HttpOptions = createFileHttpOptions,
                                                     ShouldReturnHttpResponse = true };
 
-      var createFileResponse = await PrivateCreateAsync(fileBuilder, createFileConfig);
+      var createFileResponse =
+          await PrivateCreateAsync(fileBuilder, createFileConfig, cancellationToken);
 
       string errorMessage = "Upload URL not found in create file response";
       if (createFileResponse.SdkHttpResponse?.Headers == null) {
@@ -685,10 +740,16 @@ namespace Google.GenAI {
     return uploadUrl;
     }
 
-    private async Task<Stream> DownloadStreamAsync(string fileName, DownloadFileConfig? config) {
+    private async Task<Stream> DownloadStreamAsync(string fileName, DownloadFileConfig? config,
+                                                   CancellationToken cancellationToken = default) {
       string path = $"files/{fileName}:download?alt=media";
-      var response = await _apiClient.RequestAsync(HttpMethod.Get, path, "", config?.HttpOptions);
+      var response = await _apiClient.RequestAsync(HttpMethod.Get, path, "", config?.HttpOptions,
+                                                   cancellationToken);
+#if NETSTANDARD2_0
       return await response.GetEntity().ReadAsStreamAsync();
+#else
+      return await response.GetEntity().ReadAsStreamAsync(cancellationToken);
+#endif
     }
   }
 }

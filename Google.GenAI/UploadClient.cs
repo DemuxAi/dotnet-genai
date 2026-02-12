@@ -93,16 +93,18 @@ namespace Google.GenAI
     /// <summary>
     /// Uploads data from a byte array.
     /// </summary>
-    public async Task<HttpContent> UploadAsync(string uploadUrl, byte[] bytes)
+    public async Task<HttpContent> UploadAsync(
+        string uploadUrl, byte[] bytes, CancellationToken cancellationToken = default)
     {
       using var stream = new MemoryStream(bytes);
-      return await UploadAsync(uploadUrl, stream, bytes.Length);
+      return await UploadAsync(uploadUrl, stream, bytes.Length, cancellationToken);
     }
 
     /// <summary>
     /// Uploads data from a stream using chunked resumable protocol.
     /// </summary>
-    public async Task<HttpContent> UploadAsync(string uploadUrl, Stream inputStream, long size)
+    public async Task<HttpContent> UploadAsync(
+        string uploadUrl, Stream inputStream, long size, CancellationToken cancellationToken = default)
     {
       string uploadCommand = "upload";
       byte[] buffer = new byte[_chunkSize];
@@ -110,9 +112,9 @@ namespace Google.GenAI
       long offset = 0;
 
       // Upload chunks
-      while ((bytesRead = await inputStream.ReadAsync(buffer, 0, _chunkSize)) == _chunkSize)
+      while ((bytesRead = await inputStream.ReadAsync(buffer, 0, _chunkSize, cancellationToken)) == _chunkSize)
       {
-        var uploadResponse = await UploadChunkAsync(uploadUrl, buffer, offset, uploadCommand);
+        var uploadResponse = await UploadChunkAsync(uploadUrl, buffer, offset, uploadCommand, cancellationToken);
 
         if (uploadResponse.UploadStatus != "active")
         {
@@ -128,7 +130,7 @@ namespace Google.GenAI
       Array.Copy(buffer, finalBuffer, bytesRead);
       uploadCommand = "upload, finalize";
 
-      var finalResponse = await UploadChunkAsync(uploadUrl, finalBuffer, offset, uploadCommand);
+      var finalResponse = await UploadChunkAsync(uploadUrl, finalBuffer, offset, uploadCommand, cancellationToken);
 
       if (finalResponse.UploadStatus != "final")
       {
@@ -143,7 +145,8 @@ namespace Google.GenAI
         string uploadUrl,
         byte[] chunk,
         long offset,
-        string uploadCommand)
+        string uploadCommand,
+        CancellationToken cancellationToken)
     {
       var headers = new Dictionary<string, string>
       {
@@ -159,7 +162,8 @@ namespace Google.GenAI
             HttpMethod.Post,
             uploadUrl,
             chunk,
-            httpOptions);
+            httpOptions,
+            cancellationToken);
 
         if (response.GetHeaders().TryGetValues("X-Goog-Upload-Status", out var values))
         {
@@ -171,7 +175,7 @@ namespace Google.GenAI
         }
 
         int delayMs = INITIAL_RETRY_DELAY_MS * (int)Math.Pow(DELAY_MULTIPLIER, retryCount);
-        await Task.Delay(delayMs);
+        await Task.Delay(delayMs, cancellationToken);
       }
 
       throw new InvalidOperationException(

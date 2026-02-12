@@ -17,6 +17,7 @@
 // Auto-generated code. Do not edit.
 
 using System;
+using System.Runtime.CompilerServices;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
@@ -4092,7 +4093,8 @@ namespace Google.GenAI {
     }
 
     private async Task<GenerateContentResponse> PrivateGenerateContentAsync(
-        string model, List<Content> contents, GenerateContentConfig? config) {
+        string model, List<Content> contents, GenerateContentConfig? config,
+        CancellationToken cancellationToken = default) {
       GenerateContentParameters parameter = new GenerateContentParameters();
 
       if (!Common.IsZero(model)) {
@@ -4131,10 +4133,15 @@ namespace Google.GenAI {
       }
       HttpOptions? requestHttpOptions = config?.HttpOptions;
 
-      ApiResponse response = await this._apiClient.RequestAsync(
-          HttpMethod.Post, path, JsonSerializer.Serialize(body), requestHttpOptions);
+      ApiResponse response =
+          await this._apiClient.RequestAsync(HttpMethod.Post, path, JsonSerializer.Serialize(body),
+                                             requestHttpOptions, cancellationToken);
       HttpContent httpContent = response.GetEntity();
+#if NETSTANDARD2_0
       string contentString = await httpContent.ReadAsStringAsync();
+#else
+      string contentString = await httpContent.ReadAsStringAsync(cancellationToken);
+#endif
       JsonNode? httpContentNode = JsonNode.Parse(contentString);
       if (httpContentNode == null) {
         throw new NotSupportedException("Failed to parse response to JsonNode.");
@@ -4157,7 +4164,8 @@ namespace Google.GenAI {
     }
 
     private async IAsyncEnumerable<GenerateContentResponse> PrivateGenerateContentStreamAsync(
-        string model, List<Content> contents, GenerateContentConfig? config) {
+        string model, List<Content> contents, GenerateContentConfig? config,
+        [EnumeratorCancellation] CancellationToken cancellationToken = default) {
       GenerateContentParameters parameter = new GenerateContentParameters();
 
       if (!Common.IsZero(model)) {
@@ -4197,9 +4205,13 @@ namespace Google.GenAI {
       HttpOptions? requestHttpOptions = config?.HttpOptions;
 
       await foreach (ApiResponse apiResponse in this._apiClient.RequestStreamAsync(
-                         HttpMethod.Post, path, JsonSerializer.Serialize(body),
-                         requestHttpOptions)) {
+                         HttpMethod.Post, path, JsonSerializer.Serialize(body), requestHttpOptions,
+                         cancellationToken)) {
+#if NETSTANDARD2_0
         string chunkJson = await apiResponse.GetEntity().ReadAsStringAsync();
+#else
+        string chunkJson = await apiResponse.GetEntity().ReadAsStringAsync(cancellationToken);
+#endif
         JsonNode? chunkNode = JsonNode.Parse(chunkJson);
         if (chunkNode == null)
           continue;
@@ -4224,12 +4236,14 @@ namespace Google.GenAI {
     /// <param name="contents">A <see cref="List{Content}"/> to calculate embeddings for.</param>
     /// <param name="config">An <see cref="EmbedContentConfig"/> instance that specifies the
     /// optional configurations.</param>
-    /// <returns>A <see cref="Task{EmbedContentResponse}"/> that represents the asynchronous
-    /// operation. The task result contains a <see cref="EmbedContentResponse"/> instance with
-    /// embeddings and other metadata.</returns>
+    /// <param name="cancellationToken">A <see cref="CancellationToken"/> to cancel the
+    /// operation.</param> <returns>A <see cref="Task{EmbedContentResponse}"/> that represents the
+    /// asynchronous operation. The task result contains a <see cref="EmbedContentResponse"/>
+    /// instance with embeddings and other metadata.</returns>
 
-    public async Task<EmbedContentResponse> EmbedContentAsync(string model, List<Content> contents,
-                                                              EmbedContentConfig? config = null) {
+    public async Task<EmbedContentResponse> EmbedContentAsync(
+        string model, List<Content> contents, EmbedContentConfig? config = null,
+        CancellationToken cancellationToken = default) {
       EmbedContentParameters parameter = new EmbedContentParameters();
 
       if (!Common.IsZero(model)) {
@@ -4268,10 +4282,15 @@ namespace Google.GenAI {
       }
       HttpOptions? requestHttpOptions = config?.HttpOptions;
 
-      ApiResponse response = await this._apiClient.RequestAsync(
-          HttpMethod.Post, path, JsonSerializer.Serialize(body), requestHttpOptions);
+      ApiResponse response =
+          await this._apiClient.RequestAsync(HttpMethod.Post, path, JsonSerializer.Serialize(body),
+                                             requestHttpOptions, cancellationToken);
       HttpContent httpContent = response.GetEntity();
+#if NETSTANDARD2_0
       string contentString = await httpContent.ReadAsStringAsync();
+#else
+      string contentString = await httpContent.ReadAsStringAsync(cancellationToken);
+#endif
       JsonNode? httpContentNode = JsonNode.Parse(contentString);
       if (httpContentNode == null) {
         throw new NotSupportedException("Failed to parse response to JsonNode.");
@@ -4294,7 +4313,8 @@ namespace Google.GenAI {
     }
 
     private async Task<GenerateImagesResponse> PrivateGenerateImagesAsync(
-        string model, string prompt, GenerateImagesConfig? config) {
+        string model, string prompt, GenerateImagesConfig? config,
+        CancellationToken cancellationToken = default) {
       GenerateImagesParameters parameter = new GenerateImagesParameters();
 
       if (!Common.IsZero(model)) {
@@ -4333,10 +4353,15 @@ namespace Google.GenAI {
       }
       HttpOptions? requestHttpOptions = config?.HttpOptions;
 
-      ApiResponse response = await this._apiClient.RequestAsync(
-          HttpMethod.Post, path, JsonSerializer.Serialize(body), requestHttpOptions);
+      ApiResponse response =
+          await this._apiClient.RequestAsync(HttpMethod.Post, path, JsonSerializer.Serialize(body),
+                                             requestHttpOptions, cancellationToken);
       HttpContent httpContent = response.GetEntity();
+#if NETSTANDARD2_0
       string contentString = await httpContent.ReadAsStringAsync();
+#else
+      string contentString = await httpContent.ReadAsStringAsync(cancellationToken);
+#endif
       JsonNode? httpContentNode = JsonNode.Parse(contentString);
       if (httpContentNode == null) {
         throw new NotSupportedException("Failed to parse response to JsonNode.");
@@ -4360,7 +4385,7 @@ namespace Google.GenAI {
 
     private async Task<EditImageResponse> PrivateEditImageAsync(
         string model, string prompt, List<ReferenceImageAPI> referenceImages,
-        EditImageConfig? config) {
+        EditImageConfig? config, CancellationToken cancellationToken = default) {
       EditImageParameters parameter = new EditImageParameters();
 
       if (!Common.IsZero(model)) {
@@ -4400,10 +4425,15 @@ namespace Google.GenAI {
       }
       HttpOptions? requestHttpOptions = config?.HttpOptions;
 
-      ApiResponse response = await this._apiClient.RequestAsync(
-          HttpMethod.Post, path, JsonSerializer.Serialize(body), requestHttpOptions);
+      ApiResponse response =
+          await this._apiClient.RequestAsync(HttpMethod.Post, path, JsonSerializer.Serialize(body),
+                                             requestHttpOptions, cancellationToken);
       HttpContent httpContent = response.GetEntity();
+#if NETSTANDARD2_0
       string contentString = await httpContent.ReadAsStringAsync();
+#else
+      string contentString = await httpContent.ReadAsStringAsync(cancellationToken);
+#endif
       JsonNode? httpContentNode = JsonNode.Parse(contentString);
       if (httpContentNode == null) {
         throw new NotSupportedException("Failed to parse response to JsonNode.");
@@ -4424,7 +4454,8 @@ namespace Google.GenAI {
     }
 
     private async Task<UpscaleImageResponse> PrivateUpscaleImageAsync(
-        string model, Image image, string upscaleFactor, UpscaleImageAPIConfig? config) {
+        string model, Image image, string upscaleFactor, UpscaleImageAPIConfig? config,
+        CancellationToken cancellationToken = default) {
       UpscaleImageAPIParameters parameter = new UpscaleImageAPIParameters();
 
       if (!Common.IsZero(model)) {
@@ -4464,10 +4495,15 @@ namespace Google.GenAI {
       }
       HttpOptions? requestHttpOptions = config?.HttpOptions;
 
-      ApiResponse response = await this._apiClient.RequestAsync(
-          HttpMethod.Post, path, JsonSerializer.Serialize(body), requestHttpOptions);
+      ApiResponse response =
+          await this._apiClient.RequestAsync(HttpMethod.Post, path, JsonSerializer.Serialize(body),
+                                             requestHttpOptions, cancellationToken);
       HttpContent httpContent = response.GetEntity();
+#if NETSTANDARD2_0
       string contentString = await httpContent.ReadAsStringAsync();
+#else
+      string contentString = await httpContent.ReadAsStringAsync(cancellationToken);
+#endif
       JsonNode? httpContentNode = JsonNode.Parse(contentString);
       if (httpContentNode == null) {
         throw new NotSupportedException("Failed to parse response to JsonNode.");
@@ -4489,7 +4525,8 @@ namespace Google.GenAI {
     }
 
     public async Task<RecontextImageResponse> RecontextImageAsync(
-        string model, RecontextImageSource source, RecontextImageConfig? config = null) {
+        string model, RecontextImageSource source, RecontextImageConfig? config = null,
+        CancellationToken cancellationToken = default) {
       RecontextImageParameters parameter = new RecontextImageParameters();
 
       if (!Common.IsZero(model)) {
@@ -4526,10 +4563,15 @@ namespace Google.GenAI {
       }
       HttpOptions? requestHttpOptions = config?.HttpOptions;
 
-      ApiResponse response = await this._apiClient.RequestAsync(
-          HttpMethod.Post, path, JsonSerializer.Serialize(body), requestHttpOptions);
+      ApiResponse response =
+          await this._apiClient.RequestAsync(HttpMethod.Post, path, JsonSerializer.Serialize(body),
+                                             requestHttpOptions, cancellationToken);
       HttpContent httpContent = response.GetEntity();
+#if NETSTANDARD2_0
       string contentString = await httpContent.ReadAsStringAsync();
+#else
+      string contentString = await httpContent.ReadAsStringAsync(cancellationToken);
+#endif
       JsonNode? httpContentNode = JsonNode.Parse(contentString);
       if (httpContentNode == null) {
         throw new NotSupportedException("Failed to parse response to JsonNode.");
@@ -4550,9 +4592,9 @@ namespace Google.GenAI {
                  "Failed to deserialize Task<RecontextImageResponse>.");
     }
 
-    public async Task<SegmentImageResponse> SegmentImageAsync(string model,
-                                                              SegmentImageSource source,
-                                                              SegmentImageConfig? config = null) {
+    public async Task<SegmentImageResponse> SegmentImageAsync(
+        string model, SegmentImageSource source, SegmentImageConfig? config = null,
+        CancellationToken cancellationToken = default) {
       SegmentImageParameters parameter = new SegmentImageParameters();
 
       if (!Common.IsZero(model)) {
@@ -4589,10 +4631,15 @@ namespace Google.GenAI {
       }
       HttpOptions? requestHttpOptions = config?.HttpOptions;
 
-      ApiResponse response = await this._apiClient.RequestAsync(
-          HttpMethod.Post, path, JsonSerializer.Serialize(body), requestHttpOptions);
+      ApiResponse response =
+          await this._apiClient.RequestAsync(HttpMethod.Post, path, JsonSerializer.Serialize(body),
+                                             requestHttpOptions, cancellationToken);
       HttpContent httpContent = response.GetEntity();
+#if NETSTANDARD2_0
       string contentString = await httpContent.ReadAsStringAsync();
+#else
+      string contentString = await httpContent.ReadAsStringAsync(cancellationToken);
+#endif
       JsonNode? httpContentNode = JsonNode.Parse(contentString);
       if (httpContentNode == null) {
         throw new NotSupportedException("Failed to parse response to JsonNode.");
@@ -4617,7 +4664,8 @@ namespace Google.GenAI {
     /// Retrieves a specific model resource by its name.
     /// </summary>
 
-    public async Task<Model> GetAsync(string model, GetModelConfig? config = null) {
+    public async Task<Model> GetAsync(string model, GetModelConfig? config = null,
+                                      CancellationToken cancellationToken = default) {
       GetModelParameters parameter = new GetModelParameters();
 
       if (!Common.IsZero(model)) {
@@ -4653,10 +4701,15 @@ namespace Google.GenAI {
       }
       HttpOptions? requestHttpOptions = config?.HttpOptions;
 
-      ApiResponse response = await this._apiClient.RequestAsync(
-          HttpMethod.Get, path, JsonSerializer.Serialize(body), requestHttpOptions);
+      ApiResponse response =
+          await this._apiClient.RequestAsync(HttpMethod.Get, path, JsonSerializer.Serialize(body),
+                                             requestHttpOptions, cancellationToken);
       HttpContent httpContent = response.GetEntity();
+#if NETSTANDARD2_0
       string contentString = await httpContent.ReadAsStringAsync();
+#else
+      string contentString = await httpContent.ReadAsStringAsync(cancellationToken);
+#endif
       JsonNode? httpContentNode = JsonNode.Parse(contentString);
       if (httpContentNode == null) {
         throw new NotSupportedException("Failed to parse response to JsonNode.");
@@ -4675,7 +4728,8 @@ namespace Google.GenAI {
              throw new InvalidOperationException("Failed to deserialize Task<Model>.");
     }
 
-    private async Task<ListModelsResponse> PrivateListAsync(ListModelsConfig? config) {
+    private async Task<ListModelsResponse> PrivateListAsync(
+        ListModelsConfig? config, CancellationToken cancellationToken = default) {
       ListModelsParameters parameter = new ListModelsParameters();
 
       if (!Common.IsZero(config)) {
@@ -4708,10 +4762,15 @@ namespace Google.GenAI {
       }
       HttpOptions? requestHttpOptions = config?.HttpOptions;
 
-      ApiResponse response = await this._apiClient.RequestAsync(
-          HttpMethod.Get, path, JsonSerializer.Serialize(body), requestHttpOptions);
+      ApiResponse response =
+          await this._apiClient.RequestAsync(HttpMethod.Get, path, JsonSerializer.Serialize(body),
+                                             requestHttpOptions, cancellationToken);
       HttpContent httpContent = response.GetEntity();
+#if NETSTANDARD2_0
       string contentString = await httpContent.ReadAsStringAsync();
+#else
+      string contentString = await httpContent.ReadAsStringAsync(cancellationToken);
+#endif
       JsonNode? httpContentNode = JsonNode.Parse(contentString);
       if (httpContentNode == null) {
         throw new NotSupportedException("Failed to parse response to JsonNode.");
@@ -4737,10 +4796,13 @@ namespace Google.GenAI {
     /// </summary>
     /// <param name="model">The model to update.</param>
     /// <param name="config">An <see cref="UpdateModelConfig"/> instance that specifies parameters
-    /// to update.</param> <returns>A <see cref="Task{Model}"/> that represents the asynchronous
-    /// operation. The task result contains the updated <see cref="Model"/> instance.</returns>
+    /// to update.</param> <param name="cancellationToken">A <see cref="CancellationToken"/> to
+    /// cancel the operation.</param> <returns>A <see cref="Task{Model}"/> that represents the
+    /// asynchronous operation. The task result contains the updated <see cref="Model"/>
+    /// instance.</returns>
 
-    public async Task<Model> UpdateAsync(string model, UpdateModelConfig? config = null) {
+    public async Task<Model> UpdateAsync(string model, UpdateModelConfig? config = null,
+                                         CancellationToken cancellationToken = default) {
       UpdateModelParameters parameter = new UpdateModelParameters();
 
       if (!Common.IsZero(model)) {
@@ -4777,9 +4839,14 @@ namespace Google.GenAI {
       HttpOptions? requestHttpOptions = config?.HttpOptions;
 
       ApiResponse response = await this._apiClient.RequestAsync(
-          new HttpMethod("PATCH"), path, JsonSerializer.Serialize(body), requestHttpOptions);
+          new HttpMethod("PATCH"), path, JsonSerializer.Serialize(body), requestHttpOptions,
+          cancellationToken);
       HttpContent httpContent = response.GetEntity();
+#if NETSTANDARD2_0
       string contentString = await httpContent.ReadAsStringAsync();
+#else
+      string contentString = await httpContent.ReadAsStringAsync(cancellationToken);
+#endif
       JsonNode? httpContentNode = JsonNode.Parse(contentString);
       if (httpContentNode == null) {
         throw new NotSupportedException("Failed to parse response to JsonNode.");
@@ -4802,8 +4869,9 @@ namespace Google.GenAI {
     /// Deletes a specific model resource by its name.
     /// </summary>
 
-    public async Task<DeleteModelResponse> DeleteAsync(string model,
-                                                       DeleteModelConfig? config = null) {
+    public async Task<DeleteModelResponse> DeleteAsync(
+        string model, DeleteModelConfig? config = null,
+        CancellationToken cancellationToken = default) {
       DeleteModelParameters parameter = new DeleteModelParameters();
 
       if (!Common.IsZero(model)) {
@@ -4840,9 +4908,14 @@ namespace Google.GenAI {
       HttpOptions? requestHttpOptions = config?.HttpOptions;
 
       ApiResponse response = await this._apiClient.RequestAsync(
-          HttpMethod.Delete, path, JsonSerializer.Serialize(body), requestHttpOptions);
+          HttpMethod.Delete, path, JsonSerializer.Serialize(body), requestHttpOptions,
+          cancellationToken);
       HttpContent httpContent = response.GetEntity();
+#if NETSTANDARD2_0
       string contentString = await httpContent.ReadAsStringAsync();
+#else
+      string contentString = await httpContent.ReadAsStringAsync(cancellationToken);
+#endif
       JsonNode? httpContentNode = JsonNode.Parse(contentString);
       if (httpContentNode == null) {
         throw new NotSupportedException("Failed to parse response to JsonNode.");
@@ -4871,12 +4944,14 @@ namespace Google.GenAI {
     /// <param name="contents">A <see cref="List{Content}"/> to count tokens for.</param>
     /// <param name="config">A <see cref="CountTokensConfig"/> instance that specifies the
     /// optional configurations.</param>
-    /// <returns>A <see cref="Task{CountTokensResponse}"/> that represents the asynchronous
-    /// operation. The task result contains a <see cref="CountTokensResponse"/> instance with
-    /// the total token count and other metadata.</returns>
+    /// <param name="cancellationToken">A <see cref="CancellationToken"/> to cancel the
+    /// operation.</param> <returns>A <see cref="Task{CountTokensResponse}"/> that represents the
+    /// asynchronous operation. The task result contains a <see cref="CountTokensResponse"/>
+    /// instance with the total token count and other metadata.</returns>
 
-    public async Task<CountTokensResponse> CountTokensAsync(string model, List<Content> contents,
-                                                            CountTokensConfig? config = null) {
+    public async Task<CountTokensResponse> CountTokensAsync(
+        string model, List<Content> contents, CountTokensConfig? config = null,
+        CancellationToken cancellationToken = default) {
       CountTokensParameters parameter = new CountTokensParameters();
 
       if (!Common.IsZero(model)) {
@@ -4915,10 +4990,15 @@ namespace Google.GenAI {
       }
       HttpOptions? requestHttpOptions = config?.HttpOptions;
 
-      ApiResponse response = await this._apiClient.RequestAsync(
-          HttpMethod.Post, path, JsonSerializer.Serialize(body), requestHttpOptions);
+      ApiResponse response =
+          await this._apiClient.RequestAsync(HttpMethod.Post, path, JsonSerializer.Serialize(body),
+                                             requestHttpOptions, cancellationToken);
       HttpContent httpContent = response.GetEntity();
+#if NETSTANDARD2_0
       string contentString = await httpContent.ReadAsStringAsync();
+#else
+      string contentString = await httpContent.ReadAsStringAsync(cancellationToken);
+#endif
       JsonNode? httpContentNode = JsonNode.Parse(contentString);
       if (httpContentNode == null) {
         throw new NotSupportedException("Failed to parse response to JsonNode.");
@@ -4946,13 +5026,16 @@ namespace Google.GenAI {
     /// <param name="model">The name of the GenAI model to use for token computation.</param>
     /// <param name="contents">A <see cref="List{Content}"/> to compute tokens for.</param>
     /// <param name="config">A <see cref="ComputeTokensConfig"/> instance that specifies the
-    /// optional configurations.</param> <returns>A <see cref="Task{ComputeTokensResponse}"/> that
-    /// represents the asynchronous operation. The task result contains a <see
-    /// cref="ComputeTokensResponse"/> instance with token information.</returns> <exception
-    /// cref="NotSupportedException">Thrown when called with a non-Vertex AI client.</exception>
+    /// optional configurations.</param> <param name="cancellationToken">A <see
+    /// cref="CancellationToken"/> to cancel the operation.</param> <returns>A <see
+    /// cref="Task{ComputeTokensResponse}"/> that represents the asynchronous operation. The task
+    /// result contains a <see cref="ComputeTokensResponse"/> instance with token
+    /// information.</returns> <exception cref="NotSupportedException">Thrown when called with a
+    /// non-Vertex AI client.</exception>
 
     public async Task<ComputeTokensResponse> ComputeTokensAsync(
-        string model, List<Content> contents, ComputeTokensConfig? config = null) {
+        string model, List<Content> contents, ComputeTokensConfig? config = null,
+        CancellationToken cancellationToken = default) {
       ComputeTokensParameters parameter = new ComputeTokensParameters();
 
       if (!Common.IsZero(model)) {
@@ -4989,10 +5072,15 @@ namespace Google.GenAI {
       }
       HttpOptions? requestHttpOptions = config?.HttpOptions;
 
-      ApiResponse response = await this._apiClient.RequestAsync(
-          HttpMethod.Post, path, JsonSerializer.Serialize(body), requestHttpOptions);
+      ApiResponse response =
+          await this._apiClient.RequestAsync(HttpMethod.Post, path, JsonSerializer.Serialize(body),
+                                             requestHttpOptions, cancellationToken);
       HttpContent httpContent = response.GetEntity();
+#if NETSTANDARD2_0
       string contentString = await httpContent.ReadAsStringAsync();
+#else
+      string contentString = await httpContent.ReadAsStringAsync(cancellationToken);
+#endif
       JsonNode? httpContentNode = JsonNode.Parse(contentString);
       if (httpContentNode == null) {
         throw new NotSupportedException("Failed to parse response to JsonNode.");
@@ -5015,7 +5103,7 @@ namespace Google.GenAI {
 
     private async Task<GenerateVideosOperation> PrivateGenerateVideosAsync(
         string model, string? prompt, Image? image, Video? video, GenerateVideosSource? source,
-        GenerateVideosConfig? config) {
+        GenerateVideosConfig? config, CancellationToken cancellationToken = default) {
       GenerateVideosParameters parameter = new GenerateVideosParameters();
 
       if (!Common.IsZero(model)) {
@@ -5063,10 +5151,15 @@ namespace Google.GenAI {
       }
       HttpOptions? requestHttpOptions = config?.HttpOptions;
 
-      ApiResponse response = await this._apiClient.RequestAsync(
-          HttpMethod.Post, path, JsonSerializer.Serialize(body), requestHttpOptions);
+      ApiResponse response =
+          await this._apiClient.RequestAsync(HttpMethod.Post, path, JsonSerializer.Serialize(body),
+                                             requestHttpOptions, cancellationToken);
       HttpContent httpContent = response.GetEntity();
+#if NETSTANDARD2_0
       string contentString = await httpContent.ReadAsStringAsync();
+#else
+      string contentString = await httpContent.ReadAsStringAsync(cancellationToken);
+#endif
       JsonNode? httpContentNode = JsonNode.Parse(contentString);
       if (httpContentNode == null) {
         throw new NotSupportedException("Failed to parse response to JsonNode.");
@@ -5094,13 +5187,15 @@ namespace Google.GenAI {
     /// <param name="model">The name of the GenAI model to use for generation.</param>
     /// <param name="contents">A <see cref="List{Content}"/> to send to the generative
     /// model.</param> <param name="config">A <see cref="GenerateContentConfig"/> instance that
-    /// specifies the optional configurations.</param> <returns>A <see
+    /// specifies the optional configurations.</param> <param name="cancellationToken">A <see
+    /// cref="CancellationToken"/> to cancel the operation.</param> <returns>A <see
     /// cref="Task{GenerateContentResponse}"/> that represents the asynchronous operation. The task
     /// result contains a <see cref="GenerateContentResponse"/> instance with response contents and
     /// other metadata.</returns>
     public async Task<GenerateContentResponse> GenerateContentAsync(
-        string model, List<Content> contents, GenerateContentConfig? config = null) {
-      return await PrivateGenerateContentAsync(model, contents, config);
+        string model, List<Content> contents, GenerateContentConfig? config = null,
+        CancellationToken cancellationToken = default) {
+      return await PrivateGenerateContentAsync(model, contents, config, cancellationToken);
     }
 
     /// <summary>
@@ -5109,14 +5204,16 @@ namespace Google.GenAI {
     /// <param name="model">The name of the GenAI model to use for generation.</param>
     /// <param name="contents">A <see cref="Content"/> instance to send to the generative
     /// model.</param> <param name="config">A <see cref="GenerateContentConfig"/> instance that
-    /// specifies the optional configurations.</param> <returns>A <see
+    /// specifies the optional configurations.</param> <param name="cancellationToken">A <see
+    /// cref="CancellationToken"/> to cancel the operation.</param> <returns>A <see
     /// cref="Task{GenerateContentResponse}"/> that represents the asynchronous operation. The task
     /// result contains a <see cref="GenerateContentResponse"/> instance with response contents and
     /// other metadata.</returns>
     public async Task<GenerateContentResponse> GenerateContentAsync(
-        string model, Content contents, GenerateContentConfig? config = null) {
+        string model, Content contents, GenerateContentConfig? config = null,
+        CancellationToken cancellationToken = default) {
       List<Content> contentList = Transformers.TContents(contents) ?? new List<Content>();
-      return await GenerateContentAsync(model, contentList, config);
+      return await GenerateContentAsync(model, contentList, config, cancellationToken);
     }
 
     /// <summary>
@@ -5125,14 +5222,16 @@ namespace Google.GenAI {
     /// <param name="model">The name of the GenAI model to use for generation.</param>
     /// <param name="contents">A text string to send to the generative model.</param>
     /// <param name="config">A <see cref="GenerateContentConfig"/> instance that specifies the
-    /// optional configurations.</param> <returns>A <see cref="Task{GenerateContentResponse}"/> that
-    /// represents the asynchronous operation. The task result contains a <see
-    /// cref="GenerateContentResponse"/> instance with response contents and other
-    /// metadata.</returns>
+    /// optional configurations.</param> <param name="cancellationToken">A <see
+    /// cref="CancellationToken"/> to cancel the operation.</param> <returns>A <see
+    /// cref="Task{GenerateContentResponse}"/> that represents the asynchronous operation. The task
+    /// result contains a <see cref="GenerateContentResponse"/> instance with response contents and
+    /// other metadata.</returns>
     public async Task<GenerateContentResponse> GenerateContentAsync(
-        string model, string contents, GenerateContentConfig? config = null) {
+        string model, string contents, GenerateContentConfig? config = null,
+        CancellationToken cancellationToken = default) {
       List<Content> contentList = Transformers.TContents(contents) ?? new List<Content>();
-      return await GenerateContentAsync(model, contentList, config);
+      return await GenerateContentAsync(model, contentList, config, cancellationToken);
     }
 
     /// <summary>
@@ -5141,11 +5240,14 @@ namespace Google.GenAI {
     /// <param name="model">The name of the GenAI model to use for generation.</param>
     /// <param name="contents">A <see cref="List{Content}"/> to send to the generative
     /// model.</param> <param name="config">A <see cref="GenerateContentConfig"/> instance that
-    /// specifies the optional configurations.</param> <returns>An async enumerable of <see
-    /// cref="GenerateContentResponse"/> chunks.</returns>
+    /// specifies the optional configurations.</param> <param name="cancellationToken">A <see
+    /// cref="CancellationToken"/> to cancel the operation.</param> <returns>An async enumerable of
+    /// <see cref="GenerateContentResponse"/> chunks.</returns>
     public async IAsyncEnumerable<GenerateContentResponse> GenerateContentStreamAsync(
-        string model, List<Content> contents, GenerateContentConfig? config = null) {
-      await foreach (var response in PrivateGenerateContentStreamAsync(model, contents, config)) {
+        string model, List<Content> contents, GenerateContentConfig? config = null,
+        [EnumeratorCancellation] CancellationToken cancellationToken = default) {
+      await foreach (var response in PrivateGenerateContentStreamAsync(model, contents, config,
+                                                                       cancellationToken)) {
         yield return response;
       }
     }
@@ -5156,12 +5258,15 @@ namespace Google.GenAI {
     /// <param name="model">The name of the GenAI model to use for generation.</param>
     /// <param name="contents">A <see cref="Content"/> instance to send to the generative
     /// model.</param> <param name="config">A <see cref="GenerateContentConfig"/> instance that
-    /// specifies the optional configurations.</param> <returns>An async enumerable of <see
-    /// cref="GenerateContentResponse"/> chunks.</returns>
+    /// specifies the optional configurations.</param> <param name="cancellationToken">A <see
+    /// cref="CancellationToken"/> to cancel the operation.</param> <returns>An async enumerable of
+    /// <see cref="GenerateContentResponse"/> chunks.</returns>
     public async IAsyncEnumerable<GenerateContentResponse> GenerateContentStreamAsync(
-        string model, Content contents, GenerateContentConfig? config = null) {
+        string model, Content contents, GenerateContentConfig? config = null,
+        [EnumeratorCancellation] CancellationToken cancellationToken = default) {
       List<Content> contentList = Transformers.TContents(contents) ?? new List<Content>();
-      await foreach (var response in GenerateContentStreamAsync(model, contentList, config)) {
+      await foreach (var response in GenerateContentStreamAsync(model, contentList, config,
+                                                                cancellationToken)) {
         yield return response;
       }
     }
@@ -5172,12 +5277,15 @@ namespace Google.GenAI {
     /// <param name="model">The name of the GenAI model to use for generation.</param>
     /// <param name="contents">A text string to send to the generative model.</param>
     /// <param name="config">A <see cref="GenerateContentConfig"/> instance that specifies the
-    /// optional configurations.</param> <returns>An async enumerable of <see
-    /// cref="GenerateContentResponse"/> chunks.</returns>
+    /// optional configurations.</param> <param name="cancellationToken">A <see
+    /// cref="CancellationToken"/> to cancel the operation.</param> <returns>An async enumerable of
+    /// <see cref="GenerateContentResponse"/> chunks.</returns>
     public async IAsyncEnumerable<GenerateContentResponse> GenerateContentStreamAsync(
-        string model, string contents, GenerateContentConfig? config = null) {
+        string model, string contents, GenerateContentConfig? config = null,
+        [EnumeratorCancellation] CancellationToken cancellationToken = default) {
       List<Content> contentList = Transformers.TContents(contents) ?? new List<Content>();
-      await foreach (var response in GenerateContentStreamAsync(model, contentList, config)) {
+      await foreach (var response in GenerateContentStreamAsync(model, contentList, config,
+                                                                cancellationToken)) {
         yield return response;
       }
     }
@@ -5188,13 +5296,16 @@ namespace Google.GenAI {
     /// <param name="model">The name of the GenAI model to use for generation.</param>
     /// <param name="prompt">A text prompt string to send to the generative model.</param>
     /// <param name="config">A <see cref="GenerateImagesConfig"/> instance that specifies the
-    /// optional configurations.</param> <returns>A <see cref="Task{GenerateImagesResponse}"/> that
-    /// represents the asynchronous operation. The task result contains a <see
-    /// cref="GenerateImagesResponse"/> instance with response contents and other
-    /// metadata.</returns>
+    /// optional configurations.</param> <param name="cancellationToken">A <see
+    /// cref="CancellationToken"/> to cancel the operation.</param> <returns>A <see
+    /// cref="Task{GenerateImagesResponse}"/> that represents the asynchronous operation. The task
+    /// result contains a <see cref="GenerateImagesResponse"/> instance with response contents and
+    /// other metadata.</returns>
     public async Task<GenerateImagesResponse> GenerateImagesAsync(
-        string model, string prompt, GenerateImagesConfig? config = null) {
-      GenerateImagesResponse apiResponse = await PrivateGenerateImagesAsync(model, prompt, config);
+        string model, string prompt, GenerateImagesConfig? config = null,
+        CancellationToken cancellationToken = default) {
+      GenerateImagesResponse apiResponse =
+          await PrivateGenerateImagesAsync(model, prompt, config, cancellationToken);
       SafetyAttributes? positivePromptSafetyAttributes = null;
       List<GeneratedImage> generatedImages = new List<GeneratedImage>();
 
@@ -5217,18 +5328,19 @@ namespace Google.GenAI {
       return response;
     }
 
-    public async Task<EditImageResponse> EditImageAsync(String model, String prompt,
-                                                        List<IReferenceImage> referenceImages,
-                                                        EditImageConfig? config = null) {
+    public async Task<EditImageResponse> EditImageAsync(
+        String model, String prompt, List<IReferenceImage> referenceImages,
+        EditImageConfig? config = null, CancellationToken cancellationToken = default) {
       List<ReferenceImageAPI> referenceImagesAPI =
           referenceImages.Select(i => ((IReferenceImageInternal)i).ToReferenceImageAPI()).ToList();
 
-      return await PrivateEditImageAsync(model, prompt, referenceImagesAPI, config);
+      return await PrivateEditImageAsync(model, prompt, referenceImagesAPI, config,
+                                         cancellationToken);
     }
 
-    public async Task<UpscaleImageResponse> UpscaleImageAsync(String model, Image image,
-                                                              String upscaleFactor,
-                                                              UpscaleImageConfig? config = null) {
+    public async Task<UpscaleImageResponse> UpscaleImageAsync(
+        String model, Image image, String upscaleFactor, UpscaleImageConfig? config = null,
+        CancellationToken cancellationToken = default) {
       UpscaleImageAPIConfig apiConfig = new UpscaleImageAPIConfig {
         Mode = "upscale",
         NumberOfImages = 1,
@@ -5246,7 +5358,8 @@ namespace Google.GenAI {
         apiConfig.Labels = config.Labels;
       }
 
-      return await PrivateUpscaleImageAsync(model, image, upscaleFactor, apiConfig);
+      return await PrivateUpscaleImageAsync(model, image, upscaleFactor, apiConfig,
+                                            cancellationToken);
     }
 
     /// <summary>
@@ -5254,10 +5367,11 @@ namespace Google.GenAI {
     /// </summary>
     /// <param name="config">A <see cref="ListModelsConfig"/> instance that specifies the
     /// optional configuration for the list request.</param>
-    /// <returns>A Pager object that contains one page of models. When iterating over the pager,
-    /// it automatically fetches the next page if there are more.</returns>
+    /// <param name="cancellationToken">A <see cref="CancellationToken"/> to cancel the
+    /// operation.</param> <returns>A Pager object that contains one page of models. When iterating
+    /// over the pager, it automatically fetches the next page if there are more.</returns>
     public async Task<Pager<Model, ListModelsConfig, ListModelsResponse>> ListAsync(
-        ListModelsConfig? config = null) {
+        ListModelsConfig? config = null, CancellationToken cancellationToken = default) {
       config ??= new ListModelsConfig();
 
       if (!config.QueryBase.HasValue) {
@@ -5273,10 +5387,10 @@ namespace Google.GenAI {
         }
       }
 
-      var initialResponse = await PrivateListAsync(config);
+      var initialResponse = await PrivateListAsync(config, cancellationToken);
 
       return new Pager<Model, ListModelsConfig, ListModelsResponse>(
-          requestFunc: async cfg => await PrivateListAsync(cfg),
+          requestFunc: async cfg => await PrivateListAsync(cfg, cancellationToken),
           extractItems: response => response.Models,
           extractNextPageToken: response => response.NextPageToken,
           extractHttpResponse: response => response.SdkHttpResponse,
@@ -5293,13 +5407,15 @@ namespace Google.GenAI {
     /// <param name="contents">A <see cref="Content"/> to count tokens for.</param>
     /// <param name="config">A <see cref="CountTokensConfig"/> instance that specifies the
     /// optional configurations.</param>
-    /// <returns>A <see cref="Task{CountTokensResponse}"/> that represents the asynchronous
-    /// operation. The task result contains a <see cref="CountTokensResponse"/> instance with
-    /// the total token count and other metadata.</returns>
-    public async Task<CountTokensResponse> CountTokensAsync(String model, Content contents,
-                                                            CountTokensConfig? config = null) {
+    /// <param name="cancellationToken">A <see cref="CancellationToken"/> to cancel the
+    /// operation.</param> <returns>A <see cref="Task{CountTokensResponse}"/> that represents the
+    /// asynchronous operation. The task result contains a <see cref="CountTokensResponse"/>
+    /// instance with the total token count and other metadata.</returns>
+    public async Task<CountTokensResponse> CountTokensAsync(
+        String model, Content contents, CountTokensConfig? config = null,
+        CancellationToken cancellationToken = default) {
       List<Content> contentList = Transformers.TContents(contents) ?? new List<Content>();
-      return await CountTokensAsync(model, contentList, config);
+      return await CountTokensAsync(model, contentList, config, cancellationToken);
     }
 
     /// <summary>
@@ -5309,13 +5425,15 @@ namespace Google.GenAI {
     /// <param name="contents">A text string to send to count tokens for.</param>
     /// <param name="config">A <see cref="CountTokensConfig"/> instance that specifies the
     /// optional configurations.</param>
-    /// <returns>A <see cref="Task{CountTokensResponse}"/> that represents the asynchronous
-    /// operation. The task result contains a <see cref="CountTokensResponse"/> instance with
-    /// the total token count and other metadata.</returns>
-    public async Task<CountTokensResponse> CountTokensAsync(String model, String contents,
-                                                            CountTokensConfig? config = null) {
+    /// <param name="cancellationToken">A <see cref="CancellationToken"/> to cancel the
+    /// operation.</param> <returns>A <see cref="Task{CountTokensResponse}"/> that represents the
+    /// asynchronous operation. The task result contains a <see cref="CountTokensResponse"/>
+    /// instance with the total token count and other metadata.</returns>
+    public async Task<CountTokensResponse> CountTokensAsync(
+        String model, String contents, CountTokensConfig? config = null,
+        CancellationToken cancellationToken = default) {
       List<Content> contentList = Transformers.TContents(contents) ?? new List<Content>();
-      return await CountTokensAsync(model, contentList, config);
+      return await CountTokensAsync(model, contentList, config, cancellationToken);
     }
 
     /// <summary>
@@ -5324,14 +5442,17 @@ namespace Google.GenAI {
     /// <param name="model">The name of the GenAI model to use for token computation.</param>
     /// <param name="contents">A <see cref="Content"/> instance to compute tokens for.</param>
     /// <param name="config">A <see cref="ComputeTokensConfig"/> instance that specifies the
-    /// optional configurations.</param> <returns>A <see cref="Task{ComputeTokensResponse}"/> that
-    /// represents the asynchronous operation. The task result contains a <see
-    /// cref="ComputeTokensResponse"/> instance with token information.</returns> <exception
-    /// cref="NotSupportedException">Thrown when called with a non-Vertex AI client.</exception>
+    /// optional configurations.</param> <param name="cancellationToken">A <see
+    /// cref="CancellationToken"/> to cancel the operation.</param> <returns>A <see
+    /// cref="Task{ComputeTokensResponse}"/> that represents the asynchronous operation. The task
+    /// result contains a <see cref="ComputeTokensResponse"/> instance with token
+    /// information.</returns> <exception cref="NotSupportedException">Thrown when called with a
+    /// non-Vertex AI client.</exception>
     public async Task<ComputeTokensResponse> ComputeTokensAsync(
-        String model, Content contents, ComputeTokensConfig? config = null) {
+        String model, Content contents, ComputeTokensConfig? config = null,
+        CancellationToken cancellationToken = default) {
       List<Content> contentList = Transformers.TContents(contents) ?? new List<Content>();
-      return await ComputeTokensAsync(model, contentList, config);
+      return await ComputeTokensAsync(model, contentList, config, cancellationToken);
     }
 
     /// <summary>
@@ -5340,14 +5461,17 @@ namespace Google.GenAI {
     /// <param name="model">The name of the GenAI model to use for token computation.</param>
     /// <param name="contents">A string of text to compute tokens for.</param>
     /// <param name="config">A <see cref="ComputeTokensConfig"/> instance that specifies the
-    /// optional configurations.</param> <returns>A <see cref="Task{ComputeTokensResponse}"/> that
-    /// represents the asynchronous operation. The task result contains a <see
-    /// cref="ComputeTokensResponse"/> instance with token information.</returns> <exception
-    /// cref="NotSupportedException">Thrown when called with a non-Vertex AI client.</exception>
+    /// optional configurations.</param> <param name="cancellationToken">A <see
+    /// cref="CancellationToken"/> to cancel the operation.</param> <returns>A <see
+    /// cref="Task{ComputeTokensResponse}"/> that represents the asynchronous operation. The task
+    /// result contains a <see cref="ComputeTokensResponse"/> instance with token
+    /// information.</returns> <exception cref="NotSupportedException">Thrown when called with a
+    /// non-Vertex AI client.</exception>
     public async Task<ComputeTokensResponse> ComputeTokensAsync(
-        String model, String contents, ComputeTokensConfig? config = null) {
+        String model, String contents, ComputeTokensConfig? config = null,
+        CancellationToken cancellationToken = default) {
       List<Content> contentList = Transformers.TContents(contents) ?? new List<Content>();
-      return await ComputeTokensAsync(model, contentList, config);
+      return await ComputeTokensAsync(model, contentList, config, cancellationToken);
     }
 
     /// <summary>
@@ -5356,12 +5480,14 @@ namespace Google.GenAI {
     /// <param name="model">The model to use.</param>
     /// <param name="contents">The content to embed.</param>
     /// <param name="config">Optional configuration for embeddings.</param>
-    /// <returns>A <see cref="Task{EmbedContentResponse}"/> that represents the asynchronous
-    /// operation.</returns>
-    public async Task<EmbedContentResponse> EmbedContentAsync(string model, Content contents,
-                                                              EmbedContentConfig? config = null) {
+    /// <param name="cancellationToken">A <see cref="CancellationToken"/> to cancel the
+    /// operation.</param> <returns>A <see cref="Task{EmbedContentResponse}"/> that represents the
+    /// asynchronous operation.</returns>
+    public async Task<EmbedContentResponse> EmbedContentAsync(
+        string model, Content contents, EmbedContentConfig? config = null,
+        CancellationToken cancellationToken = default) {
       List<Content> contentList = Transformers.TContents(contents) ?? new List<Content>();
-      return await EmbedContentAsync(model, contentList, config);
+      return await EmbedContentAsync(model, contentList, config, cancellationToken);
     }
 
     /// <summary>
@@ -5370,17 +5496,21 @@ namespace Google.GenAI {
     /// <param name="model">The model to use.</param>
     /// <param name="contents">The text string to embed.</param>
     /// <param name="config">Optional configuration for embeddings.</param>
-    /// <returns>A <see cref="Task{EmbedContentResponse}"/> that represents the asynchronous
-    /// operation.</returns>
-    public async Task<EmbedContentResponse> EmbedContentAsync(string model, String contents,
-                                                              EmbedContentConfig? config = null) {
+    /// <param name="cancellationToken">A <see cref="CancellationToken"/> to cancel the
+    /// operation.</param> <returns>A <see cref="Task{EmbedContentResponse}"/> that represents the
+    /// asynchronous operation.</returns>
+    public async Task<EmbedContentResponse> EmbedContentAsync(
+        string model, String contents, EmbedContentConfig? config = null,
+        CancellationToken cancellationToken = default) {
       List<Content> contentList = Transformers.TContents(contents) ?? new List<Content>();
-      return await EmbedContentAsync(model, contentList, config);
+      return await EmbedContentAsync(model, contentList, config, cancellationToken);
     }
 
     public async Task<GenerateVideosOperation> GenerateVideosAsync(
-        String model, GenerateVideosSource source, GenerateVideosConfig? config = null) {
-      return await PrivateGenerateVideosAsync(model, null, null, null, source, config);
+        String model, GenerateVideosSource source, GenerateVideosConfig? config = null,
+        CancellationToken cancellationToken = default) {
+      return await PrivateGenerateVideosAsync(model, null, null, null, source, config,
+                                              cancellationToken);
     }
   }
 }

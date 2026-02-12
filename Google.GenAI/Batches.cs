@@ -17,6 +17,7 @@
 // Auto-generated code. Do not edit.
 
 using System;
+using System.Runtime.CompilerServices;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
@@ -1578,7 +1579,8 @@ namespace Google.GenAI {
     }
 
     private async Task<BatchJob> PrivateCreateAsync(string? model, BatchJobSource src,
-                                                    CreateBatchJobConfig? config) {
+                                                    CreateBatchJobConfig? config,
+                                                    CancellationToken cancellationToken = default) {
       CreateBatchJobParameters parameter = new CreateBatchJobParameters();
 
       if (!Common.IsZero(model)) {
@@ -1615,10 +1617,15 @@ namespace Google.GenAI {
       }
       HttpOptions? requestHttpOptions = config?.HttpOptions;
 
-      ApiResponse response = await this._apiClient.RequestAsync(
-          HttpMethod.Post, path, JsonSerializer.Serialize(body), requestHttpOptions);
+      ApiResponse response =
+          await this._apiClient.RequestAsync(HttpMethod.Post, path, JsonSerializer.Serialize(body),
+                                             requestHttpOptions, cancellationToken);
       HttpContent httpContent = response.GetEntity();
+#if NETSTANDARD2_0
       string contentString = await httpContent.ReadAsStringAsync();
+#else
+      string contentString = await httpContent.ReadAsStringAsync(cancellationToken);
+#endif
       JsonNode? httpContentNode = JsonNode.Parse(contentString);
       if (httpContentNode == null) {
         throw new NotSupportedException("Failed to parse response to JsonNode.");
@@ -1638,7 +1645,8 @@ namespace Google.GenAI {
     }
 
     private async Task<BatchJob> PrivateCreateEmbeddingsAsync(
-        string? model, EmbeddingsBatchJobSource src, CreateEmbeddingsBatchJobConfig? config) {
+        string? model, EmbeddingsBatchJobSource src, CreateEmbeddingsBatchJobConfig? config,
+        CancellationToken cancellationToken = default) {
       CreateEmbeddingsBatchJobParameters parameter = new CreateEmbeddingsBatchJobParameters();
 
       if (!Common.IsZero(model)) {
@@ -1677,10 +1685,15 @@ namespace Google.GenAI {
       }
       HttpOptions? requestHttpOptions = config?.HttpOptions;
 
-      ApiResponse response = await this._apiClient.RequestAsync(
-          HttpMethod.Post, path, JsonSerializer.Serialize(body), requestHttpOptions);
+      ApiResponse response =
+          await this._apiClient.RequestAsync(HttpMethod.Post, path, JsonSerializer.Serialize(body),
+                                             requestHttpOptions, cancellationToken);
       HttpContent httpContent = response.GetEntity();
+#if NETSTANDARD2_0
       string contentString = await httpContent.ReadAsStringAsync();
+#else
+      string contentString = await httpContent.ReadAsStringAsync(cancellationToken);
+#endif
       JsonNode? httpContentNode = JsonNode.Parse(contentString);
       if (httpContentNode == null) {
         throw new NotSupportedException("Failed to parse response to JsonNode.");
@@ -1711,7 +1724,8 @@ namespace Google.GenAI {
     /// request.</param> <returns>A <see cref="BatchJob"/> object that contains the info of the
     /// batch job.</returns>
 
-    public async Task<BatchJob> GetAsync(string name, GetBatchJobConfig? config = null) {
+    public async Task<BatchJob> GetAsync(string name, GetBatchJobConfig? config = null,
+                                         CancellationToken cancellationToken = default) {
       GetBatchJobParameters parameter = new GetBatchJobParameters();
 
       if (!Common.IsZero(name)) {
@@ -1745,10 +1759,15 @@ namespace Google.GenAI {
       }
       HttpOptions? requestHttpOptions = config?.HttpOptions;
 
-      ApiResponse response = await this._apiClient.RequestAsync(
-          HttpMethod.Get, path, JsonSerializer.Serialize(body), requestHttpOptions);
+      ApiResponse response =
+          await this._apiClient.RequestAsync(HttpMethod.Get, path, JsonSerializer.Serialize(body),
+                                             requestHttpOptions, cancellationToken);
       HttpContent httpContent = response.GetEntity();
+#if NETSTANDARD2_0
       string contentString = await httpContent.ReadAsStringAsync();
+#else
+      string contentString = await httpContent.ReadAsStringAsync(cancellationToken);
+#endif
       JsonNode? httpContentNode = JsonNode.Parse(contentString);
       if (httpContentNode == null) {
         throw new NotSupportedException("Failed to parse response to JsonNode.");
@@ -1778,7 +1797,8 @@ namespace Google.GenAI {
     /// request.</param> <returns>A <see cref="Task"/> that represents the asynchronous
     /// operation.</returns>
 
-    public async Task CancelAsync(string name, CancelBatchJobConfig? config = null) {
+    public async Task CancelAsync(string name, CancelBatchJobConfig? config = null,
+                                  CancellationToken cancellationToken = default) {
       CancelBatchJobParameters parameter = new CancelBatchJobParameters();
 
       if (!Common.IsZero(name)) {
@@ -1812,10 +1832,15 @@ namespace Google.GenAI {
       }
       HttpOptions? requestHttpOptions = config?.HttpOptions;
 
-      ApiResponse response = await this._apiClient.RequestAsync(
-          HttpMethod.Post, path, JsonSerializer.Serialize(body), requestHttpOptions);
+      ApiResponse response =
+          await this._apiClient.RequestAsync(HttpMethod.Post, path, JsonSerializer.Serialize(body),
+                                             requestHttpOptions, cancellationToken);
       HttpContent httpContent = response.GetEntity();
+#if NETSTANDARD2_0
       string contentString = await httpContent.ReadAsStringAsync();
+#else
+      string contentString = await httpContent.ReadAsStringAsync(cancellationToken);
+#endif
       JsonNode? httpContentNode = JsonNode.Parse(contentString);
       if (httpContentNode == null) {
         throw new NotSupportedException("Failed to parse response to JsonNode.");
@@ -1833,7 +1858,8 @@ namespace Google.GenAI {
       return;
     }
 
-    private async Task<ListBatchJobsResponse> PrivateListAsync(ListBatchJobsConfig? config) {
+    private async Task<ListBatchJobsResponse> PrivateListAsync(
+        ListBatchJobsConfig? config, CancellationToken cancellationToken = default) {
       ListBatchJobsParameters parameter = new ListBatchJobsParameters();
 
       if (!Common.IsZero(config)) {
@@ -1864,10 +1890,15 @@ namespace Google.GenAI {
       }
       HttpOptions? requestHttpOptions = config?.HttpOptions;
 
-      ApiResponse response = await this._apiClient.RequestAsync(
-          HttpMethod.Get, path, JsonSerializer.Serialize(body), requestHttpOptions);
+      ApiResponse response =
+          await this._apiClient.RequestAsync(HttpMethod.Get, path, JsonSerializer.Serialize(body),
+                                             requestHttpOptions, cancellationToken);
       HttpContent httpContent = response.GetEntity();
+#if NETSTANDARD2_0
       string contentString = await httpContent.ReadAsStringAsync();
+#else
+      string contentString = await httpContent.ReadAsStringAsync(cancellationToken);
+#endif
       JsonNode? httpContentNode = JsonNode.Parse(contentString);
       if (httpContentNode == null) {
         throw new NotSupportedException("Failed to parse response to JsonNode.");
@@ -1898,8 +1929,9 @@ namespace Google.GenAI {
     /// request.</param> <returns>A <see cref="DeleteResourceJob"/> object that shows the status of
     /// the deletion.</returns>
 
-    public async Task<DeleteResourceJob> DeleteAsync(string name,
-                                                     DeleteBatchJobConfig? config = null) {
+    public async Task<DeleteResourceJob> DeleteAsync(
+        string name, DeleteBatchJobConfig? config = null,
+        CancellationToken cancellationToken = default) {
       DeleteBatchJobParameters parameter = new DeleteBatchJobParameters();
 
       if (!Common.IsZero(name)) {
@@ -1934,9 +1966,14 @@ namespace Google.GenAI {
       HttpOptions? requestHttpOptions = config?.HttpOptions;
 
       ApiResponse response = await this._apiClient.RequestAsync(
-          HttpMethod.Delete, path, JsonSerializer.Serialize(body), requestHttpOptions);
+          HttpMethod.Delete, path, JsonSerializer.Serialize(body), requestHttpOptions,
+          cancellationToken);
       HttpContent httpContent = response.GetEntity();
+#if NETSTANDARD2_0
       string contentString = await httpContent.ReadAsStringAsync();
+#else
+      string contentString = await httpContent.ReadAsStringAsync(cancellationToken);
+#endif
       JsonNode? httpContentNode = JsonNode.Parse(contentString);
       if (httpContentNode == null) {
         throw new NotSupportedException("Failed to parse response to JsonNode.");
@@ -1965,12 +2002,12 @@ namespace Google.GenAI {
     ///     exhausted.</returns>
 
     public async Task<Pager<BatchJob, ListBatchJobsConfig, ListBatchJobsResponse>> ListAsync(
-        ListBatchJobsConfig? config = null) {
+        ListBatchJobsConfig? config = null, CancellationToken cancellationToken = default) {
       config ??= new ListBatchJobsConfig();
-      var initialResponse = await PrivateListAsync(config);
+      var initialResponse = await PrivateListAsync(config, cancellationToken);
 
       return new Pager<BatchJob, ListBatchJobsConfig, ListBatchJobsResponse>(
-          requestFunc: async cfg => await PrivateListAsync(cfg),
+          requestFunc: async cfg => await PrivateListAsync(cfg, cancellationToken),
           extractItems: response => response.BatchJobs,
           extractNextPageToken: response => response.NextPageToken,
           extractHttpResponse: response => response.SdkHttpResponse,
@@ -1989,11 +2026,12 @@ namespace Google.GenAI {
     /// "bq://projectId.bqDatasetId.bqTableId". Gemini Developer API supports List of
     /// inlined_request, or file name. Example: "files/file_name".</param> <param
     /// name="config">Optional <see cref="CreateBatchJobConfig"/> to configure the batch
-    /// job.</param> <returns>A <see cref="Task{BatchJob}"/> that represents the asynchronous
-    /// operation. The task result contains a <see cref="BatchJob"/> instance with batch job
-    /// details.</returns>
+    /// job.</param> <param name="cancellationToken">The cancellation token for the request.</param>
+    /// <returns>A <see cref="Task{BatchJob}"/> that represents the asynchronous operation. The task
+    /// result contains a <see cref="BatchJob"/> instance with batch job details.</returns>
     public async Task<BatchJob> CreateAsync(string model, BatchJobSource src,
-                                            CreateBatchJobConfig config) {
+                                            CreateBatchJobConfig config,
+                                            CancellationToken cancellationToken = default) {
       if (this._apiClient.VertexAI) {
         if (src.InlinedRequests != null) {
           throw new NotSupportedException("inlinedRequests is not supported for Vertex AI.");
@@ -2015,7 +2053,7 @@ namespace Google.GenAI {
           throw new ArgumentException("one of fileName and InlinedRequests must be set.");
         }
       }
-      return await this.PrivateCreateAsync(model, src, config);
+      return await this.PrivateCreateAsync(model, src, config, cancellationToken);
     }
 
     /// <summary>
@@ -2025,15 +2063,17 @@ namespace Google.GenAI {
     /// <param name="src">The <see cref="EmbeddingsBatchJobSource"/> of the batch job.
     /// Gemini Developer API supports List of inlined_request, or file name. Example:
     /// "files/file_name".</param> <param name="config">Optional <see
-    /// cref="CreateEmbeddingsBatchJobConfig"/> to configure the batch job.</param> <returns>A <see
+    /// cref="CreateEmbeddingsBatchJobConfig"/> to configure the batch job.</param> <param
+    /// name="cancellationToken">The cancellation token for the request.</param> <returns>A <see
     /// cref="Task{BatchJob}"/> that represents the asynchronous operation. The task result contains
     /// a <see cref="BatchJob"/> instance with batch job details.</returns>
-    public async Task<BatchJob> CreateEmbeddingsAsync(string model, EmbeddingsBatchJobSource src,
-                                                      CreateEmbeddingsBatchJobConfig config) {
+    public async Task<BatchJob> CreateEmbeddingsAsync(
+        string model, EmbeddingsBatchJobSource src, CreateEmbeddingsBatchJobConfig config,
+        CancellationToken cancellationToken = default) {
       if (this._apiClient.VertexAI) {
         throw new NotSupportedException("Vertex AI does not support batches.createEmbeddings.");
       }
-      return await this.PrivateCreateEmbeddingsAsync(model, src, config);
+      return await this.PrivateCreateEmbeddingsAsync(model, src, config, cancellationToken);
     }
   }
 }
