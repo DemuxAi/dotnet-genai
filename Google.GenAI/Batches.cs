@@ -24,8 +24,6 @@ using System.Text.Json.Serialization;
 
 using Google.GenAI.Types;
 
-using System;
-using Google.GenAI.Types;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
