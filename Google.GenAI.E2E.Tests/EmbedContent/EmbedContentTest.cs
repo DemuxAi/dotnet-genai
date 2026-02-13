@@ -32,6 +32,7 @@ public class EmbedContentTest {
   private Client vertexClient;
   private Client geminiClient;
   private string modelName;
+  private string multimodalModelName;
   public TestContext TestContext { get; set; }
 
   [ClassInitialize]
@@ -74,6 +75,7 @@ public class EmbedContentTest {
 
     // Specific setup for this test class
     modelName = "text-embedding-004";
+    multimodalModelName = "gemini-embedding-2-exp-11-2025";
   }
 
   [TestMethod]
@@ -143,4 +145,158 @@ public class EmbedContentTest {
     Assert.IsNotNull(geminiResponse.Embeddings);
     Assert.AreEqual(2, geminiResponse.Embeddings.Count);
   }
+
+  [TestMethod]
+  public async Task EmbedContentMimeTypeNotSupportedGeminiTest()
+  {
+      var contents = new List<Content> {
+          new Content { Parts = new List<Part> { new Part { Text = "What is your name?" } } }
+      };
+      var config = new EmbedContentConfig
+      {
+          OutputDimensionality = 10,
+          MimeType = "text/plain"
+      };
+      var exception = await Assert.ThrowsExceptionAsync<NotSupportedException>(
+          () => geminiClient.Models.EmbedContentAsync(model: modelName, contents: contents, config: config));
+
+      Assert.IsTrue(exception.Message.Contains("mimeType parameter is not supported"));
+  }
+
+  [TestMethod]
+  public async Task EmbedContentAutoTruncateNotSupportedGeminiTest()
+  {
+      var contents = new List<Content> {
+          new Content { Parts = new List<Part> { new Part { Text = "What is your name?" } } }
+      };
+      var config = new EmbedContentConfig
+      {
+          OutputDimensionality = 10,
+          AutoTruncate = true
+      };
+      var exception = await Assert.ThrowsExceptionAsync<NotSupportedException>(
+          () => geminiClient.Models.EmbedContentAsync(model: modelName, contents: contents, config: config));
+
+      Assert.IsTrue(exception.Message.Contains("autoTruncate parameter is not supported"));
+  }
+
+  [TestMethod]
+  public async Task EmbedContentNewApiTextOnlyWithConfigVertexTest()
+  {
+      var contents = new List<Content> {
+        new Content { Parts = new List<Part> { new Part { Text = "What is your name?" } } }
+      };
+      var config = new EmbedContentConfig {
+          OutputDimensionality = 10,
+          Title = "test_title",
+          TaskType = "RETRIEVAL_DOCUMENT",
+          AutoTruncate = true,
+          HttpOptions = new HttpOptions {
+              Headers = new Dictionary<string, string> { { "test", "headers" } }
+          }
+      };
+      var vertexResponse = await vertexClient.Models.EmbedContentAsync(
+          model: multimodalModelName, contents: contents, config: config);
+
+      Assert.IsNotNull(vertexResponse);
+      Assert.IsNotNull(vertexResponse.Embeddings);
+  }
+
+  [TestMethod]
+  public async Task EmbedContentNewApiTextOnlyWithConfigGeminiTest()
+  {
+      var contents = new List<Content> {
+          new Content { Parts = new List<Part> { new Part { Text = "What is your name?" } } }
+      };
+      var config = new EmbedContentConfig {
+          OutputDimensionality = 10,
+          Title = "test_title",
+          TaskType = "RETRIEVAL_DOCUMENT",
+          AutoTruncate = true,
+          HttpOptions = new HttpOptions {
+              Headers = new Dictionary<string, string> { { "test", "headers" } }
+          }
+      };
+
+      var exception = await Assert.ThrowsExceptionAsync<NotSupportedException>(
+          () => geminiClient.Models.EmbedContentAsync(model: multimodalModelName, contents: contents, config: config));
+
+      Assert.IsTrue(exception.Message.Contains("autoTruncate parameter is not supported"));
+  }
+
+    [TestMethod]
+    public async Task EmbedContentNewApiTextOnlyVertexTest()
+    {
+        var contents = new List<Content> {
+            new Content { Parts = new List<Part> { new Part { Text = "What is your name?" } } }
+        };
+        var config = new EmbedContentConfig {
+          OutputDimensionality = 100,
+        };
+        var vertexResponse = await vertexClient.Models.EmbedContentAsync(
+            model: multimodalModelName, contents: contents, config: config);
+
+        Assert.IsNotNull(vertexResponse);
+        Assert.IsNotNull(vertexResponse.Embeddings);
+    }
+
+    [TestMethod]
+    public async Task EmbedContentNewApiMaasVertexTest()
+    {
+        var contents = new List<Content> {
+            new Content { Parts = new List<Part> { new Part { Text = "What is your name?" } } }
+        };
+        var config = new EmbedContentConfig {
+          OutputDimensionality = 100,
+        };
+        var vertexResponse = await vertexClient.Models.EmbedContentAsync(
+            model: "publishers/intfloat/models/multilingual-e5-large-instruct-maas", contents: contents, config: config);
+
+        Assert.IsNotNull(vertexResponse);
+        Assert.IsNotNull(vertexResponse.Embeddings);
+    }
+
+    [TestMethod]
+    public async Task EmbedContentNewApiGcsImageVertexTest()
+    {
+        var contents = new List<Content> {
+            new Content {
+                Parts = new List<Part> {
+                    new Part { Text = "Similar things to the following image:" },
+                    new Part {
+                        FileData = new FileData {
+                            MimeType = "image/png",
+                            FileUri = "gs://cloud-samples-data/generative-ai/image/a-man-and-a-dog.png"
+                        }
+                    }
+                }
+            }
+        };
+        var config = new EmbedContentConfig {
+            OutputDimensionality = 10,
+            Title = "test_title",
+            TaskType = "RETRIEVAL_DOCUMENT",
+            HttpOptions = new HttpOptions {
+                Headers = new Dictionary<string, string> { { "test", "headers" } }
+            }
+        };
+        var vertexResponse = await vertexClient.Models.EmbedContentAsync(
+            model: multimodalModelName, contents: contents, config: config);
+
+        Assert.IsNotNull(vertexResponse);
+        Assert.IsNotNull(vertexResponse.Embeddings);
+    }
+
+    [TestMethod]
+    public async Task EmbedContentNewApiListOfContentsVertexTest()
+    {
+        var contents = new List<Content> {
+            new Content { Parts = new List<Part> { new Part { Text = "hello" } } },
+            new Content { Parts = new List<Part> { new Part { Text = "world" } } }
+        };
+        var exception = await Assert.ThrowsExceptionAsync<ArgumentException>(
+            () => vertexClient.Models.EmbedContentAsync(model: multimodalModelName, contents: contents, config: null));
+
+        Assert.IsTrue(exception.Message.Contains("The embedContent API for this model only supports one content at a time."));
+    }
 }

@@ -652,37 +652,92 @@ namespace Google.GenAI {
                                                  JsonNode rootObject) {
       JsonObject toObject = new JsonObject();
 
-      if (Common.GetValueByPath(fromObject, new string[] { "taskType" }) != null) {
-        Common.SetValueByPath(parentObject, new string[] { "instances[]", "task_type" },
-                              Common.GetValueByPath(fromObject, new string[] { "taskType" }));
+      JsonNode discriminatorTaskType =
+          Common.GetValueByPath(rootObject, new string[] { "embeddingApiType" });
+      string discriminatorValueTaskType =
+          discriminatorTaskType == null ? "PREDICT" : discriminatorTaskType.GetValue<string>();
+      if (discriminatorValueTaskType == "PREDICT") {
+        if (Common.GetValueByPath(fromObject, new string[] { "taskType" }) != null) {
+          Common.SetValueByPath(parentObject, new string[] { "instances[]", "task_type" },
+                                Common.GetValueByPath(fromObject, new string[] { "taskType" }));
+        }
+      } else if (discriminatorValueTaskType == "EMBED_CONTENT") {
+        if (Common.GetValueByPath(fromObject, new string[] { "taskType" }) != null) {
+          Common.SetValueByPath(parentObject, new string[] { "taskType" },
+                                Common.GetValueByPath(fromObject, new string[] { "taskType" }));
+        }
       }
 
-      if (Common.GetValueByPath(fromObject, new string[] { "title" }) != null) {
-        Common.SetValueByPath(parentObject, new string[] { "instances[]", "title" },
-                              Common.GetValueByPath(fromObject, new string[] { "title" }));
+      JsonNode discriminatorTitle =
+          Common.GetValueByPath(rootObject, new string[] { "embeddingApiType" });
+      string discriminatorValueTitle =
+          discriminatorTitle == null ? "PREDICT" : discriminatorTitle.GetValue<string>();
+      if (discriminatorValueTitle == "PREDICT") {
+        if (Common.GetValueByPath(fromObject, new string[] { "title" }) != null) {
+          Common.SetValueByPath(parentObject, new string[] { "instances[]", "title" },
+                                Common.GetValueByPath(fromObject, new string[] { "title" }));
+        }
+      } else if (discriminatorValueTitle == "EMBED_CONTENT") {
+        if (Common.GetValueByPath(fromObject, new string[] { "title" }) != null) {
+          Common.SetValueByPath(parentObject, new string[] { "title" },
+                                Common.GetValueByPath(fromObject, new string[] { "title" }));
+        }
       }
 
-      if (Common.GetValueByPath(fromObject, new string[] { "outputDimensionality" }) != null) {
-        Common.SetValueByPath(
-            parentObject, new string[] { "parameters", "outputDimensionality" },
-            Common.GetValueByPath(fromObject, new string[] { "outputDimensionality" }));
+      JsonNode discriminatorOutputDimensionality =
+          Common.GetValueByPath(rootObject, new string[] { "embeddingApiType" });
+      string discriminatorValueOutputDimensionality =
+          discriminatorOutputDimensionality == null
+              ? "PREDICT"
+              : discriminatorOutputDimensionality.GetValue<string>();
+      if (discriminatorValueOutputDimensionality == "PREDICT") {
+        if (Common.GetValueByPath(fromObject, new string[] { "outputDimensionality" }) != null) {
+          Common.SetValueByPath(
+              parentObject, new string[] { "parameters", "outputDimensionality" },
+              Common.GetValueByPath(fromObject, new string[] { "outputDimensionality" }));
+        }
+      } else if (discriminatorValueOutputDimensionality == "EMBED_CONTENT") {
+        if (Common.GetValueByPath(fromObject, new string[] { "outputDimensionality" }) != null) {
+          Common.SetValueByPath(
+              parentObject, new string[] { "outputDimensionality" },
+              Common.GetValueByPath(fromObject, new string[] { "outputDimensionality" }));
+        }
       }
 
-      if (Common.GetValueByPath(fromObject, new string[] { "mimeType" }) != null) {
-        Common.SetValueByPath(parentObject, new string[] { "instances[]", "mimeType" },
-                              Common.GetValueByPath(fromObject, new string[] { "mimeType" }));
+      JsonNode discriminatorMimeType =
+          Common.GetValueByPath(rootObject, new string[] { "embeddingApiType" });
+      string discriminatorValueMimeType =
+          discriminatorMimeType == null ? "PREDICT" : discriminatorMimeType.GetValue<string>();
+      if (discriminatorValueMimeType == "PREDICT") {
+        if (Common.GetValueByPath(fromObject, new string[] { "mimeType" }) != null) {
+          Common.SetValueByPath(parentObject, new string[] { "instances[]", "mimeType" },
+                                Common.GetValueByPath(fromObject, new string[] { "mimeType" }));
+        }
       }
 
-      if (Common.GetValueByPath(fromObject, new string[] { "autoTruncate" }) != null) {
-        Common.SetValueByPath(parentObject, new string[] { "parameters", "autoTruncate" },
-                              Common.GetValueByPath(fromObject, new string[] { "autoTruncate" }));
+      JsonNode discriminatorAutoTruncate =
+          Common.GetValueByPath(rootObject, new string[] { "embeddingApiType" });
+      string discriminatorValueAutoTruncate = discriminatorAutoTruncate == null
+                                                  ? "PREDICT"
+                                                  : discriminatorAutoTruncate.GetValue<string>();
+      if (discriminatorValueAutoTruncate == "PREDICT") {
+        if (Common.GetValueByPath(fromObject, new string[] { "autoTruncate" }) != null) {
+          Common.SetValueByPath(parentObject, new string[] { "parameters", "autoTruncate" },
+                                Common.GetValueByPath(fromObject, new string[] { "autoTruncate" }));
+        }
+      } else if (discriminatorValueAutoTruncate == "EMBED_CONTENT") {
+        if (Common.GetValueByPath(fromObject, new string[] { "autoTruncate" }) != null) {
+          Common.SetValueByPath(parentObject, new string[] { "autoTruncate" },
+                                Common.GetValueByPath(fromObject, new string[] { "autoTruncate" }));
+        }
       }
 
       return toObject;
     }
 
-    internal JsonNode EmbedContentParametersToMldev(ApiClient apiClient, JsonNode fromObject,
-                                                    JsonObject parentObject, JsonNode rootObject) {
+    internal JsonNode EmbedContentParametersPrivateToMldev(ApiClient apiClient, JsonNode fromObject,
+                                                           JsonObject parentObject,
+                                                           JsonNode rootObject) {
       JsonObject toObject = new JsonObject();
 
       if (Common.GetValueByPath(fromObject, new string[] { "model" }) != null) {
@@ -699,6 +754,12 @@ namespace Google.GenAI {
                 this._apiClient, Common.GetValueByPath(fromObject, new string[] { "contents" })));
       }
 
+      if (Common.GetValueByPath(fromObject, new string[] { "content" }) != null) {
+        _ = ContentToMldev(JsonNode.Parse(JsonSerializer.Serialize(Transformers.TContent(
+                               Common.GetValueByPath(fromObject, new string[] { "content" })))),
+                           toObject, rootObject);
+      }
+
       if (Common.GetValueByPath(fromObject, new string[] { "config" }) != null) {
         _ = EmbedContentConfigToMldev(JsonNode.Parse(JsonSerializer.Serialize(Common.GetValueByPath(
                                           fromObject, new string[] { "config" }))),
@@ -713,8 +774,10 @@ namespace Google.GenAI {
       return toObject;
     }
 
-    internal JsonNode EmbedContentParametersToVertex(ApiClient apiClient, JsonNode fromObject,
-                                                     JsonObject parentObject, JsonNode rootObject) {
+    internal JsonNode EmbedContentParametersPrivateToVertex(ApiClient apiClient,
+                                                            JsonNode fromObject,
+                                                            JsonObject parentObject,
+                                                            JsonNode rootObject) {
       JsonObject toObject = new JsonObject();
 
       if (Common.GetValueByPath(fromObject, new string[] { "model" }) != null) {
@@ -724,11 +787,29 @@ namespace Google.GenAI {
                                 Common.GetValueByPath(fromObject, new string[] { "model" })));
       }
 
-      if (Common.GetValueByPath(fromObject, new string[] { "contents" }) != null) {
-        Common.SetValueByPath(
-            toObject, new string[] { "instances[]", "content" },
-            Transformers.TContentsForEmbed(
-                this._apiClient, Common.GetValueByPath(fromObject, new string[] { "contents" })));
+      JsonNode discriminatorContents =
+          Common.GetValueByPath(rootObject, new string[] { "embeddingApiType" });
+      string discriminatorValueContents =
+          discriminatorContents == null ? "PREDICT" : discriminatorContents.GetValue<string>();
+      if (discriminatorValueContents == "PREDICT") {
+        if (Common.GetValueByPath(fromObject, new string[] { "contents" }) != null) {
+          Common.SetValueByPath(
+              toObject, new string[] { "instances[]", "content" },
+              Transformers.TContentsForEmbed(
+                  this._apiClient, Common.GetValueByPath(fromObject, new string[] { "contents" })));
+        }
+      }
+
+      JsonNode discriminatorContent =
+          Common.GetValueByPath(rootObject, new string[] { "embeddingApiType" });
+      string discriminatorValueContent =
+          discriminatorContent == null ? "PREDICT" : discriminatorContent.GetValue<string>();
+      if (discriminatorValueContent == "EMBED_CONTENT") {
+        if (Common.GetValueByPath(fromObject, new string[] { "content" }) != null) {
+          Common.SetValueByPath(
+              toObject, new string[] { "content" },
+              Transformers.TContent(Common.GetValueByPath(fromObject, new string[] { "content" })));
+        }
       }
 
       if (Common.GetValueByPath(fromObject, new string[] { "config" }) != null) {
@@ -790,6 +871,31 @@ namespace Google.GenAI {
       if (Common.GetValueByPath(fromObject, new string[] { "metadata" }) != null) {
         Common.SetValueByPath(toObject, new string[] { "metadata" },
                               Common.GetValueByPath(fromObject, new string[] { "metadata" }));
+      }
+
+      if (rootObject != null &&
+          Common.GetValueByPath(rootObject, new string[] { "embeddingApiType" }) != null &&
+          Common.GetValueByPath(rootObject, new string[] { "embeddingApiType" })
+                  .GetValue<string>() == "EMBED_CONTENT") {
+        JsonNode? embedding_node = Common.GetValueByPath(fromObject, new string[] { "embedding" });
+        if (embedding_node != null) {
+          JsonNode embedding = JsonNode.Parse(embedding_node.ToJsonString());
+          JsonNode usageMetadata =
+              Common.GetValueByPath(fromObject, new string[] { "usageMetadata" });
+          JsonNode truncated = Common.GetValueByPath(fromObject, new string[] { "truncated" });
+          JsonObject stats = new JsonObject();
+          if (usageMetadata != null && usageMetadata["promptTokenCount"] != null) {
+            stats.Add("token_count",
+                      JsonNode.Parse(usageMetadata["promptTokenCount"].ToJsonString()));
+          }
+          if (truncated != null) {
+            stats.Add("truncated", JsonNode.Parse(truncated.ToJsonString()));
+          }
+          ((JsonObject)embedding).Add("statistics", stats);
+          JsonArray embeddings = new JsonArray();
+          embeddings.Add(embedding);
+          Common.SetValueByPath(toObject, new string[] { "embeddings" }, embeddings);
+        }
       }
 
       return toObject;
@@ -4241,10 +4347,10 @@ namespace Google.GenAI {
     /// asynchronous operation. The task result contains a <see cref="EmbedContentResponse"/>
     /// instance with embeddings and other metadata.</returns>
 
-    public async Task<EmbedContentResponse> EmbedContentAsync(
-        string model, List<Content> contents, EmbedContentConfig? config = null,
-        CancellationToken cancellationToken = default) {
-      EmbedContentParameters parameter = new EmbedContentParameters();
+    private async Task<EmbedContentResponse> PrivateEmbedContentAsync(
+        string model, List<Content>? contents, Content? content, EmbeddingApiType? embeddingApiType,
+        EmbedContentConfig? config, CancellationToken cancellationToken = default) {
+      EmbedContentParametersPrivate parameter = new EmbedContentParametersPrivate();
 
       if (!Common.IsZero(model)) {
         parameter.Model = model;
@@ -4252,24 +4358,35 @@ namespace Google.GenAI {
       if (!Common.IsZero(contents)) {
         parameter.Contents = contents;
       }
+      if (!Common.IsZero(content)) {
+        parameter.Content = content;
+      }
+      if (!Common.IsZero(embeddingApiType)) {
+        parameter.EmbeddingApiType = embeddingApiType;
+      }
       if (!Common.IsZero(config)) {
         parameter.Config = config;
       }
       string jsonString = JsonSerializer.Serialize(parameter);
       JsonNode? parameterNode = JsonNode.Parse(jsonString);
       if (parameterNode == null) {
-        throw new NotSupportedException("Failed to parse EmbedContentParameters to JsonNode.");
+        throw new NotSupportedException(
+            "Failed to parse EmbedContentParametersPrivate to JsonNode.");
       }
 
       JsonNode body;
       string path;
       if (this._apiClient.VertexAI) {
-        body = EmbedContentParametersToVertex(this._apiClient, parameterNode, new JsonObject(),
-                                              parameterNode);
-        path = Common.FormatMap("{model}:predict", body["_url"]);
+        body = EmbedContentParametersPrivateToVertex(this._apiClient, parameterNode,
+                                                     new JsonObject(), parameterNode);
+        string endpointUrl =
+            Transformers.TIsVertexEmbedContentModel(parameterNode["model"].ToString())
+                ? "{model}:embedContent"
+                : "{model}:predict";
+        path = Common.FormatMap(endpointUrl, body["_url"]);
       } else {
-        body = EmbedContentParametersToMldev(this._apiClient, parameterNode, new JsonObject(),
-                                             parameterNode);
+        body = EmbedContentParametersPrivateToMldev(this._apiClient, parameterNode,
+                                                    new JsonObject(), parameterNode);
         path = Common.FormatMap("{model}:batchEmbedContents", body["_url"]);
       }
       JsonObject? bodyObj = body?.AsObject();
@@ -5475,7 +5592,7 @@ namespace Google.GenAI {
     }
 
     /// <summary>
-    /// Calculates embeddings for the given content. Only text is supported.
+    /// Calculates embeddings for the given content.
     /// </summary>
     /// <param name="model">The model to use.</param>
     /// <param name="contents">The content to embed.</param>
@@ -5511,6 +5628,35 @@ namespace Google.GenAI {
         CancellationToken cancellationToken = default) {
       return await PrivateGenerateVideosAsync(model, null, null, null, source, config,
                                               cancellationToken);
+    }
+
+    /// <summary>
+    /// Calculates embeddings for the given content.
+    /// </summary>
+    /// <param name="model">The model to use.</param>
+    /// <param name="contents">The content to embed.</param>
+    /// <param name="config">Optional configuration for embeddings.</param>
+    /// <param name="cancellationToken">A <see cref="CancellationToken"/> to cancel the
+    /// operation.</param> <returns>A <see cref="Task{EmbedContentResponse}"/> that represents the
+    /// asynchronous operation.</returns>
+    public async Task<EmbedContentResponse> EmbedContentAsync(
+        string model, List<Content> contents, EmbedContentConfig? config = null,
+        CancellationToken cancellationToken = default) {
+      if (!_apiClient.VertexAI) {
+        return await PrivateEmbedContentAsync(model, contents, null, null, config,
+                                              cancellationToken);
+      }
+      if (Transformers.TIsVertexEmbedContentModel(model)) {
+        if (contents.Count > 1) {
+          throw new ArgumentException(
+              "The embedContent API for this model only supports one content at a time.");
+        }
+        return await PrivateEmbedContentAsync(
+            model, contents, contents[0], EmbeddingApiType.EmbedContent, config, cancellationToken);
+      } else {
+        return await PrivateEmbedContentAsync(model, contents, null, EmbeddingApiType.Predict,
+                                              config, cancellationToken);
+      }
     }
   }
 }
