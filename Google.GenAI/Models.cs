@@ -4340,6 +4340,8 @@ namespace Google.GenAI {
     /// </summary>
     /// <param name="model">The model to use for embedding.</param>
     /// <param name="contents">A <see cref="List{Content}"/> to calculate embeddings for.</param>
+    /// <param name="content">A <see cref="Content"/> to calculate embeddings for.</param>
+    /// <param name="embeddingApiType">The <see cref="EmbeddingApiType"/> to use.</param>
     /// <param name="config">An <see cref="EmbedContentConfig"/> instance that specifies the
     /// optional configurations.</param>
     /// <param name="cancellationToken">A <see cref="CancellationToken"/> to cancel the

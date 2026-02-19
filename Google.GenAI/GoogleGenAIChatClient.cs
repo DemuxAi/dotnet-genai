@@ -164,7 +164,7 @@ internal sealed class GoogleGenAIChatClient : IChatClient
   /// <inheritdoc />
   void IDisposable.Dispose() { /* nop */ }
 
-  /// <summary>Creates the message parameters for <see cref="Models.GenerateContentAsync(string, List{Content}, GenerateContentConfig?)"/> from <paramref name="messages"/> and <paramref name="options"/>.</summary>
+  /// <summary>Creates the message parameters for <see cref="Models.GenerateContentAsync(string, List{Content}, GenerateContentConfig, CancellationToken)"/> from <paramref name="messages"/> and <paramref name="options"/>.</summary>
   private (string? ModelId, List<Content> Contents, GenerateContentConfig Config) CreateRequest(IEnumerable<ChatMessage> messages, ChatOptions? options)
   {
     // Create the GenerateContentConfig object. If the options contains a RawRepresentationFactory, try to use it to

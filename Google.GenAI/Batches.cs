@@ -1998,8 +1998,8 @@ namespace Google.GenAI {
     /// </summary>
     /// <param name="config">A <see cref="ListBatchJobsConfig"/> for configuring the list
     /// request.</param> <param name="cancellationToken">The <see cref="CancellationToken"/> for the
-    /// request.</param> <returns>A <see cref="Pager{BatchJob}"/> object that contains the list of
-    /// batch jobs. The pager is an
+    /// request.</param> <returns>A <see cref="Pager{BatchJob, ListBatchJobsConfig,
+    /// ListBatchJobsResponse}"/> object that contains the list of batch jobs. The pager is an
     ///     iterable and automatically queries the next page once the current page is
     ///     exhausted.</returns>
 

@@ -439,9 +439,9 @@ namespace Google.GenAI {
     /// <param name="filePath">The path to the file to upload.</param>
     /// <param name="config">A <see cref="UploadFileConfig"/> instance that specifies the optional
     /// configurations.</param> <param name="cancellationToken">A <see cref="CancellationToken"/> to
-    /// cancel the operation.</param> <returns>A <see cref="Task{Google.GenAI.Types.File}"/> that
-    /// represents the asynchronous operation. The task result contains the uploaded <see
-    /// cref="Google.GenAI.Types.File"/> metadata.</returns>
+    /// cancel the operation.</param> <returns>A <see cref="Task{File}"/> that represents the
+    /// asynchronous operation. The task result contains the uploaded <see cref="File"/>
+    /// metadata.</returns>
     public async Task<Google.GenAI.Types.File> UploadAsync(
         string filePath, UploadFileConfig? config = null,
         CancellationToken cancellationToken = default) {
@@ -464,9 +464,9 @@ namespace Google.GenAI {
     /// <param name="fileName">Optional file name to use.</param>
     /// <param name="config">A <see cref="UploadFileConfig"/> instance that specifies the optional
     /// configurations.</param> <param name="cancellationToken">A <see cref="CancellationToken"/> to
-    /// cancel the operation.</param> <returns>A <see cref="Task{Google.GenAI.Types.File}"/> that
-    /// represents the asynchronous operation. The task result contains the uploaded <see
-    /// cref="Google.GenAI.Types.File"/> metadata.</returns>
+    /// cancel the operation.</param> <returns>A <see cref="Task{File}"/> that represents the
+    /// asynchronous operation. The task result contains the uploaded <see cref="File"/>
+    /// metadata.</returns>
     public async Task<Google.GenAI.Types.File> UploadAsync(
         byte[] bytes, string? fileName = null, UploadFileConfig? config = null,
         CancellationToken cancellationToken = default) {
@@ -488,9 +488,8 @@ namespace Google.GenAI {
     /// application/octet-stream.</param> <param name="config">A <see cref="UploadFileConfig"/>
     /// instance that specifies the optional configurations.</param> <param
     /// name="cancellationToken">A <see cref="CancellationToken"/> to cancel the operation.</param>
-    /// <returns>A <see cref="Task{Google.GenAI.Types.File}"/> that represents the asynchronous
-    /// operation. The task result contains the uploaded <see cref="Google.GenAI.Types.File"/>
-    /// metadata.</returns>
+    /// <returns>A <see cref="Task{File}"/> that represents the asynchronous operation. The task
+    /// result contains the uploaded <see cref="File"/> metadata.</returns>
     public async Task<Google.GenAI.Types.File> UploadAsync(
         Stream stream, long size, string? fileName = null, string? mimeType = null,
         UploadFileConfig? config = null, CancellationToken cancellationToken = default) {
@@ -526,10 +525,10 @@ namespace Google.GenAI {
     }
 
     /// <summary>
-    /// Downloads a <see cref="Google.GenAI.Types.File"/> object and returns it as a <see
-    /// cref="Stream"/>. Caller is responsible for disposing the returned stream.
+    /// Downloads a <see cref="File"/> object and returns it as a <see cref="Stream"/>. Caller is
+    /// responsible for disposing the returned stream.
     /// </summary>
-    /// <param name="file">The <see cref="Google.GenAI.Types.File"/> object to download.</param>
+    /// <param name="file">The <see cref="File"/> object to download.</param>
     /// <param name="config">A <see cref="DownloadFileConfig"/> instance that specifies the optional
     /// configurations.</param> <param name="cancellationToken">A <see cref="CancellationToken"/> to
     /// cancel the operation.</param> <returns>A <see cref="Task{Stream}"/> that represents the
@@ -543,45 +542,44 @@ namespace Google.GenAI {
             "This method is only supported in the Gemini Developer API client.");
       }
       if (string.IsNullOrEmpty(file.Name))
-        throw new ArgumentException("Google.GenAI.Types.File.Name is required", nameof(file));
+        throw new ArgumentException("File.Name is required", nameof(file));
 
       return await DownloadAsync(file.Name, config, cancellationToken);
     }
 
     /// <summary>
-    /// Downloads a <see cref="Google.GenAI.Types.Video"/> object and returns it as a <see
-    /// cref="Stream"/>. Caller is responsible for disposing the returned stream.
+    /// Downloads a <see cref="Video"/> object and returns it as a <see cref="Stream"/>. Caller is
+    /// responsible for disposing the returned stream.
     /// </summary>
-    /// <param name="file">The <see cref="Google.GenAI.Types.Video"/> object to download.</param>
+    /// <param name="video">The <see cref="Video"/> object to download.</param>
     /// <param name="config">A <see cref="DownloadFileConfig"/> instance that specifies the optional
     /// configurations.</param> <param name="cancellationToken">A <see cref="CancellationToken"/> to
     /// cancel the operation.</param> <returns>A <see cref="Task{Stream}"/> that represents the
     /// asynchronous operation. The task result contains a <see cref="Stream"/> with the file
     /// data.</returns>
-    public async Task<Stream> DownloadAsync(Google.GenAI.Types.Video video,
-                                            DownloadFileConfig? config = null,
+    public async Task<Stream> DownloadAsync(Video video, DownloadFileConfig? config = null,
                                             CancellationToken cancellationToken = default) {
       if (this._apiClient.VertexAI) {
         throw new NotSupportedException(
             "This method is only supported in the Gemini Developer API client.");
       }
       if (string.IsNullOrEmpty(video.Uri))
-        throw new ArgumentException("Google.GenAI.Types.Video.Uri is required", nameof(video));
+        throw new ArgumentException("Video.Uri is required", nameof(video));
 
       return await DownloadAsync(video.Uri, config, cancellationToken);
     }
 
     /// <summary>
-    /// Downloads a <see cref="Google.GenAI.Types.GeneratedVideo"/> object and returns it as a <see
-    /// cref="Stream"/>. Caller is responsible for disposing the returned stream.
+    /// Downloads a <see cref="GeneratedVideo"/> object and returns it as a <see cref="Stream"/>.
+    /// Caller is responsible for disposing the returned stream.
     /// </summary>
-    /// <param name="file">The <see cref="Google.GenAI.Types.GeneratedVideo"/> object to
-    /// download.</param> <param name="config">A <see cref="DownloadFileConfig"/> instance that
-    /// specifies the optional configurations.</param> <param name="cancellationToken">A <see
-    /// cref="CancellationToken"/> to cancel the operation.</param> <returns>A <see
-    /// cref="Task{Stream}"/> that represents the asynchronous operation. The task result contains a
-    /// <see cref="Stream"/> with the file data.</returns>
-    public async Task<Stream> DownloadAsync(Google.GenAI.Types.GeneratedVideo generatedVideo,
+    /// <param name="generatedVideo">The <see cref="GeneratedVideo"/> object to download.</param>
+    /// <param name="config">A <see cref="DownloadFileConfig"/> instance that specifies the optional
+    /// configurations.</param> <param name="cancellationToken">A <see cref="CancellationToken"/> to
+    /// cancel the operation.</param> <returns>A <see cref="Task{Stream}"/> that represents the
+    /// asynchronous operation. The task result contains a <see cref="Stream"/> with the file
+    /// data.</returns>
+    public async Task<Stream> DownloadAsync(GeneratedVideo generatedVideo,
                                             DownloadFileConfig? config = null,
                                             CancellationToken cancellationToken = default) {
       if (this._apiClient.VertexAI) {
@@ -589,7 +587,7 @@ namespace Google.GenAI {
             "This method is only supported in the Gemini Developer API client.");
       }
       if (generatedVideo.Video == null)
-        throw new ArgumentException("Google.GenAI.Types.Video is empty", nameof(generatedVideo));
+        throw new ArgumentException("Video is empty", nameof(generatedVideo));
 
       return await DownloadAsync(generatedVideo.Video, config, cancellationToken);
     }
@@ -623,7 +621,7 @@ namespace Google.GenAI {
     }
 
     /// <summary>
-    /// Downloads a <see cref="Google.GenAI.Types.File"/> object directly to a file path.
+    /// Downloads a <see cref="File"/> object directly to a file path.
     /// </summary>
     /// <param name="file">The <see cref="File"/> object to download.</param>
     /// <param name="outputPath">The path where the file should be saved.</param>
@@ -645,37 +643,37 @@ namespace Google.GenAI {
     }
 
     /// <summary>
-    /// Downloads a <see cref="Google.GenAI.Types.GeneratedVideo"/> object directly to a file path.
+    /// Downloads a <see cref="GeneratedVideo"/> object directly to a file path.
     /// </summary>
-    /// <param name="file">The <see cref="GeneratedVideo"/> object to download.</param>
+    /// <param name="generatedVideo">The <see cref="GeneratedVideo"/> object to download.</param>
     /// <param name="outputPath">The path where the Video should be saved.</param>
     /// <param name="config">A <see cref="DownloadFileConfig"/> instance that specifies the optional
     /// configurations.</param> <param name="cancellationToken">A <see cref="CancellationToken"/> to
     /// cancel the operation.</param> <returns>A <see cref="Task"/> that represents the asynchronous
     /// operation.</returns>
-    public async Task DownloadToFileAsync(Google.GenAI.Types.GeneratedVideo generatedVideo,
-                                          string outputPath, DownloadFileConfig? config = null,
+    public async Task DownloadToFileAsync(GeneratedVideo generatedVideo, string outputPath,
+                                          DownloadFileConfig? config = null,
                                           CancellationToken cancellationToken = default) {
       if (this._apiClient.VertexAI) {
         throw new NotSupportedException(
             "This method is only supported in the Gemini Developer API client.");
       }
       if (generatedVideo.Video == null)
-        throw new ArgumentException("Google.GenAI.Types.Video is empty", nameof(generatedVideo));
+        throw new ArgumentException("Video is empty", nameof(generatedVideo));
 
       await DownloadToFileAsync(generatedVideo.Video, outputPath, config, cancellationToken);
     }
 
     /// <summary>
-    /// Downloads a <see cref="Google.GenAI.Types.Video"/> object directly to a file path.
+    /// Downloads a <see cref="Video"/> object directly to a file path.
     /// </summary>
-    /// <param name="file">The <see cref="Video"/> object to download.</param>
+    /// <param name="video">The <see cref="Video"/> object to download.</param>
     /// <param name="outputPath">The path where the Video should be saved.</param>
     /// <param name="config">A <see cref="DownloadFileConfig"/> instance that specifies the optional
     /// configurations.</param> <param name="cancellationToken">A <see cref="CancellationToken"/> to
     /// cancel the operation.</param> <returns>A <see cref="Task"/> that represents the asynchronous
     /// operation.</returns>
-    public async Task DownloadToFileAsync(Google.GenAI.Types.Video video, string outputPath,
+    public async Task DownloadToFileAsync(Video video, string outputPath,
                                           DownloadFileConfig? config = null,
                                           CancellationToken cancellationToken = default) {
       if (this._apiClient.VertexAI) {
@@ -683,7 +681,7 @@ namespace Google.GenAI {
             "This method is only supported in the Gemini Developer API client.");
       }
       if (string.IsNullOrEmpty(video.Uri))
-        throw new ArgumentException("Google.GenAI.Types.Video.Uri is required", nameof(video));
+        throw new ArgumentException("Video.Uri is required", nameof(video));
 
       await DownloadToFileAsync(video.Uri, outputPath, config, cancellationToken);
     }
