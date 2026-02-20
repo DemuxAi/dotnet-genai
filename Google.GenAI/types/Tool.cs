@@ -123,6 +123,16 @@ namespace Google.GenAI.Types {
           }
 
     /// <summary>
+    /// Optional. MCP Servers to connect to. This field is not supported in Vertex AI.
+    /// </summary>
+    [JsonPropertyName("mcpServers")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public List<McpServer>
+        ? McpServers {
+            get; set;
+          }
+
+    /// <summary>
     /// Deserializes a JSON string to a Tool object.
     /// </summary>
     /// <param name="jsonString">The JSON string to deserialize.</param>

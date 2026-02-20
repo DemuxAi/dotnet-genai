@@ -1373,6 +1373,11 @@ namespace Google.GenAI {
                               Common.GetValueByPath(fromObject, new string[] { "urlContext" }));
       }
 
+      if (Common.GetValueByPath(fromObject, new string[] { "mcpServers" }) != null) {
+        Common.SetValueByPath(toObject, new string[] { "mcpServers" },
+                              Common.GetValueByPath(fromObject, new string[] { "mcpServers" }));
+      }
+
       return toObject;
     }
 
@@ -1431,6 +1436,10 @@ namespace Google.GenAI {
       if (Common.GetValueByPath(fromObject, new string[] { "urlContext" }) != null) {
         Common.SetValueByPath(toObject, new string[] { "urlContext" },
                               Common.GetValueByPath(fromObject, new string[] { "urlContext" }));
+      }
+
+      if (!Common.IsZero(Common.GetValueByPath(fromObject, new string[] { "mcpServers" }))) {
+        throw new NotSupportedException("mcpServers parameter is not supported in Vertex AI.");
       }
 
       return toObject;

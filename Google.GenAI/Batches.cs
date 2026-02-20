@@ -1569,6 +1569,11 @@ namespace Google.GenAI {
                               Common.GetValueByPath(fromObject, new string[] { "urlContext" }));
       }
 
+      if (Common.GetValueByPath(fromObject, new string[] { "mcpServers" }) != null) {
+        Common.SetValueByPath(toObject, new string[] { "mcpServers" },
+                              Common.GetValueByPath(fromObject, new string[] { "mcpServers" }));
+      }
+
       return toObject;
     }
 
