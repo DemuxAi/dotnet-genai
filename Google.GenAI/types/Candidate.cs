@@ -76,22 +76,23 @@ namespace Google.GenAI.Types {
           }
 
     /// <summary>
+    /// Output only. Metadata returned when grounding is enabled. It contains the sources used to
+    /// ground the generated content.
+    /// </summary>
+    [JsonPropertyName("groundingMetadata")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public GroundingMetadata
+        ? GroundingMetadata {
+            get; set;
+          }
+
+    /// <summary>
     /// Output only. Average log probability score of the candidate.
     /// </summary>
     [JsonPropertyName("avgLogprobs")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public double
         ? AvgLogprobs {
-            get; set;
-          }
-
-    /// <summary>
-    /// Output only. Metadata specifies sources used to ground generated content.
-    /// </summary>
-    [JsonPropertyName("groundingMetadata")]
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public GroundingMetadata
-        ? GroundingMetadata {
             get; set;
           }
 

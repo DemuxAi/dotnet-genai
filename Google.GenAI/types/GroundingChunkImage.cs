@@ -23,60 +23,60 @@ using Google.GenAI.Serialization;
 
 namespace Google.GenAI.Types {
   /// <summary>
-  /// Tool to support web search.
+  /// A piece of evidence that comes from an image search result.  It contains the URI of the image
+  /// search result and the URI of the image. This is used to provide the user with a link to the
+  /// source of the information.
   /// </summary>
 
-  public record GoogleSearch {
+  public record GroundingChunkImage {
     /// <summary>
-    /// Different types of search that can be enabled on the GoogleSearch tool.
+    /// The URI of the image search result page.
     /// </summary>
-    [JsonPropertyName("searchTypes")]
+    [JsonPropertyName("sourceUri")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public SearchTypes ? SearchTypes { get; set; }
+    public string ? SourceUri { get; set; }
 
     /// <summary>
-    /// Optional. List of domains to be excluded from the search results. The default limit is 2000
-    /// domains. Example: ["amazon.com", "facebook.com"]. This field is not supported in Gemini API.
+    /// The URI of the image.
     /// </summary>
-    [JsonPropertyName("excludeDomains")]
+    [JsonPropertyName("imageUri")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public List<string>
-        ? ExcludeDomains {
+    public string
+        ? ImageUri {
             get; set;
           }
 
     /// <summary>
-    /// Optional. Sites with confidence level chosen &amp; above this value will be blocked from the
-    /// search results. This field is not supported in Gemini API.
+    /// The title of the image search result page.
     /// </summary>
-    [JsonPropertyName("blockingConfidence")]
+    [JsonPropertyName("title")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public PhishBlockThreshold
-        ? BlockingConfidence {
+    public string
+        ? Title {
             get; set;
           }
 
     /// <summary>
-    /// Optional. Filter search results to a specific time range. If customers set a start time,
-    /// they must set an end time (and vice versa). This field is not supported in Vertex AI.
+    /// The domain of the image search result page.
     /// </summary>
-    [JsonPropertyName("timeRangeFilter")]
+    [JsonPropertyName("domain")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public Interval
-        ? TimeRangeFilter {
+    public string
+        ? Domain {
             get; set;
           }
 
     /// <summary>
-    /// Deserializes a JSON string to a GoogleSearch object.
+    /// Deserializes a JSON string to a GroundingChunkImage object.
     /// </summary>
     /// <param name="jsonString">The JSON string to deserialize.</param>
     /// <param name="options">Optional JsonSerializerOptions.</param>
-    /// <returns>The deserialized GoogleSearch object, or null if deserialization fails.</returns>
-    public static GoogleSearch
+    /// <returns>The deserialized GroundingChunkImage object, or null if deserialization
+    /// fails.</returns>
+    public static GroundingChunkImage
         ? FromJson(string jsonString, JsonSerializerOptions? options = null) {
       try {
-        return JsonSerializer.Deserialize<GoogleSearch>(jsonString, options);
+        return JsonSerializer.Deserialize<GroundingChunkImage>(jsonString, options);
       } catch (JsonException e) {
         Console.Error.WriteLine($"Error deserializing JSON: {e.ToString()}");
         return null;

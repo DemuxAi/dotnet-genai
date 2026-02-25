@@ -22,11 +22,28 @@ using System.Text.Json.Serialization;
 using Google.GenAI.Serialization;
 
 namespace Google.GenAI.Types {
-  /// <summary>
-  /// Metadata returned to client when grounding is enabled.
-  /// </summary>
 
   public record GroundingMetadata {
+    /// <summary>
+    /// Optional. The image search queries that were used to generate the content. This field is
+    /// populated only when the grounding source is Google Search with the Image Search search_type
+    /// enabled.
+    /// </summary>
+    [JsonPropertyName("imageSearchQueries")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public List<string> ? ImageSearchQueries { get; set; }
+
+    /// <summary>
+    /// A list of supporting references retrieved from the grounding source. This field is populated
+    /// when the grounding source is Google Search, Vertex AI Search, or Google Maps.
+    /// </summary>
+    [JsonPropertyName("groundingChunks")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public List<GroundingChunk>
+        ? GroundingChunks {
+            get; set;
+          }
+
     /// <summary>
     /// Optional. Output only. Resource name of the Google Maps widget context token to be used with
     /// the PlacesContextElement widget to render contextual data. This is populated only for Google
@@ -34,15 +51,8 @@ namespace Google.GenAI.Types {
     /// </summary>
     [JsonPropertyName("googleMapsWidgetContextToken")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public string ? GoogleMapsWidgetContextToken { get; set; }
-
-    /// <summary>
-    /// List of supporting references retrieved from specified grounding source.
-    /// </summary>
-    [JsonPropertyName("groundingChunks")]
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public List<GroundingChunk>
-        ? GroundingChunks {
+    public string
+        ? GoogleMapsWidgetContextToken {
             get; set;
           }
 

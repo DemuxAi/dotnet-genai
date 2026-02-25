@@ -23,16 +23,28 @@ using Google.GenAI.Serialization;
 
 namespace Google.GenAI.Types {
   /// <summary>
-  /// Grounding chunk.
+  /// A piece of evidence that supports a claim made by the model.  This is used to show a citation
+  /// for a claim made by the model. When grounding is enabled, the model returns a `GroundingChunk`
+  /// that contains a reference to the source of the information.
   /// </summary>
 
   public record GroundingChunk {
+    /// <summary>
+    /// A grounding chunk from an image search result. See the `Image` message for details.
+    /// </summary>
+    [JsonPropertyName("image")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public GroundingChunkImage ? Image { get; set; }
+
     /// <summary>
     /// Grounding chunk from Google Maps. This field is not supported in Gemini API.
     /// </summary>
     [JsonPropertyName("maps")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public GroundingChunkMaps ? Maps { get; set; }
+    public GroundingChunkMaps
+        ? Maps {
+            get; set;
+          }
 
     /// <summary>
     /// Grounding chunk from context retrieved by the retrieval tools. This field is not supported

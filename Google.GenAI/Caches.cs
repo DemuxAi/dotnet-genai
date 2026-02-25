@@ -460,6 +460,11 @@ namespace Google.GenAI {
     internal JsonNode GoogleSearchToMldev(JsonNode fromObject, JsonObject parentObject) {
       JsonObject toObject = new JsonObject();
 
+      if (Common.GetValueByPath(fromObject, new string[] { "searchTypes" }) != null) {
+        Common.SetValueByPath(toObject, new string[] { "searchTypes" },
+                              Common.GetValueByPath(fromObject, new string[] { "searchTypes" }));
+      }
+
       if (!Common.IsZero(Common.GetValueByPath(fromObject, new string[] { "excludeDomains" }))) {
         throw new NotSupportedException("excludeDomains parameter is not supported in Gemini API.");
       }
@@ -693,6 +698,14 @@ namespace Google.GenAI {
                               Common.GetValueByPath(fromObject, new string[] { "computerUse" }));
       }
 
+      if (Common.GetValueByPath(fromObject, new string[] { "googleSearch" }) != null) {
+        Common.SetValueByPath(
+            toObject, new string[] { "googleSearch" },
+            GoogleSearchToMldev(JsonNode.Parse(JsonSerializer.Serialize(Common.GetValueByPath(
+                                    fromObject, new string[] { "googleSearch" }))),
+                                toObject));
+      }
+
       if (Common.GetValueByPath(fromObject, new string[] { "codeExecution" }) != null) {
         Common.SetValueByPath(toObject, new string[] { "codeExecution" },
                               Common.GetValueByPath(fromObject, new string[] { "codeExecution" }));
@@ -716,14 +729,6 @@ namespace Google.GenAI {
             GoogleMapsToMldev(JsonNode.Parse(JsonSerializer.Serialize(Common.GetValueByPath(
                                   fromObject, new string[] { "googleMaps" }))),
                               toObject));
-      }
-
-      if (Common.GetValueByPath(fromObject, new string[] { "googleSearch" }) != null) {
-        Common.SetValueByPath(
-            toObject, new string[] { "googleSearch" },
-            GoogleSearchToMldev(JsonNode.Parse(JsonSerializer.Serialize(Common.GetValueByPath(
-                                    fromObject, new string[] { "googleSearch" }))),
-                                toObject));
       }
 
       if (Common.GetValueByPath(fromObject, new string[] { "googleSearchRetrieval" }) != null) {
@@ -758,6 +763,11 @@ namespace Google.GenAI {
                               Common.GetValueByPath(fromObject, new string[] { "computerUse" }));
       }
 
+      if (Common.GetValueByPath(fromObject, new string[] { "googleSearch" }) != null) {
+        Common.SetValueByPath(toObject, new string[] { "googleSearch" },
+                              Common.GetValueByPath(fromObject, new string[] { "googleSearch" }));
+      }
+
       if (Common.GetValueByPath(fromObject, new string[] { "codeExecution" }) != null) {
         Common.SetValueByPath(toObject, new string[] { "codeExecution" },
                               Common.GetValueByPath(fromObject, new string[] { "codeExecution" }));
@@ -784,11 +794,6 @@ namespace Google.GenAI {
       if (Common.GetValueByPath(fromObject, new string[] { "googleMaps" }) != null) {
         Common.SetValueByPath(toObject, new string[] { "googleMaps" },
                               Common.GetValueByPath(fromObject, new string[] { "googleMaps" }));
-      }
-
-      if (Common.GetValueByPath(fromObject, new string[] { "googleSearch" }) != null) {
-        Common.SetValueByPath(toObject, new string[] { "googleSearch" },
-                              Common.GetValueByPath(fromObject, new string[] { "googleSearch" }));
       }
 
       if (Common.GetValueByPath(fromObject, new string[] { "googleSearchRetrieval" }) != null) {

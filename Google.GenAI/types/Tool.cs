@@ -48,6 +48,16 @@ namespace Google.GenAI.Types {
           }
 
     /// <summary>
+    /// Enables the model to execute Google Search as part of generation.
+    /// </summary>
+    [JsonPropertyName("googleSearch")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public GoogleSearch
+        ? GoogleSearch {
+            get; set;
+          }
+
+    /// <summary>
     /// Optional. CodeExecution tool type. Enables the model to execute code as part of generation.
     /// </summary>
     [JsonPropertyName("codeExecution")]
@@ -89,16 +99,6 @@ namespace Google.GenAI.Types {
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public GoogleMaps
         ? GoogleMaps {
-            get; set;
-          }
-
-    /// <summary>
-    /// Optional. GoogleSearch tool type. Tool to support Google Search in Model. Powered by Google.
-    /// </summary>
-    [JsonPropertyName("googleSearch")]
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public GoogleSearch
-        ? GoogleSearch {
             get; set;
           }
 
