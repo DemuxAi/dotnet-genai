@@ -104,17 +104,7 @@ public class GenerateContentToolsTest {
           } }
         });
 
-    Assert.IsNotNull(vertexResponse.Candidates);
-    Assert.IsTrue(vertexResponse.Candidates.Count >= 1);
-    var firstCandidate = vertexResponse.Candidates.FirstOrDefault();
-    Assert.IsNotNull(firstCandidate);
-    Assert.IsNotNull(firstCandidate.Content);
-    Assert.IsNotNull(firstCandidate.Content.Parts);
-    Assert.IsTrue(firstCandidate.Content.Parts.Count >= 1);
-    var firstPart = firstCandidate.Content.Parts.FirstOrDefault();
-    Assert.IsNotNull(firstPart);
-    Assert.IsNotNull(firstPart.FunctionCall);
-    Assert.AreEqual("GetWeather", firstPart.FunctionCall.Name);
+    Assert.AreEqual("GetWeather", vertexResponse.FunctionCalls.FirstOrDefault().Name);
   }
 
   [TestMethod]
@@ -128,17 +118,7 @@ public class GenerateContentToolsTest {
           } }
         });
 
-    Assert.IsNotNull(geminiResponse.Candidates);
-    Assert.IsTrue(geminiResponse.Candidates.Count >= 1);
-    var firstCandidate = geminiResponse.Candidates.FirstOrDefault();
-    Assert.IsNotNull(firstCandidate);
-    Assert.IsNotNull(firstCandidate.Content);
-    Assert.IsNotNull(firstCandidate.Content.Parts);
-    Assert.IsTrue(firstCandidate.Content.Parts.Count >= 1);
-    var firstPart = firstCandidate.Content.Parts.FirstOrDefault();
-    Assert.IsNotNull(firstPart);
-    Assert.IsNotNull(firstPart.FunctionCall);
-    Assert.AreEqual("GetWeather", firstPart.FunctionCall.Name);
+    Assert.AreEqual("GetWeather", geminiResponse.FunctionCalls.FirstOrDefault().Name);
   }
 
   [TestMethod]
@@ -167,7 +147,7 @@ public class GenerateContentToolsTest {
 
     Assert.IsNotNull(geminiResponse.Candidates);
     Assert.IsTrue(geminiResponse.Candidates.Count >= 1);
-    Assert.IsNotNull(geminiResponse.Candidates.First().Content.Parts.First().Text);
+    Assert.IsNotNull(geminiResponse.Text);
     Assert.IsNotNull(geminiResponse.Candidates.First().GroundingMetadata);
   }
 }

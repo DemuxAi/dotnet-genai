@@ -82,7 +82,7 @@ public class GenerateContentSimpleTest {
         model: modelName, contents: "What is the capital of France?");
 
     Assert.IsNotNull(vertexResponse.Candidates);
-    StringAssert.Contains(vertexResponse.Candidates.First().Content.Parts.First().Text, "Paris");
+    StringAssert.Contains(vertexResponse.Text, "Paris");
   }
 
   [TestMethod]
@@ -91,7 +91,7 @@ public class GenerateContentSimpleTest {
         model: modelName, contents: "What is the capital of France?");
 
     Assert.IsNotNull(geminiResponse.Candidates);
-    StringAssert.Contains(geminiResponse.Candidates.First().Content.Parts.First().Text, "Paris");
+    StringAssert.Contains(geminiResponse.Text, "Paris");
   }
 
   [TestMethod]
@@ -103,7 +103,7 @@ public class GenerateContentSimpleTest {
         model: modelName, contents: "high", config: generateContentConfig);
 
     Assert.IsNotNull(vertexResponse.Candidates);
-    StringAssert.Contains(vertexResponse.Candidates.First().Content.Parts.First().Text, "low");
+    StringAssert.Contains(vertexResponse.Text, "low");
   }
 
   [TestMethod]
@@ -115,7 +115,7 @@ public class GenerateContentSimpleTest {
         model: modelName, contents: "high", config: generateContentConfig);
 
     Assert.IsNotNull(geminiResponse.Candidates);
-    StringAssert.Contains(geminiResponse.Candidates.First().Content.Parts.First().Text, "low");
+    StringAssert.Contains(geminiResponse.Text, "low");
   }
 
   [TestMethod]
@@ -176,7 +176,7 @@ public class GenerateContentSimpleTest {
 
     Assert.IsNotNull(vertexResponse.Candidates);
     Assert.IsTrue(vertexResponse.Candidates.Count >= 1);
-    Assert.IsNotNull(vertexResponse.Candidates.First().Content.Parts.First().Text);
+    Assert.IsNotNull(vertexResponse.Text);
     Assert.IsNotNull(vertexResponse.Candidates.First().SafetyRatings);
   }
 }

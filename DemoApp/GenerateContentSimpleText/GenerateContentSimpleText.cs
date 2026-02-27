@@ -25,7 +25,7 @@ public class GenerateContentSimpleText {
       var geminiResponse = await geminiClient.Models.GenerateContentAsync(
           model: "gemini-2.0-flash", contents: "What is the capital of France?");
       Console.WriteLine("Gemini API Response:");
-      Console.WriteLine(geminiResponse);
+      Console.WriteLine(geminiResponse.Text);
     } catch (HttpRequestException ex) {
       Console.WriteLine($"An error occurred with Gemini API: {ex.ToString()}");
     }
@@ -41,7 +41,7 @@ public class GenerateContentSimpleText {
       var vertexResponse = await vertexClient.Models.GenerateContentAsync(model: "gemini-2.0-flash",
                                                                           contents: contents);
       Console.WriteLine("Vertex AI API Response:");
-      Console.WriteLine(vertexResponse);
+      Console.WriteLine(vertexResponse.Text);
     } catch (Exception ex) {
       Console.WriteLine($"An error occurred with Vertex AI API: {ex.Message}");
     }

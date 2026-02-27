@@ -103,17 +103,7 @@ public class GenerateContentStreamToolsTest {
                                new List<GoogleTypes.FunctionDeclaration> { getWeatherDeclaration }
                          } }
                        })) {
-      Assert.IsNotNull(chunk.Candidates);
-      Assert.IsTrue(chunk.Candidates.Count >= 1);
-      var firstCandidate = chunk.Candidates.FirstOrDefault();
-      Assert.IsNotNull(firstCandidate);
-      Assert.IsNotNull(firstCandidate.Content);
-      Assert.IsNotNull(firstCandidate.Content.Parts);
-      Assert.IsTrue(firstCandidate.Content.Parts.Count >= 1);
-      var firstPart = firstCandidate.Content.Parts.FirstOrDefault();
-      Assert.IsNotNull(firstPart);
-      Assert.IsNotNull(firstPart.FunctionCall);
-      Assert.AreEqual("GetWeather", firstPart.FunctionCall.Name);
+      Assert.AreEqual("GetWeather", chunk.FunctionCalls.FirstOrDefault().Name);
     }
   }
 
@@ -132,16 +122,7 @@ public class GenerateContentStreamToolsTest {
                                                               StreamFunctionCallArguments = true
                                                             } }
                        })) {
-      Assert.IsNotNull(chunk.Candidates);
-      Assert.IsTrue(chunk.Candidates.Count >= 1);
-      var firstCandidate = chunk.Candidates.FirstOrDefault();
-      Assert.IsNotNull(firstCandidate);
-      Assert.IsNotNull(firstCandidate.Content);
-      Assert.IsNotNull(firstCandidate.Content.Parts);
-      Assert.IsTrue(firstCandidate.Content.Parts.Count >= 1);
-      var firstPart = firstCandidate.Content.Parts.FirstOrDefault();
-      Assert.IsNotNull(firstPart);
-      Assert.IsNotNull(firstPart.FunctionCall);
+      Assert.IsNotNull(chunk.FunctionCalls.FirstOrDefault());
     }
   }
 
@@ -155,17 +136,7 @@ public class GenerateContentStreamToolsTest {
                                new List<GoogleTypes.FunctionDeclaration> { getWeatherDeclaration }
                          } }
                        })) {
-      Assert.IsNotNull(chunk.Candidates);
-      Assert.IsTrue(chunk.Candidates.Count >= 1);
-      var firstCandidate = chunk.Candidates.FirstOrDefault();
-      Assert.IsNotNull(firstCandidate);
-      Assert.IsNotNull(firstCandidate.Content);
-      Assert.IsNotNull(firstCandidate.Content.Parts);
-      Assert.IsTrue(firstCandidate.Content.Parts.Count >= 1);
-      var firstPart = firstCandidate.Content.Parts.FirstOrDefault();
-      Assert.IsNotNull(firstPart);
-      Assert.IsNotNull(firstPart.FunctionCall);
-      Assert.AreEqual("GetWeather", firstPart.FunctionCall.Name);
+      Assert.AreEqual("GetWeather", chunk.FunctionCalls.FirstOrDefault().Name);
     }
   }
 
@@ -179,7 +150,7 @@ public class GenerateContentStreamToolsTest {
                        config: generateContentConfig)) {
       Assert.IsNotNull(chunk.Candidates);
       Assert.IsTrue(chunk.Candidates.Count >= 1);
-      Assert.IsNotNull(chunk.Candidates.First().Content.Parts.First().Text);
+      Assert.IsNotNull(chunk.Text);
       Assert.IsNotNull(chunk.Candidates.First().GroundingMetadata);
     }
   }
@@ -194,7 +165,7 @@ public class GenerateContentStreamToolsTest {
                        config: generateContentConfig)) {
       Assert.IsNotNull(chunk.Candidates);
       Assert.IsTrue(chunk.Candidates.Count >= 1);
-      Assert.IsNotNull(chunk.Candidates.First().Content.Parts.First().Text);
+      Assert.IsNotNull(chunk.Text);
       Assert.IsNotNull(chunk.Candidates.First().GroundingMetadata);
     }
   }

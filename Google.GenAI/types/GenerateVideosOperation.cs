@@ -54,6 +54,9 @@ namespace Google.GenAI.Types {
       }
     }
 
+    /// <summary>
+    /// Creates a new GenerateVideosOperation object from an API response.
+    /// </summary>
     public override GenerateVideosOperation
         ? FromApiResponse(JsonNode apiResponse, bool isVertexAI) {
       var operationsConverters = new OperationsConverters(null);

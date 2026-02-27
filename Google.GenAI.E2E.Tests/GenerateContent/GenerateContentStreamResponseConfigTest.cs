@@ -124,9 +124,8 @@ public class GenerateContentStreamResponseConfigTest {
       Assert.IsNotNull(content);
       var part = content.Parts?.FirstOrDefault();
       Assert.IsNotNull(part);
-      string? text = part.Text;
-      Assert.IsNotNull(text);
-      aggregatedText += text;
+      Assert.IsNotNull(chunk.Text);
+      aggregatedText += chunk.Text;
     };
 
     var parsedText = JsonSerializer.Deserialize<Dictionary<string, object>>(aggregatedText);
@@ -154,9 +153,8 @@ public class GenerateContentStreamResponseConfigTest {
       Assert.IsNotNull(content);
       var part = content.Parts?.FirstOrDefault();
       Assert.IsNotNull(part);
-      string? text = part.Text;
-      Assert.IsNotNull(text);
-      aggregatedText += text;
+      Assert.IsNotNull(chunk.Text);
+      aggregatedText += chunk.Text;
     }
 
     var parsedText = JsonSerializer.Deserialize<Dictionary<string, object>>(aggregatedText);
@@ -184,9 +182,8 @@ public class GenerateContentStreamResponseConfigTest {
       Assert.IsNotNull(content);
       var part = content.Parts?.FirstOrDefault();
       Assert.IsNotNull(part);
-      string? text = part.Text;
-      Assert.IsNotNull(text);
-      aggregatedText += text;
+      Assert.IsNotNull(chunk.Text);
+      aggregatedText += chunk.Text;
     }
 
     var parsedText = JsonSerializer.Deserialize<Dictionary<string, object>>(aggregatedText);
@@ -213,9 +210,8 @@ public class GenerateContentStreamResponseConfigTest {
       Assert.IsNotNull(content);
       var part = content.Parts?.FirstOrDefault();
       Assert.IsNotNull(part);
-      string? text = part.Text;
-      Assert.IsNotNull(text);
-      aggregatedText += text;
+      Assert.IsNotNull(chunk.Text);
+      aggregatedText += chunk.Text;
     }
 
     var parsedText = JsonSerializer.Deserialize<Dictionary<string, object>>(aggregatedText);

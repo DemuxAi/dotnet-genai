@@ -117,8 +117,7 @@ public class GenerateContentResponseConfigTest {
 
     Assert.IsNotNull(vertexResponse.Candidates);
     Assert.IsTrue(vertexResponse.Candidates.Count >= 1);
-    string text = vertexResponse.Candidates.First().Content.Parts.First().Text;
-    var parsedText = JsonSerializer.Deserialize<Dictionary<string, object>>(text);
+    var parsedText = JsonSerializer.Deserialize<Dictionary<string, object>>(vertexResponse.Text);
     Assert.IsNotNull(parsedText);
     Assert.IsNotNull(parsedText["title"]);
     Assert.IsNotNull(parsedText["population"]);
@@ -136,8 +135,7 @@ public class GenerateContentResponseConfigTest {
 
     Assert.IsNotNull(geminiResponse.Candidates);
     Assert.IsTrue(geminiResponse.Candidates.Count >= 1);
-    string text = geminiResponse.Candidates.First().Content.Parts.First().Text;
-    var parsedText = JsonSerializer.Deserialize<Dictionary<string, object>>(text);
+    var parsedText = JsonSerializer.Deserialize<Dictionary<string, object>>(geminiResponse.Text);
     Assert.IsNotNull(parsedText);
     Assert.IsNotNull(parsedText["title"]);
     Assert.IsNotNull(parsedText["population"]);
@@ -155,8 +153,7 @@ public class GenerateContentResponseConfigTest {
 
     Assert.IsNotNull(vertexResponse.Candidates);
     Assert.IsTrue(vertexResponse.Candidates.Count >= 1);
-    string text = vertexResponse.Candidates.First().Content.Parts.First().Text;
-    var parsedText = JsonSerializer.Deserialize<Dictionary<string, object>>(text);
+    var parsedText = JsonSerializer.Deserialize<Dictionary<string, object>>(vertexResponse.Text);
     Assert.IsNotNull(parsedText);
     Assert.IsNotNull(parsedText["name"]);
     Assert.AreEqual(parsedText["city"].ToString(), "New York");
@@ -173,8 +170,7 @@ public class GenerateContentResponseConfigTest {
 
     Assert.IsNotNull(geminiResponse.Candidates);
     Assert.IsTrue(geminiResponse.Candidates.Count >= 1);
-    string text = geminiResponse.Candidates.First().Content.Parts.First().Text;
-    var parsedText = JsonSerializer.Deserialize<Dictionary<string, object>>(text);
+    var parsedText = JsonSerializer.Deserialize<Dictionary<string, object>>(geminiResponse.Text);
     Assert.IsNotNull(parsedText);
     Assert.IsNotNull(parsedText["name"]);
     Assert.AreEqual(parsedText["city"].ToString(), "New York");

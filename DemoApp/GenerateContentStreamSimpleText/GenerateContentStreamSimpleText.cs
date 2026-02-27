@@ -29,10 +29,7 @@ public class GenerateContentStreamSimpleText {
       await foreach (var chunk in geminiClient.Models.GenerateContentStreamAsync(
                          model: "gemini-2.0-flash",
                          contents: "Tell me a short story about a brave knight.")) {
-        var text = chunk.Candidates?[0]?.Content?.Parts?[0]?.Text;
-        if (!string.IsNullOrEmpty(text)) {
-          Console.Write(text);
-        }
+        Console.Write(chunk.Text);
       }
       Console.WriteLine("\n=== End of Gemini Streaming ===\n");
     } catch (ClientError ex) {
@@ -60,10 +57,7 @@ public class GenerateContentStreamSimpleText {
 
       await foreach (var chunk in vertexClient.Models.GenerateContentStreamAsync(
                          model: "gemini-2.0-flash", contents: contents)) {
-        var text = chunk.Candidates?[0]?.Content?.Parts?[0]?.Text;
-        if (!string.IsNullOrEmpty(text)) {
-          Console.Write(text);
-        }
+        Console.Write(chunk.Text);
       }
       Console.WriteLine("\n=== End of Vertex AI Streaming ===\n");
     } catch (ClientError ex) {

@@ -113,5 +113,51 @@ namespace Google.GenAI.Types {
         return null;
       }
     }
+
+    /// <summary>
+    /// Returns the concatenation of all text parts from the first candidate.
+    /// Non-text parts are ignored. Returns null if no text parts are present.
+    /// </summary>
+    public string ? Text {
+      get {
+        var parts = Candidates?.FirstOrDefault()?.Content?.Parts;
+        if (parts == null)
+          return null;
+        var textParts = parts.Where(p => p.Text != null).Select(p => p.Text!).ToList();
+        return textParts.Count == 0 ? null : string.Concat(textParts);
+      }
+    }
+
+    /// <summary>
+    /// Returns the list of function calls from the first candidate.
+    /// Returns null if no function call parts are present.
+    /// </summary>
+    public List<FunctionCall> ? FunctionCalls {
+      get {
+        var calls = Candidates?.FirstOrDefault()?.Content?.Parts
+            ?.Where(p => p.FunctionCall != null).Select(p => p.FunctionCall!).ToList();
+        return (calls == null || calls.Count == 0) ? null : calls;
+      }
+    }
+
+    /// <summary>
+    /// Returns the executable code string from the first candidate's first executable code part.
+    /// Returns null if no executable code parts are present.
+    /// </summary>
+    public string? ExecutableCode => Candidates?.FirstOrDefault()?.Content?.Parts
+        ?.FirstOrDefault(p => p.ExecutableCode != null)?.ExecutableCode?.Code;
+
+    /// <summary>
+    /// Returns the code execution result output from the first candidate's first result part.
+    /// Returns null if no code execution result parts are present.
+    /// </summary>
+    public string? CodeExecutionResult => Candidates?.FirstOrDefault()?.Content?.Parts
+        ?.FirstOrDefault(p => p.CodeExecutionResult != null)?.CodeExecutionResult?.Output;
+
+    /// <summary>
+    /// Returns the parts from the first candidate's content.
+    /// Returns null if there are no candidates or no content.
+    /// </summary>
+    public List<Part>? Parts => Candidates?.FirstOrDefault()?.Content?.Parts;
   }
 }
