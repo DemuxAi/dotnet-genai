@@ -154,5 +154,51 @@ namespace Google.GenAI.Types {
         return null;
       }
     }
+
+    /// <summary>
+    /// Creates a Part from a file URI. If <paramref name="mimeType"/> is not provided it is
+    /// inferred from the URI's file extension. Throws <see cref="ArgumentException"/> if the
+    /// MIME type cannot be determined.
+    /// </summary>
+    public static Part FromUri(string fileUri, string? mimeType = null,
+                               PartMediaResolution? mediaResolution = null) {
+      if (mimeType == null && !MimeTypes.TryGetMimeType(fileUri, out mimeType))
+        throw new ArgumentException($"Failed to determine MIME type for file: {fileUri}",
+                                    nameof(fileUri));
+      return new Part { FileData = new FileData { FileUri = fileUri, MimeType = mimeType },
+                        MediaResolution = mediaResolution };
+    }
+
+    /// <summary>Creates a Part with text content.</summary>
+    public static Part FromText(string text) => new Part { Text = text };
+
+    /// <summary>
+    /// Creates a Part with inline binary data. <paramref name="mimeType"/> must be a valid
+    /// IANA MIME type string (e.g. "image/jpeg").
+    /// </summary>
+    public static Part FromBytes(byte[] data, string mimeType,
+                                 PartMediaResolution? mediaResolution = null) =>
+        new Part { InlineData = new Blob { Data = data, MimeType = mimeType },
+                   MediaResolution = mediaResolution };
+
+    /// <summary>Creates a Part containing a model-issued function call.</summary>
+    public static Part FromFunctionCall(string name, Dictionary<string, object>? args = null) =>
+        new Part { FunctionCall = new FunctionCall { Name = name, Args = args } };
+
+    /// <summary>Creates a Part containing the result of a function call.</summary>
+    public static Part FromFunctionResponse(string name,
+                                            Dictionary<string, object>? response = null,
+                                            List<FunctionResponsePart>? parts = null) =>
+        new Part { FunctionResponse =
+                       new FunctionResponse { Name = name, Response = response, Parts = parts } };
+
+    /// <summary>Creates a Part containing executable code.</summary>
+    public static Part FromExecutableCode(string code, Language language) =>
+        new Part { ExecutableCode = new ExecutableCode { Code = code, Language = language } };
+
+    /// <summary>Creates a Part containing a code execution result.</summary>
+    public static Part FromCodeExecutionResult(Outcome outcome, string output) =>
+        new Part { CodeExecutionResult =
+                       new CodeExecutionResult { Outcome = outcome, Output = output } };
   }
 }
