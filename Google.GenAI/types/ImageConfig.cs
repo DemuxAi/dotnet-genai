@@ -91,6 +91,16 @@ namespace Google.GenAI.Types {
           }
 
     /// <summary>
+    /// Optional. The image output format for generated images.
+    /// </summary>
+    [JsonPropertyName("imageOutputOptions")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public ImageConfigImageOutputOptions
+        ? ImageOutputOptions {
+            get; set;
+          }
+
+    /// <summary>
     /// Deserializes a JSON string to a ImageConfig object.
     /// </summary>
     /// <param name="jsonString">The JSON string to deserialize.</param>
