@@ -508,6 +508,265 @@ namespace Google.GenAI {
       return toObject;
     }
 
+    internal JsonNode GenerationConfigFromVertex(JsonNode fromObject, JsonObject parentObject,
+                                                 JsonNode rootObject) {
+      JsonObject toObject = new JsonObject();
+
+      if (Common.GetValueByPath(fromObject, new string[] { "modelConfig" }) != null) {
+        Common.SetValueByPath(toObject, new string[] { "modelSelectionConfig" },
+                              Common.GetValueByPath(fromObject, new string[] { "modelConfig" }));
+      }
+
+      if (Common.GetValueByPath(fromObject, new string[] { "responseJsonSchema" }) != null) {
+        Common.SetValueByPath(
+            toObject, new string[] { "responseJsonSchema" },
+            Common.GetValueByPath(fromObject, new string[] { "responseJsonSchema" }));
+      }
+
+      if (Common.GetValueByPath(fromObject, new string[] { "audioTimestamp" }) != null) {
+        Common.SetValueByPath(toObject, new string[] { "audioTimestamp" },
+                              Common.GetValueByPath(fromObject, new string[] { "audioTimestamp" }));
+      }
+
+      if (Common.GetValueByPath(fromObject, new string[] { "candidateCount" }) != null) {
+        Common.SetValueByPath(toObject, new string[] { "candidateCount" },
+                              Common.GetValueByPath(fromObject, new string[] { "candidateCount" }));
+      }
+
+      if (Common.GetValueByPath(fromObject, new string[] { "enableAffectiveDialog" }) != null) {
+        Common.SetValueByPath(
+            toObject, new string[] { "enableAffectiveDialog" },
+            Common.GetValueByPath(fromObject, new string[] { "enableAffectiveDialog" }));
+      }
+
+      if (Common.GetValueByPath(fromObject, new string[] { "frequencyPenalty" }) != null) {
+        Common.SetValueByPath(
+            toObject, new string[] { "frequencyPenalty" },
+            Common.GetValueByPath(fromObject, new string[] { "frequencyPenalty" }));
+      }
+
+      if (Common.GetValueByPath(fromObject, new string[] { "logprobs" }) != null) {
+        Common.SetValueByPath(toObject, new string[] { "logprobs" },
+                              Common.GetValueByPath(fromObject, new string[] { "logprobs" }));
+      }
+
+      if (Common.GetValueByPath(fromObject, new string[] { "maxOutputTokens" }) != null) {
+        Common.SetValueByPath(
+            toObject, new string[] { "maxOutputTokens" },
+            Common.GetValueByPath(fromObject, new string[] { "maxOutputTokens" }));
+      }
+
+      if (Common.GetValueByPath(fromObject, new string[] { "mediaResolution" }) != null) {
+        Common.SetValueByPath(
+            toObject, new string[] { "mediaResolution" },
+            Common.GetValueByPath(fromObject, new string[] { "mediaResolution" }));
+      }
+
+      if (Common.GetValueByPath(fromObject, new string[] { "presencePenalty" }) != null) {
+        Common.SetValueByPath(
+            toObject, new string[] { "presencePenalty" },
+            Common.GetValueByPath(fromObject, new string[] { "presencePenalty" }));
+      }
+
+      if (Common.GetValueByPath(fromObject, new string[] { "responseLogprobs" }) != null) {
+        Common.SetValueByPath(
+            toObject, new string[] { "responseLogprobs" },
+            Common.GetValueByPath(fromObject, new string[] { "responseLogprobs" }));
+      }
+
+      if (Common.GetValueByPath(fromObject, new string[] { "responseMimeType" }) != null) {
+        Common.SetValueByPath(
+            toObject, new string[] { "responseMimeType" },
+            Common.GetValueByPath(fromObject, new string[] { "responseMimeType" }));
+      }
+
+      if (Common.GetValueByPath(fromObject, new string[] { "responseModalities" }) != null) {
+        Common.SetValueByPath(
+            toObject, new string[] { "responseModalities" },
+            Common.GetValueByPath(fromObject, new string[] { "responseModalities" }));
+      }
+
+      if (Common.GetValueByPath(fromObject, new string[] { "responseSchema" }) != null) {
+        Common.SetValueByPath(toObject, new string[] { "responseSchema" },
+                              Common.GetValueByPath(fromObject, new string[] { "responseSchema" }));
+      }
+
+      if (Common.GetValueByPath(fromObject, new string[] { "routingConfig" }) != null) {
+        Common.SetValueByPath(toObject, new string[] { "routingConfig" },
+                              Common.GetValueByPath(fromObject, new string[] { "routingConfig" }));
+      }
+
+      if (Common.GetValueByPath(fromObject, new string[] { "seed" }) != null) {
+        Common.SetValueByPath(toObject, new string[] { "seed" },
+                              Common.GetValueByPath(fromObject, new string[] { "seed" }));
+      }
+
+      if (Common.GetValueByPath(fromObject, new string[] { "speechConfig" }) != null) {
+        Common.SetValueByPath(toObject, new string[] { "speechConfig" },
+                              Common.GetValueByPath(fromObject, new string[] { "speechConfig" }));
+      }
+
+      if (Common.GetValueByPath(fromObject, new string[] { "stopSequences" }) != null) {
+        Common.SetValueByPath(toObject, new string[] { "stopSequences" },
+                              Common.GetValueByPath(fromObject, new string[] { "stopSequences" }));
+      }
+
+      if (Common.GetValueByPath(fromObject, new string[] { "temperature" }) != null) {
+        Common.SetValueByPath(toObject, new string[] { "temperature" },
+                              Common.GetValueByPath(fromObject, new string[] { "temperature" }));
+      }
+
+      if (Common.GetValueByPath(fromObject, new string[] { "thinkingConfig" }) != null) {
+        Common.SetValueByPath(toObject, new string[] { "thinkingConfig" },
+                              Common.GetValueByPath(fromObject, new string[] { "thinkingConfig" }));
+      }
+
+      if (Common.GetValueByPath(fromObject, new string[] { "topK" }) != null) {
+        Common.SetValueByPath(toObject, new string[] { "topK" },
+                              Common.GetValueByPath(fromObject, new string[] { "topK" }));
+      }
+
+      if (Common.GetValueByPath(fromObject, new string[] { "topP" }) != null) {
+        Common.SetValueByPath(toObject, new string[] { "topP" },
+                              Common.GetValueByPath(fromObject, new string[] { "topP" }));
+      }
+
+      return toObject;
+    }
+
+    internal JsonNode GenerationConfigToVertex(JsonNode fromObject, JsonObject parentObject,
+                                               JsonNode rootObject) {
+      JsonObject toObject = new JsonObject();
+
+      if (Common.GetValueByPath(fromObject, new string[] { "modelSelectionConfig" }) != null) {
+        Common.SetValueByPath(
+            toObject, new string[] { "modelConfig" },
+            Common.GetValueByPath(fromObject, new string[] { "modelSelectionConfig" }));
+      }
+
+      if (Common.GetValueByPath(fromObject, new string[] { "responseJsonSchema" }) != null) {
+        Common.SetValueByPath(
+            toObject, new string[] { "responseJsonSchema" },
+            Common.GetValueByPath(fromObject, new string[] { "responseJsonSchema" }));
+      }
+
+      if (Common.GetValueByPath(fromObject, new string[] { "audioTimestamp" }) != null) {
+        Common.SetValueByPath(toObject, new string[] { "audioTimestamp" },
+                              Common.GetValueByPath(fromObject, new string[] { "audioTimestamp" }));
+      }
+
+      if (Common.GetValueByPath(fromObject, new string[] { "candidateCount" }) != null) {
+        Common.SetValueByPath(toObject, new string[] { "candidateCount" },
+                              Common.GetValueByPath(fromObject, new string[] { "candidateCount" }));
+      }
+
+      if (Common.GetValueByPath(fromObject, new string[] { "enableAffectiveDialog" }) != null) {
+        Common.SetValueByPath(
+            toObject, new string[] { "enableAffectiveDialog" },
+            Common.GetValueByPath(fromObject, new string[] { "enableAffectiveDialog" }));
+      }
+
+      if (Common.GetValueByPath(fromObject, new string[] { "frequencyPenalty" }) != null) {
+        Common.SetValueByPath(
+            toObject, new string[] { "frequencyPenalty" },
+            Common.GetValueByPath(fromObject, new string[] { "frequencyPenalty" }));
+      }
+
+      if (Common.GetValueByPath(fromObject, new string[] { "logprobs" }) != null) {
+        Common.SetValueByPath(toObject, new string[] { "logprobs" },
+                              Common.GetValueByPath(fromObject, new string[] { "logprobs" }));
+      }
+
+      if (Common.GetValueByPath(fromObject, new string[] { "maxOutputTokens" }) != null) {
+        Common.SetValueByPath(
+            toObject, new string[] { "maxOutputTokens" },
+            Common.GetValueByPath(fromObject, new string[] { "maxOutputTokens" }));
+      }
+
+      if (Common.GetValueByPath(fromObject, new string[] { "mediaResolution" }) != null) {
+        Common.SetValueByPath(
+            toObject, new string[] { "mediaResolution" },
+            Common.GetValueByPath(fromObject, new string[] { "mediaResolution" }));
+      }
+
+      if (Common.GetValueByPath(fromObject, new string[] { "presencePenalty" }) != null) {
+        Common.SetValueByPath(
+            toObject, new string[] { "presencePenalty" },
+            Common.GetValueByPath(fromObject, new string[] { "presencePenalty" }));
+      }
+
+      if (Common.GetValueByPath(fromObject, new string[] { "responseLogprobs" }) != null) {
+        Common.SetValueByPath(
+            toObject, new string[] { "responseLogprobs" },
+            Common.GetValueByPath(fromObject, new string[] { "responseLogprobs" }));
+      }
+
+      if (Common.GetValueByPath(fromObject, new string[] { "responseMimeType" }) != null) {
+        Common.SetValueByPath(
+            toObject, new string[] { "responseMimeType" },
+            Common.GetValueByPath(fromObject, new string[] { "responseMimeType" }));
+      }
+
+      if (Common.GetValueByPath(fromObject, new string[] { "responseModalities" }) != null) {
+        Common.SetValueByPath(
+            toObject, new string[] { "responseModalities" },
+            Common.GetValueByPath(fromObject, new string[] { "responseModalities" }));
+      }
+
+      if (Common.GetValueByPath(fromObject, new string[] { "responseSchema" }) != null) {
+        Common.SetValueByPath(toObject, new string[] { "responseSchema" },
+                              Common.GetValueByPath(fromObject, new string[] { "responseSchema" }));
+      }
+
+      if (Common.GetValueByPath(fromObject, new string[] { "routingConfig" }) != null) {
+        Common.SetValueByPath(toObject, new string[] { "routingConfig" },
+                              Common.GetValueByPath(fromObject, new string[] { "routingConfig" }));
+      }
+
+      if (Common.GetValueByPath(fromObject, new string[] { "seed" }) != null) {
+        Common.SetValueByPath(toObject, new string[] { "seed" },
+                              Common.GetValueByPath(fromObject, new string[] { "seed" }));
+      }
+
+      if (Common.GetValueByPath(fromObject, new string[] { "speechConfig" }) != null) {
+        Common.SetValueByPath(toObject, new string[] { "speechConfig" },
+                              Common.GetValueByPath(fromObject, new string[] { "speechConfig" }));
+      }
+
+      if (Common.GetValueByPath(fromObject, new string[] { "stopSequences" }) != null) {
+        Common.SetValueByPath(toObject, new string[] { "stopSequences" },
+                              Common.GetValueByPath(fromObject, new string[] { "stopSequences" }));
+      }
+
+      if (Common.GetValueByPath(fromObject, new string[] { "temperature" }) != null) {
+        Common.SetValueByPath(toObject, new string[] { "temperature" },
+                              Common.GetValueByPath(fromObject, new string[] { "temperature" }));
+      }
+
+      if (Common.GetValueByPath(fromObject, new string[] { "thinkingConfig" }) != null) {
+        Common.SetValueByPath(toObject, new string[] { "thinkingConfig" },
+                              Common.GetValueByPath(fromObject, new string[] { "thinkingConfig" }));
+      }
+
+      if (Common.GetValueByPath(fromObject, new string[] { "topK" }) != null) {
+        Common.SetValueByPath(toObject, new string[] { "topK" },
+                              Common.GetValueByPath(fromObject, new string[] { "topK" }));
+      }
+
+      if (Common.GetValueByPath(fromObject, new string[] { "topP" }) != null) {
+        Common.SetValueByPath(toObject, new string[] { "topP" },
+                              Common.GetValueByPath(fromObject, new string[] { "topP" }));
+      }
+
+      if (!Common.IsZero(
+              Common.GetValueByPath(fromObject, new string[] { "enableEnhancedCivicAnswers" }))) {
+        throw new NotSupportedException(
+            "enableEnhancedCivicAnswers parameter is not supported in Vertex AI.");
+      }
+
+      return toObject;
+    }
+
     internal JsonNode GetTuningJobParametersToMldev(JsonNode fromObject, JsonObject parentObject,
                                                     JsonNode rootObject) {
       JsonObject toObject = new JsonObject();
