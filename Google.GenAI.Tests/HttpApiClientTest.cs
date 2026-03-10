@@ -15,6 +15,9 @@
  */
 
 using System;
+using System.Net.Http;
+using System.Reflection;
+using System.Threading.Tasks;
 
 using Google.Apis.Auth.OAuth2;
 
@@ -331,6 +334,48 @@ namespace Google.GenAI.Tests {
       var request = await InvokeCreateHttpRequestAsync(client, System.Net.Http.HttpMethod.Post, "some/path", "{}", null);
 
       Assert.AreEqual("https://my-location-aiplatform.googleapis.com/v1beta1/projects/my-project/locations/my-location/some/path", request.RequestUri!.ToString());
+    }
+
+    [TestMethod]
+    public async Task CreateHttpRequestAsync_RewritesAbsoluteUrlWithBaseUrl() {
+        var customHttpOptions = new Types.HttpOptions { BaseUrl = "https://my-proxy.company.com" };
+        var client = new HttpApiClient(apiKey: TestApiKey, httpOptions: customHttpOptions);
+
+        var method = typeof(HttpApiClient).GetMethod("CreateHttpRequestAsync", 
+            System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance, 
+            null, 
+            new[] { typeof(System.Net.Http.HttpMethod), typeof(string), typeof(byte[]), typeof(Types.HttpOptions) }, 
+            null);
+        Assert.IsNotNull(method, "Could not find CreateHttpRequestAsync method via reflection.");
+
+        var absoluteUrl = "https://generativelanguage.googleapis.com/upload/v1beta/files?uploadType=resumable";
+        var bytes = new byte[] { 1, 2, 3 };
+
+        var task = (Task<System.Net.Http.HttpRequestMessage>)method.Invoke(client, new object[] { System.Net.Http.HttpMethod.Post, absoluteUrl, bytes, null });
+        var request = await task;
+
+        Assert.AreEqual("https://my-proxy.company.com/upload/v1beta/files?uploadType=resumable", request.RequestUri.ToString());
+    }
+
+    [TestMethod]
+    public async Task CreateHttpRequestAsync_RewritesAbsoluteUrlInPathWithBaseUrl() {
+        var customHttpOptions = new Types.HttpOptions { BaseUrl = "https://my-proxy.company.com" };
+        var client = new HttpApiClient(apiKey: TestApiKey, httpOptions: customHttpOptions);
+
+        var method = typeof(HttpApiClient).GetMethod("CreateHttpRequestAsync", 
+            System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance, 
+            null, 
+            new[] { typeof(System.Net.Http.HttpMethod), typeof(string), typeof(string), typeof(Types.HttpOptions) }, 
+            null);
+        Assert.IsNotNull(method, "Could not find CreateHttpRequestAsync method via reflection.");
+
+        var absoluteUrl = "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.0-flash:generateContent";
+        var json = "{}";
+
+        var task = (Task<System.Net.Http.HttpRequestMessage>)method.Invoke(client, new object[] { System.Net.Http.HttpMethod.Post, absoluteUrl, json, null });
+        var request = await task;
+
+        Assert.AreEqual("https://my-proxy.company.com/v1beta/models/gemini-3.0-flash:generateContent", request.RequestUri.ToString());
     }
   }
 }

@@ -661,8 +661,8 @@ namespace Google.GenAI {
       }
       string uploadUrl =
           await CreateFileInApiAsync(config, mimeType, fileName, size, cancellationToken);
-      HttpContent responseContent =
-          await _uploadClient.UploadAsync(uploadUrl, stream, size, cancellationToken);
+      HttpContent responseContent = await _uploadClient.UploadAsync(
+          uploadUrl, stream, size, config?.HttpOptions, cancellationToken);
       return await FileFromUploadResponseBodyAsync(responseContent);
     }
 
