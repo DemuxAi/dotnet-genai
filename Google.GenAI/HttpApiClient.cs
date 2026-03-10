@@ -84,15 +84,13 @@ namespace Google.GenAI
   public class HttpApiClient : ApiClient
   {
     public HttpApiClient(
-      string? apiKey,
-      Types.HttpOptions? httpOptions
-    ) : base(apiKey, httpOptions) { }
-    public HttpApiClient(
-        string? project,
-        string? location,
-        ICredential? credentials,
-        Types.HttpOptions? httpOptions
-    ) : base(project, location, credentials, httpOptions) { }
+        bool? vertexAI = null,
+        string? apiKey = null,
+        string? project = null,
+        string? location = null,
+        ICredential? credentials = null,
+        Types.HttpOptions? httpOptions = null
+    ) : base(vertexAI, apiKey, project, location, credentials, httpOptions) { }
 
     public override async Task<ApiResponse> RequestAsync(
         HttpMethod httpMethod,
@@ -183,18 +181,26 @@ namespace Google.GenAI
       }
     }
 
+    private bool ShouldPrependVertexProjectPath(Types.HttpOptions mergedHttpOptions)
+    {
+      if (!this.VertexAI) return false;
+      if (!string.IsNullOrEmpty(this.ApiKey)) return false;
+      if (string.IsNullOrEmpty(this.Project) && string.IsNullOrEmpty(this.Location)) return false;
+      if (mergedHttpOptions.BaseUrlResourceScope == Types.ResourceScope.Collection && !string.IsNullOrEmpty(mergedHttpOptions.BaseUrl)) return false;
+      return true;
+    }
+
     private async Task<HttpRequestMessage> CreateHttpRequestAsync(HttpMethod httpMethod, string path,
         string requestJson, Types.HttpOptions? requestHttpOptions)
     {
+        Types.HttpOptions mergedHttpOptions = MergeHttpOptions(requestHttpOptions);
         bool queryBaseModel = httpMethod == HttpMethod.Get && path.StartsWith("publishers/google/models");
-        if (this.VertexAI && !path.StartsWith("projects/") && !queryBaseModel)
+        if (ShouldPrependVertexProjectPath(mergedHttpOptions) && !path.StartsWith("projects/") && !queryBaseModel)
         {
             path = $"projects/{Project}/locations/{Location}/{path}";
         }
-
-        Types.HttpOptions mergedHttpOptions = MergeHttpOptions(requestHttpOptions);
         string requestUrl;
-        if (string.IsNullOrEmpty(mergedHttpOptions.ApiVersion))
+        if (string.IsNullOrEmpty(mergedHttpOptions.ApiVersion) || mergedHttpOptions.BaseUrlResourceScope == Types.ResourceScope.Collection)
         {
             requestUrl = $"{mergedHttpOptions.BaseUrl}/{path}";
         }
