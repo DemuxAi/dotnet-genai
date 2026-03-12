@@ -28,6 +28,15 @@ namespace Google.GenAI.Types {
 
   public record AudioTranscriptionConfig {
     /// <summary>
+    /// The language codes of the audio. BCP-47 language code. If not set, the transcription will be
+    /// in the language detected by the model. If set, the server will use the language code
+    /// specified in the model config as a hint for the language of the audio
+    /// </summary>
+    [JsonPropertyName("languageCodes")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public List<string> ? LanguageCodes { get; set; }
+
+    /// <summary>
     /// Deserializes a JSON string to a AudioTranscriptionConfig object.
     /// </summary>
     /// <param name="jsonString">The JSON string to deserialize.</param>
