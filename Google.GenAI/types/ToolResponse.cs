@@ -23,50 +23,50 @@ using Google.GenAI.Serialization;
 
 namespace Google.GenAI.Types {
   /// <summary>
-  /// Model-generated code executed server-side, results returned to the model.  Only generated when
-  /// using the `CodeExecution` tool, in which the code will be automatically executed, and a
-  /// corresponding `CodeExecutionResult` will also be generated.
+  /// The output from a server-side `ToolCall` execution.  This message contains the results of a
+  /// tool invocation that was initiated by a `ToolCall` from the model. The client should pass this
+  /// `ToolResponse` back to the API in a subsequent turn within a `Content` message, along with the
+  /// corresponding `ToolCall`.
   /// </summary>
 
-  public record ExecutableCode {
+  public record ToolResponse {
     /// <summary>
-    /// The code to be executed.
-    /// </summary>
-    [JsonPropertyName("code")]
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public string ? Code { get; set; }
-
-    /// <summary>
-    /// Programming language of the `code`.
-    /// </summary>
-    [JsonPropertyName("language")]
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public Language
-        ? Language {
-            get; set;
-          }
-
-    /// <summary>
-    /// Unique identifier of the `ExecutableCode` part. The server returns the `CodeExecutionResult`
-    /// with the matching `id`.
+    /// The identifier of the tool call this response is for.
     /// </summary>
     [JsonPropertyName("id")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public string
-        ? Id {
+    public string ? Id { get; set; }
+
+    /// <summary>
+    /// The type of tool that was called, matching the tool_type in the corresponding ToolCall.
+    /// </summary>
+    [JsonPropertyName("toolType")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public ToolType
+        ? ToolType {
             get; set;
           }
 
     /// <summary>
-    /// Deserializes a JSON string to a ExecutableCode object.
+    /// The tool response.
+    /// </summary>
+    [JsonPropertyName("response")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public Dictionary<string, object>
+        ? Response {
+            get; set;
+          }
+
+    /// <summary>
+    /// Deserializes a JSON string to a ToolResponse object.
     /// </summary>
     /// <param name="jsonString">The JSON string to deserialize.</param>
     /// <param name="options">Optional JsonSerializerOptions.</param>
-    /// <returns>The deserialized ExecutableCode object, or null if deserialization fails.</returns>
-    public static ExecutableCode
+    /// <returns>The deserialized ToolResponse object, or null if deserialization fails.</returns>
+    public static ToolResponse
         ? FromJson(string jsonString, JsonSerializerOptions? options = null) {
       try {
-        return JsonSerializer.Deserialize<ExecutableCode>(jsonString, options);
+        return JsonSerializer.Deserialize<ToolResponse>(jsonString, options);
       } catch (JsonException e) {
         Console.Error.WriteLine($"Error deserializing JSON: {e.ToString()}");
         return null;

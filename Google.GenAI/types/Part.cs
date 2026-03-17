@@ -144,6 +144,29 @@ namespace Google.GenAI.Types {
           }
 
     /// <summary>
+    /// Server-side tool call. This field is populated when the model predicts a tool invocation
+    /// that should be executed on the server. The client is expected to echo this message back to
+    /// the API.
+    /// </summary>
+    [JsonPropertyName("toolCall")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public ToolCall
+        ? ToolCall {
+            get; set;
+          }
+
+    /// <summary>
+    /// The output from a server-side ToolCall execution. This field is populated by the client with
+    /// the results of executing the corresponding ToolCall.
+    /// </summary>
+    [JsonPropertyName("toolResponse")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public ToolResponse
+        ? ToolResponse {
+            get; set;
+          }
+
+    /// <summary>
     /// Deserializes a JSON string to a Part object.
     /// </summary>
     /// <param name="jsonString">The JSON string to deserialize.</param>

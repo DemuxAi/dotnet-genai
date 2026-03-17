@@ -23,8 +23,8 @@ using Google.GenAI.Serialization;
 
 namespace Google.GenAI.Types {
   /// <summary>
-  /// Result of executing the [ExecutableCode]. Only generated when using the [CodeExecution] tool,
-  /// and always follows a `part` containing the [ExecutableCode].
+  /// Result of executing the `ExecutableCode`.  Generated only when the `CodeExecution` tool is
+  /// used.
   /// </summary>
 
   public record CodeExecutionResult {
@@ -43,6 +43,17 @@ namespace Google.GenAI.Types {
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public string
         ? Output {
+            get; set;
+          }
+
+    /// <summary>
+    /// The identifier of the `ExecutableCode` part this result is for. Only populated if the
+    /// corresponding `ExecutableCode` has an id.
+    /// </summary>
+    [JsonPropertyName("id")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public string
+        ? Id {
             get; set;
           }
 

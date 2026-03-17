@@ -1529,6 +1529,16 @@ namespace Google.GenAI {
                               Common.GetValueByPath(fromObject, new string[] { "videoMetadata" }));
       }
 
+      if (Common.GetValueByPath(fromObject, new string[] { "toolCall" }) != null) {
+        Common.SetValueByPath(toObject, new string[] { "toolCall" },
+                              Common.GetValueByPath(fromObject, new string[] { "toolCall" }));
+      }
+
+      if (Common.GetValueByPath(fromObject, new string[] { "toolResponse" }) != null) {
+        Common.SetValueByPath(toObject, new string[] { "toolResponse" },
+                              Common.GetValueByPath(fromObject, new string[] { "toolResponse" }));
+      }
+
       return toObject;
     }
 
@@ -1567,6 +1577,13 @@ namespace Google.GenAI {
                                   JsonNode.Parse(JsonSerializer.Serialize(Common.GetValueByPath(
                                       fromObject, new string[] { "functionCallingConfig" }))),
                                   toObject));
+      }
+
+      if (Common.GetValueByPath(fromObject, new string[] { "includeServerSideToolInvocations" }) !=
+          null) {
+        Common.SetValueByPath(
+            toObject, new string[] { "includeServerSideToolInvocations" },
+            Common.GetValueByPath(fromObject, new string[] { "includeServerSideToolInvocations" }));
       }
 
       return toObject;

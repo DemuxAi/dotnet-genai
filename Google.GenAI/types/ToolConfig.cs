@@ -45,6 +45,17 @@ namespace Google.GenAI.Types {
           }
 
     /// <summary>
+    /// If true, the API response will include the server-side tool calls and responses within the
+    /// `Content` message. This allows clients to observe the server's tool invocations.
+    /// </summary>
+    [JsonPropertyName("includeServerSideToolInvocations")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public bool
+        ? IncludeServerSideToolInvocations {
+            get; set;
+          }
+
+    /// <summary>
     /// Deserializes a JSON string to a ToolConfig object.
     /// </summary>
     /// <param name="jsonString">The JSON string to deserialize.</param>
