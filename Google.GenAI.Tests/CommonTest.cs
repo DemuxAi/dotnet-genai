@@ -225,5 +225,82 @@ namespace Google.GenAI.Tests
             };
             Assert.AreEqual(expected.ToJsonString(), data.ToJsonString());
         }
+
+        [TestMethod]
+        public void SetValueByPath_WithJsonNodeValue_PreservesValueAndIsCloned()
+        {
+            var data = new JsonObject();
+            string largeBase64 = new string('A', 100_000);
+            var sourceNode = JsonValue.Create(largeBase64);
+
+            Common.SetValueByPath(data, new string[] { "inlineData", "data" }, sourceNode);
+
+            Assert.AreEqual(largeBase64, data["inlineData"]["data"].GetValue<string>());
+            Assert.AreNotSame(sourceNode, data["inlineData"]["data"]);
+        }
+
+        [TestMethod]
+        public void SetValueByPath_Self_WithLargeJsonNodeProperties_PreservesAllValuesAndIsCloned()
+        {
+            var target = new JsonObject();
+            string largeBase64 = new string('B', 100_000);
+            var dataNode = JsonValue.Create(largeBase64);
+            var mimeNode = JsonValue.Create("image/png");
+            var selfNode = new JsonObject
+            {
+                ["data"] = dataNode,
+                ["mimeType"] = mimeNode
+            };
+
+            Common.SetValueByPath(target, new string[] { "_self" }, selfNode);
+
+            Assert.AreEqual(largeBase64, target["data"].GetValue<string>());
+            Assert.AreEqual("image/png", target["mimeType"].GetValue<string>());
+            Assert.AreNotSame(dataNode, target["data"]);
+            Assert.AreNotSame(mimeNode, target["mimeType"]);
+        }
+
+        [TestMethod]
+        public void SetValueByPath_MergeJsonObject_PreservesBothOriginalAndNewPropertiesAndIsCloned()
+        {
+            string largeBase64 = new string('C', 100_000);
+            var data = new JsonObject
+            {
+                ["inlineData"] = new JsonObject { ["mimeType"] = "image/png" }
+            };
+            var dataNode = JsonValue.Create(largeBase64);
+            var newNode = new JsonObject { ["data"] = dataNode };
+
+            Common.SetValueByPath(data, new string[] { "inlineData" }, newNode);
+
+            Assert.AreEqual("image/png", data["inlineData"]["mimeType"].GetValue<string>());
+            Assert.AreEqual(largeBase64, data["inlineData"]["data"].GetValue<string>());
+            Assert.AreNotSame(dataNode, data["inlineData"]["data"]);
+        }
+
+        [TestMethod]
+        public void GetValueByPath_ArrayCollect_PreservesValuesAcrossAllElementsAndIsCloned()
+        {
+            string largeBase64 = new string('D', 100_000);
+            var element0DataNode = JsonValue.Create(largeBase64);
+            var element1DataNode = JsonValue.Create(largeBase64);
+            var data = new JsonObject
+            {
+                ["parts"] = new JsonArray
+                {
+                    new JsonObject { ["data"] = element0DataNode },
+                    new JsonObject { ["data"] = element1DataNode }
+                }
+            };
+
+            var result = Common.GetValueByPath(data, new string[] { "parts[]", "data" }) as JsonArray;
+
+            Assert.IsNotNull(result);
+            Assert.AreEqual(2, result.Count);
+            Assert.AreEqual(largeBase64, result[0].GetValue<string>());
+            Assert.AreEqual(largeBase64, result[1].GetValue<string>());
+            Assert.AreNotSame(element0DataNode, result[0]);
+            Assert.AreNotSame(element1DataNode, result[1]);
+        }
     }
 }

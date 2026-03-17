@@ -112,7 +112,7 @@ namespace Google.GenAI
       {
           foreach (var property in selfNode.ToList())
           {
-              currentObject[property.Key] = property.Value == null ? null : JsonNode.Parse(property.Value.ToJsonString());
+              currentObject[property.Key] = property.Value == null ? null : property.Value.DeepClone();
           }
           return;
       }
@@ -122,7 +122,7 @@ namespace Google.GenAI
       {
           foreach (KeyValuePair<string, JsonNode?> property in newObject)
           {
-              existingObject[property.Key] = property.Value == null ? null : JsonNode.Parse(property.Value.ToJsonString());
+              existingObject[property.Key] = property.Value == null ? null : property.Value.DeepClone();
           }
       }
       else if(currentObject.ContainsKey(finalKey) && IsZero(value))
@@ -180,7 +180,7 @@ namespace Google.GenAI
                   GetValueByPath(element, keys.Skip(i + 1).ToArray());
               if (node != null)
               {
-                result.Add(JsonNode.Parse(node.ToJsonString()));
+                result.Add(node.DeepClone());
               }
             }
             return result;
@@ -356,7 +356,7 @@ namespace Google.GenAI
         case bool b:
           return JsonValue.Create(b);
         case JsonNode node:
-          return JsonNode.Parse(node.ToJsonString());
+          return node.DeepClone();
         case System.Collections.IEnumerable enumerable:
           JsonArray array = new JsonArray();
           foreach (var item in enumerable)
