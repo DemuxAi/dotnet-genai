@@ -221,6 +221,74 @@ namespace Google.GenAI
       return currentObject;
     }
 
+    /// <summary>
+    /// Moves values from source paths to destination paths.
+    /// <para>Example: MoveValueByPath( {'requests': [{'content': v1}, {'content': v2}]}, {'requests[].*': 'requests[].request.*'} ) -> {'requests': [{'request': {'content': v1}}, {'request': {'content': v2}}]}</para>
+    /// </summary>
+    public static void MoveValueByPath(JsonNode data, IDictionary<string, string> paths)
+    {
+        if (data == null || paths == null)
+        {
+            return;
+        }
+
+        foreach (KeyValuePair<string, string> entry in paths)
+        {
+            string sourcePath = entry.Key;
+            string destPath = entry.Value;
+
+            string[] sourceKeys = sourcePath.Split('.');
+            string[] destKeys = destPath.Split('.');
+
+            HashSet<string> excludeKeys = new HashSet<string>();
+            int wildcardIdx = -1;
+
+            for (int i = 0; i < sourceKeys.Length; i++)
+            {
+                if (sourceKeys[i].Equals("*"))
+                {
+                    wildcardIdx = i;
+                    break;
+                }
+            }
+
+            if (wildcardIdx != -1 && destKeys.Length > wildcardIdx)
+            {
+                // Extract the intermediate key between source and dest paths
+                // Example: source=['requests[]', '*'], dest=['requests[]', 'request', '*']
+                // We want to exclude 'request'
+                for (int i = wildcardIdx; i < destKeys.Length; i++)
+                {
+                    string key = destKeys[i];
+                    if (!key.Equals("*") && !key.EndsWith("[]") && !key.EndsWith("[0]"))
+                    {
+                        excludeKeys.Add(key);
+                    }
+                }
+            }
+
+            MoveValueRecursive(data, sourceKeys, destKeys, 0, excludeKeys);
+        }
+    }
+
+    /// <summary>
+    /// Efficiently converts a value to a JsonNode, using DeepClone() when the value is
+    /// already a JsonNode to avoid the expensive serialize-to-string-then-parse round-trip
+    /// that causes OutOfMemoryException with large payloads (e.g. base64 inline image data).
+    /// </summary>
+    internal static JsonNode? ParseToJsonNode(object? value)
+    {
+        if (value == null)
+        {
+            return null;
+        }
+        if (value is JsonNode node)
+        {
+            return node.DeepClone();
+        }
+        return JsonSerializer.SerializeToNode(value);
+    }
+
     internal static string FormatQuery(JsonObject queryParams)
     {
       var queryParts = new List<string>();
@@ -367,56 +435,6 @@ namespace Google.GenAI
         default:
           return JsonNode.Parse(JsonSerializer.Serialize(value));
       }
-    }
-
-    /// <summary>
-    /// Moves values from source paths to destination paths.
-    /// <para>Example: MoveValueByPath( {'requests': [{'content': v1}, {'content': v2}]}, {'requests[].*': 'requests[].request.*'} ) -> {'requests': [{'request': {'content': v1}}, {'request': {'content': v2}}]}</para>
-    /// </summary>
-    public static void MoveValueByPath(JsonNode data, IDictionary<string, string> paths)
-    {
-        if (data == null || paths == null)
-        {
-            return;
-        }
-
-        foreach (KeyValuePair<string, string> entry in paths)
-        {
-            string sourcePath = entry.Key;
-            string destPath = entry.Value;
-
-            string[] sourceKeys = sourcePath.Split('.');
-            string[] destKeys = destPath.Split('.');
-
-            HashSet<string> excludeKeys = new HashSet<string>();
-            int wildcardIdx = -1;
-
-            for (int i = 0; i < sourceKeys.Length; i++)
-            {
-                if (sourceKeys[i].Equals("*"))
-                {
-                    wildcardIdx = i;
-                    break;
-                }
-            }
-
-            if (wildcardIdx != -1 && destKeys.Length > wildcardIdx)
-            {
-                // Extract the intermediate key between source and dest paths
-                // Example: source=['requests[]', '*'], dest=['requests[]', 'request', '*']
-                // We want to exclude 'request'
-                for (int i = wildcardIdx; i < destKeys.Length; i++)
-                {
-                    string key = destKeys[i];
-                    if (!key.Equals("*") && !key.EndsWith("[]") && !key.EndsWith("[0]"))
-                    {
-                        excludeKeys.Add(key);
-                    }
-                }
-            }
-
-            MoveValueRecursive(data, sourceKeys, destKeys, 0, excludeKeys);
-        }
     }
 
     private static void MoveValueRecursive(

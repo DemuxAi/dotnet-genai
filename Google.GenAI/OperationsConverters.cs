@@ -96,8 +96,8 @@ namespace Google.GenAI {
         Common.SetValueByPath(
             toObject, new string[] { "response" },
             GenerateVideosResponseFromMldev(
-                JsonNode.Parse(JsonSerializer.Serialize(Common.GetValueByPath(
-                    fromObject, new string[] { "response", "generateVideoResponse" }))),
+                Common.ParseToJsonNode(Common.GetValueByPath(
+                    fromObject, new string[] { "response", "generateVideoResponse" })),
                 toObject));
       }
 
@@ -129,11 +129,11 @@ namespace Google.GenAI {
       }
 
       if (Common.GetValueByPath(fromObject, new string[] { "response" }) != null) {
-        Common.SetValueByPath(toObject, new string[] { "response" },
-                              GenerateVideosResponseFromVertex(
-                                  JsonNode.Parse(JsonSerializer.Serialize(Common.GetValueByPath(
-                                      fromObject, new string[] { "response" }))),
-                                  toObject));
+        Common.SetValueByPath(
+            toObject, new string[] { "response" },
+            GenerateVideosResponseFromVertex(Common.ParseToJsonNode(Common.GetValueByPath(
+                                                 fromObject, new string[] { "response" })),
+                                             toObject));
       }
 
       return toObject;
@@ -149,8 +149,7 @@ namespace Google.GenAI {
         JsonArray result = new JsonArray();
 
         foreach (var record in keyArray) {
-          result.Add(
-              GeneratedVideoFromMldev(JsonNode.Parse(JsonSerializer.Serialize(record)), toObject));
+          result.Add(GeneratedVideoFromMldev(Common.ParseToJsonNode(record), toObject));
         }
         Common.SetValueByPath(toObject, new string[] { "generatedVideos" }, result);
       }
@@ -180,8 +179,7 @@ namespace Google.GenAI {
         JsonArray result = new JsonArray();
 
         foreach (var record in keyArray) {
-          result.Add(
-              GeneratedVideoFromVertex(JsonNode.Parse(JsonSerializer.Serialize(record)), toObject));
+          result.Add(GeneratedVideoFromVertex(Common.ParseToJsonNode(record), toObject));
         }
         Common.SetValueByPath(toObject, new string[] { "generatedVideos" }, result);
       }
@@ -205,11 +203,10 @@ namespace Google.GenAI {
       JsonObject toObject = new JsonObject();
 
       if (Common.GetValueByPath(fromObject, new string[] { "video" }) != null) {
-        Common.SetValueByPath(
-            toObject, new string[] { "video" },
-            VideoFromMldev(JsonNode.Parse(JsonSerializer.Serialize(
-                               Common.GetValueByPath(fromObject, new string[] { "video" }))),
-                           toObject));
+        Common.SetValueByPath(toObject, new string[] { "video" },
+                              VideoFromMldev(Common.ParseToJsonNode(Common.GetValueByPath(
+                                                 fromObject, new string[] { "video" })),
+                                             toObject));
       }
 
       return toObject;
@@ -219,11 +216,10 @@ namespace Google.GenAI {
       JsonObject toObject = new JsonObject();
 
       if (Common.GetValueByPath(fromObject, new string[] { "_self" }) != null) {
-        Common.SetValueByPath(
-            toObject, new string[] { "video" },
-            VideoFromVertex(JsonNode.Parse(JsonSerializer.Serialize(
-                                Common.GetValueByPath(fromObject, new string[] { "_self" }))),
-                            toObject));
+        Common.SetValueByPath(toObject, new string[] { "video" },
+                              VideoFromVertex(Common.ParseToJsonNode(Common.GetValueByPath(
+                                                  fromObject, new string[] { "_self" })),
+                                              toObject));
       }
 
       return toObject;
@@ -275,11 +271,11 @@ namespace Google.GenAI {
       }
 
       if (Common.GetValueByPath(fromObject, new string[] { "response" }) != null) {
-        Common.SetValueByPath(toObject, new string[] { "response" },
-                              ImportFileResponseFromMldev(
-                                  JsonNode.Parse(JsonSerializer.Serialize(Common.GetValueByPath(
-                                      fromObject, new string[] { "response" }))),
-                                  toObject));
+        Common.SetValueByPath(
+            toObject, new string[] { "response" },
+            ImportFileResponseFromMldev(Common.ParseToJsonNode(Common.GetValueByPath(
+                                            fromObject, new string[] { "response" })),
+                                        toObject));
       }
 
       return toObject;
@@ -332,11 +328,11 @@ namespace Google.GenAI {
       }
 
       if (Common.GetValueByPath(fromObject, new string[] { "response" }) != null) {
-        Common.SetValueByPath(toObject, new string[] { "response" },
-                              UploadToFileSearchStoreResponseFromMldev(
-                                  JsonNode.Parse(JsonSerializer.Serialize(Common.GetValueByPath(
-                                      fromObject, new string[] { "response" }))),
-                                  toObject));
+        Common.SetValueByPath(
+            toObject, new string[] { "response" },
+            UploadToFileSearchStoreResponseFromMldev(Common.ParseToJsonNode(Common.GetValueByPath(
+                                                         fromObject, new string[] { "response" })),
+                                                     toObject));
       }
 
       return toObject;

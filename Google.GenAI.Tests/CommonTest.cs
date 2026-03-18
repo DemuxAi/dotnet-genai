@@ -302,5 +302,81 @@ namespace Google.GenAI.Tests
             Assert.AreNotSame(element0DataNode, result[0]);
             Assert.AreNotSame(element1DataNode, result[1]);
         }
+
+        [TestMethod]
+        public void ParseToJsonNode_WithJsonNodeInput_PreservesValueAndIsCloned()
+        {
+            string largeBase64 = new string('E', 100_000);
+            var sourceNode = JsonValue.Create(largeBase64);
+
+            var result = Common.ParseToJsonNode(sourceNode);
+
+            Assert.IsNotNull(result);
+            Assert.AreEqual(largeBase64, result.GetValue<string>());
+            Assert.AreNotSame(sourceNode, result);
+        }
+
+        [TestMethod]
+        public void ParseToJsonNode_WithJsonObjectInput_PreservesAllPropertiesAndIsCloned()
+        {
+            string largeBase64 = new string('F', 100_000);
+            var sourceNode = new JsonObject
+            {
+                ["data"] = largeBase64,
+                ["mimeType"] = "image/png"
+            };
+            var innerDataNode = sourceNode["data"];
+
+            var result = Common.ParseToJsonNode(sourceNode) as JsonObject;
+
+            Assert.IsNotNull(result);
+            Assert.AreEqual(largeBase64, result["data"].GetValue<string>());
+            Assert.AreEqual("image/png", result["mimeType"].GetValue<string>());
+            Assert.AreNotSame(sourceNode, result);
+            // Inner nodes must also be cloned, not the same references.
+            Assert.AreNotSame(innerDataNode, result["data"]);
+        }
+
+        [TestMethod]
+        public void ParseToJsonNode_WithNullInput_ReturnsNull()
+        {
+            var result = Common.ParseToJsonNode(null);
+
+            Assert.IsNull(result);
+        }
+
+        [TestMethod]
+        public void ParseToJsonNode_WithClrObjectInput_SerializesCorrectly()
+        {
+            var clrObject = new { mimeType = "image/png", width = 3840 };
+
+            var result = Common.ParseToJsonNode(clrObject) as JsonObject;
+
+            Assert.IsNotNull(result);
+            Assert.AreEqual("image/png", result["mimeType"].GetValue<string>());
+            Assert.AreEqual(3840, result["width"].GetValue<int>());
+        }
+
+        [TestMethod]
+        public void ParseToJsonNode_WithContentClrObject_SerializesCorrectly()
+        {
+            var content = new Types.Content
+            {
+                Role = "user",
+                Parts = new List<Types.Part>
+                {
+                    new Types.Part { Text = "Why is the sky blue?" }
+                }
+            };
+
+            var result = Common.ParseToJsonNode(content) as JsonObject;
+
+            Assert.IsNotNull(result);
+            Assert.AreEqual("user", result["role"].GetValue<string>());
+            var parts = result["parts"] as JsonArray;
+            Assert.IsNotNull(parts);
+            Assert.AreEqual(1, parts.Count);
+            Assert.AreEqual("Why is the sky blue?", parts[0]["text"].GetValue<string>());
+        }
     }
 }

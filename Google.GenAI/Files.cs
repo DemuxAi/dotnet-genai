@@ -125,9 +125,9 @@ namespace Google.GenAI {
       JsonObject toObject = new JsonObject();
 
       if (Common.GetValueByPath(fromObject, new string[] { "config" }) != null) {
-        _ = ListFilesConfigToMldev(JsonNode.Parse(JsonSerializer.Serialize(Common.GetValueByPath(
-                                       fromObject, new string[] { "config" }))),
-                                   toObject);
+        _ = ListFilesConfigToMldev(
+            Common.ParseToJsonNode(Common.GetValueByPath(fromObject, new string[] { "config" })),
+            toObject);
       }
 
       return toObject;

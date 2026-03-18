@@ -199,24 +199,24 @@ namespace Google.GenAI {
         if (Common.GetValueByPath(fromObject, new string[] { "validationDataset" }) != null) {
           Common.SetValueByPath(parentObject, new string[] { "supervisedTuningSpec" },
                                 TuningValidationDatasetToVertex(
-                                    JsonNode.Parse(JsonSerializer.Serialize(Common.GetValueByPath(
-                                        fromObject, new string[] { "validationDataset" }))),
+                                    Common.ParseToJsonNode(Common.GetValueByPath(
+                                        fromObject, new string[] { "validationDataset" })),
                                     toObject, rootObject));
         }
       } else if (discriminatorValueValidationDataset == "PREFERENCE_TUNING") {
         if (Common.GetValueByPath(fromObject, new string[] { "validationDataset" }) != null) {
           Common.SetValueByPath(parentObject, new string[] { "preferenceOptimizationSpec" },
                                 TuningValidationDatasetToVertex(
-                                    JsonNode.Parse(JsonSerializer.Serialize(Common.GetValueByPath(
-                                        fromObject, new string[] { "validationDataset" }))),
+                                    Common.ParseToJsonNode(Common.GetValueByPath(
+                                        fromObject, new string[] { "validationDataset" })),
                                     toObject, rootObject));
         }
       } else if (discriminatorValueValidationDataset == "DISTILLATION") {
         if (Common.GetValueByPath(fromObject, new string[] { "validationDataset" }) != null) {
           Common.SetValueByPath(parentObject, new string[] { "distillationSpec" },
                                 TuningValidationDatasetToVertex(
-                                    JsonNode.Parse(JsonSerializer.Serialize(Common.GetValueByPath(
-                                        fromObject, new string[] { "validationDataset" }))),
+                                    Common.ParseToJsonNode(Common.GetValueByPath(
+                                        fromObject, new string[] { "validationDataset" })),
                                     toObject, rootObject));
         }
       }
@@ -448,15 +448,14 @@ namespace Google.GenAI {
       }
 
       if (Common.GetValueByPath(fromObject, new string[] { "trainingDataset" }) != null) {
-        _ = TuningDatasetToMldev(JsonNode.Parse(JsonSerializer.Serialize(Common.GetValueByPath(
-                                     fromObject, new string[] { "trainingDataset" }))),
+        _ = TuningDatasetToMldev(Common.ParseToJsonNode(Common.GetValueByPath(
+                                     fromObject, new string[] { "trainingDataset" })),
                                  toObject, rootObject);
       }
 
       if (Common.GetValueByPath(fromObject, new string[] { "config" }) != null) {
         _ = CreateTuningJobConfigToMldev(
-            JsonNode.Parse(JsonSerializer.Serialize(
-                Common.GetValueByPath(fromObject, new string[] { "config" }))),
+            Common.ParseToJsonNode(Common.GetValueByPath(fromObject, new string[] { "config" })),
             toObject, rootObject);
       }
 
@@ -479,15 +478,14 @@ namespace Google.GenAI {
       }
 
       if (Common.GetValueByPath(fromObject, new string[] { "trainingDataset" }) != null) {
-        _ = TuningDatasetToVertex(JsonNode.Parse(JsonSerializer.Serialize(Common.GetValueByPath(
-                                      fromObject, new string[] { "trainingDataset" }))),
+        _ = TuningDatasetToVertex(Common.ParseToJsonNode(Common.GetValueByPath(
+                                      fromObject, new string[] { "trainingDataset" })),
                                   toObject, rootObject);
       }
 
       if (Common.GetValueByPath(fromObject, new string[] { "config" }) != null) {
         _ = CreateTuningJobConfigToVertex(
-            JsonNode.Parse(JsonSerializer.Serialize(
-                Common.GetValueByPath(fromObject, new string[] { "config" }))),
+            Common.ParseToJsonNode(Common.GetValueByPath(fromObject, new string[] { "config" })),
             toObject, rootObject);
       }
 
@@ -841,8 +839,7 @@ namespace Google.GenAI {
 
       if (Common.GetValueByPath(fromObject, new string[] { "config" }) != null) {
         _ = ListTuningJobsConfigToMldev(
-            JsonNode.Parse(JsonSerializer.Serialize(
-                Common.GetValueByPath(fromObject, new string[] { "config" }))),
+            Common.ParseToJsonNode(Common.GetValueByPath(fromObject, new string[] { "config" })),
             toObject, rootObject);
       }
 
@@ -855,8 +852,7 @@ namespace Google.GenAI {
 
       if (Common.GetValueByPath(fromObject, new string[] { "config" }) != null) {
         _ = ListTuningJobsConfigToVertex(
-            JsonNode.Parse(JsonSerializer.Serialize(
-                Common.GetValueByPath(fromObject, new string[] { "config" }))),
+            Common.ParseToJsonNode(Common.GetValueByPath(fromObject, new string[] { "config" })),
             toObject, rootObject);
       }
 
@@ -884,8 +880,7 @@ namespace Google.GenAI {
         JsonArray result = new JsonArray();
 
         foreach (var record in keyArray) {
-          result.Add(TuningJobFromMldev(JsonNode.Parse(JsonSerializer.Serialize(record)), toObject,
-                                        rootObject));
+          result.Add(TuningJobFromMldev(Common.ParseToJsonNode(record), toObject, rootObject));
         }
         Common.SetValueByPath(toObject, new string[] { "tuningJobs" }, result);
       }
@@ -914,8 +909,7 @@ namespace Google.GenAI {
         JsonArray result = new JsonArray();
 
         foreach (var record in keyArray) {
-          result.Add(TuningJobFromVertex(JsonNode.Parse(JsonSerializer.Serialize(record)), toObject,
-                                         rootObject));
+          result.Add(TuningJobFromVertex(Common.ParseToJsonNode(record), toObject, rootObject));
         }
         Common.SetValueByPath(toObject, new string[] { "tuningJobs" }, result);
       }
@@ -1078,11 +1072,10 @@ namespace Google.GenAI {
       }
 
       if (Common.GetValueByPath(fromObject, new string[] { "_self" }) != null) {
-        Common.SetValueByPath(
-            toObject, new string[] { "tunedModel" },
-            TunedModelFromMldev(JsonNode.Parse(JsonSerializer.Serialize(
-                                    Common.GetValueByPath(fromObject, new string[] { "_self" }))),
-                                toObject, rootObject));
+        Common.SetValueByPath(toObject, new string[] { "tunedModel" },
+                              TunedModelFromMldev(Common.ParseToJsonNode(Common.GetValueByPath(
+                                                      fromObject, new string[] { "_self" })),
+                                                  toObject, rootObject));
       }
 
       return toObject;
