@@ -235,7 +235,7 @@ namespace Google.GenAI {
         responseNode = httpContentNode;
       }
 
-      return JsonSerializer.Deserialize<ListFilesResponse>(responseNode.ToString()) ??
+      return responseNode.Deserialize<ListFilesResponse>() ??
              throw new InvalidOperationException("Failed to deserialize Task<ListFilesResponse>.");
     }
 
@@ -316,7 +316,7 @@ namespace Google.GenAI {
         responseNode = httpContentNode;
       }
 
-      return JsonSerializer.Deserialize<CreateFileResponse>(responseNode.ToString()) ??
+      return responseNode.Deserialize<CreateFileResponse>() ??
              throw new InvalidOperationException("Failed to deserialize Task<CreateFileResponse>.");
     }
 
@@ -379,7 +379,7 @@ namespace Google.GenAI {
         responseNode = httpContentNode;
       }
 
-      return JsonSerializer.Deserialize<Google.GenAI.Types.File>(responseNode.ToString()) ??
+      return responseNode.Deserialize<Google.GenAI.Types.File>() ??
              throw new InvalidOperationException(
                  "Failed to deserialize Task<Google.GenAI.Types.File>.");
     }
@@ -444,7 +444,7 @@ namespace Google.GenAI {
         responseNode = httpContentNode;
       }
 
-      return JsonSerializer.Deserialize<DeleteFileResponse>(responseNode.ToString()) ??
+      return responseNode.Deserialize<DeleteFileResponse>() ??
              throw new InvalidOperationException("Failed to deserialize Task<DeleteFileResponse>.");
     }
 
@@ -526,7 +526,7 @@ namespace Google.GenAI {
         responseNode = httpContentNode;
       }
 
-      return JsonSerializer.Deserialize<RegisterFilesResponse>(responseNode.ToString()) ??
+      return responseNode.Deserialize<RegisterFilesResponse>() ??
              throw new InvalidOperationException(
                  "Failed to deserialize Task<RegisterFilesResponse>.");
     }

@@ -1365,7 +1365,7 @@ namespace Google.GenAI {
         responseNode = TuningJobFromMldev(httpContentNode, new JsonObject(), parameterNode);
       }
 
-      return JsonSerializer.Deserialize<TuningJob>(responseNode.ToString()) ??
+      return responseNode.Deserialize<TuningJob>() ??
              throw new InvalidOperationException("Failed to deserialize Task<TuningJob>.");
     }
 
@@ -1426,7 +1426,7 @@ namespace Google.GenAI {
             ListTuningJobsResponseFromMldev(httpContentNode, new JsonObject(), parameterNode);
       }
 
-      return JsonSerializer.Deserialize<ListTuningJobsResponse>(responseNode.ToString()) ??
+      return responseNode.Deserialize<ListTuningJobsResponse>() ??
              throw new InvalidOperationException(
                  "Failed to deserialize Task<ListTuningJobsResponse>.");
     }
@@ -1500,7 +1500,7 @@ namespace Google.GenAI {
             CancelTuningJobResponseFromMldev(httpContentNode, new JsonObject(), parameterNode);
       }
 
-      return JsonSerializer.Deserialize<CancelTuningJobResponse>(responseNode.ToString()) ??
+      return responseNode.Deserialize<CancelTuningJobResponse>() ??
              throw new InvalidOperationException(
                  "Failed to deserialize Task<CancelTuningJobResponse>.");
     }
@@ -1572,7 +1572,7 @@ namespace Google.GenAI {
         throw new NotSupportedException("This method is only supported in the Vertex AI client.");
       }
 
-      return JsonSerializer.Deserialize<TuningJob>(responseNode.ToString()) ??
+      return responseNode.Deserialize<TuningJob>() ??
              throw new InvalidOperationException("Failed to deserialize Task<TuningJob>.");
     }
 
@@ -1644,7 +1644,7 @@ namespace Google.GenAI {
         responseNode = httpContentNode;
       }
 
-      return JsonSerializer.Deserialize<TuningOperation>(responseNode.ToString()) ??
+      return responseNode.Deserialize<TuningOperation>() ??
              throw new InvalidOperationException("Failed to deserialize Task<TuningOperation>.");
     }
 

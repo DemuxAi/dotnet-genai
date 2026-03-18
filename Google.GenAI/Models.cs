@@ -4524,7 +4524,7 @@ namespace Google.GenAI {
             GenerateContentResponseFromMldev(httpContentNode, new JsonObject(), parameterNode);
       }
 
-      return JsonSerializer.Deserialize<GenerateContentResponse>(responseNode.ToString()) ??
+      return responseNode.Deserialize<GenerateContentResponse>() ??
              throw new InvalidOperationException(
                  "Failed to deserialize Task<GenerateContentResponse>.");
     }
@@ -4589,8 +4589,7 @@ namespace Google.GenAI {
           responseNode =
               GenerateContentResponseFromMldev(chunkNode, new JsonObject(), parameterNode);
         }
-        var chunkResponse =
-            JsonSerializer.Deserialize<GenerateContentResponse>(responseNode.ToString());
+        var chunkResponse = responseNode.Deserialize<GenerateContentResponse>();
         yield return chunkResponse;
       }
     }
@@ -4686,7 +4685,7 @@ namespace Google.GenAI {
             EmbedContentResponseFromMldev(httpContentNode, new JsonObject(), parameterNode);
       }
 
-      return JsonSerializer.Deserialize<EmbedContentResponse>(responseNode.ToString()) ??
+      return responseNode.Deserialize<EmbedContentResponse>() ??
              throw new InvalidOperationException(
                  "Failed to deserialize Task<EmbedContentResponse>.");
     }
@@ -4757,7 +4756,7 @@ namespace Google.GenAI {
             GenerateImagesResponseFromMldev(httpContentNode, new JsonObject(), parameterNode);
       }
 
-      return JsonSerializer.Deserialize<GenerateImagesResponse>(responseNode.ToString()) ??
+      return responseNode.Deserialize<GenerateImagesResponse>() ??
              throw new InvalidOperationException(
                  "Failed to deserialize Task<GenerateImagesResponse>.");
     }
@@ -4828,7 +4827,7 @@ namespace Google.GenAI {
         throw new NotSupportedException("This method is only supported in the Vertex AI client.");
       }
 
-      return JsonSerializer.Deserialize<EditImageResponse>(responseNode.ToString()) ??
+      return responseNode.Deserialize<EditImageResponse>() ??
              throw new InvalidOperationException("Failed to deserialize Task<EditImageResponse>.");
     }
 
@@ -4898,7 +4897,7 @@ namespace Google.GenAI {
         throw new NotSupportedException("This method is only supported in the Vertex AI client.");
       }
 
-      return JsonSerializer.Deserialize<UpscaleImageResponse>(responseNode.ToString()) ??
+      return responseNode.Deserialize<UpscaleImageResponse>() ??
              throw new InvalidOperationException(
                  "Failed to deserialize Task<UpscaleImageResponse>.");
     }
@@ -4966,7 +4965,7 @@ namespace Google.GenAI {
         throw new NotSupportedException("This method is only supported in the Vertex AI client.");
       }
 
-      return JsonSerializer.Deserialize<RecontextImageResponse>(responseNode.ToString()) ??
+      return responseNode.Deserialize<RecontextImageResponse>() ??
              throw new InvalidOperationException(
                  "Failed to deserialize Task<RecontextImageResponse>.");
     }
@@ -5034,7 +5033,7 @@ namespace Google.GenAI {
         throw new NotSupportedException("This method is only supported in the Vertex AI client.");
       }
 
-      return JsonSerializer.Deserialize<SegmentImageResponse>(responseNode.ToString()) ??
+      return responseNode.Deserialize<SegmentImageResponse>() ??
              throw new InvalidOperationException(
                  "Failed to deserialize Task<SegmentImageResponse>.");
     }
@@ -5103,7 +5102,7 @@ namespace Google.GenAI {
         responseNode = ModelFromMldev(httpContentNode, new JsonObject(), parameterNode);
       }
 
-      return JsonSerializer.Deserialize<Model>(responseNode.ToString()) ??
+      return responseNode.Deserialize<Model>() ??
              throw new InvalidOperationException("Failed to deserialize Task<Model>.");
     }
 
@@ -5166,7 +5165,7 @@ namespace Google.GenAI {
             ListModelsResponseFromMldev(httpContentNode, new JsonObject(), parameterNode);
       }
 
-      return JsonSerializer.Deserialize<ListModelsResponse>(responseNode.ToString()) ??
+      return responseNode.Deserialize<ListModelsResponse>() ??
              throw new InvalidOperationException("Failed to deserialize Task<ListModelsResponse>.");
     }
 
@@ -5240,7 +5239,7 @@ namespace Google.GenAI {
         responseNode = ModelFromMldev(httpContentNode, new JsonObject(), parameterNode);
       }
 
-      return JsonSerializer.Deserialize<Model>(responseNode.ToString()) ??
+      return responseNode.Deserialize<Model>() ??
              throw new InvalidOperationException("Failed to deserialize Task<Model>.");
     }
 
@@ -5311,7 +5310,7 @@ namespace Google.GenAI {
             DeleteModelResponseFromMldev(httpContentNode, new JsonObject(), parameterNode);
       }
 
-      return JsonSerializer.Deserialize<DeleteModelResponse>(responseNode.ToString()) ??
+      return responseNode.Deserialize<DeleteModelResponse>() ??
              throw new InvalidOperationException(
                  "Failed to deserialize Task<DeleteModelResponse>.");
     }
@@ -5394,7 +5393,7 @@ namespace Google.GenAI {
             CountTokensResponseFromMldev(httpContentNode, new JsonObject(), parameterNode);
       }
 
-      return JsonSerializer.Deserialize<CountTokensResponse>(responseNode.ToString()) ??
+      return responseNode.Deserialize<CountTokensResponse>() ??
              throw new InvalidOperationException(
                  "Failed to deserialize Task<CountTokensResponse>.");
     }
@@ -5475,7 +5474,7 @@ namespace Google.GenAI {
         throw new NotSupportedException("This method is only supported in the Vertex AI client.");
       }
 
-      return JsonSerializer.Deserialize<ComputeTokensResponse>(responseNode.ToString()) ??
+      return responseNode.Deserialize<ComputeTokensResponse>() ??
              throw new InvalidOperationException(
                  "Failed to deserialize Task<ComputeTokensResponse>.");
     }
@@ -5555,7 +5554,7 @@ namespace Google.GenAI {
             GenerateVideosOperationFromMldev(httpContentNode, new JsonObject(), parameterNode);
       }
 
-      return JsonSerializer.Deserialize<GenerateVideosOperation>(responseNode.ToString()) ??
+      return responseNode.Deserialize<GenerateVideosOperation>() ??
              throw new InvalidOperationException(
                  "Failed to deserialize Task<GenerateVideosOperation>.");
     }

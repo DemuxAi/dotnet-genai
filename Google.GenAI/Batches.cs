@@ -1724,7 +1724,7 @@ namespace Google.GenAI {
         responseNode = BatchJobFromMldev(httpContentNode, new JsonObject());
       }
 
-      return JsonSerializer.Deserialize<BatchJob>(responseNode.ToString()) ??
+      return responseNode.Deserialize<BatchJob>() ??
              throw new InvalidOperationException("Failed to deserialize Task<BatchJob>.");
     }
 
@@ -1793,7 +1793,7 @@ namespace Google.GenAI {
         responseNode = BatchJobFromMldev(httpContentNode, new JsonObject());
       }
 
-      return JsonSerializer.Deserialize<BatchJob>(responseNode.ToString()) ??
+      return responseNode.Deserialize<BatchJob>() ??
              throw new InvalidOperationException("Failed to deserialize Task<BatchJob>.");
     }
 
@@ -1867,7 +1867,7 @@ namespace Google.GenAI {
         responseNode = BatchJobFromMldev(httpContentNode, new JsonObject());
       }
 
-      return JsonSerializer.Deserialize<BatchJob>(responseNode.ToString()) ??
+      return responseNode.Deserialize<BatchJob>() ??
              throw new InvalidOperationException("Failed to deserialize Task<BatchJob>.");
     }
 
@@ -1999,7 +1999,7 @@ namespace Google.GenAI {
         responseNode = ListBatchJobsResponseFromMldev(httpContentNode, new JsonObject());
       }
 
-      return JsonSerializer.Deserialize<ListBatchJobsResponse>(responseNode.ToString()) ??
+      return responseNode.Deserialize<ListBatchJobsResponse>() ??
              throw new InvalidOperationException(
                  "Failed to deserialize Task<ListBatchJobsResponse>.");
     }
@@ -2075,7 +2075,7 @@ namespace Google.GenAI {
         responseNode = DeleteResourceJobFromMldev(httpContentNode, new JsonObject());
       }
 
-      return JsonSerializer.Deserialize<DeleteResourceJob>(responseNode.ToString()) ??
+      return responseNode.Deserialize<DeleteResourceJob>() ??
              throw new InvalidOperationException("Failed to deserialize Task<DeleteResourceJob>.");
     }
 

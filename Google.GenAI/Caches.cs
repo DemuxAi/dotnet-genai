@@ -1157,7 +1157,7 @@ namespace Google.GenAI {
         responseNode = httpContentNode;
       }
 
-      return JsonSerializer.Deserialize<CachedContent>(responseNode.ToString()) ??
+      return responseNode.Deserialize<CachedContent>() ??
              throw new InvalidOperationException("Failed to deserialize Task<CachedContent>.");
     }
 
@@ -1219,7 +1219,7 @@ namespace Google.GenAI {
         responseNode = httpContentNode;
       }
 
-      return JsonSerializer.Deserialize<CachedContent>(responseNode.ToString()) ??
+      return responseNode.Deserialize<CachedContent>() ??
              throw new InvalidOperationException("Failed to deserialize Task<CachedContent>.");
     }
 
@@ -1285,7 +1285,7 @@ namespace Google.GenAI {
         responseNode = DeleteCachedContentResponseFromMldev(httpContentNode, new JsonObject());
       }
 
-      return JsonSerializer.Deserialize<DeleteCachedContentResponse>(responseNode.ToString()) ??
+      return responseNode.Deserialize<DeleteCachedContentResponse>() ??
              throw new InvalidOperationException(
                  "Failed to deserialize Task<DeleteCachedContentResponse>.");
     }
@@ -1352,7 +1352,7 @@ namespace Google.GenAI {
         responseNode = httpContentNode;
       }
 
-      return JsonSerializer.Deserialize<CachedContent>(responseNode.ToString()) ??
+      return responseNode.Deserialize<CachedContent>() ??
              throw new InvalidOperationException("Failed to deserialize Task<CachedContent>.");
     }
 
@@ -1412,7 +1412,7 @@ namespace Google.GenAI {
         responseNode = ListCachedContentsResponseFromMldev(httpContentNode, new JsonObject());
       }
 
-      return JsonSerializer.Deserialize<ListCachedContentsResponse>(responseNode.ToString()) ??
+      return responseNode.Deserialize<ListCachedContentsResponse>() ??
              throw new InvalidOperationException(
                  "Failed to deserialize Task<ListCachedContentsResponse>.");
     }
