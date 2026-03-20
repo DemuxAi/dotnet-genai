@@ -468,51 +468,51 @@ namespace Google.GenAI.Tests {
     }
 
     [TestMethod]
-    public void Constructor_HttpOptionsNull_WithStaticVertexUrlSet_StillUsesApiClientDefault() {
+    public void Constructor_HttpOptionsNull_WithStaticVertexUrlSet_UsesStaticVertexUrl() {
       Client.setDefaultBaseUrl("http://static-vertex.com/s", null);
-      var expectedBaseUrl = ApiClient.GetDefaultHttpOptions(true, "us-central1").BaseUrl;
+      var expectedBaseUrl = "http://static-vertex.com/s";
 
       var client = new Client(vertexAI: true, project: "project", location: "us-central1",
                               httpOptions: null);
 
       Assert.AreEqual(expectedBaseUrl, client._apiClient.HttpOptions.BaseUrl,
-                      "Static URL should be ignored when httpOptions is null.");
+                      "Static URL should be used even when httpOptions is null.");
     }
 
     [TestMethod]
-    public void Constructor_HttpOptionsNull_WithEnvVertexUrlSet_StillUsesApiClientDefault() {
+    public void Constructor_HttpOptionsNull_WithEnvVertexUrlSet_UsesEnvVertexUrl() {
       System.Environment.SetEnvironmentVariable("GOOGLE_VERTEX_BASE_URL",
                                                 "http://env-vertex.com/e");
-      var expectedBaseUrl = ApiClient.GetDefaultHttpOptions(true, "us-central1").BaseUrl;
+      var expectedBaseUrl = "http://env-vertex.com/e";
 
       var client = new Client(vertexAI: true, project: "project", location: "us-central1",
                               httpOptions: null);
 
       Assert.AreEqual(expectedBaseUrl, client._apiClient.HttpOptions.BaseUrl,
-                      "Env URL should be ignored when httpOptions is null.");
+                      "Env URL should be used even when httpOptions is null.");
     }
 
     [TestMethod]
-    public void Constructor_HttpOptionsNull_WithStaticGeminiUrlSet_StillUsesApiClientDefault() {
+    public void Constructor_HttpOptionsNull_WithStaticGeminiUrlSet_UsesStaticGeminiUrl() {
       Client.setDefaultBaseUrl(null, "http://static-gemini.com/s");
-      var expectedBaseUrl = ApiClient.GetDefaultHttpOptions(false, null).BaseUrl;
+      var expectedBaseUrl = "http://static-gemini.com/s";
 
       var client = new Client(vertexAI: false, apiKey: "key", httpOptions: null);
 
       Assert.AreEqual(expectedBaseUrl, client._apiClient.HttpOptions.BaseUrl,
-                      "Static URL should be ignored when httpOptions is null.");
+                      "Static URL should be used even when httpOptions is null.");
     }
 
     [TestMethod]
-    public void Constructor_HttpOptionsNull_WithEnvGeminiUrlSet_StillUsesApiClientDefault() {
+    public void Constructor_HttpOptionsNull_WithEnvGeminiUrlSet_UsesEnvGeminiUrl() {
       System.Environment.SetEnvironmentVariable("GOOGLE_GEMINI_BASE_URL",
                                                 "http://env-gemini.com/e");
-      var expectedBaseUrl = ApiClient.GetDefaultHttpOptions(false, null).BaseUrl;
+      var expectedBaseUrl = "http://env-gemini.com/e";
 
       var client = new Client(vertexAI: false, apiKey: "key", httpOptions: null);
 
       Assert.AreEqual(expectedBaseUrl, client._apiClient.HttpOptions.BaseUrl,
-                      "Env URL should be ignored when httpOptions is null.");
+                      "Env URL should be used even when httpOptions is null.");
     }
 
     // Case 2: httpOptions parameter to Client is NOT null

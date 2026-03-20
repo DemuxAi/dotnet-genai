@@ -55,6 +55,7 @@ namespace Google.GenAI {
     public Client(bool? vertexAI = null, string? apiKey = null, ICredential? credential = null,
                   string? project = null, string? location = null,
                   Types.HttpOptions? httpOptions = null) {
+      httpOptions ??= new();
       bool resolvedVertexAI;
       if (vertexAI.HasValue) {
         resolvedVertexAI = vertexAI.Value;
@@ -74,10 +75,7 @@ namespace Google.GenAI {
         }
       }
 
-      string? baseUrl = inferBaseUrl(resolvedVertexAI, httpOptions);
-      if (baseUrl != null && httpOptions != null && httpOptions.BaseUrl == null) {
-        httpOptions.BaseUrl = baseUrl;
-      }
+      httpOptions.BaseUrl ??= inferBaseUrl(resolvedVertexAI);
 
       _apiClient = new HttpApiClient(vertexAI, apiKey, project, location, credential, httpOptions);
       Live = new Live(_apiClient);
@@ -89,9 +87,7 @@ namespace Google.GenAI {
       Files = new Files(_apiClient);
     }
 
-    static string? inferBaseUrl(bool vertexAI, Types.HttpOptions? httpOptions) {
-      if (httpOptions?.BaseUrl != null)
-        return httpOptions.BaseUrl;
+    static string? inferBaseUrl(bool vertexAI) {
       if (vertexAI)
         return vertexBaseUrl ?? Environment.GetEnvironmentVariable("GOOGLE_VERTEX_BASE_URL");
       else
