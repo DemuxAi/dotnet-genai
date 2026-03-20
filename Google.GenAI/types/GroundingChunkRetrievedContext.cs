@@ -24,8 +24,7 @@ using Google.GenAI.Serialization;
 namespace Google.GenAI.Types {
   /// <summary>
   /// Context retrieved from a data source to ground the model's response. This is used when a
-  /// retrieval tool fetches information from a user-provided corpus or a public dataset. This data
-  /// type is not supported in Gemini API.
+  /// retrieval tool fetches information from a user-provided corpus or a public dataset.
   /// </summary>
 
   public record GroundingChunkRetrievedContext {
@@ -33,6 +32,7 @@ namespace Google.GenAI.Types {
     /// Output only. The full resource name of the referenced Vertex AI Search document. This is
     /// used to identify the specific document that was retrieved. The format is
     /// `projects/{project}/locations/{location}/collections/{collection}/dataStores/{data_store}/branches/{branch}/documents/{document}`.
+    /// This field is not supported in Gemini API.
     /// </summary>
     [JsonPropertyName("documentName")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -40,7 +40,8 @@ namespace Google.GenAI.Types {
 
     /// <summary>
     /// Additional context for a Retrieval-Augmented Generation (RAG) retrieval result. This is
-    /// populated only when the RAG retrieval tool is used.
+    /// populated only when the RAG retrieval tool is used. This field is not supported in Gemini
+    /// API.
     /// </summary>
     [JsonPropertyName("ragChunk")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -76,6 +77,28 @@ namespace Google.GenAI.Types {
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public string
         ? Uri {
+            get; set;
+          }
+
+    /// <summary>
+    /// Optional. User-provided metadata about the retrieved context. This field is not supported in
+    /// Vertex AI.
+    /// </summary>
+    [JsonPropertyName("customMetadata")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public List<GroundingChunkCustomMetadata>
+        ? CustomMetadata {
+            get; set;
+          }
+
+    /// <summary>
+    /// Optional. Name of the `FileSearchStore` containing the document. Example:
+    /// `fileSearchStores/123`. This field is not supported in Vertex AI.
+    /// </summary>
+    [JsonPropertyName("fileSearchStore")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public string
+        ? FileSearchStore {
             get; set;
           }
 

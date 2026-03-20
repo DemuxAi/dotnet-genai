@@ -48,7 +48,18 @@ namespace Google.GenAI.Types {
           }
 
     /// <summary>
-    /// Enables the model to execute Google Search as part of generation.
+    /// Optional. FileSearch tool type. Tool to retrieve knowledge from Semantic Retrieval corpora.
+    /// This field is not supported in Vertex AI.
+    /// </summary>
+    [JsonPropertyName("fileSearch")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public FileSearch
+        ? FileSearch {
+            get; set;
+          }
+
+    /// <summary>
+    /// Optional. GoogleSearch tool type. Tool to support Google Search in Model. Powered by Google.
     /// </summary>
     [JsonPropertyName("googleSearch")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]

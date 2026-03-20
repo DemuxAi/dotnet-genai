@@ -23,60 +23,40 @@ using Google.GenAI.Serialization;
 
 namespace Google.GenAI.Types {
   /// <summary>
-  /// An `Image` chunk is a piece of evidence that comes from an image search result. It contains
-  /// the URI of the image search result and the URI of the image. This is used to provide the user
-  /// with a link to the source of the information.
+  /// Tuning job metadata. This data type is not supported in Gemini API.
   /// </summary>
 
-  public record GroundingChunkImage {
+  public record TuningJobMetadata {
     /// <summary>
-    /// The URI of the image search result page.
+    /// Output only. The number of epochs that have been completed.
     /// </summary>
-    [JsonPropertyName("sourceUri")]
+    [JsonPropertyName("completedEpochCount")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public string ? SourceUri { get; set; }
+    [JsonConverter(typeof(StringToNullableLongConverter))]
+    public long ? CompletedEpochCount { get; set; }
 
     /// <summary>
-    /// The URI of the image.
+    /// Output only. The number of steps that have been completed. Set for Multi-Step RL.
     /// </summary>
-    [JsonPropertyName("imageUri")]
+    [JsonPropertyName("completedStepCount")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public string
-        ? ImageUri {
+    [JsonConverter(typeof(StringToNullableLongConverter))]
+    public long
+        ? CompletedStepCount {
             get; set;
           }
 
     /// <summary>
-    /// The title of the image search result page.
-    /// </summary>
-    [JsonPropertyName("title")]
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public string
-        ? Title {
-            get; set;
-          }
-
-    /// <summary>
-    /// The domain of the image search result page.
-    /// </summary>
-    [JsonPropertyName("domain")]
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public string
-        ? Domain {
-            get; set;
-          }
-
-    /// <summary>
-    /// Deserializes a JSON string to a GroundingChunkImage object.
+    /// Deserializes a JSON string to a TuningJobMetadata object.
     /// </summary>
     /// <param name="jsonString">The JSON string to deserialize.</param>
     /// <param name="options">Optional JsonSerializerOptions.</param>
-    /// <returns>The deserialized GroundingChunkImage object, or null if deserialization
+    /// <returns>The deserialized TuningJobMetadata object, or null if deserialization
     /// fails.</returns>
-    public static GroundingChunkImage
+    public static TuningJobMetadata
         ? FromJson(string jsonString, JsonSerializerOptions? options = null) {
       try {
-        return JsonSerializer.Deserialize<GroundingChunkImage>(jsonString, options);
+        return JsonSerializer.Deserialize<TuningJobMetadata>(jsonString, options);
       } catch (JsonException e) {
         Console.Error.WriteLine($"Error deserializing JSON: {e.ToString()}");
         return null;

@@ -1242,6 +1242,18 @@ namespace Google.GenAI {
                               Common.GetValueByPath(fromObject, new string[] { "veoTuningSpec" }));
       }
 
+      if (Common.GetValueByPath(fromObject, new string[] { "distillationSamplingSpec" }) != null) {
+        Common.SetValueByPath(
+            toObject, new string[] { "distillationSamplingSpec" },
+            Common.GetValueByPath(fromObject, new string[] { "distillationSamplingSpec" }));
+      }
+
+      if (Common.GetValueByPath(fromObject, new string[] { "tuningJobMetadata" }) != null) {
+        Common.SetValueByPath(
+            toObject, new string[] { "tuningJobMetadata" },
+            Common.GetValueByPath(fromObject, new string[] { "tuningJobMetadata" }));
+      }
+
       return toObject;
     }
 

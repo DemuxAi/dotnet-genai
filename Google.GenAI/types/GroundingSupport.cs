@@ -58,6 +58,17 @@ namespace Google.GenAI.Types {
           }
 
     /// <summary>
+    /// Indices into the `rendered_parts` field of the `GroundingMetadata` message. These indices
+    /// specify which rendered parts are associated with this support message.
+    /// </summary>
+    [JsonPropertyName("renderedParts")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public List<int>
+        ? RenderedParts {
+            get; set;
+          }
+
+    /// <summary>
     /// Deserializes a JSON string to a GroundingSupport object.
     /// </summary>
     /// <param name="jsonString">The JSON string to deserialize.</param>

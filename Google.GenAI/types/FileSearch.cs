@@ -23,60 +23,49 @@ using Google.GenAI.Serialization;
 
 namespace Google.GenAI.Types {
   /// <summary>
-  /// An `Image` chunk is a piece of evidence that comes from an image search result. It contains
-  /// the URI of the image search result and the URI of the image. This is used to provide the user
-  /// with a link to the source of the information.
+  /// The FileSearch tool that retrieves knowledge from Semantic Retrieval corpora. Files are
+  /// imported to Semantic Retrieval corpora using the ImportFile API. This data type is not
+  /// supported in Vertex AI.
   /// </summary>
 
-  public record GroundingChunkImage {
+  public record FileSearch {
     /// <summary>
-    /// The URI of the image search result page.
+    /// The names of the file_search_stores to retrieve from. Example:
+    /// `fileSearchStores/my-file-search-store-123`
     /// </summary>
-    [JsonPropertyName("sourceUri")]
+    [JsonPropertyName("fileSearchStoreNames")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public string ? SourceUri { get; set; }
+    public List<string> ? FileSearchStoreNames { get; set; }
 
     /// <summary>
-    /// The URI of the image.
+    /// Optional. Metadata filter to apply to the semantic retrieval documents and chunks.
     /// </summary>
-    [JsonPropertyName("imageUri")]
+    [JsonPropertyName("metadataFilter")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public string
-        ? ImageUri {
+        ? MetadataFilter {
             get; set;
           }
 
     /// <summary>
-    /// The title of the image search result page.
+    /// Optional. The number of semantic retrieval chunks to retrieve.
     /// </summary>
-    [JsonPropertyName("title")]
+    [JsonPropertyName("topK")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public string
-        ? Title {
+    public int
+        ? TopK {
             get; set;
           }
 
     /// <summary>
-    /// The domain of the image search result page.
-    /// </summary>
-    [JsonPropertyName("domain")]
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public string
-        ? Domain {
-            get; set;
-          }
-
-    /// <summary>
-    /// Deserializes a JSON string to a GroundingChunkImage object.
+    /// Deserializes a JSON string to a FileSearch object.
     /// </summary>
     /// <param name="jsonString">The JSON string to deserialize.</param>
     /// <param name="options">Optional JsonSerializerOptions.</param>
-    /// <returns>The deserialized GroundingChunkImage object, or null if deserialization
-    /// fails.</returns>
-    public static GroundingChunkImage
-        ? FromJson(string jsonString, JsonSerializerOptions? options = null) {
+    /// <returns>The deserialized FileSearch object, or null if deserialization fails.</returns>
+    public static FileSearch ? FromJson(string jsonString, JsonSerializerOptions? options = null) {
       try {
-        return JsonSerializer.Deserialize<GroundingChunkImage>(jsonString, options);
+        return JsonSerializer.Deserialize<FileSearch>(jsonString, options);
       } catch (JsonException e) {
         Console.Error.WriteLine($"Error deserializing JSON: {e.ToString()}");
         return null;

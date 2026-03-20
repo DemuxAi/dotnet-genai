@@ -50,8 +50,7 @@ namespace Google.GenAI.Types {
 
     /// <summary>
     /// A grounding chunk from a data source retrieved by a retrieval tool, such as Vertex AI
-    /// Search. See the `RetrievedContext` message for details. This field is not supported in
-    /// Gemini API.
+    /// Search. See the `RetrievedContext` message for details
     /// </summary>
     [JsonPropertyName("retrievedContext")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]

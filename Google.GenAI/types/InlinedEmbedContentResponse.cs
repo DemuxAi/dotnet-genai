@@ -28,19 +28,29 @@ namespace Google.GenAI.Types {
 
   public record InlinedEmbedContentResponse {
     /// <summary>
-    /// The response to the request.
+    /// Output only. The response to the request.
     /// </summary>
     [JsonPropertyName("response")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public SingleEmbedContentResponse ? Response { get; set; }
 
     /// <summary>
-    /// The error encountered while processing the request.
+    /// Output only. The error encountered while processing the request.
     /// </summary>
     [JsonPropertyName("error")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public JobError
         ? Error {
+            get; set;
+          }
+
+    /// <summary>
+    /// Output only. The metadata associated with the request.
+    /// </summary>
+    [JsonPropertyName("metadata")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public Dictionary<string, object>
+        ? Metadata {
             get; set;
           }
 

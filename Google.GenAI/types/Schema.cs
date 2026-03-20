@@ -84,7 +84,9 @@ namespace Google.GenAI.Types {
           }
 
     /// <summary>
-    /// Optional. Description of the schema.
+    /// Optional. Describes the data. The model uses this field to understand the purpose of the
+    /// schema and how to use it. It is a best practice to provide a clear and descriptive
+    /// explanation for the schema and its properties here, rather than in the prompt.
     /// </summary>
     [JsonPropertyName("description")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]

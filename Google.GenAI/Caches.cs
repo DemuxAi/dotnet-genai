@@ -371,20 +371,6 @@ namespace Google.GenAI {
       return toObject;
     }
 
-    internal JsonNode FileSearchToMldev(JsonNode fromObject, JsonObject parentObject) {
-      JsonObject toObject = new JsonObject();
-
-      if (!Common.IsZero(Common.GetValueByPath(fromObject, new string[] { "" }))) {
-        throw new NotSupportedException(" parameter is not supported in Gemini API.");
-      }
-
-      if (!Common.IsZero(Common.GetValueByPath(fromObject, new string[] { "" }))) {
-        throw new NotSupportedException(" parameter is not supported in Gemini API.");
-      }
-
-      return toObject;
-    }
-
     internal JsonNode FunctionCallToMldev(JsonNode fromObject, JsonObject parentObject) {
       JsonObject toObject = new JsonObject();
 
@@ -736,6 +722,11 @@ namespace Google.GenAI {
                               Common.GetValueByPath(fromObject, new string[] { "toolResponse" }));
       }
 
+      if (Common.GetValueByPath(fromObject, new string[] { "partMetadata" }) != null) {
+        Common.SetValueByPath(toObject, new string[] { "partMetadata" },
+                              Common.GetValueByPath(fromObject, new string[] { "partMetadata" }));
+      }
+
       return toObject;
     }
 
@@ -809,6 +800,10 @@ namespace Google.GenAI {
         throw new NotSupportedException("toolResponse parameter is not supported in Vertex AI.");
       }
 
+      if (!Common.IsZero(Common.GetValueByPath(fromObject, new string[] { "partMetadata" }))) {
+        throw new NotSupportedException("partMetadata parameter is not supported in Vertex AI.");
+      }
+
       return toObject;
     }
 
@@ -873,6 +868,11 @@ namespace Google.GenAI {
       if (Common.GetValueByPath(fromObject, new string[] { "computerUse" }) != null) {
         Common.SetValueByPath(toObject, new string[] { "computerUse" },
                               Common.GetValueByPath(fromObject, new string[] { "computerUse" }));
+      }
+
+      if (Common.GetValueByPath(fromObject, new string[] { "fileSearch" }) != null) {
+        Common.SetValueByPath(toObject, new string[] { "fileSearch" },
+                              Common.GetValueByPath(fromObject, new string[] { "fileSearch" }));
       }
 
       if (Common.GetValueByPath(fromObject, new string[] { "googleSearch" }) != null) {
@@ -941,6 +941,10 @@ namespace Google.GenAI {
       if (Common.GetValueByPath(fromObject, new string[] { "computerUse" }) != null) {
         Common.SetValueByPath(toObject, new string[] { "computerUse" },
                               Common.GetValueByPath(fromObject, new string[] { "computerUse" }));
+      }
+
+      if (!Common.IsZero(Common.GetValueByPath(fromObject, new string[] { "fileSearch" }))) {
+        throw new NotSupportedException("fileSearch parameter is not supported in Vertex AI.");
       }
 
       if (Common.GetValueByPath(fromObject, new string[] { "googleSearch" }) != null) {

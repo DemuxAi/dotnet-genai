@@ -23,7 +23,7 @@ using Google.GenAI.Serialization;
 
 namespace Google.GenAI.Types {
   /// <summary>
-  /// Standard web search for grounding and related configurations.  Only text results are returned.
+  /// Standard web search for grounding and related configurations. Only text results are returned.
   /// </summary>
 
   public record WebSearch {

@@ -22,7 +22,10 @@ using System.Text.Json;
 
 namespace Google.GenAI.Types {
   /// <summary>
-  /// Enum for controlling whether the model can generate images of prominent people (celebrities).
+  /// Controls whether prominent people (celebrities) generation is allowed. If used with
+  /// personGeneration, personGeneration enum would take precedence. For instance, if ALLOW_NONE is
+  /// set, all person generation would be blocked. If this field is unspecified, the default
+  /// behavior is to allow prominent people. This enum is not supported in Gemini API.
   /// </summary>
 
   [JsonConverter(typeof(ProminentPeopleConverter))]

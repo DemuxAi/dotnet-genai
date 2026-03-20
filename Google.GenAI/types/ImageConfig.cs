@@ -57,10 +57,10 @@ namespace Google.GenAI.Types {
           }
 
     /// <summary>
-    /// Controls whether prominent people (celebrities) generation is allowed. If used with
-    /// personGeneration, personGeneration enum would take precedence. For instance, if ALLOW_NONE
-    /// is set, all person generation would be blocked. If this field is unspecified, the default
-    /// behavior is to allow prominent people.
+    /// Optional. Controls whether prominent people (celebrities) generation is allowed. If used
+    /// with personGeneration, personGeneration enum would take precedence. For instance, if
+    /// ALLOW_NONE is set, all person generation would be blocked. If this field is unspecified, the
+    /// default behavior is to allow prominent people. This field is not supported in Gemini API.
     /// </summary>
     [JsonPropertyName("prominentPeople")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -91,7 +91,8 @@ namespace Google.GenAI.Types {
           }
 
     /// <summary>
-    /// Optional. The image output format for generated images.
+    /// Optional. The image output format for generated images. This field is not supported in
+    /// Gemini API.
     /// </summary>
     [JsonPropertyName("imageOutputOptions")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]

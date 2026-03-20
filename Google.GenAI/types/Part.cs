@@ -167,6 +167,19 @@ namespace Google.GenAI.Types {
           }
 
     /// <summary>
+    /// Custom metadata associated with the Part. Agents using genai.Part as content representation
+    /// may need to keep track of the additional information. For example it can be name of a
+    /// file/source from which the Part originates or a way to multiplex multiple Part streams. This
+    /// field is not supported in Vertex AI.
+    /// </summary>
+    [JsonPropertyName("partMetadata")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public Dictionary<string, object>
+        ? PartMetadata {
+            get; set;
+          }
+
+    /// <summary>
     /// Deserializes a JSON string to a Part object.
     /// </summary>
     /// <param name="jsonString">The JSON string to deserialize.</param>

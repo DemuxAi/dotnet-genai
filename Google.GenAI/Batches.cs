@@ -838,20 +838,6 @@ namespace Google.GenAI {
       return toObject;
     }
 
-    internal JsonNode FileSearchToMldev(JsonNode fromObject, JsonObject parentObject) {
-      JsonObject toObject = new JsonObject();
-
-      if (!Common.IsZero(Common.GetValueByPath(fromObject, new string[] { "" }))) {
-        throw new NotSupportedException(" parameter is not supported in Gemini API.");
-      }
-
-      if (!Common.IsZero(Common.GetValueByPath(fromObject, new string[] { "" }))) {
-        throw new NotSupportedException(" parameter is not supported in Gemini API.");
-      }
-
-      return toObject;
-    }
-
     internal JsonNode FunctionCallToMldev(JsonNode fromObject, JsonObject parentObject) {
       JsonObject toObject = new JsonObject();
 
@@ -1132,6 +1118,11 @@ namespace Google.GenAI {
       if (Common.GetValueByPath(fromObject, new string[] { "usageMetadata" }) != null) {
         Common.SetValueByPath(toObject, new string[] { "usageMetadata" },
                               Common.GetValueByPath(fromObject, new string[] { "usageMetadata" }));
+      }
+
+      if (Common.GetValueByPath(fromObject, new string[] { "modelStatus" }) != null) {
+        Common.SetValueByPath(toObject, new string[] { "modelStatus" },
+                              Common.GetValueByPath(fromObject, new string[] { "modelStatus" }));
       }
 
       return toObject;
@@ -1518,6 +1509,11 @@ namespace Google.GenAI {
                               Common.GetValueByPath(fromObject, new string[] { "toolResponse" }));
       }
 
+      if (Common.GetValueByPath(fromObject, new string[] { "partMetadata" }) != null) {
+        Common.SetValueByPath(toObject, new string[] { "partMetadata" },
+                              Common.GetValueByPath(fromObject, new string[] { "partMetadata" }));
+      }
+
       return toObject;
     }
 
@@ -1578,6 +1574,11 @@ namespace Google.GenAI {
       if (Common.GetValueByPath(fromObject, new string[] { "computerUse" }) != null) {
         Common.SetValueByPath(toObject, new string[] { "computerUse" },
                               Common.GetValueByPath(fromObject, new string[] { "computerUse" }));
+      }
+
+      if (Common.GetValueByPath(fromObject, new string[] { "fileSearch" }) != null) {
+        Common.SetValueByPath(toObject, new string[] { "fileSearch" },
+                              Common.GetValueByPath(fromObject, new string[] { "fileSearch" }));
       }
 
       if (Common.GetValueByPath(fromObject, new string[] { "googleSearch" }) != null) {

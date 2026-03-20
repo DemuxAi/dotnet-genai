@@ -28,14 +28,14 @@ namespace Google.GenAI.Types {
 
   public record Transcription {
     /// <summary>
-    /// Transcription text.
+    /// Optional. Transcription text.
     /// </summary>
     [JsonPropertyName("text")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public string ? Text { get; set; }
 
     /// <summary>
-    /// The bool indicates the end of the transcription.
+    /// Optional. The bool indicates the end of the transcription.
     /// </summary>
     [JsonPropertyName("finished")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]

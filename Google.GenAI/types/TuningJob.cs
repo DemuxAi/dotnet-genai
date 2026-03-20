@@ -337,6 +337,26 @@ namespace Google.GenAI.Types {
           }
 
     /// <summary>
+    /// Optional. Spec for creating a distillation dataset.
+    /// </summary>
+    [JsonPropertyName("distillationSamplingSpec")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public DistillationSamplingSpec
+        ? DistillationSamplingSpec {
+            get; set;
+          }
+
+    /// <summary>
+    /// Output only. Tuning Job metadata.
+    /// </summary>
+    [JsonPropertyName("tuningJobMetadata")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public TuningJobMetadata
+        ? TuningJobMetadata {
+            get; set;
+          }
+
+    /// <summary>
     /// Deserializes a JSON string to a TuningJob object.
     /// </summary>
     /// <param name="jsonString">The JSON string to deserialize.</param>

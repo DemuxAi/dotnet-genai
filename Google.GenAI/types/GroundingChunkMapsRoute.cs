@@ -23,60 +23,49 @@ using Google.GenAI.Serialization;
 
 namespace Google.GenAI.Types {
   /// <summary>
-  /// An `Image` chunk is a piece of evidence that comes from an image search result. It contains
-  /// the URI of the image search result and the URI of the image. This is used to provide the user
-  /// with a link to the source of the information.
+  /// Route information from Google Maps. This data type is not supported in Gemini API.
   /// </summary>
 
-  public record GroundingChunkImage {
+  public record GroundingChunkMapsRoute {
     /// <summary>
-    /// The URI of the image search result page.
+    /// The total distance of the route, in meters.
     /// </summary>
-    [JsonPropertyName("sourceUri")]
+    [JsonPropertyName("distanceMeters")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public string ? SourceUri { get; set; }
+    public int ? DistanceMeters { get; set; }
 
     /// <summary>
-    /// The URI of the image.
+    /// The total duration of the route.
     /// </summary>
-    [JsonPropertyName("imageUri")]
+    [JsonPropertyName("duration")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public string
-        ? ImageUri {
+        ? Duration {
             get; set;
           }
 
     /// <summary>
-    /// The title of the image search result page.
+    /// An encoded polyline of the route. See
+    /// https://developers.google.com/maps/documentation/utilities/polylinealgorithm
     /// </summary>
-    [JsonPropertyName("title")]
+    [JsonPropertyName("encodedPolyline")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public string
-        ? Title {
+        ? EncodedPolyline {
             get; set;
           }
 
     /// <summary>
-    /// The domain of the image search result page.
-    /// </summary>
-    [JsonPropertyName("domain")]
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public string
-        ? Domain {
-            get; set;
-          }
-
-    /// <summary>
-    /// Deserializes a JSON string to a GroundingChunkImage object.
+    /// Deserializes a JSON string to a GroundingChunkMapsRoute object.
     /// </summary>
     /// <param name="jsonString">The JSON string to deserialize.</param>
     /// <param name="options">Optional JsonSerializerOptions.</param>
-    /// <returns>The deserialized GroundingChunkImage object, or null if deserialization
+    /// <returns>The deserialized GroundingChunkMapsRoute object, or null if deserialization
     /// fails.</returns>
-    public static GroundingChunkImage
+    public static GroundingChunkMapsRoute
         ? FromJson(string jsonString, JsonSerializerOptions? options = null) {
       try {
-        return JsonSerializer.Deserialize<GroundingChunkImage>(jsonString, options);
+        return JsonSerializer.Deserialize<GroundingChunkMapsRoute>(jsonString, options);
       } catch (JsonException e) {
         Console.Error.WriteLine($"Error deserializing JSON: {e.ToString()}");
         return null;

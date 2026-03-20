@@ -89,8 +89,7 @@ namespace Google.GenAI.Types {
 
     /// <summary>
     /// Optional. Output only. A token that can be used to render a Google Maps widget with the
-    /// contextual data. This field is populated only when the grounding source is Google Maps. This
-    /// field is not supported in Gemini API.
+    /// contextual data. This field is populated only when the grounding source is Google Maps.
     /// </summary>
     [JsonPropertyName("googleMapsWidgetContextToken")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]

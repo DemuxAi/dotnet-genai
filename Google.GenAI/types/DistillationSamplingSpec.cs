@@ -23,60 +23,52 @@ using Google.GenAI.Serialization;
 
 namespace Google.GenAI.Types {
   /// <summary>
-  /// An `Image` chunk is a piece of evidence that comes from an image search result. It contains
-  /// the URI of the image search result and the URI of the image. This is used to provide the user
-  /// with a link to the source of the information.
+  /// Spec for creating a distilled dataset in Vertex Dataset. This data type is not supported in
+  /// Gemini API.
   /// </summary>
 
-  public record GroundingChunkImage {
+  public record DistillationSamplingSpec {
     /// <summary>
-    /// The URI of the image search result page.
+    /// Optional. The base teacher model that is being distilled. See Supported models
+    /// (https://cloud.google.com/vertex-ai/generative-ai/docs/model-reference/tuning#supported_models).
     /// </summary>
-    [JsonPropertyName("sourceUri")]
+    [JsonPropertyName("baseTeacherModel")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public string ? SourceUri { get; set; }
+    public string ? BaseTeacherModel { get; set; }
 
     /// <summary>
-    /// The URI of the image.
+    /// Optional. The resource name of the Tuned teacher model. Format:
+    /// `projects/{project}/locations/{location}/models/{model}`.
     /// </summary>
-    [JsonPropertyName("imageUri")]
+    [JsonPropertyName("tunedTeacherModelSource")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public string
-        ? ImageUri {
+        ? TunedTeacherModelSource {
             get; set;
           }
 
     /// <summary>
-    /// The title of the image search result page.
+    /// Optional. Cloud Storage path to file containing validation dataset for distillation. The
+    /// dataset must be formatted as a JSONL file.
     /// </summary>
-    [JsonPropertyName("title")]
+    [JsonPropertyName("validationDatasetUri")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public string
-        ? Title {
+        ? ValidationDatasetUri {
             get; set;
           }
 
     /// <summary>
-    /// The domain of the image search result page.
-    /// </summary>
-    [JsonPropertyName("domain")]
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public string
-        ? Domain {
-            get; set;
-          }
-
-    /// <summary>
-    /// Deserializes a JSON string to a GroundingChunkImage object.
+    /// Deserializes a JSON string to a DistillationSamplingSpec object.
     /// </summary>
     /// <param name="jsonString">The JSON string to deserialize.</param>
     /// <param name="options">Optional JsonSerializerOptions.</param>
-    /// <returns>The deserialized GroundingChunkImage object, or null if deserialization
+    /// <returns>The deserialized DistillationSamplingSpec object, or null if deserialization
     /// fails.</returns>
-    public static GroundingChunkImage
+    public static DistillationSamplingSpec
         ? FromJson(string jsonString, JsonSerializerOptions? options = null) {
       try {
-        return JsonSerializer.Deserialize<GroundingChunkImage>(jsonString, options);
+        return JsonSerializer.Deserialize<DistillationSamplingSpec>(jsonString, options);
       } catch (JsonException e) {
         Console.Error.WriteLine($"Error deserializing JSON: {e.ToString()}");
         return null;

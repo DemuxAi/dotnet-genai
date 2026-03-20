@@ -52,6 +52,16 @@ namespace Google.GenAI.Types {
           }
 
     /// <summary>
+    /// Sum of log probabilities for all tokens. This field is not supported in Vertex AI.
+    /// </summary>
+    [JsonPropertyName("logProbabilitySum")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public double
+        ? LogProbabilitySum {
+            get; set;
+          }
+
+    /// <summary>
     /// Deserializes a JSON string to a LogprobsResult object.
     /// </summary>
     /// <param name="jsonString">The JSON string to deserialize.</param>

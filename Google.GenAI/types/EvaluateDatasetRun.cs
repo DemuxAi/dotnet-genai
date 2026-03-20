@@ -67,8 +67,7 @@ namespace Google.GenAI.Types {
           }
 
     /// <summary>
-    /// Output only. The operation ID of the evaluation run. Format:
-    /// `projects/{project}/locations/{location}/operations/{operation_id}`.
+    /// Output only. Deprecated: The updated architecture uses evaluation_run instead.
     /// </summary>
     [JsonPropertyName("operationName")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]

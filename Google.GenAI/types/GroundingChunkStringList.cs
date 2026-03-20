@@ -23,36 +23,28 @@ using Google.GenAI.Serialization;
 
 namespace Google.GenAI.Types {
   /// <summary>
-  /// Different types of search that can be enabled on the GoogleSearch tool.
+  /// A list of string values. This data type is not supported in Vertex AI.
   /// </summary>
 
-  public record SearchTypes {
+  public record GroundingChunkStringList {
     /// <summary>
-    /// Optional. Setting this field enables web search. Only text results are returned.
+    /// The string values of the list.
     /// </summary>
-    [JsonPropertyName("webSearch")]
+    [JsonPropertyName("values")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public WebSearch ? WebSearch { get; set; }
+    public List<string> ? Values { get; set; }
 
     /// <summary>
-    /// Optional. Setting this field enables image search. Image bytes are returned.
-    /// </summary>
-    [JsonPropertyName("imageSearch")]
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public ImageSearch
-        ? ImageSearch {
-            get; set;
-          }
-
-    /// <summary>
-    /// Deserializes a JSON string to a SearchTypes object.
+    /// Deserializes a JSON string to a GroundingChunkStringList object.
     /// </summary>
     /// <param name="jsonString">The JSON string to deserialize.</param>
     /// <param name="options">Optional JsonSerializerOptions.</param>
-    /// <returns>The deserialized SearchTypes object, or null if deserialization fails.</returns>
-    public static SearchTypes ? FromJson(string jsonString, JsonSerializerOptions? options = null) {
+    /// <returns>The deserialized GroundingChunkStringList object, or null if deserialization
+    /// fails.</returns>
+    public static GroundingChunkStringList
+        ? FromJson(string jsonString, JsonSerializerOptions? options = null) {
       try {
-        return JsonSerializer.Deserialize<SearchTypes>(jsonString, options);
+        return JsonSerializer.Deserialize<GroundingChunkStringList>(jsonString, options);
       } catch (JsonException e) {
         Console.Error.WriteLine($"Error deserializing JSON: {e.ToString()}");
         return null;

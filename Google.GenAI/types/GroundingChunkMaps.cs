@@ -79,6 +79,16 @@ namespace Google.GenAI.Types {
           }
 
     /// <summary>
+    /// Output only. Route information.
+    /// </summary>
+    [JsonPropertyName("route")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public GroundingChunkMapsRoute
+        ? Route {
+            get; set;
+          }
+
+    /// <summary>
     /// Deserializes a JSON string to a GroundingChunkMaps object.
     /// </summary>
     /// <param name="jsonString">The JSON string to deserialize.</param>

@@ -23,12 +23,12 @@ using Google.GenAI.Serialization;
 
 namespace Google.GenAI.Types {
   /// <summary>
-  /// Tool to support web search.
+  /// GoogleSearch tool type. Tool to support Google Search in Model. Powered by Google.
   /// </summary>
 
   public record GoogleSearch {
     /// <summary>
-    /// Different types of search that can be enabled on the GoogleSearch tool.
+    /// Optional. The set of search types to enable. If not set, web search is enabled by default.
     /// </summary>
     [JsonPropertyName("searchTypes")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
