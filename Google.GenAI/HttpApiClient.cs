@@ -151,7 +151,7 @@ namespace Google.GenAI
       HttpRequestMessage request =
           await CreateHttpRequestAsync(httpMethod, path, requestJson, requestHttpOptions);
 
-      HttpResponseMessage response = await ((HttpClient)HttpClient).SendAsync(
+      HttpResponseMessage response = await HttpClient.SendAsync(
         request,
         // Use ResponseHeadersRead to avoid buffering the entire response
         HttpCompletionOption.ResponseHeadersRead,

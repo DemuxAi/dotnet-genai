@@ -29,10 +29,10 @@ namespace Google.GenAI
   {
     private static readonly string SdkVersion = GetSdkVersion();
 
-    private HttpMessageInvoker? _httpClient;
+    private HttpClient? _httpClient;
     private readonly object _httpClientLock = new object();
 
-    protected HttpMessageInvoker HttpClient
+    protected HttpClient HttpClient
     {
         get
         {
