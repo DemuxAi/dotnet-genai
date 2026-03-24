@@ -23,19 +23,20 @@ using Google.GenAI.Serialization;
 
 namespace Google.GenAI.Types {
   /// <summary>
-  /// ReplicatedVoiceConfig is used to configure replicated voice.
+  /// The configuration for the replicated voice to use.
   /// </summary>
 
   public record ReplicatedVoiceConfig {
     /// <summary>
-    /// The mime type of the replicated voice.
+    /// The mimetype of the voice sample. The only currently supported value is `audio/wav`. This
+    /// represents 16-bit signed little-endian wav data, with a 24kHz sampling rate.
     /// </summary>
     [JsonPropertyName("mimeType")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public string ? MimeType { get; set; }
 
     /// <summary>
-    /// The sample audio of the replicated voice.
+    /// The sample of the custom voice.
     /// </summary>
     [JsonPropertyName("voiceSampleAudio")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]

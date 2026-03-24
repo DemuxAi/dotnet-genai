@@ -22,10 +22,13 @@ using System.Text.Json.Serialization;
 using Google.GenAI.Serialization;
 
 namespace Google.GenAI.Types {
+  /// <summary>
+  /// Config for speech generation and transcription.
+  /// </summary>
 
   public record SpeechConfig {
     /// <summary>
-    /// Configuration for the voice of the response.
+    /// The configuration in case of single-voice output.
     /// </summary>
     [JsonPropertyName("voiceConfig")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]

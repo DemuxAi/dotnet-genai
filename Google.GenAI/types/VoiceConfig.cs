@@ -22,10 +22,14 @@ using System.Text.Json.Serialization;
 using Google.GenAI.Serialization;
 
 namespace Google.GenAI.Types {
+  /// <summary>
+  /// The configuration for the voice to use.
+  /// </summary>
 
   public record VoiceConfig {
     /// <summary>
-    /// If true, the model will use a replicated voice for the response.
+    /// The configuration for a replicated voice, which is a clone of a user's voice that can be
+    /// used for speech synthesis. If this is unset, a default voice is used.
     /// </summary>
     [JsonPropertyName("replicatedVoiceConfig")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
