@@ -154,6 +154,7 @@ public class GenerateVideosTest {
       NegativePrompt = "ugly, low quality",
       EnhancePrompt = true,
       CompressionQuality = VideoCompressionQuality.Lossless,
+      Labels = new Dictionary<string, string> { ["veo_label_key"] = "generate_videos" },
     };
 
     var operation = await vertexClient.Models.GenerateVideosAsync(

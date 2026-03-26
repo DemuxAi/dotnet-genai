@@ -2054,6 +2054,10 @@ namespace Google.GenAI {
             "compressionQuality parameter is not supported in Gemini API.");
       }
 
+      if (!Common.IsZero(Common.GetValueByPath(fromObject, new string[] { "labels" }))) {
+        throw new NotSupportedException("labels parameter is not supported in Gemini API.");
+      }
+
       return toObject;
     }
 
@@ -2155,6 +2159,11 @@ namespace Google.GenAI {
         Common.SetValueByPath(
             parentObject, new string[] { "parameters", "compressionQuality" },
             Common.GetValueByPath(fromObject, new string[] { "compressionQuality" }));
+      }
+
+      if (Common.GetValueByPath(fromObject, new string[] { "labels" }) != null) {
+        Common.SetValueByPath(parentObject, new string[] { "labels" },
+                              Common.GetValueByPath(fromObject, new string[] { "labels" }));
       }
 
       return toObject;

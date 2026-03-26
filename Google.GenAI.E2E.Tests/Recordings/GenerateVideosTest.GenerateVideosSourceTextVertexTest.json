@@ -7,7 +7,7 @@
         "url": "/v1beta1/projects/REDACTED/locations/us-central1/publishers/google/models/veo-3.1-generate-preview:predictLongRunning",
         "request": "POST /v1beta1/projects/REDACTED/locations/us-central1/publishers/google/models/veo-3.1-generate-preview:predictLongRunning HTTP/1.1",
         "headers": {
-          "Content-Length": "325",
+          "Content-Length": "370",
           "Content-Type": "application/json; charset=utf-8",
           "Test-Name": "GenerateVideosTest.GenerateVideosSourceTextVertexTest"
         },
@@ -18,6 +18,9 @@
                 "prompt": "Man with a dog"
               }
             ],
+            "labels": {
+              "veo_label_key": "generate_videos"
+            },
             "parameters": {
               "aspectRatio": "16:9",
               "compressionQuality": "LOSSLESS",
@@ -38,12 +41,12 @@
         "port": 443,
         "protocol": "https"
       },
-      "shaSum": "b2a53f2619ef680858e7c01b7e724b21367942ce9a54771955a3f2603cf9ef2f",
+      "shaSum": "4bf28c5be06ff116d750a2bcf3ebf0ce8c1fbe81dd4d6662eb2db8fcb064a18a",
       "response": {
         "statusCode": 200,
         "headers": {
           "Content-Type": "application/json; charset=UTF-8",
-          "Date": "Tue, 02 Dec 2025 00:19:20 GMT",
+          "Date": "Mon, 23 Mar 2026 23:34:37 GMT",
           "Server": "scaffolding on HTTPServer2",
           "Vary": "Origin, X-Origin, Referer",
           "X-Content-Type-Options": "nosniff",
@@ -52,7 +55,7 @@
         },
         "bodySegments": [
           {
-            "name": "projects/REDACTED/locations/us-central1/publishers/google/models/veo-3.1-generate-preview/operations/bb6f6116-15a0-4a92-8d8c-6a56e67da943"
+            "name": "projects/REDACTED/locations/us-central1/publishers/google/models/veo-3.1-generate-preview/operations/fb676b50-23b7-4c80-b9f6-45f1a54fa2c4"
           }
         ]
       }
@@ -69,20 +72,20 @@
         },
         "bodySegments": [
           {
-            "operationName": "projects/REDACTED/locations/us-central1/publishers/google/models/veo-3.1-generate-preview/operations/bb6f6116-15a0-4a92-8d8c-6a56e67da943"
+            "operationName": "projects/REDACTED/locations/us-central1/publishers/google/models/veo-3.1-generate-preview/operations/fb676b50-23b7-4c80-b9f6-45f1a54fa2c4"
           }
         ],
-        "previousRequest": "b2a53f2619ef680858e7c01b7e724b21367942ce9a54771955a3f2603cf9ef2f",
+        "previousRequest": "4bf28c5be06ff116d750a2bcf3ebf0ce8c1fbe81dd4d6662eb2db8fcb064a18a",
         "serverAddress": "us-central1-aiplatform.googleapis.com",
         "port": 443,
         "protocol": "https"
       },
-      "shaSum": "80da516c38b028e4bfad8aee14ffca7fec8c83f6acab94cfde1a4e1c390b0822",
+      "shaSum": "6d266f1eafed7f27244055d53dba9a211d47b2db3febff46e8ff17849e8310a8",
       "response": {
         "statusCode": 200,
         "headers": {
           "Content-Type": "application/json; charset=UTF-8",
-          "Date": "Tue, 02 Dec 2025 00:19:30 GMT",
+          "Date": "Mon, 23 Mar 2026 23:34:47 GMT",
           "Server": "scaffolding on HTTPServer2",
           "Vary": "Origin, X-Origin, Referer",
           "X-Content-Type-Options": "nosniff",
@@ -91,7 +94,7 @@
         },
         "bodySegments": [
           {
-            "name": "projects/REDACTED/locations/us-central1/publishers/google/models/veo-3.1-generate-preview/operations/bb6f6116-15a0-4a92-8d8c-6a56e67da943"
+            "name": "projects/REDACTED/locations/us-central1/publishers/google/models/veo-3.1-generate-preview/operations/fb676b50-23b7-4c80-b9f6-45f1a54fa2c4"
           }
         ]
       }
@@ -108,20 +111,20 @@
         },
         "bodySegments": [
           {
-            "operationName": "projects/REDACTED/locations/us-central1/publishers/google/models/veo-3.1-generate-preview/operations/bb6f6116-15a0-4a92-8d8c-6a56e67da943"
+            "operationName": "projects/REDACTED/locations/us-central1/publishers/google/models/veo-3.1-generate-preview/operations/fb676b50-23b7-4c80-b9f6-45f1a54fa2c4"
           }
         ],
-        "previousRequest": "80da516c38b028e4bfad8aee14ffca7fec8c83f6acab94cfde1a4e1c390b0822",
+        "previousRequest": "6d266f1eafed7f27244055d53dba9a211d47b2db3febff46e8ff17849e8310a8",
         "serverAddress": "us-central1-aiplatform.googleapis.com",
         "port": 443,
         "protocol": "https"
       },
-      "shaSum": "13f31aa3f96e01b269f32caac652aef5f78d0381628731e83eace2579552ae33",
+      "shaSum": "bf84dc0ce5ac62c0a1d53784f6784e2e27e1c2f1e7afb40469d2c9cadd4a0c40",
       "response": {
         "statusCode": 200,
         "headers": {
           "Content-Type": "application/json; charset=UTF-8",
-          "Date": "Tue, 02 Dec 2025 00:19:40 GMT",
+          "Date": "Mon, 23 Mar 2026 23:34:58 GMT",
           "Server": "scaffolding on HTTPServer2",
           "Vary": "Origin, X-Origin, Referer",
           "X-Content-Type-Options": "nosniff",
@@ -130,7 +133,7 @@
         },
         "bodySegments": [
           {
-            "name": "projects/REDACTED/locations/us-central1/publishers/google/models/veo-3.1-generate-preview/operations/bb6f6116-15a0-4a92-8d8c-6a56e67da943"
+            "name": "projects/REDACTED/locations/us-central1/publishers/google/models/veo-3.1-generate-preview/operations/fb676b50-23b7-4c80-b9f6-45f1a54fa2c4"
           }
         ]
       }
@@ -147,20 +150,20 @@
         },
         "bodySegments": [
           {
-            "operationName": "projects/REDACTED/locations/us-central1/publishers/google/models/veo-3.1-generate-preview/operations/bb6f6116-15a0-4a92-8d8c-6a56e67da943"
+            "operationName": "projects/REDACTED/locations/us-central1/publishers/google/models/veo-3.1-generate-preview/operations/fb676b50-23b7-4c80-b9f6-45f1a54fa2c4"
           }
         ],
-        "previousRequest": "13f31aa3f96e01b269f32caac652aef5f78d0381628731e83eace2579552ae33",
+        "previousRequest": "bf84dc0ce5ac62c0a1d53784f6784e2e27e1c2f1e7afb40469d2c9cadd4a0c40",
         "serverAddress": "us-central1-aiplatform.googleapis.com",
         "port": 443,
         "protocol": "https"
       },
-      "shaSum": "005cd08a1b606d2fb9906e2b0075bbe2ba81690a5f90f201347271e62f57e568",
+      "shaSum": "84e6cece47330516d40cb646e71468d6acf7305d168dc4c62ea877a4acd830eb",
       "response": {
         "statusCode": 200,
         "headers": {
           "Content-Type": "application/json; charset=UTF-8",
-          "Date": "Tue, 02 Dec 2025 00:19:51 GMT",
+          "Date": "Mon, 23 Mar 2026 23:35:08 GMT",
           "Server": "scaffolding on HTTPServer2",
           "Vary": "Origin, X-Origin, Referer",
           "X-Content-Type-Options": "nosniff",
@@ -169,7 +172,7 @@
         },
         "bodySegments": [
           {
-            "name": "projects/REDACTED/locations/us-central1/publishers/google/models/veo-3.1-generate-preview/operations/bb6f6116-15a0-4a92-8d8c-6a56e67da943"
+            "name": "projects/REDACTED/locations/us-central1/publishers/google/models/veo-3.1-generate-preview/operations/fb676b50-23b7-4c80-b9f6-45f1a54fa2c4"
           }
         ]
       }
@@ -186,20 +189,20 @@
         },
         "bodySegments": [
           {
-            "operationName": "projects/REDACTED/locations/us-central1/publishers/google/models/veo-3.1-generate-preview/operations/bb6f6116-15a0-4a92-8d8c-6a56e67da943"
+            "operationName": "projects/REDACTED/locations/us-central1/publishers/google/models/veo-3.1-generate-preview/operations/fb676b50-23b7-4c80-b9f6-45f1a54fa2c4"
           }
         ],
-        "previousRequest": "005cd08a1b606d2fb9906e2b0075bbe2ba81690a5f90f201347271e62f57e568",
+        "previousRequest": "84e6cece47330516d40cb646e71468d6acf7305d168dc4c62ea877a4acd830eb",
         "serverAddress": "us-central1-aiplatform.googleapis.com",
         "port": 443,
         "protocol": "https"
       },
-      "shaSum": "dbde31e1ec7ce7e68847ee531d561c4e31647f1f0c2a01b7ece878a6e4912f13",
+      "shaSum": "590e4526fa5ef6235913d7ea5f8699effe46e149282321a032941ce6a3aa09cf",
       "response": {
         "statusCode": 200,
         "headers": {
           "Content-Type": "application/json; charset=UTF-8",
-          "Date": "Tue, 02 Dec 2025 00:20:01 GMT",
+          "Date": "Mon, 23 Mar 2026 23:35:18 GMT",
           "Server": "scaffolding on HTTPServer2",
           "Vary": "Origin, X-Origin, Referer",
           "X-Content-Type-Options": "nosniff",
@@ -208,7 +211,7 @@
         },
         "bodySegments": [
           {
-            "name": "projects/REDACTED/locations/us-central1/publishers/google/models/veo-3.1-generate-preview/operations/bb6f6116-15a0-4a92-8d8c-6a56e67da943"
+            "name": "projects/REDACTED/locations/us-central1/publishers/google/models/veo-3.1-generate-preview/operations/fb676b50-23b7-4c80-b9f6-45f1a54fa2c4"
           }
         ]
       }
@@ -225,20 +228,20 @@
         },
         "bodySegments": [
           {
-            "operationName": "projects/REDACTED/locations/us-central1/publishers/google/models/veo-3.1-generate-preview/operations/bb6f6116-15a0-4a92-8d8c-6a56e67da943"
+            "operationName": "projects/REDACTED/locations/us-central1/publishers/google/models/veo-3.1-generate-preview/operations/fb676b50-23b7-4c80-b9f6-45f1a54fa2c4"
           }
         ],
-        "previousRequest": "dbde31e1ec7ce7e68847ee531d561c4e31647f1f0c2a01b7ece878a6e4912f13",
+        "previousRequest": "590e4526fa5ef6235913d7ea5f8699effe46e149282321a032941ce6a3aa09cf",
         "serverAddress": "us-central1-aiplatform.googleapis.com",
         "port": 443,
         "protocol": "https"
       },
-      "shaSum": "b3c3ba187e1b6eb41d263503c0185a6547d8b161e4da3b1436d26e068c6f6f60",
+      "shaSum": "abeff042e63db5e09b354b72a793570b581b1a3943c90a67dce97c22edd9b9e6",
       "response": {
         "statusCode": 200,
         "headers": {
           "Content-Type": "application/json; charset=UTF-8",
-          "Date": "Tue, 02 Dec 2025 00:20:11 GMT",
+          "Date": "Mon, 23 Mar 2026 23:35:28 GMT",
           "Server": "scaffolding on HTTPServer2",
           "Vary": "Origin, X-Origin, Referer",
           "X-Content-Type-Options": "nosniff",
@@ -247,7 +250,7 @@
         },
         "bodySegments": [
           {
-            "name": "projects/REDACTED/locations/us-central1/publishers/google/models/veo-3.1-generate-preview/operations/bb6f6116-15a0-4a92-8d8c-6a56e67da943"
+            "name": "projects/REDACTED/locations/us-central1/publishers/google/models/veo-3.1-generate-preview/operations/fb676b50-23b7-4c80-b9f6-45f1a54fa2c4"
           }
         ]
       }
@@ -264,20 +267,20 @@
         },
         "bodySegments": [
           {
-            "operationName": "projects/REDACTED/locations/us-central1/publishers/google/models/veo-3.1-generate-preview/operations/bb6f6116-15a0-4a92-8d8c-6a56e67da943"
+            "operationName": "projects/REDACTED/locations/us-central1/publishers/google/models/veo-3.1-generate-preview/operations/fb676b50-23b7-4c80-b9f6-45f1a54fa2c4"
           }
         ],
-        "previousRequest": "b3c3ba187e1b6eb41d263503c0185a6547d8b161e4da3b1436d26e068c6f6f60",
+        "previousRequest": "abeff042e63db5e09b354b72a793570b581b1a3943c90a67dce97c22edd9b9e6",
         "serverAddress": "us-central1-aiplatform.googleapis.com",
         "port": 443,
         "protocol": "https"
       },
-      "shaSum": "b2b4e54a92bc000a851b3b25d1e151ef2b60b78d459756c2c3b28a0096c21eae",
+      "shaSum": "c1f69cc281e5f8f4b5e303e481d63d716a5a995afcd7834ee8f2d4d9b8101b09",
       "response": {
         "statusCode": 200,
         "headers": {
           "Content-Type": "application/json; charset=UTF-8",
-          "Date": "Tue, 02 Dec 2025 00:20:21 GMT",
+          "Date": "Mon, 23 Mar 2026 23:35:38 GMT",
           "Server": "scaffolding on HTTPServer2",
           "Vary": "Origin, X-Origin, Referer",
           "X-Content-Type-Options": "nosniff",
@@ -286,7 +289,7 @@
         },
         "bodySegments": [
           {
-            "name": "projects/REDACTED/locations/us-central1/publishers/google/models/veo-3.1-generate-preview/operations/bb6f6116-15a0-4a92-8d8c-6a56e67da943"
+            "name": "projects/REDACTED/locations/us-central1/publishers/google/models/veo-3.1-generate-preview/operations/fb676b50-23b7-4c80-b9f6-45f1a54fa2c4"
           }
         ]
       }
@@ -303,20 +306,20 @@
         },
         "bodySegments": [
           {
-            "operationName": "projects/REDACTED/locations/us-central1/publishers/google/models/veo-3.1-generate-preview/operations/bb6f6116-15a0-4a92-8d8c-6a56e67da943"
+            "operationName": "projects/REDACTED/locations/us-central1/publishers/google/models/veo-3.1-generate-preview/operations/fb676b50-23b7-4c80-b9f6-45f1a54fa2c4"
           }
         ],
-        "previousRequest": "b2b4e54a92bc000a851b3b25d1e151ef2b60b78d459756c2c3b28a0096c21eae",
+        "previousRequest": "c1f69cc281e5f8f4b5e303e481d63d716a5a995afcd7834ee8f2d4d9b8101b09",
         "serverAddress": "us-central1-aiplatform.googleapis.com",
         "port": 443,
         "protocol": "https"
       },
-      "shaSum": "10118fd802f6769bb515b49694a1d00e2a6a58d005f32e031214e6a90cad238e",
+      "shaSum": "ea0e021fd70a4552cd3c604ffe9d8f20fa248e16eaa1a77bcf6fb69307023a1d",
       "response": {
         "statusCode": 200,
         "headers": {
           "Content-Type": "application/json; charset=UTF-8",
-          "Date": "Tue, 02 Dec 2025 00:20:31 GMT",
+          "Date": "Mon, 23 Mar 2026 23:35:48 GMT",
           "Server": "scaffolding on HTTPServer2",
           "Vary": "Origin, X-Origin, Referer",
           "X-Content-Type-Options": "nosniff",
@@ -326,13 +329,13 @@
         "bodySegments": [
           {
             "done": true,
-            "name": "projects/REDACTED/locations/us-central1/publishers/google/models/veo-3.1-generate-preview/operations/bb6f6116-15a0-4a92-8d8c-6a56e67da943",
+            "name": "projects/REDACTED/locations/us-central1/publishers/google/models/veo-3.1-generate-preview/operations/fb676b50-23b7-4c80-b9f6-45f1a54fa2c4",
             "response": {
               "@type": "type.googleapis.com/cloud.ai.large_models.vision.GenerateVideoResponse",
               "raiMediaFilteredCount": 0,
               "videos": [
                 {
-                  "gcsUri": "gs://genai-sdk-tests/temp/videos/16802657975300148523/sample_0.mp4",
+                  "gcsUri": "gs://genai-sdk-tests/temp/videos/5207771344965705426/sample_0.mp4",
                   "mimeType": "video/mp4"
                 }
               ]
