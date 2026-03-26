@@ -271,6 +271,29 @@ namespace Google.GenAI.Tests {
     }
 
     [TestMethod]
+    public void VertexConstructor_LocationUs_SetsCorrectBaseUrl() {
+      var mockCredential = new Mock<ICredential>();
+      var client = new HttpApiClient(vertexAI: true, project: "my-project", location: "us", credentials: mockCredential.Object);
+
+      Assert.AreEqual("my-project", client.Project);
+      Assert.AreEqual("us", client.Location);
+      Assert.IsTrue(client.VertexAI);
+      Assert.AreEqual("https://aiplatform.us.rep.googleapis.com", client.HttpOptions.BaseUrl);
+    }
+
+    [TestMethod]
+    public void VertexConstructor_LocationUsAndCustomHttpOptions_SetsCorrectBaseUrl() {
+      var mockCredential = new Mock<ICredential>();
+      var customOptions = new Types.HttpOptions { BaseUrl = "https://my-custom-url.com/" };
+      var client = new HttpApiClient(vertexAI: true, project: "my-project", location: "us", credentials: mockCredential.Object, httpOptions: customOptions);
+
+      Assert.AreEqual("my-project", client.Project);
+      Assert.AreEqual("us", client.Location);
+      Assert.IsTrue(client.VertexAI);
+      Assert.AreEqual("https://my-custom-url.com/", client.HttpOptions.BaseUrl);
+    }
+
+    [TestMethod]
     public void Constructor_HttpOptions_BaseUrlResourceScopeWithoutBaseUrl_ThrowsArgumentException() {
       var customOptions = new Types.HttpOptions { BaseUrlResourceScope = Types.ResourceScope.Collection, BaseUrl = null };
       var ex = Assert.ThrowsException<ArgumentException>(() => new HttpApiClient(vertexAI: false, apiKey: "key", httpOptions: customOptions));

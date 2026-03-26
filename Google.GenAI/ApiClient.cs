@@ -316,6 +316,10 @@ namespace Google.GenAI
         {
           defaultHttpOptions.BaseUrl = "https://aiplatform.googleapis.com";
         }
+        else if (location!.Equals("us"))
+        {
+          defaultHttpOptions.BaseUrl = $"https://aiplatform.{location}.rep.googleapis.com";
+        }
         else
         {
           defaultHttpOptions.BaseUrl = $"https://{location}-aiplatform.googleapis.com";
