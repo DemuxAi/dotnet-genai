@@ -36,30 +36,30 @@ namespace Google.GenAI.Types {
     /// <summary>
     /// Default service tier, which is standard.
     /// </summary>
-    public static ServiceTier ServiceTierUnspecified { get; } = new("SERVICE_TIER_UNSPECIFIED");
+    public static ServiceTier Unspecified { get; } = new("unspecified");
 
     /// <summary>
     /// Flex service tier.
     /// </summary>
-    public static ServiceTier ServiceTierFlex { get; } = new("SERVICE_TIER_FLEX");
+    public static ServiceTier Flex { get; } = new("flex");
 
     /// <summary>
     /// Standard service tier.
     /// </summary>
-    public static ServiceTier ServiceTierStandard { get; } = new("SERVICE_TIER_STANDARD");
+    public static ServiceTier Standard { get; } = new("standard");
 
     /// <summary>
     /// Priority service tier.
     /// </summary>
-    public static ServiceTier ServiceTierPriority { get; } = new("SERVICE_TIER_PRIORITY");
+    public static ServiceTier Priority { get; } = new("priority");
 
     public static IReadOnlyList<ServiceTier> AllValues {
       get;
-    } = new[] { ServiceTierUnspecified, ServiceTierFlex, ServiceTierStandard, ServiceTierPriority };
+    } = new[] { Unspecified, Flex, Standard, Priority };
 
     public static ServiceTier FromString(string value) {
       if (string.IsNullOrEmpty(value)) {
-        return new ServiceTier("SERVICE_TIER_UNSPECIFIED");
+        return new ServiceTier("UNSPECIFIED");
       }
 
       foreach (var known in AllValues) {

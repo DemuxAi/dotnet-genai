@@ -373,7 +373,7 @@ namespace Google.GenAI.Types {
           }
 
     /// <summary>
-    /// The service tier to use for the request. For example, SERVICE_TIER_FLEX.
+    /// The service tier to use for the request. For example, ServiceTier.FLEX.
     /// </summary>
     [JsonPropertyName("serviceTier")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
