@@ -1,0 +1,18 @@
+<Project>
+  <!-- csproj 内联的 TargetFrameworks 需在 targets 阶段再覆盖为 net10.0（与 Channel.SDK\Directory.Build.targets 一致；本子目录 targets 最后导入，确保生效） -->
+  <PropertyGroup>
+    <TargetFrameworks>net10.0</TargetFrameworks>
+  </PropertyGroup>
+  <!--
+    net10：保留 build\MimeFromNuGetPackage.cs（MimeTypes 包 contentFiles 在预览 SDK / IDE 下偶发未进编译 → CS0103），并去掉 obj\NuGet 生成的 MimeTypes.Nullable.cs，避免重复类型。
+    若仍有其他 TFM，则不要用 nullable 模板源文件，只走包内生成。
+  -->
+  <Target Name="GoogleGenAI_MimeTypesSingleSource" BeforeTargets="CoreCompile">
+    <ItemGroup Condition="'$(TargetFramework)' == 'net10.0'">
+      <Compile Remove="@(Compile)" Condition="'%(Filename)' == 'MimeTypes.Nullable'" />
+    </ItemGroup>
+    <ItemGroup Condition="'$(TargetFramework)' != 'net10.0'">
+      <Compile Remove="$(MSBuildThisFileDirectory)build\MimeFromNuGetPackage.cs" />
+    </ItemGroup>
+  </Target>
+</Project>

@@ -1,0 +1,8 @@
+<Project>
+  <!-- Nearest Directory.Build.props shadows Channel.SDK unless chained -->
+  <Import Project="$(MSBuildThisFileDirectory)..\..\Directory.Build.props" Condition="Exists('$(MSBuildThisFileDirectory)..\..\Directory.Build.props')" />
+  <PropertyGroup>
+    <!-- P2P 元数据默认指向 obj\...\ref\*.dll；clean/局部生成后易缺失。改用 bin 输出可避免 CS0006 -->
+    <ProduceReferenceAssembly>false</ProduceReferenceAssembly>
+  </PropertyGroup>
+</Project>
