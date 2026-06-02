@@ -24,7 +24,7 @@ namespace Google.GenAI
   /// <summary>
   /// Configuration for JSON serialization.
   /// </summary>
-  internal static class JsonConfig
+  public static class JsonConfig
   {
     public static readonly JsonSerializerOptions JsonSerializerOptions = new JsonSerializerOptions
     {
