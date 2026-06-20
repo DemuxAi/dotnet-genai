@@ -1,0 +1,1541 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title> | Google GenAI .NET SDK </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content=" | Google GenAI .NET SDK ">
+      
+      
+      <link rel="icon" href="favicon.ico">
+      <link rel="stylesheet" href="public/docfx.min.css">
+      <link rel="stylesheet" href="public/main.css">
+      <meta name="docfx:navrel" content="toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/DemuxAi/dotnet-genai/blob/main/README.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="index.html">
+            <img id="logo" class="svg" src="logo.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+
+      <div class="content">
+        <div class="actionbar">
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+
+<p>Google Gen AI .NET SDK provides an interface for developers to integrate
+Google's generative models into their .NET applications. It supports the
+<a href="https://ai.google.dev/gemini-api/docs">Gemini Developer API</a> and
+<a href="https://docs.cloud.google.com/gemini-enterprise-agent-platform">Gemini Enterprise Agent Platform</a>
+APIs.</p>
+<h2 id="supported-net-version">Supported .NET version</h2>
+<p>This library is built for net8.0 and netstandard2.0.</p>
+<h2 id="full-api-reference">Full API Reference</h2>
+<p>The full API reference is hosted in the <a href="https://googleapis.github.io/dotnet-genai/api/index.html">dedicated GitHub Page</a></p>
+<h2 id="install">Install</h2>
+<p>In your dotnet project directory, type the the following command</p>
+<pre><code>dotnet add package Google.GenAI
+</code></pre>
+<h2 id="imports">Imports</h2>
+<pre><code class="lang-csharp">using Google.GenAI;
+using Google.GenAI.Types;
+</code></pre>
+<h2 id="create-a-client">Create a client</h2>
+<p>Please run one of the following code blocks to create a client for
+different services (<a href="https://ai.google.dev/gemini-api/docs">Gemini Developer API</a> or <a href="https://cloud.google.com/vertex-ai/generative-ai/docs/learn/overview">Gemini Enterprise Agent Platform</a>).</p>
+<pre><code class="lang-csharp">using Google.GenAI;
+
+//  Only run this block for Gemini Developer API
+var client = new Client(apiKey: apiKey);
+</code></pre>
+<pre><code class="lang-csharp">using Google.GenAI;
+
+// only run this block for Gemini Enterprise Agent Platform API
+client = new Client(
+    project: project, location: location, enterprise: true
+)
+</code></pre>
+<p><strong>(Optional) Using environment variables:</strong></p>
+<p>You can create a client by configuring the necessary environment variables.
+Configuration setup instructions depends on whether you're using the Gemini
+Developer API or the Gemini Enterprise Agent Platform.</p>
+<p><strong>Gemini Developer API:</strong> Set the <code>GOOGLE_API_KEY</code>. It will automatically be
+picked up by the client.</p>
+<pre><code class="lang-bash">export GEMINI_API_KEY='your-api-key'
+</code></pre>
+<p><strong>Gemini Enterprise Agent Platform:</strong> Set <code>GOOGLE_GENAI_USE_ENTERPRISE</code>,
+<code>GOOGLE_CLOUD_PROJECT</code> and <code>GOOGLE_CLOUD_LOCATION</code>, as shown below:</p>
+<pre><code class="lang-bash">export GOOGLE_GENAI_USE_ENTERPRISE=true
+export GOOGLE_CLOUD_PROJECT='your-project-id'
+export GOOGLE_CLOUD_LOCATION='us-central1'
+</code></pre>
+<pre><code class="lang-csharp">using Google.GenAI;
+
+client = new Client();
+</code></pre>
+<h2 id="types">Types</h2>
+<p>Parameter types are specified in the <code>Google.GenAI.Types</code> namespace.</p>
+<h3 id="enums">Enums</h3>
+<p>Enums are represented using structs for forward compatibility reasons. Enum
+values follow C# naming conventions (PascalCase).</p>
+<p>The SDK enum value contains an underlying string value that is sent to the API,
+which is usually UPPER_SNAKE_CASE. Please refer to the API documentation for
+the expected enum string values if you do not use the static SDK enum values.</p>
+<p>Unknown enum values are preserved as string values, accessible through
+PersonGeneration.Value. String equality with static SDK enum values can be
+checked, but must match the underlying string value exactly
+(ex. <code>PersonGeneration.AllowAll == &quot;ALLOW_ALL&quot;</code> is true).</p>
+<h2 id="models">Models</h2>
+<p>The <code>client.Models</code> module exposes model inferencing. See <code>Create a client</code>
+section above to initialize a client.</p>
+<h3 id="generate-content">Generate Content</h3>
+<h4 id="with-simple-text-content">With simple text content</h4>
+<pre><code class="lang-csharp">using System.Threading.Tasks;
+using Google.GenAI;
+using Google.GenAI.Types;
+
+public class GenerateContentSimpleText {
+  public static async Task main() {
+    // assuming credentials are set up in environment variables as instructed above.
+    var client = new Client();
+    var response = await client.Models.GenerateContentAsync(
+      model: &quot;gemini-2.0-flash&quot;, contents: &quot;why is the sky blue?&quot;
+    );
+    Console.WriteLine(response.Candidates[0].Content.Parts[0].Text);
+  }
+}
+</code></pre>
+<h4 id="system-instructions-and-other-configs">System Instructions and Other Configs</h4>
+<p>The output of the model can be influenced by several optional settings
+available in GenerateContentAsync's config parameter. For example, to make a model more
+deterministic, lowering the <code>Temperature</code> parameter reduces randomness, with
+values near 0 minimizing variability. Capabilities and parameter defaults for
+each model is shown in the
+<a href="https://cloud.google.com/vertex-ai/generative-ai/docs/models/gemini/2-5-flash">Gemini Enterprise Agent Platform docs</a>
+and <a href="https://ai.google.dev/gemini-api/docs/models">Gemini API docs</a> respectively.</p>
+<pre><code class="lang-csharp">using System.Threading.Tasks;
+using Google.GenAI;
+using Google.GenAI.Types;
+
+public class GenerateContentWithConfig {
+  public static async Task main() {
+    // assuming credentials are set up in environment variables as instructed above.
+    var client = new Client();
+    var generateContentConfig =
+    new GenerateContentConfig {
+        SystemInstruction = new Content
+        {
+          Parts = new List&lt;Part&gt; {
+              new Part {Text = &quot;I say high you say low.&quot;}
+          }
+        },
+        Temperature = 0.1,
+        MaxOutputTokens = 3
+    };
+    var response = await client.Models.GenerateContentAsync(
+        model: &quot;gemini-2.0-flash&quot;,
+        contents: &quot;high&quot;,
+        config: generateContentConfig
+    );
+    Console.WriteLine(response.Candidates[0].Content.Parts[0].Text);
+  }
+}
+
+</code></pre>
+<h4 id="safety-settings">Safety Settings</h4>
+<pre><code class="lang-csharp">using System.Threading.Tasks;
+using Google.GenAI;
+using Google.GenAI.Types;
+
+class GenerateContentWithSafetySettings {
+  public static async Task main() {
+    // assuming credentials are set up in environment variables as instructed above.
+    var client = new Client();
+
+    var safetySettings = new List&lt;SafetySetting&gt; {
+      new SafetySetting {
+        Category = HarmCategory.HARM_CATEGORY_HATE_SPEECH,
+        Threshold = HarmBlockThreshold.BLOCK_LOW_AND_ABOVE
+      }
+    };
+    var generateContentConfig = new GenerateContentConfig
+    {
+      SafetySettings =  new List&lt;SafetySetting&gt;(safetySettings)
+    };
+    var response = await client.Models.GenerateContentAsync(
+        model: &quot;gemini-2.0-flash&quot;,
+        contents: &quot;say something hateful&quot;,
+        config: generateContentConfig
+    );
+    Console.WriteLine(response.Candidates[0].SafetyRatings);
+  }
+}
+</code></pre>
+<h4 id="json-response-schema">Json response schema</h4>
+<p>However you define your schema, don't duplicate it in your input prompt,
+including by giving examples of expected JSON output. If you do, the generated
+output might be lower in quality.</p>
+<pre><code class="lang-csharp">using System.Threading.Tasks;
+using Google.GenAI;
+using Google.GenAI.Types;
+
+public class GenerateContentWithJsonSchema {
+  public static async Task main() {
+    // assuming credentials are set up in environment variables as instructed above.
+    var client = new Client();
+
+    // define the response schema you desire
+    Schema countryInfo = new Schema {
+      Properties =
+        new Dictionary&lt;string, Schema&gt; {
+          {
+            &quot;title&quot;, new Schema { Type = Type.STRING, Title = &quot;Title&quot; }
+          },
+          {
+            &quot;population&quot;, new Schema { Type = Type.INTEGER, Title = &quot;Population&quot; }
+          },
+          {
+            &quot;capital&quot;, new Schema { Type = Type.STRING, Title = &quot;Capital&quot; }
+          },
+          {
+            &quot;continent&quot;, new Schema { Type = Type.STRING, Title = &quot;Continent&quot; }
+          },
+          {
+            &quot;language&quot;, new Schema { Type = Type.STRING, Title = &quot;Language&quot; }
+          }
+        },
+      PropertyOrdering =
+          new List&lt;string&gt; { &quot;title&quot;, &quot;population&quot;, &quot;capital&quot;, &quot;continent&quot;, &quot;language&quot; },
+      Required = new List&lt;string&gt; { &quot;title&quot;, &quot;population&quot;, &quot;capital&quot;, &quot;continent&quot;, &quot;language&quot; },
+      Title = &quot;CountryInfo&quot;, Type = Type.OBJECT
+    };
+
+    var response = await client.Models.GenerateContentAsync(
+        model: &quot;gemini-2.0-flash&quot;,
+        contents: &quot;Give me information about Australia&quot;,
+        config: new GenerateContentConfig {
+            ResponseMimeType = &quot;application/json&quot;,
+            ResponseSchema = countryInfo
+        }
+    );
+
+    string text = response.Candidates[0].Content.Parts[0].Text;
+    var parsedText = JsonSerializer.Deserialize&lt;Dictionary&lt;string, object&gt;&gt;(text);
+    Console.WriteLine(parsedText);
+  }
+}
+
+</code></pre>
+<h3 id="generate-content-stream">Generate Content Stream</h3>
+<p>The usage of GenerateContentStreamAsync is similar to GenerateContentAsync, this section shows one simple example to showcase the nuance in the usage.</p>
+<pre><code class="lang-csharp">using System.Threading.Tasks;
+using Google.GenAI;
+using Google.GenAI.Types;
+
+class GenerateContentStreamSimpleText {
+  public static async Task main() {
+
+    // assuming credentials are set up in environment variables as instructed above.
+    var client = new Client();
+    await foreach (var chunk in client.Models.GenerateContentStreamAsync(
+        model: &quot;gemini-2.0-flash&quot;,
+        contents: &quot;why is the sky blue?&quot;
+    )) {
+        Console.WriteLine(chunk.Candidates[0].Content.Parts[0].Text);
+    }
+  }
+}
+
+</code></pre>
+<h3 id="ichatclient">IChatClient</h3>
+<p>Microsoft.Extensions.AI provides abstractions and exchange types for working with AI services. The Google.GenAI library includes an implementation of the IChatClient interface to enable
+easy integration with applications that use these abstractions.</p>
+<pre><code class="lang-csharp">using Google.GenAI;
+using Microsoft.Extensions.AI;
+using System.ComponentModel
+
+// assuming credentials are set up in environment variables as instructed above.
+IChatClient chatClient = new Client().AsIChatClient(&quot;gemini-2.0-flash&quot;)
+    .AsBuilder()
+    .UseFunctionInvocation()
+    .UseOpenTelemetry()
+    .Build();
+
+ChatOptions options = new()
+{
+    Tools = [AIFunctionFactory.Create(
+        method: ([Description(&quot;The name of the person whose age is to be retrieved&quot;)] string personName) =&gt; personName switch
+        {
+            &quot;Alice&quot; =&gt; 30,
+            &quot;Bob&quot; =&gt; 25,
+            _ =&gt; 35
+        },
+        name: &quot;get_person_age&quot;,
+        description: &quot;Gets the age of the specified person&quot;)
+    ]
+};
+
+await foreach (var update in chatClient.GetStreamingResponseAsync(&quot;How much older is Alice than Bob?&quot;, options))
+{
+    Console.Write(update);
+}
+</code></pre>
+<h3 id="generate-images">Generate Images</h3>
+<pre><code class="lang-csharp">using System.Threading.Tasks;
+using Google.GenAI;
+using Google.GenAI.Types;
+
+public class GenerateImagesSimple {
+  public static async Task main() {
+    // assuming credentials are set up in environment variables as instructed above.
+    var client = new Client();
+    var generateImagesConfig = new GenerateImagesConfig
+    {
+      NumberOfImages = 1,
+      AspectRatio = &quot;1:1&quot;,
+      SafetyFilterLevel = SafetyFilterLevel.BLOCK_LOW_AND_ABOVE,
+      PersonGeneration = PersonGeneration.DONT_ALLOW,
+      IncludeSafetyAttributes = true,
+      IncludeRaiReason = true,
+      OutputMimeType = &quot;image/jpeg&quot;,
+    };
+    var response = await client.Models.GenerateImagesAsync(
+      model: &quot;imagen-4.0-generate-001&quot;,
+      prompt: &quot;Red skateboard&quot;,
+      config: generateImagesConfig
+    );
+    // Do something with the generated image
+    var image = response.GeneratedImages.First().Image;
+  }
+}
+</code></pre>
+<h3 id="upscale-image">Upscale Image</h3>
+<p>Upscaling an image is only supported on the Gemini Enterprise Agent Platform client.</p>
+<pre><code class="lang-csharp">using System.Threading.Tasks;
+using Google.GenAI;
+using Google.GenAI.Types;
+
+public class UpscaleImageSimple {
+  public static async Task main() {
+    // assuming credentials are set up in environment variables as instructed above.
+    var client = new Client();
+    var upscaleImageConfig = new UpscaleImageConfig {
+      OutputMimeType = &quot;image/jpeg&quot;, EnhanceInputImage = true
+    };
+    var image; // Image to upscale here
+    var response = await client.Models.UpscaleImageAsync(
+      model: modelName, image: image, upscaleFactor: &quot;x2&quot;,
+      config: upscaleImageConfig);
+
+    // Do something with the generated image
+    var image = response.GeneratedImages.First().Image;
+  }
+}
+</code></pre>
+<h3 id="edit-image">Edit Image</h3>
+<p>Edit image uses a separate model from generate and upscale.</p>
+<p>Edit image is only supported in Gemini Enterprise Agent Platform mode, not in
+Gemini Developer API mode.</p>
+<pre><code class="lang-csharp">using Google.GenAI;
+using Google.GenAI.Types;
+
+public class EditImageSimple {
+  public static async Task main() {
+    // assuming credentials are set up in environment variables as instructed above.
+    var client = new Client();
+
+    List&lt;IReferenceImage&gt; referenceImages = new List&lt;IReferenceImage&gt;();
+
+    // Raw reference image
+    var rawReferenceImage = new RawReferenceImage {
+      ReferenceImage = Image.FromFile(&quot;path/to/file&quot;, &quot;image/png&quot;),
+      ReferenceId = 1,
+    };
+    referenceImages.Add(rawReferenceImage);
+
+    // Mask reference image, generated by model
+    var maskReferenceImage = new MaskReferenceImage {
+      ReferenceId = 2,
+      Config =
+          new MaskReferenceConfig {
+            MaskMode = MaskReferenceMode.MASK_MODE_BACKGROUND,
+            MaskDilation = 0.06,
+          }
+    };
+    referenceImages.Add(maskReferenceImage);
+
+    var editImageConfig = new EditImageConfig {
+      EditMode = EditMode.EDIT_MODE_INPAINT_INSERTION,
+      NumberOfImages = 1,
+      OutputMimeType = &quot;image/jpeg&quot;,
+    };
+
+    var editImageResponse = await client.Models.EditImageAsync(
+        model: &quot;imagen-3.0-capability-001&quot;,
+        prompt: &quot;Change the colors of [1] using the mask [2]&quot;,
+        referenceImages: referenceImages,
+        config: editImageConfig);
+
+    // Do something with the generated image
+    var image = editImageResponse.GeneratedImages.First().Image;
+  }
+}
+</code></pre>
+<h3 id="segment-image">Segment Image</h3>
+<p>Segment image is only supported in the Gemini Enterprise Agent Platform client.</p>
+<pre><code class="lang-csharp">using Google.GenAI;
+using Google.GenAI.Types;
+
+public class SegmentImageSimple {
+  public static async Task main() {
+    // assuming credentials are set up in environment variables as instructed above.
+    var client = new Client();
+
+    var segmentImageConfig = new SegmentImageConfig {
+      Mode = SegmentMode.BACKGROUND,
+      MaxPredictions = 1,
+    };
+
+    var segmentImageResponse = await client.Models.SegmentImageAsync(
+        model: modelName,
+        source: new SegmentImageSource {
+          Image = Image.FromFile(&quot;path/to/image.png&quot;, &quot;image/png&quot;),
+        },
+        config: segmentImageConfig);
+
+    // Do something with the generated mask
+    var mask = segmentImageResponse.GeneratedMasks.First().Mask;
+  }
+}
+</code></pre>
+<h3 id="generate-videos">Generate Videos</h3>
+<p>Generated videos can be either be returned by the API as bytes or a GCS URI for
+Gemini Enterprise Agent Platform. For Gemini Developer API, only a Files URI can be returned.</p>
+<p>For Gemini, generated videos can be downloaded to a local file as follows:</p>
+<pre><code class="lang-csharp">await client.Files.DownloadToFileAsync(
+    generatedVideo: operation.Response.GeneratedVideos.First(),
+    outputPath: &quot;video.mp4&quot;
+);
+</code></pre>
+<h4 id="generate-videos-from-text">Generate Videos (From Text)</h4>
+<pre><code class="lang-csharp">using System.Threading.Tasks;
+using Google.GenAI;
+using Google.GenAI.Types;
+
+public class GenerateVideosFromText {
+  public static async Task main() {
+    // assuming credentials are set up in environment variables as instructed above.
+    var client = new Client();
+    var source = new GenerateVideosSource {
+      Prompt = &quot;Man with a dog&quot;,
+    };
+
+    var config = new GenerateVideosConfig {
+      NumberOfVideos = 1,
+    };
+
+    var operation = await client.Models.GenerateVideosAsync(
+        model: &quot;veo-3.1-generate-preview&quot;, source: source, config: config);
+
+    while (operation.Done != true) {
+      try {
+        await Task.Delay(10000);
+        operation = await client.Operations.GetAsync(operation, null);
+      } catch (TaskCanceledException) {
+        System.Console.WriteLine(&quot;Task was cancelled while waiting.&quot;);
+        break;
+      }
+    }
+    // Do something with the generated video
+    var video = operation.Response.GeneratedVideos.First().Video;
+  }
+}
+</code></pre>
+<h4 id="generate-videos-from-image">Generate Videos (From Image)</h4>
+<pre><code class="lang-csharp">using System.Threading.Tasks;
+using Google.GenAI;
+using Google.GenAI.Types;
+
+public class GenerateVideosFromText {
+  public static async Task main() {
+    // assuming credentials are set up in environment variables as instructed above.
+    var client = new Client();
+    var source = new GenerateVideosSource {
+      // Prompt is optional if Image is provided
+      Prompt = &quot;Man with a dog&quot;,
+      Image = Image.FromFile(&quot;images/man.png&quot;),
+    };
+
+    var config = new GenerateVideosConfig {
+      NumberOfVideos = 1,
+    };
+
+    var operation = await client.Models.GenerateVideosAsync(
+        model: &quot;veo-3.1-generate-preview&quot;, source: source, config: config);
+
+    while (operation.Done != true) {
+      try {
+        await Task.Delay(10000);
+        operation = await client.Operations.GetAsync(operation, null);
+      } catch (TaskCanceledException) {
+        System.Console.WriteLine(&quot;Task was cancelled while waiting.&quot;);
+        break;
+      }
+    }
+    // Do something with the generated video
+    var video = operation.Response.GeneratedVideos.First().Video;
+  }
+}
+</code></pre>
+<h4 id="generate-videos-frame-interpolation">Generate Videos (Frame Interpolation)</h4>
+<pre><code class="lang-csharp">using System.Threading.Tasks;
+using Google.GenAI;
+using Google.GenAI.Types;
+
+public class GenerateVideosFrameInterpolation {
+  public static async Task main() {
+    // assuming credentials are set up in environment variables as instructed above.
+    var client = new Client();
+    var source = new GenerateVideosSource {
+      Prompt = &quot;At the park&quot;,
+      Image = Image.FromFile(&quot;images/man.jpg&quot;),
+    };
+    var config = new GenerateVideosConfig {
+      NumberOfVideos = 1,
+      LastFrame = Image.FromFile(&quot;images/dog.jpg&quot;),
+    };
+    var operation = await client.Models.GenerateVideosAsync(
+        model: &quot;veo-3.1-generate-preview&quot;, source: source, config: config);
+
+    while (operation.Done != true) {
+      try {
+        await Task.Delay(10000);
+        operation = await client.Operations.GetAsync(operation, null);
+      } catch (TaskCanceledException) {
+        System.Console.WriteLine(&quot;Task was cancelled while waiting.&quot;);
+        break;
+      }
+    }
+
+    // Do something with the generated video
+    var video = operation.Response.GeneratedVideos.First().Video;
+  }
+}
+</code></pre>
+<h4 id="generate-videos-from-reference-images">Generate Videos (From Reference Images)</h4>
+<pre><code class="lang-csharp">using System.Threading.Tasks;
+using Google.GenAI;
+using Google.GenAI.Types;
+
+public class GenerateVideosReferenceImages{
+  public static async Task main() {
+    // assuming credentials are set up in environment variables as instructed above.
+    var client = new Client();
+
+    var source = new GenerateVideosSource {
+      Prompt = &quot;Chirping birds in a colorful forest&quot;,
+    };
+    List&lt;VideoGenerationReferenceImage&gt; referenceImages = new List&lt;VideoGenerationReferenceImage&gt;();
+    referenceImages.Add(new VideoGenerationReferenceImage {
+      Image = Image.FromFile(&quot;images/man.jpg&quot;),
+      ReferenceType = VideoGenerationReferenceType.ASSET,
+    });
+    var config = new GenerateVideosConfig {
+      NumberOfVideos = 1,
+      ReferenceImages = referenceImages,
+    };
+    var operation = await client.Models.GenerateVideosAsync(
+        model: &quot;veo-3.1-generate-preview&quot;, source: source, config: config);
+
+    while (operation.Done != true) {
+      try {
+        await Task.Delay(10000);
+        operation = await client.Operations.GetAsync(operation, null);
+      } catch (TaskCanceledException) {
+        System.Console.WriteLine(&quot;Task was cancelled while waiting.&quot;);
+        break;
+      }
+    }
+
+    // Do something with the generated video
+    var video = operation.Response.GeneratedVideos.First().Video;
+  }
+}
+</code></pre>
+<h4 id="generate-videos-from-video">Generate Videos (From Video)</h4>
+<p>Gemini Developer API only accepts previously generated videos.
+Gemini Enterprise Agent Platform accepts a Video from GCS URI.</p>
+<pre><code class="lang-csharp">using System.Threading.Tasks;
+using Google.GenAI;
+using Google.GenAI.Types;
+
+public class GenerateVideosFromVideo {
+  public static async Task main() {
+    // assuming credentials are set up in environment variables as instructed above.
+    var client = new Client();
+
+    var source1 = new GenerateVideosSource {
+      Prompt = &quot;Man with a dog&quot;,
+    };
+    var operation1 = await client.Models.GenerateVideosAsync(
+        model: modelName, source: source1, config: new GenerateVideosConfig{
+          NumberOfVideos = 1,
+    });
+
+    while (operation1.Done != true) {
+      try {
+        await Task.Delay(10000);
+        operation1 = await client.Operations.GetAsync(operation1, null);
+      } catch (TaskCanceledException) {
+        System.Console.WriteLine(&quot;Task was cancelled while waiting.&quot;);
+        break;
+      }
+    }
+
+    var source2 = new GenerateVideosSource {
+      Prompt = &quot;Driving through a tunnel.&quot;,
+      Video = operation1.Response.GeneratedVideos.First().Video,
+    };
+    var operation2 = await client.Models.GenerateVideosAsync(
+        model: &quot;veo-3.1-generate-preview&quot;, source: source2, config: new GenerateVideosConfig{
+          NumberOfVideos = 1,
+    });
+
+    while (operation2.Done != true) {
+      try {
+        await Task.Delay(10000);
+        operation2 = await client.Operations.GetAsync(operation2, null);
+      } catch (TaskCanceledException) {
+        System.Console.WriteLine(&quot;Task was cancelled while waiting.&quot;);
+        break;
+      }
+    }
+    // Do something with the generated video
+    var video = operation2.Response.GeneratedVideos.First().Video;
+  }
+}
+</code></pre>
+<h3 id="edit-video">Edit Video</h3>
+<p>Editing a video is only available on Gemini Enterprise Agent Platform.</p>
+<pre><code class="lang-csharp">using System.Threading.Tasks;
+using Google.GenAI;
+using Google.GenAI.Types;
+
+public class EditVideoOutpaint {
+  public static async Task main() {
+    // assuming credentials are set up in environment variables as instructed above.
+    var client = new Client();
+
+    var source = new GenerateVideosSource {
+      Prompt = &quot;A mountain landscape&quot;,
+      Video = new Video {
+        Uri = &quot;gs://bucket/inputs/editing_demo.mp4&quot;,
+        MimeType = &quot;video/mp4&quot;,
+      },
+    };
+
+    var config = new GenerateVideosConfig {
+      OutputGcsUri = outputGcsUri,
+      AspectRatio = &quot;16:9&quot;,
+      Mask = new VideoGenerationMask {
+        Image = new Image {
+          GcsUri = &quot;gs://bucket/inputs/video_outpaint_mask.png&quot;,
+          MimeType = &quot;image/png&quot;,
+        },
+        MaskMode = VideoGenerationMaskMode.OUTPAINT,
+      },
+    };
+    var operation = await client.Models.GenerateVideosAsync(
+        model: &quot;veo-2.0-generate-exp&quot;, source: source, config: config);
+
+    while (operation.Done != true) {
+      try {
+        await Task.Delay(10000);
+        operation = await client.Operations.GetAsync(operation, null);
+      } catch (TaskCanceledException) {
+        System.Console.WriteLine(&quot;Task was cancelled while waiting.&quot;);
+        break;
+      }
+    }
+    var video = operation.Response.GeneratedVideos.First().Video;
+  }
+}
+</code></pre>
+<h3 id="count-tokens">Count Tokens</h3>
+<pre><code class="lang-csharp">using Google.GenAI;
+using Google.GenAI.Types;
+
+public class CountTokensExample {
+  public static async Task main() {
+    // assuming credentials are set up in environment variables as instructed above.
+    var client = new Client();
+
+    var response = await client.Models.CountTokensAsync(
+      model: &quot;gemini-2.0-flash&quot;,
+      contents: &quot;What is the capital of France?&quot;
+    );
+
+    Console.Writeline(response.TotalTokens);
+  }
+}
+
+</code></pre>
+<h3 id="compute-tokens">Compute Tokens</h3>
+<pre><code class="lang-csharp">using Google.GenAI;
+using Google.GenAI.Types;
+
+public class ComputeTokensExample {
+  public static async Task main() {
+    // assuming credentials are set up in environment variables as instructed above.
+    var client = new Client();
+
+    var response = await client.Models.ComputeTokensAsync(
+      model: &quot;gemini-2.0-flash&quot;,
+      contents: &quot;What is the capital of France?&quot;
+    );
+
+    Console.Writeline(response.TokensInfo);
+  }
+}
+
+</code></pre>
+<h3 id="embed-content">Embed Content</h3>
+<pre><code class="lang-csharp">using Google.GenAI;
+using Google.GenAI.Types;
+
+public class EmbedContentExample {
+  public static async Task main() {
+    // assuming credentials are set up in environment variables as instructed above.
+    var client = new Client();
+
+    var response = await client.Models.EmbedContentAsync(
+      model: &quot;text-embedding-004&quot;,
+      contents: &quot;What is the capital of France?&quot;
+    );
+
+    Console.WriteLine(response.Embeddings[0].Values);
+
+    // Multimodal embedding with Gemini Enterprise Agent Platform
+    var client = new Client(enterprise: true);
+    var contents = new List&lt;Content&gt; {
+        new Content {
+            Parts = new List&lt;Part&gt; {
+                new Part { Text = &quot;Hello.&quot; },
+                new Part {
+                    FileData = new FileData {
+                        MimeType = &quot;image/png&quot;,
+                        FileUri = &quot;gs://cloud-samples-data/generative-ai/image/a-man-and-a-dog.png&quot;
+                    }
+                }
+            }
+        }
+    };
+    var config = new EmbedContentConfig {
+        OutputDimensionality = 10,
+        Title = &quot;test_title&quot;,
+        TaskType = &quot;RETRIEVAL_DOCUMENT&quot;,
+    };
+    var mmResponse = await client.Models.EmbedContentAsync(
+        model: &quot;gemini-embedding-2-exp-11-2025&quot;, contents: contents, config: config);
+    Console.WriteLine(mmResponse.Embeddings);
+  }
+}
+</code></pre>
+<h3 id="get-model">Get Model</h3>
+<pre><code class="lang-csharp">using Google.GenAI;
+using Google.GenAI.Types;
+
+public class GetModelExample {
+  public static async Task main() {
+    // assuming credentials are set up in environment variables as instructed above.
+    var client = new Client();
+
+    // get a base model
+    var baseModelResponse = await client.Models.GetAsync(
+      model: &quot;gemini-2.5-flash&quot;
+    );
+
+    // get a tuned model
+    var tunedModelResponse = await client.Models.GetAsync(
+      model: &quot;models/your-tuned-model&quot;
+    );
+  }
+}
+</code></pre>
+<h3 id="update-model">Update Model</h3>
+<pre><code class="lang-csharp">using Google.GenAI;
+using Google.GenAI.Types;
+
+public class UpdateModelExample {
+  public static async Task main() {
+    // assuming credentials are set up in environment variables as instructed above.
+    var client = new Client();
+
+    var response = await client.Models.UpdateAsync(
+      model: &quot;models/your-tuned-model&quot;,
+      config: new UpdateModelConfig { Description = &quot;updated model description&quot; }
+    );
+
+    Console.WriteLine(response.Description);
+  }
+}
+</code></pre>
+<h3 id="delete-model">Delete Model</h3>
+<pre><code class="lang-csharp">using Google.GenAI;
+using Google.GenAI.Types;
+
+public class DeleteModelExample {
+  public static async Task main() {
+    // assuming credentials are set up in environment variables as instructed above.
+    var client = new Client();
+
+    await client.Models.DeleteAsync(
+      model: &quot;models/your-tuned-model&quot;
+    );
+  }
+}
+</code></pre>
+<h3 id="list-models">List Models</h3>
+<p>The <code>ListAsync</code> method returns a <code>Pager</code> object that allows you to iterate through pages of models. If <code>QueryBase</code> is set to <code>true</code> (the default) in <code>ListModelsConfig</code>, it lists base models; otherwise, it lists tuned models.</p>
+<pre><code class="lang-csharp">using Google.GenAI;
+using Google.GenAI.Types;
+
+public class ListModelsExample {
+  public static async Task main() {
+    // assuming credentials are set up in environment variables as instructed above.
+    var client = new Client();
+
+    // List base models with default settings
+    Console.WriteLine(&quot;Base Models:&quot;);
+    var pager = await client.Models.ListAsync();
+    await foreach(var model in pager)
+    {
+        Console.WriteLine(model.Name);
+    }
+
+    // List tuned models with a page size of 10
+    Console.WriteLine(&quot;Tuned Models:&quot;);
+    var config = new ListModelsConfig { QueryBase = false, PageSize = 10 };
+    var tunedModelsPager = await client.Models.ListAsync(config);
+    await foreach(var model in tunedModelsPager)
+    {
+        Console.WriteLine(model.Name);
+    }
+  }
+}
+</code></pre>
+<h2 id="batches">Batches</h2>
+<p>The <code>client.Batches</code> module can be used to manage batch jobs.
+See <code>Create a client</code> section above to initialize a client.</p>
+<h3 id="create-batch-job">Create Batch Job</h3>
+<p>Batch jobs can be created from GCS URIs or BigQuery URIs when using Gemini
+Enterprise Agent Platform, or from Files or Inlined Requests when using the
+Gemini API.</p>
+<h4 id="with-gcs-uri-gemini-enterprise-agent-platform-only">With GCS URI (Gemini Enterprise Agent Platform only)</h4>
+<pre><code class="lang-csharp">using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Google.GenAI;
+using Google.GenAI.Types;
+
+public class CreateBatchWithGcs {
+    public static async Task main()
+    {
+        // assuming credentials are set up for Gemini Enterprise Agent Platform in environment variables as instructed above.
+        var client = new Client();
+        var src = new BatchJobSource
+        {
+            GcsUri = new List&lt;string&gt; { &quot;gs://unified-genai-tests/batches/input/generate_content_requests.jsonl&quot; },
+            Format = &quot;jsonl&quot;
+        };
+        var config = new CreateBatchJobConfig
+        {
+            DisplayName = &quot;test_batch_gcs&quot;,
+            Dest = new BatchJobDestination
+            {
+                GcsUri = &quot;gs://unified-genai-tests/batches/output&quot;,
+                Format = &quot;jsonl&quot;
+            }
+        };
+        var response = await client.Batches.CreateAsync(&quot;gemini-2.5-flash&quot;, src, config);
+        Console.WriteLine($&quot;Created Gemini Enterprise Agent Platform batch job: {response.Name}&quot;);
+    }
+}
+</code></pre>
+<h4 id="with-bigquery-uri-gemini-enterprise-agent-platform-only">With BigQuery URI (Gemini Enterprise Agent Platform only)</h4>
+<pre><code class="lang-csharp">using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Google.GenAI;
+using Google.GenAI.Types;
+
+public class CreateBatchWithBigQuery {
+    public static async Task main()
+    {
+        // assuming credentials are set up for Gemini Enterprise Agent Platfrom in environment variables as instructed above.
+        var client = new Client();
+        var src = new BatchJobSource
+        {
+            BigqueryUri = &quot;bq://storage-samples.generative_ai.batch_requests_for_multimodal_input&quot;,
+            Format = &quot;bigquery&quot;
+        };
+        var config = new CreateBatchJobConfig
+        {
+            DisplayName = &quot;test_batch_bigquery&quot;,
+            Dest = new BatchJobDestination
+            {
+                BigqueryUri = &quot;bq://REDACTED.unified_genai_tests_batches.generate_content_output&quot;,
+                Format = &quot;bigquery&quot;
+            }
+        };
+        var response = await client.Batches.CreateAsync(&quot;gemini-2.5-flash&quot;, src, config);
+        Console.WriteLine($&quot;Created Gemini Enterprise Agent Platform batch job: {response.Name}&quot;);
+    }
+}
+</code></pre>
+<h4 id="with-inlined-requests-gemini-api-only">With Inlined Requests (Gemini API only)</h4>
+<pre><code class="lang-csharp">using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Google.GenAI;
+using Google.GenAI.Types;
+
+public class CreateBatchWithInlinedRequests {
+    public static async Task main()
+    {
+        // assuming credentials are set up for Gemini API in environment variables as instructed above.
+        var client = new Client();
+        var safetySettings = new List&lt;SafetySetting&gt;
+        {
+            new SafetySetting { Category = HarmCategory.HARM_CATEGORY_HATE_SPEECH, Threshold = HarmBlockThreshold.BLOCK_ONLY_HIGH }
+        };
+        var inlineRequest = new InlinedRequest
+        {
+            Contents = new List&lt;Content&gt;
+            {
+                new Content
+                {
+                    Parts = new List&lt;Part&gt; { new Part { Text = &quot;Hello!&quot; } },
+                    Role = &quot;user&quot;
+                }
+            },
+            Metadata = new Dictionary&lt;string, string&gt; { { &quot;key&quot;, &quot;request-1&quot; } },
+            Config = new GenerateContentConfig
+            {
+                SafetySettings = safetySettings
+            }
+        };
+        var src = new BatchJobSource
+        {
+            InlinedRequests = new List&lt;InlinedRequest&gt; { inlineRequest }
+        };
+        var config = new CreateBatchJobConfig
+        {
+            DisplayName = &quot;test_batch_inlined&quot;
+        };
+        var response = await client.Batches.CreateAsync(&quot;gemini-2.5-flash&quot;, src, config);
+        Console.WriteLine($&quot;Created Gemini API batch job: {response.Name}&quot;);
+    }
+}
+</code></pre>
+<h4 id="with-file-name-gemini-api-only">With File Name (Gemini API only)</h4>
+<pre><code class="lang-csharp">using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Google.GenAI;
+using Google.GenAI.Types;
+
+public class CreateBatchWithFile {
+    public static async Task main()
+    {
+        // assuming credentials are set up for Gemini API in environment variables as instructed above.
+        var client = new Client();
+        var src = new BatchJobSource
+        {
+            FileName = &quot;files/your-file-id&quot;
+        };
+        var config = new CreateBatchJobConfig
+        {
+            DisplayName = &quot;test_batch_file&quot;
+        };
+        var response = await client.Batches.CreateAsync(&quot;gemini-2.5-flash&quot;, src, config);
+        Console.WriteLine($&quot;Created Gemini API batch job: {response.Name}&quot;);
+    }
+}
+</code></pre>
+<h3 id="create-embedding-batch-job">Create Embedding Batch Job</h3>
+<p>Embedding batch jobs are only supported in Gemini API, from Files or Inlined Requests.</p>
+<h4 id="with-inlined-requests-gemini-api-only-1">With Inlined Requests (Gemini API only)</h4>
+<pre><code class="lang-csharp">using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Google.GenAI;
+using Google.GenAI.Types;
+
+public class CreateEmbeddingBatchWithInlinedRequests {
+    public static async Task main()
+    {
+        // assuming credentials are set up for Gemini API in environment variables as instructed above.
+        var client = new Client();
+        var src = new EmbeddingsBatchJobSource
+        {
+            InlinedRequests = new EmbedContentBatch
+            {
+                Config = new EmbedContentConfig { OutputDimensionality = 64 },
+                Contents = new List&lt;Content&gt;
+                {
+                    new Content { Parts = new List&lt;Part&gt; { new Part { Text = &quot;1&quot; } } },
+                    new Content { Parts = new List&lt;Part&gt; { new Part { Text = &quot;2&quot; } } },
+                    new Content { Parts = new List&lt;Part&gt; { new Part { Text = &quot;3&quot; } } },
+                }
+            }
+        };
+        var config = new CreateEmbeddingsBatchJobConfig
+        {
+            DisplayName = &quot;test_batch_embedding_inlined&quot;
+        };
+        var response = await client.Batches.CreateEmbeddingsAsync(&quot;gemini-embedding-001&quot;, src, config);
+        Console.WriteLine($&quot;Created Gemini API embedding batch job: {response.Name}&quot;);
+    }
+}
+</code></pre>
+<h4 id="with-file-name-gemini-api-only-1">With File Name (Gemini API only)</h4>
+<pre><code class="lang-csharp">using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Google.GenAI;
+using Google.GenAI.Types;
+
+public class CreateEmbeddingBatchWithFile {
+    public static async Task main()
+    {
+        // assuming credentials are set up for Gemini API in environment variables as instructed above.
+        var client = new Client();
+        var src = new EmbeddingsBatchJobSource
+        {
+            FileName = &quot;files/your-file-id&quot;,
+        };
+        var config = new CreateEmbeddingsBatchJobConfig
+        {
+            DisplayName = &quot;test_batch_embedding_file&quot;
+        };
+        var response = await client.Batches.CreateEmbeddingsAsync(&quot;gemini-embedding-001&quot;, src, config);
+        Console.WriteLine($&quot;Created Gemini API embedding batch job: {response.Name}&quot;);
+    }
+}
+</code></pre>
+<h3 id="get-batch-job">Get Batch Job</h3>
+<pre><code class="lang-csharp">using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Google.GenAI;
+using Google.GenAI.Types;
+
+public class GetBatchJob {
+    public static async Task main()
+    {
+        // assuming credentials are set up in environment variables as instructed above.
+        var client = new Client();
+        // Use a batch job name from a previously created batch job.
+        var batchJob = await client.Batches.GetAsync(name: &quot;batches/your-batch-job-name&quot;);
+        Console.WriteLine($&quot;Batch job name: {batchJob.Name}, State: {batchJob.State}&quot;);
+    }
+}
+</code></pre>
+<h3 id="cancel-batch-job">Cancel Batch Job</h3>
+<pre><code class="lang-csharp">using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Google.GenAI;
+using Google.GenAI.Types;
+
+public class CancelBatchJob {
+    public static async Task main()
+    {
+        // assuming credentials are set up in environment variables as instructed above.
+        var client = new Client();
+        // Use a batch job name from a previously created batch job.
+        await client.Batches.CancelAsync(name: &quot;batches/your-batch-job-name&quot;);
+        Console.WriteLine(&quot;Batch job cancelled.&quot;);
+    }
+}
+</code></pre>
+<h3 id="list-batch-jobs">List Batch Jobs</h3>
+<pre><code class="lang-csharp">using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Google.GenAI;
+using Google.GenAI.Types;
+
+public class ListBatchJobs {
+    public static async Task main()
+    {
+        // assuming credentials are set up in environment variables as instructed above.
+        var client = new Client();
+        var pager = await client.Batches.ListAsync(new ListBatchJobsConfig { PageSize = 10 });
+
+        await foreach(var job in pager)
+        {
+            Console.WriteLine($&quot;Batch job name: {job.Name}, State: {job.State}&quot;);
+        }
+    }
+}
+</code></pre>
+<h3 id="delete-batch-job">Delete Batch Job</h3>
+<pre><code class="lang-csharp">using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Google.GenAI;
+using Google.GenAI.Types;
+
+public class DeleteBatchJob {
+    public static async Task main()
+    {
+        // assuming credentials are set up in environment variables as instructed above.
+        var client = new Client();
+        // Use a batch job name from a previously created batch job.
+        await client.Batches.DeleteAsync(name: &quot;batches/your-batch-job-name&quot;);
+        Console.WriteLine(&quot;Batch job deleted.&quot;);
+    }
+}
+</code></pre>
+<h2 id="caches">Caches</h2>
+<p>The <code>client.Caches</code> module can be used to manage cached content.
+See <code>Create a client</code> section above to initialize a client.</p>
+<h3 id="create-cache">Create Cache</h3>
+<p>Cacheable content can be created from Google Cloud Storage URIs when using
+Gemini Enterprise Agent Platform, or from File URIs when using the Gemini API.</p>
+<pre><code class="lang-csharp">using System.Threading.Tasks;
+using Google.GenAI;
+using Google.GenAI.Types;
+
+public class CreateCache {
+    public static async Task main()
+    {
+        // Example for Gemini Enterprise Agent Platform with GCS URIs:
+        var enterpriseClient = new Client(project: project, location: location, enterprise: true);
+        var agenterpriseConfig = new CreateCachedContentConfig {
+            Contents = new List&lt;Content&gt; {
+                new Content {
+                    Role = &quot;user&quot;,
+                    Parts = new List&lt;Part&gt; {
+                        new Part { FileData = new FileData { FileUri = &quot;gs://cloud-samples-data/generative-ai/pdf/2312.11805v3.pdf&quot;, MimeType = &quot;application/pdf&quot; } },
+                        new Part { FileData = new FileData { FileUri = &quot;gs://cloud-samples-data/generative-ai/pdf/2403.05530.pdf&quot;, MimeType = &quot;application/pdf&quot; } }
+                    }
+                }
+            },
+            DisplayName = &quot;my-enterprise-cache&quot;,
+            Ttl = &quot;600s&quot;
+        };
+        var enterpriseResponse = await agenterpriseClient.Caches.CreateAsync(model: &quot;gemini-2.5-flash&quot;, config: enterpriseConfig);
+        Console.WriteLine($&quot;Created Gemini Enterprise Agent Platform cache: {enterpriseResponse.Name}&quot;);
+
+        // Example for Gemini API with File URIs:
+        var geminiClient = new Client(apiKey: apiKey);
+        var geminiConfig = new CreateCachedContentConfig {
+            Contents = new List&lt;Content&gt; {
+                new Content {
+                    Role = &quot;user&quot;,
+                    Parts = new List&lt;Part&gt; {
+                        new Part { FileData = new FileData { FileUri = &quot;https://generativelanguage.googleapis.com/v1beta/files/file-id&quot;, MimeType = &quot;application/pdf&quot; } }
+                    }
+                }
+            },
+            DisplayName = &quot;my-gemini-cache&quot;,
+            Ttl = &quot;600s&quot;
+        };
+        var geminiResponse = await geminiClient.Caches.CreateAsync(model: &quot;gemini-2.5-flash&quot;, config: geminiConfig);
+        Console.WriteLine($&quot;Created Gemini API cache: {geminiResponse.Name}&quot;);
+    }
+}
+</code></pre>
+<h3 id="get-cache">Get Cache</h3>
+<pre><code class="lang-csharp">using System.Threading.Tasks;
+using Google.GenAI;
+using Google.GenAI.Types;
+
+public class GetCache {
+    public static async Task main()
+    {
+        // assuming credentials are set up in environment variables as instructed above.
+        var client = new Client();
+        // Use a cache name from a previously created cache.
+        var cachedContent = await client.Caches.GetAsync(name: &quot;cachedContents/your-cache-name&quot;, config: null);
+        Console.WriteLine($&quot;Cache name: {cachedContent.Name}, DisplayName: {cachedContent.DisplayName}&quot;);
+    }
+}
+</code></pre>
+<h3 id="update-cache">Update Cache</h3>
+<pre><code class="lang-csharp">using System.Threading.Tasks;
+using Google.GenAI;
+using Google.GenAI.Types;
+
+public class UpdateCache {
+    public static async Task main()
+    {
+        // assuming credentials are set up in environment variables as instructed above.
+        var client = new Client();
+        var updateConfig = new UpdateCachedContentConfig { Ttl = &quot;1200s&quot; };
+        // Use a cache name from a previously created cache.
+        var cachedContent = await client.Caches.UpdateAsync(name: &quot;cachedContents/your-cache-name&quot;, config: updateConfig);
+        Console.WriteLine($&quot;Cache updated. New expiration time: {cachedContent.ExpireTime}&quot;);
+    }
+}
+</code></pre>
+<h3 id="delete-cache">Delete Cache</h3>
+<pre><code class="lang-csharp">using System.Threading.Tasks;
+using Google.GenAI;
+using Google.GenAI.Types;
+
+public class DeleteCache {
+    public static async Task main()
+    {
+        // assuming credentials are set up in environment variables as instructed above.
+        var client = new Client();
+        // Use a cache name from a previously created cache.
+        await client.Caches.DeleteAsync(name: &quot;cachedContents/your-cache-name&quot;, config: null);
+        Console.WriteLine(&quot;Cache deleted.&quot;);
+    }
+}
+</code></pre>
+<h3 id="list-caches">List Caches</h3>
+<pre><code class="lang-csharp">using System.Threading.Tasks;
+using Google.GenAI;
+using Google.GenAI.Types;
+
+public class ListCaches {
+    public static async Task main()
+    {
+        // assuming credentials are set up in environment variables as instructed above.
+        var client = new Client();
+        var pager = await client.Caches.ListAsync(new ListCachedContentConfig { PageSize = 10 });
+
+        await foreach(var cache in pager)
+        {
+            Console.WriteLine($&quot;Cache name: {cache.Name}, DisplayName: {cache.DisplayName}&quot;);
+        }
+    }
+}
+</code></pre>
+<h2 id="tunings">Tunings</h2>
+<p>The <code>client.Tunings</code> module exposes model tuning. See <code>Create a client</code>
+section above to initialize a client.</p>
+<h3 id="create-tuning-job-gemini-enterprise-agent-platform-only">Create Tuning Job (Gemini Enterprise Agent Platform only)</h3>
+<h4 id="with-simple-training-data">With simple training data</h4>
+<pre><code class="lang-csharp">using System.Threading.Tasks;
+using Google.GenAI;
+using Google.GenAI.Types;
+
+public class CreateTuningJobSimple {
+  public static async Task main() {
+    // assuming credentials are set up in environment variables as instructed above.
+    var client = new Client(enterprise: true);
+    var trainingDataset = new TuningDataset {
+      GcsUri = &quot;gs://cloud-samples-data/ai-platform/generative_ai/gemini-2_0/text/sft_train_data.jsonl&quot;
+    };
+    var tuningJob = await client.Tunings.TuneAsync(
+      baseModel: &quot;gemini-2.5-flash&quot;,
+      trainingDataset: trainingDataset,
+    );
+    Console.WriteLine(tuningJob.State);
+  }
+}
+</code></pre>
+<h4 id="hyperparameters-and-other-configs">Hyperparameters and Other Configs</h4>
+<p>The tuning job can be configured by several optional settings
+available in Tune's config parameter. For example, we can configure
+the number of epochs to train for, or specify a validation dataset.</p>
+<pre><code class="lang-csharp">using System.Threading.Tasks;
+using Google.GenAI;
+using Google.GenAI.Types;
+
+public class CreateTuningJobWithConfig {
+  public static async Task main() {
+    // assuming credentials are set up in environment variables as instructed above.
+    var client = new Client(enterprise: true);
+    var trainingDataset = new TuningDataset {
+      GcsUri = &quot;gs://cloud-samples-data/ai-platform/generative_ai/gemini-2_0/text/sft_train_data.jsonl&quot;
+    };
+    var validationDataset = new TuningValidationDataset {
+      GcsUri = &quot;gs://cloud-samples-data/ai-platform/generative_ai/gemini-2_0/text/sft_validation_data.jsonl&quot;
+    };
+    var config = new CreateTuningJobConfig {
+      TunedModelDisplayName = &quot;Tuned Model&quot;,
+      EpochCount = 3,
+      LearningRateMultiplier = 0.5,
+      ValidationDataset = validationDataset,
+    };
+    var tuningJob = await client.Tunings.TuneAsync(
+      baseModel: &quot;gemini-2.5-flash&quot;,
+      trainingDataset: trainingDataset,
+      config: config,
+    );
+    Console.WriteLine(tuningJob.State);
+  }
+}
+</code></pre>
+<h4 id="preference-tuning">Preference Tuning</h4>
+<p>You can perform preference tuning by setting <code>Method</code> to <code>TuningMethod.PREFERENCE_TUNING</code> in <code>CreateTuningJobConfig</code>.</p>
+<pre><code class="lang-csharp">using System.Threading.Tasks;
+using Google.GenAI;
+using Google.GenAI.Types;
+
+public class PreferenceTuningJob {
+  public static async Task main() {
+    // assuming credentials are set up in environment variables as instructed above.
+    var client = new Client(enterprise: true);
+    var trainingDataset = new TuningDataset {
+      GcsUri = &quot;gs://cloud-samples-data/ai-platform/generative_ai/gemini-1_5/text/sft_train_data.jsonl&quot;
+    };
+    var config = new CreateTuningJobConfig {
+      TunedModelDisplayName = &quot;Tuned Model&quot;,
+      Method = TuningMethod.PREFERENCE_TUNING,
+      EpochCount = 1,
+    };
+    var tuningJob = await client.Tunings.TuneAsync(
+      baseModel: &quot;gemini-2.5-flash&quot;,
+      trainingDataset: trainingDataset,
+      config: config,
+    );
+    Console.WriteLine(tuningJob.State);
+  }
+}
+</code></pre>
+<h4 id="continuous-tuning">Continuous Tuning</h4>
+<p>You can perform continuous tuning on a previously tuned model by passing
+the tuned model's resource name as the <code>baseModel</code> parameter.</p>
+<pre><code class="lang-csharp">using System.Threading.Tasks;
+using Google.GenAI;
+using Google.GenAI.Types;
+
+public class ContinuousTuningJob {
+  public static async Task main() {
+    // assuming credentials are set up in environment variables as instructed above.
+    var client = new Client(enterprise: true);
+    var trainingDataset = new TuningDataset {
+      GcsUri = &quot;gs://cloud-samples-data/ai-platform/generative_ai/gemini-2_0/text/sft_train_data.jsonl&quot;
+    };
+    // Continuously tune a previously tuned model by passing in its resource name.
+    var tunedModelResourceName = &quot;models/your-tuned-model&quot;;
+    var tuningJob = await client.Tunings.TuneAsync(
+      baseModel: tunedModelResourceName,
+      trainingDataset: trainingDataset,
+    );
+    Console.WriteLine(tuningJob.State);
+  }
+}
+</code></pre>
+<h4 id="distillation">Distillation</h4>
+<p>You can perform distillation by setting <code>Method</code> to <code>TuningMethod.DISTILLATION</code> in <code>CreateTuningJobConfig</code>.</p>
+<pre><code class="lang-csharp">using System.Threading.Tasks;
+using Google.GenAI;
+using Google.GenAI.Types;
+
+public class DistillationJob {
+  public static async Task main() {
+    // assuming credentials are set up in environment variables as instructed above.
+    var client = new Client(enterprise: true);
+
+    // Prompt dataset
+    var trainingDataset = new TuningDataset {
+      GcsUri = &quot;gs://cloud-samples-data/ai-platform/generative_ai/gemini-2_0/text/sft_train_data.jsonl&quot;
+    };
+
+    var config = new CreateTuningJobConfig {
+      Method = TuningMethod.DISTILLATION,
+      BaseTeacherModel = &quot;teacher-model-id&quot;,
+      EpochCount = 1,
+    };
+    var tuningJob = await client.Tunings.TuneAsync(
+      baseModel: &quot;student-model-id&quot;,
+      trainingDataset: trainingDataset,
+      config: config,
+    );
+    Console.WriteLine(tuningJob.State);
+  }
+}
+</code></pre>
+<h3 id="cancel-tuning-job">Cancel Tuning Job</h3>
+<pre><code class="lang-csharp">using System.Threading.Tasks;
+using Google.GenAI;
+using Google.GenAI.Types;
+
+public class CancelTuningJobExample {
+  public static async Task main() {
+    // assuming credentials are set up in environment variables as instructed above.
+    var client = new Client();
+
+    // The tuning job resource name to cancel, retrieved from a created tuning job.
+    var tuningJobResourceName = &quot;tuningJobs/your-tuning-job&quot;;
+    await client.Tunings.CancelAsync(tuningJobResourceName);
+  }
+}
+</code></pre>
+<h3 id="list-tuning-jobs">List Tuning Jobs</h3>
+<pre><code class="lang-csharp">using System.Threading.Tasks;
+using Google.GenAI;
+using Google.GenAI.Types;
+
+public class ListTuningJobs {
+    public static async Task main()
+    {
+        // assuming credentials are set up in environment variables as instructed above.
+        var client = new Client();
+        var pager = await client.Tunings.ListAsync(new ListTuningJobsConfig { PageSize = 2 });
+
+        await foreach(var tuningJob in pager)
+        {
+            Console.WriteLine($&quot;Tuning job name: {tuningJob.Name}, State: {tuningJob.State}&quot;);
+        }
+    }
+}
+</code></pre>
+<h2 id="files-gemini-api-only">Files (Gemini API only)</h2>
+<p>The Files feature are only supported for the Gemini API.</p>
+<h3 id="upload-file">Upload File</h3>
+<pre><code class="lang-csharp">using Google.GenAI;
+using Google.GenAI.Types;
+
+public class Files {
+  public static async Task Main() {
+    // assuming credentials are set up in environment variables as instructed above.
+    var client = new Client(enterprise: false);
+
+    // uploading from local file path
+    var uploadResponse1 = await client.Files.UploadAsync(filtePath: &quot;path/to/your/file.png&quot;);
+    Console.WriteLine($&quot;Gemini API Files Upload Response: {uploadResponse1}&quot;);
+
+    // uploading from bytes
+    // using this fileBytes variable for demo purpose only
+    byte[] fileBytes = await System.IO.File.ReadAllBytesAsync(&quot;path/to/your/file.png&quot;);
+    var uploadResponse2 = await geminiClient.Files.UploadAsync(
+          bytes: fileBytes,
+          fileName: &quot;file.png&quot;
+      );
+      Console.WriteLine($&quot;Gemini API Files Upload Response: {uploadResponse2}&quot;);
+  }
+}
+</code></pre>
+<h3 id="get-file">Get File</h3>
+<pre><code class="lang-csharp">using Google.GenAI;
+using Google.GenAI.Types;
+
+public class Files {
+  public static async Task Main() {
+    // assuming credentials are set up in environment variables as instructed above.
+    var client = new Client(enterprise: false);
+
+    // usually, pattern is similar to this example &quot;files/s0pa54alni6w&quot;
+    string fileName = &quot;files/randomID&quot;;
+    var getResponse = await client.Files.GetAsync(name: fileName);
+    Console.WriteLine($&quot;Gemini API Files Get Response: {getResponse}&quot;);
+
+  }
+}
+</code></pre>
+<h3 id="delete-file">Delete File</h3>
+<pre><code class="lang-csharp">using Google.GenAI;
+using Google.GenAI.Types;
+
+public class Files {
+  public static async Task Main() {
+    // assuming credentials are set up in environment variables as instructed above.
+    var client = new Client(enterprise: false);
+
+    // usually, pattern is similar to this example &quot;files/s0pa54alni6w&quot;
+    string fileName = &quot;files/randomID&quot;;
+    var deleteResponse = await client.Files.DeleteAsync(name: fileName);
+    Console.WriteLine($&quot;Gemini API Files Delete Response: {deleteResponse}&quot;);
+
+  }
+}
+</code></pre>
+<h3 id="list-file">List File</h3>
+<pre><code class="lang-csharp">using Google.GenAI;
+using Google.GenAI.Types;
+
+public class Files {
+  public static async Task Main() {
+    // assuming credentials are set up in environment variables as instructed above.
+    var client = new Client(enterprise: false);
+
+    var pager = await client.Files.ListAsync();
+    await foreach(var page in pager) {
+      Console.WriteLine($&quot;Gemini API Files List Response page: {page}&quot;);
+    }
+
+  }
+}
+
+</code></pre>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/DemuxAi/dotnet-genai/blob/main/README.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

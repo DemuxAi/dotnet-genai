@@ -1,0 +1,1106 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Class Schema | Google GenAI .NET SDK </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Class Schema | Google GenAI .NET SDK ">
+      
+      <meta name="description" content="Schema is used to define the format of input/output data.  Represents a select subset of an OpenAPI 3.0 schema object (https://spec.openapis.org/oas/v3.0.3#schema-object). More fields may be added in the future as needed.">
+      <link rel="icon" href="../favicon.ico">
+      <link rel="stylesheet" href="../public/docfx.min.css">
+      <link rel="stylesheet" href="../public/main.css">
+      <meta name="docfx:navrel" content="../toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/DemuxAi/dotnet-genai/new/main/apiSpec/new?filename=Google_GenAI_Types_Schema.md&amp;value=---%0Auid%3A%20Google.GenAI.Types.Schema%0Asummary%3A%20&#39;*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax&#39;%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="ManagedReference">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../index.html">
+            <img id="logo" class="svg" src="../logo.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="Google.GenAI.Types.Schema">
+
+
+
+  <h1 id="Google_GenAI_Types_Schema" data-uid="Google.GenAI.Types.Schema" class="text-break">
+Class Schema  <a class="header-action link-secondary" title="View source" href="https://github.com/DemuxAi/dotnet-genai/blob/main/Google.GenAI/types/Schema.cs/#L31"><i class="bi bi-code-slash"></i></a>
+  </h1>
+
+  <div class="facts text-secondary">
+    <dl><dt>Namespace</dt><dd><a class="xref" href="Google.html">Google</a>.<a class="xref" href="Google.GenAI.html">GenAI</a>.<a class="xref" href="Google.GenAI.Types.html">Types</a></dd></dl>
+  <dl><dt>Assembly</dt><dd>Google.GenAI.dll</dd></dl>
+  </div>
+
+  <div class="markdown summary"><p>Schema is used to define the format of input/output data.  Represents a select subset of an
+OpenAPI 3.0 schema object (<a href="https://spec.openapis.org/oas/v3.0.3#schema-object">https://spec.openapis.org/oas/v3.0.3#schema-object</a>). More fields
+may be added in the future as needed.</p>
+</div>
+  <div class="markdown conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public record Schema : IEquatable&lt;Schema&gt;</code></pre>
+  </div>
+
+
+
+
+  <dl class="typelist inheritance">
+    <dt>Inheritance</dt>
+    <dd>
+      <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">object</a></div>
+      <div><span class="xref">Schema</span></div>
+    </dd>
+  </dl>
+
+  <dl class="typelist implements">
+    <dt>Implements</dt>
+    <dd>
+      <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.iequatable-1">IEquatable</a>&lt;<a class="xref" href="Google.GenAI.Types.Schema.html">Schema</a>&gt;</div>
+    </dd>
+  </dl>
+
+
+  <dl class="typelist inheritedMembers">
+    <dt>Inherited Members</dt>
+    <dd>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)">object.Equals(object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)">object.Equals(object, object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.gethashcode">object.GetHashCode()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.gettype">object.GetType()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone">object.MemberwiseClone()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.referenceequals">object.ReferenceEquals(object, object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.tostring">object.ToString()</a>
+    </div>
+  </dd></dl>
+
+
+
+
+
+
+  <h2 class="section" id="properties">Properties
+</h2>
+
+
+  <a id="Google_GenAI_Types_Schema_AdditionalProperties_" data-uid="Google.GenAI.Types.Schema.AdditionalProperties*"></a>
+
+  <h3 id="Google_GenAI_Types_Schema_AdditionalProperties" data-uid="Google.GenAI.Types.Schema.AdditionalProperties">
+  AdditionalProperties
+  <a class="header-action link-secondary" title="View source" href="https://github.com/DemuxAi/dotnet-genai/blob/main/Google.GenAI/types/Schema.cs/#L36"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Optional. Can either be a boolean or an object; controls the presence of additional
+properties.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[JsonPropertyName(&quot;additionalProperties&quot;)]
+[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+public object? AdditionalProperties { get; set; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">object</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Google_GenAI_Types_Schema_AnyOf_" data-uid="Google.GenAI.Types.Schema.AnyOf*"></a>
+
+  <h3 id="Google_GenAI_Types_Schema_AnyOf" data-uid="Google.GenAI.Types.Schema.AnyOf">
+  AnyOf
+  <a class="header-action link-secondary" title="View source" href="https://github.com/DemuxAi/dotnet-genai/blob/main/Google.GenAI/types/Schema.cs/#L69"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Optional. The instance must be valid against any (one or more) of the subschemas listed in
+<code>any_of</code>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[JsonPropertyName(&quot;anyOf&quot;)]
+[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+public List&lt;Schema&gt;? AnyOf { get; set; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1">List</a>&lt;<a class="xref" href="Google.GenAI.Types.Schema.html">Schema</a>&gt;</dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Google_GenAI_Types_Schema_Default_" data-uid="Google.GenAI.Types.Schema.Default*"></a>
+
+  <h3 id="Google_GenAI_Types_Schema_Default" data-uid="Google.GenAI.Types.Schema.Default">
+  Default
+  <a class="header-action link-secondary" title="View source" href="https://github.com/DemuxAi/dotnet-genai/blob/main/Google.GenAI/types/Schema.cs/#L79"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Optional. Default value to use if the field is not specified.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[JsonPropertyName(&quot;default&quot;)]
+[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+public object? Default { get; set; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">object</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Google_GenAI_Types_Schema_Defs_" data-uid="Google.GenAI.Types.Schema.Defs*"></a>
+
+  <h3 id="Google_GenAI_Types_Schema_Defs" data-uid="Google.GenAI.Types.Schema.Defs">
+  Defs
+  <a class="header-action link-secondary" title="View source" href="https://github.com/DemuxAi/dotnet-genai/blob/main/Google.GenAI/types/Schema.cs/#L43"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Optional. A map of definitions for use by <code>ref</code> Only allowed at the root of the schema.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[JsonPropertyName(&quot;defs&quot;)]
+[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+public Dictionary&lt;string, Schema&gt;? Defs { get; set; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a>, <a class="xref" href="Google.GenAI.Types.Schema.html">Schema</a>&gt;</dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Google_GenAI_Types_Schema_Description_" data-uid="Google.GenAI.Types.Schema.Description*"></a>
+
+  <h3 id="Google_GenAI_Types_Schema_Description" data-uid="Google.GenAI.Types.Schema.Description">
+  Description
+  <a class="header-action link-secondary" title="View source" href="https://github.com/DemuxAi/dotnet-genai/blob/main/Google.GenAI/types/Schema.cs/#L91"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Optional. Describes the data. The model uses this field to understand the purpose of the
+schema and how to use it. It is a best practice to provide a clear and descriptive
+explanation for the schema and its properties here, rather than in the prompt.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[JsonPropertyName(&quot;description&quot;)]
+[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+public string? Description { get; set; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Google_GenAI_Types_Schema_Enum_" data-uid="Google.GenAI.Types.Schema.Enum*"></a>
+
+  <h3 id="Google_GenAI_Types_Schema_Enum" data-uid="Google.GenAI.Types.Schema.Enum">
+  Enum
+  <a class="header-action link-secondary" title="View source" href="https://github.com/DemuxAi/dotnet-genai/blob/main/Google.GenAI/types/Schema.cs/#L105"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Optional. Possible values of the field. This field can be used to restrict a value to a
+fixed set of values. To mark a field as an enum, set <code>format</code> to <code>enum</code> and provide the list
+of possible values in <code>enum</code>. For example: 1. To define directions: <code>{type:STRING, format:enum, enum:[&quot;EAST&quot;, &quot;NORTH&quot;, &quot;SOUTH&quot;, &quot;WEST&quot;]}</code> 2. To define apartment numbers:
+<code>{type:INTEGER, format:enum, enum:[&quot;101&quot;, &quot;201&quot;, &quot;301&quot;]}</code></p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[JsonPropertyName(&quot;enum&quot;)]
+[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+public List&lt;string&gt;? Enum { get; set; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1">List</a>&lt;<a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a>&gt;</dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Google_GenAI_Types_Schema_Example_" data-uid="Google.GenAI.Types.Schema.Example*"></a>
+
+  <h3 id="Google_GenAI_Types_Schema_Example" data-uid="Google.GenAI.Types.Schema.Example">
+  Example
+  <a class="header-action link-secondary" title="View source" href="https://github.com/DemuxAi/dotnet-genai/blob/main/Google.GenAI/types/Schema.cs/#L115"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Optional. Example of an instance of this schema.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[JsonPropertyName(&quot;example&quot;)]
+[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+public object? Example { get; set; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">object</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Google_GenAI_Types_Schema_Format_" data-uid="Google.GenAI.Types.Schema.Format*"></a>
+
+  <h3 id="Google_GenAI_Types_Schema_Format" data-uid="Google.GenAI.Types.Schema.Format">
+  Format
+  <a class="header-action link-secondary" title="View source" href="https://github.com/DemuxAi/dotnet-genai/blob/main/Google.GenAI/types/Schema.cs/#L127"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Optional. The format of the data. For <code>NUMBER</code> type, format can be <code>float</code> or <code>double</code>. For
+<code>INTEGER</code> type, format can be <code>int32</code> or <code>int64</code>. For <code>STRING</code> type, format can be <code>email</code>,
+<code>byte</code>, <code>date</code>, <code>date-time</code>, <code>password</code>, and other formats to further refine the data type.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[JsonPropertyName(&quot;format&quot;)]
+[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+public string? Format { get; set; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Google_GenAI_Types_Schema_Items_" data-uid="Google.GenAI.Types.Schema.Items*"></a>
+
+  <h3 id="Google_GenAI_Types_Schema_Items" data-uid="Google.GenAI.Types.Schema.Items">
+  Items
+  <a class="header-action link-secondary" title="View source" href="https://github.com/DemuxAi/dotnet-genai/blob/main/Google.GenAI/types/Schema.cs/#L137"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Optional. If type is <code>ARRAY</code>, <code>items</code> specifies the schema of elements in the array.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[JsonPropertyName(&quot;items&quot;)]
+[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+public Schema? Items { get; set; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Google.GenAI.Types.Schema.html">Schema</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Google_GenAI_Types_Schema_MaxItems_" data-uid="Google.GenAI.Types.Schema.MaxItems*"></a>
+
+  <h3 id="Google_GenAI_Types_Schema_MaxItems" data-uid="Google.GenAI.Types.Schema.MaxItems">
+  MaxItems
+  <a class="header-action link-secondary" title="View source" href="https://github.com/DemuxAi/dotnet-genai/blob/main/Google.GenAI/types/Schema.cs/#L147"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Optional. If type is <code>ARRAY</code>, <code>max_items</code> specifies the maximum number of items in an array.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[JsonPropertyName(&quot;maxItems&quot;)]
+[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+[JsonConverter(typeof(StringToNullableLongConverter))]
+public long? MaxItems { get; set; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int64">long</a>?</dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Google_GenAI_Types_Schema_MaxLength_" data-uid="Google.GenAI.Types.Schema.MaxLength*"></a>
+
+  <h3 id="Google_GenAI_Types_Schema_MaxLength" data-uid="Google.GenAI.Types.Schema.MaxLength">
+  MaxLength
+  <a class="header-action link-secondary" title="View source" href="https://github.com/DemuxAi/dotnet-genai/blob/main/Google.GenAI/types/Schema.cs/#L158"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Optional. If type is <code>STRING</code>, <code>max_length</code> specifies the maximum length of the string.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[JsonPropertyName(&quot;maxLength&quot;)]
+[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+[JsonConverter(typeof(StringToNullableLongConverter))]
+public long? MaxLength { get; set; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int64">long</a>?</dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Google_GenAI_Types_Schema_MaxProperties_" data-uid="Google.GenAI.Types.Schema.MaxProperties*"></a>
+
+  <h3 id="Google_GenAI_Types_Schema_MaxProperties" data-uid="Google.GenAI.Types.Schema.MaxProperties">
+  MaxProperties
+  <a class="header-action link-secondary" title="View source" href="https://github.com/DemuxAi/dotnet-genai/blob/main/Google.GenAI/types/Schema.cs/#L170"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Optional. If type is <code>OBJECT</code>, <code>max_properties</code> specifies the maximum number of properties
+that can be provided.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[JsonPropertyName(&quot;maxProperties&quot;)]
+[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+[JsonConverter(typeof(StringToNullableLongConverter))]
+public long? MaxProperties { get; set; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int64">long</a>?</dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Google_GenAI_Types_Schema_Maximum_" data-uid="Google.GenAI.Types.Schema.Maximum*"></a>
+
+  <h3 id="Google_GenAI_Types_Schema_Maximum" data-uid="Google.GenAI.Types.Schema.Maximum">
+  Maximum
+  <a class="header-action link-secondary" title="View source" href="https://github.com/DemuxAi/dotnet-genai/blob/main/Google.GenAI/types/Schema.cs/#L181"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Optional. If type is <code>INTEGER</code> or <code>NUMBER</code>, <code>maximum</code> specifies the maximum allowed value.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[JsonPropertyName(&quot;maximum&quot;)]
+[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+public double? Maximum { get; set; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a>?</dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Google_GenAI_Types_Schema_MinItems_" data-uid="Google.GenAI.Types.Schema.MinItems*"></a>
+
+  <h3 id="Google_GenAI_Types_Schema_MinItems" data-uid="Google.GenAI.Types.Schema.MinItems">
+  MinItems
+  <a class="header-action link-secondary" title="View source" href="https://github.com/DemuxAi/dotnet-genai/blob/main/Google.GenAI/types/Schema.cs/#L191"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Optional. If type is <code>ARRAY</code>, <code>min_items</code> specifies the minimum number of items in an array.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[JsonPropertyName(&quot;minItems&quot;)]
+[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+[JsonConverter(typeof(StringToNullableLongConverter))]
+public long? MinItems { get; set; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int64">long</a>?</dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Google_GenAI_Types_Schema_MinLength_" data-uid="Google.GenAI.Types.Schema.MinLength*"></a>
+
+  <h3 id="Google_GenAI_Types_Schema_MinLength" data-uid="Google.GenAI.Types.Schema.MinLength">
+  MinLength
+  <a class="header-action link-secondary" title="View source" href="https://github.com/DemuxAi/dotnet-genai/blob/main/Google.GenAI/types/Schema.cs/#L202"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Optional. If type is <code>STRING</code>, <code>min_length</code> specifies the minimum length of the string.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[JsonPropertyName(&quot;minLength&quot;)]
+[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+[JsonConverter(typeof(StringToNullableLongConverter))]
+public long? MinLength { get; set; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int64">long</a>?</dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Google_GenAI_Types_Schema_MinProperties_" data-uid="Google.GenAI.Types.Schema.MinProperties*"></a>
+
+  <h3 id="Google_GenAI_Types_Schema_MinProperties" data-uid="Google.GenAI.Types.Schema.MinProperties">
+  MinProperties
+  <a class="header-action link-secondary" title="View source" href="https://github.com/DemuxAi/dotnet-genai/blob/main/Google.GenAI/types/Schema.cs/#L214"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Optional. If type is <code>OBJECT</code>, <code>min_properties</code> specifies the minimum number of properties
+that can be provided.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[JsonPropertyName(&quot;minProperties&quot;)]
+[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+[JsonConverter(typeof(StringToNullableLongConverter))]
+public long? MinProperties { get; set; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int64">long</a>?</dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Google_GenAI_Types_Schema_Minimum_" data-uid="Google.GenAI.Types.Schema.Minimum*"></a>
+
+  <h3 id="Google_GenAI_Types_Schema_Minimum" data-uid="Google.GenAI.Types.Schema.Minimum">
+  Minimum
+  <a class="header-action link-secondary" title="View source" href="https://github.com/DemuxAi/dotnet-genai/blob/main/Google.GenAI/types/Schema.cs/#L225"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Optional. If type is <code>INTEGER</code> or <code>NUMBER</code>, <code>minimum</code> specifies the minimum allowed value.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[JsonPropertyName(&quot;minimum&quot;)]
+[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+public double? Minimum { get; set; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a>?</dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Google_GenAI_Types_Schema_Nullable_" data-uid="Google.GenAI.Types.Schema.Nullable*"></a>
+
+  <h3 id="Google_GenAI_Types_Schema_Nullable" data-uid="Google.GenAI.Types.Schema.Nullable">
+  Nullable
+  <a class="header-action link-secondary" title="View source" href="https://github.com/DemuxAi/dotnet-genai/blob/main/Google.GenAI/types/Schema.cs/#L235"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Optional. Indicates if the value of this field can be null.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[JsonPropertyName(&quot;nullable&quot;)]
+[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+public bool? Nullable { get; set; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a>?</dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Google_GenAI_Types_Schema_Pattern_" data-uid="Google.GenAI.Types.Schema.Pattern*"></a>
+
+  <h3 id="Google_GenAI_Types_Schema_Pattern" data-uid="Google.GenAI.Types.Schema.Pattern">
+  Pattern
+  <a class="header-action link-secondary" title="View source" href="https://github.com/DemuxAi/dotnet-genai/blob/main/Google.GenAI/types/Schema.cs/#L246"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Optional. If type is <code>STRING</code>, <code>pattern</code> specifies a regular expression that the string must
+match.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[JsonPropertyName(&quot;pattern&quot;)]
+[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+public string? Pattern { get; set; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Google_GenAI_Types_Schema_Properties_" data-uid="Google.GenAI.Types.Schema.Properties*"></a>
+
+  <h3 id="Google_GenAI_Types_Schema_Properties" data-uid="Google.GenAI.Types.Schema.Properties">
+  Properties
+  <a class="header-action link-secondary" title="View source" href="https://github.com/DemuxAi/dotnet-genai/blob/main/Google.GenAI/types/Schema.cs/#L257"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Optional. If type is <code>OBJECT</code>, <code>properties</code> is a map of property names to schema definitions
+for each property of the object.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[JsonPropertyName(&quot;properties&quot;)]
+[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+public Dictionary&lt;string, Schema&gt;? Properties { get; set; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a>, <a class="xref" href="Google.GenAI.Types.Schema.html">Schema</a>&gt;</dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Google_GenAI_Types_Schema_PropertyOrdering_" data-uid="Google.GenAI.Types.Schema.PropertyOrdering*"></a>
+
+  <h3 id="Google_GenAI_Types_Schema_PropertyOrdering" data-uid="Google.GenAI.Types.Schema.PropertyOrdering">
+  PropertyOrdering
+  <a class="header-action link-secondary" title="View source" href="https://github.com/DemuxAi/dotnet-genai/blob/main/Google.GenAI/types/Schema.cs/#L268"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Optional. Order of properties displayed or used where order matters. This is not a standard
+field in OpenAPI specification, but can be used to control the order of properties.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[JsonPropertyName(&quot;propertyOrdering&quot;)]
+[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+public List&lt;string&gt;? PropertyOrdering { get; set; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1">List</a>&lt;<a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a>&gt;</dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Google_GenAI_Types_Schema_Ref_" data-uid="Google.GenAI.Types.Schema.Ref*"></a>
+
+  <h3 id="Google_GenAI_Types_Schema_Ref" data-uid="Google.GenAI.Types.Schema.Ref">
+  Ref
+  <a class="header-action link-secondary" title="View source" href="https://github.com/DemuxAi/dotnet-genai/blob/main/Google.GenAI/types/Schema.cs/#L58"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Optional. Allows indirect references between schema nodes. The value should be a valid
+reference to a child of the root <code>defs</code>. For example, the following schema defines a
+reference to a schema node named &quot;Pet&quot;: type: object properties: pet: ref: #/defs/Pet defs:
+Pet: type: object properties: name: type: string The value of the &quot;pet&quot; property is a
+reference to the schema node named &quot;Pet&quot;. See details in
+<a href="https://json-schema.org/understanding-json-schema/structuring">https://json-schema.org/understanding-json-schema/structuring</a></p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[JsonPropertyName(&quot;ref&quot;)]
+[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+public string? Ref { get; set; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Google_GenAI_Types_Schema_Required_" data-uid="Google.GenAI.Types.Schema.Required*"></a>
+
+  <h3 id="Google_GenAI_Types_Schema_Required" data-uid="Google.GenAI.Types.Schema.Required">
+  Required
+  <a class="header-action link-secondary" title="View source" href="https://github.com/DemuxAi/dotnet-genai/blob/main/Google.GenAI/types/Schema.cs/#L279"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Optional. If type is <code>OBJECT</code>, <code>required</code> lists the names of properties that must be
+present.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[JsonPropertyName(&quot;required&quot;)]
+[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+public List&lt;string&gt;? Required { get; set; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1">List</a>&lt;<a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a>&gt;</dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Google_GenAI_Types_Schema_Title_" data-uid="Google.GenAI.Types.Schema.Title*"></a>
+
+  <h3 id="Google_GenAI_Types_Schema_Title" data-uid="Google.GenAI.Types.Schema.Title">
+  Title
+  <a class="header-action link-secondary" title="View source" href="https://github.com/DemuxAi/dotnet-genai/blob/main/Google.GenAI/types/Schema.cs/#L289"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Optional. Title for the schema.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[JsonPropertyName(&quot;title&quot;)]
+[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+public string? Title { get; set; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Google_GenAI_Types_Schema_Type_" data-uid="Google.GenAI.Types.Schema.Type*"></a>
+
+  <h3 id="Google_GenAI_Types_Schema_Type" data-uid="Google.GenAI.Types.Schema.Type">
+  Type
+  <a class="header-action link-secondary" title="View source" href="https://github.com/DemuxAi/dotnet-genai/blob/main/Google.GenAI/types/Schema.cs/#L299"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Optional. Data type of the schema field.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[JsonPropertyName(&quot;type&quot;)]
+[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+public Type? Type { get; set; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Google.GenAI.Types.Type.html">Type</a>?</dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <h2 class="section" id="methods">Methods
+</h2>
+
+
+  <a id="Google_GenAI_Types_Schema_FromJson_" data-uid="Google.GenAI.Types.Schema.FromJson*"></a>
+
+  <h3 id="Google_GenAI_Types_Schema_FromJson_System_String_System_Text_Json_JsonSerializerOptions_" data-uid="Google.GenAI.Types.Schema.FromJson(System.String,System.Text.Json.JsonSerializerOptions)">
+  FromJson(string, JsonSerializerOptions?)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/DemuxAi/dotnet-genai/blob/main/Google.GenAI/types/Schema.cs/#L312"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Deserializes a JSON string to a Schema object.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static Schema? FromJson(string jsonString, JsonSerializerOptions? options = null)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>jsonString</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd><p>The JSON string to deserialize.</p>
+</dd>
+    <dt><code>options</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.text.json.jsonserializeroptions">JsonSerializerOptions</a></dt>
+    <dd><p>Optional JsonSerializerOptions.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Google.GenAI.Types.Schema.html">Schema</a></dt>
+    <dd><p>The deserialized Schema object, or null if deserialization fails.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/DemuxAi/dotnet-genai/blob/main/Google.GenAI/types/Schema.cs/#L31" class="edit-link">Edit this page</a>
+        </div>
+
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
