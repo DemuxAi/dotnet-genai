@@ -23,7 +23,7 @@ using Google.GenAI.Serialization;
 
 namespace Google.GenAI.Types {
   /// <summary>
-  /// URI based data for function response.
+  /// URI based data for function response. This data type is not supported in Gemini API.
   /// </summary>
 
   public record FunctionResponseFileData {
@@ -45,8 +45,10 @@ namespace Google.GenAI.Types {
           }
 
     /// <summary>
-    /// Optional. Display name of the file. Used to provide a label or filename to distinguish
-    /// files.
+    /// Optional. Display name of the file data. Used to provide a label or filename to distinguish
+    /// file datas. This field is only returned in PromptMessage for prompt management. It is
+    /// currently used in the Gemini GenerateContent calls only when server side tools
+    /// (code_execution, google_search, and url_context) are enabled.
     /// </summary>
     [JsonPropertyName("displayName")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]

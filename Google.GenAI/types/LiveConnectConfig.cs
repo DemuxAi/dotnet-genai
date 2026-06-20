@@ -253,6 +253,36 @@ namespace Google.GenAI.Types {
           }
 
     /// <summary>
+    /// Configures the avatar model behavior.
+    /// </summary>
+    [JsonPropertyName("avatarConfig")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public AvatarConfig
+        ? AvatarConfig {
+            get; set;
+          }
+
+    /// <summary>
+    /// Safety settings in the request to block unsafe content in the response.
+    /// </summary>
+    [JsonPropertyName("safetySettings")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public List<SafetySetting>
+        ? SafetySettings {
+            get; set;
+          }
+
+    /// <summary>
+    /// Config for translation.
+    /// </summary>
+    [JsonPropertyName("translationConfig")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public TranslationConfig
+        ? TranslationConfig {
+            get; set;
+          }
+
+    /// <summary>
     /// Deserializes a JSON string to a LiveConnectConfig object.
     /// </summary>
     /// <param name="jsonString">The JSON string to deserialize.</param>

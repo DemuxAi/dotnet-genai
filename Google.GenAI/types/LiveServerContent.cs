@@ -139,6 +139,16 @@ namespace Google.GenAI.Types {
           }
 
     /// <summary>
+    /// Low latency transcription updated while the user is speaking.
+    /// </summary>
+    [JsonPropertyName("interimInputTranscription")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public Transcription
+        ? InterimInputTranscription {
+            get; set;
+          }
+
+    /// <summary>
     /// Deserializes a JSON string to a LiveServerContent object.
     /// </summary>
     /// <param name="jsonString">The JSON string to deserialize.</param>

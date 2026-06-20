@@ -28,13 +28,42 @@ namespace Google.GenAI.Types {
 
   public record AudioTranscriptionConfig {
     /// <summary>
-    /// The language codes of the audio. BCP-47 language code. If not set, the transcription will be
-    /// in the language detected by the model. If set, the server will use the language code
-    /// specified in the model config as a hint for the language of the audio
+    /// Deprecated: use LanguageAuto or LanguageHints instead.
     /// </summary>
     [JsonPropertyName("languageCodes")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public List<string> ? LanguageCodes { get; set; }
+
+    /// <summary>
+    /// The model will detect the language automatically. Do not use together with LanguageHints.
+    /// </summary>
+    [JsonPropertyName("languageAuto")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public LanguageAuto
+        ? LanguageAuto {
+            get; set;
+          }
+
+    /// <summary>
+    /// Specifies one or more languages in the audio. Do not use together with LanguageAuto.
+    /// </summary>
+    [JsonPropertyName("languageHints")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public LanguageHints
+        ? LanguageHints {
+            get; set;
+          }
+
+    /// <summary>
+    /// A list of phrases used for speech adaptation, which biases the ASR model to improve
+    /// recognition of these specific terms.
+    /// </summary>
+    [JsonPropertyName("adaptationPhrases")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public List<string>
+        ? AdaptationPhrases {
+            get; set;
+          }
 
     /// <summary>
     /// Deserializes a JSON string to a AudioTranscriptionConfig object.

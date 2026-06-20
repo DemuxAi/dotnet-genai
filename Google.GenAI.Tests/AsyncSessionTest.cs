@@ -93,9 +93,9 @@ namespace Google.GenAI.Tests {
     }
 
     [TestMethod]
-    public async Task ReceiveAsync_WhenServerSendsCloseMessage_ShouldReturnNull() {
-      var closeStatus = WebSocketCloseStatus.PolicyViolation;
-      var closeStatusDescription = "Server initiated close due to policy violation.";
+    public async Task ReceiveAsync_WhenServerSendsNormalCloseMessage_ShouldReturnNull() {
+      var closeStatus = WebSocketCloseStatus.NormalClosure;
+      var closeStatusDescription = "Normal closure.";
       var closeResult = new WebSocketReceiveResult(0, WebSocketMessageType.Close, true, closeStatus,
                                                    closeStatusDescription);
 
@@ -112,6 +112,42 @@ namespace Google.GenAI.Tests {
           ws => ws.CloseOutputAsync(It.IsAny<WebSocketCloseStatus>(), It.IsAny<string>(),
                                     It.IsAny<CancellationToken>()),
           Times.Never);
+    }
+
+    [TestMethod]
+    public async Task ReceiveAsync_WhenServerSendsAbnormalCloseMessage_ShouldThrowInvalidOperationException() {
+      var closeStatus = WebSocketCloseStatus.PolicyViolation;
+      var closeStatusDescription = "Server initiated close due to policy violation.";
+      var closeResult = new WebSocketReceiveResult(0, WebSocketMessageType.Close, true, closeStatus,
+                                                   closeStatusDescription);
+
+      _mockWebSocket.Setup(ws => ws.State).Returns(WebSocketState.Open);
+      _mockWebSocket
+          .Setup(ws =>
+                     ws.ReceiveAsync(It.IsAny<ArraySegment<byte>>(), It.IsAny<CancellationToken>()))
+          .ReturnsAsync(closeResult);
+
+      var exception = await Assert.ThrowsExceptionAsync<InvalidOperationException>(
+          async () => await _asyncSession.ReceiveAsync());
+
+      Assert.AreEqual(
+          $"Server closed the WebSocket connection: [{WebSocketCloseStatus.PolicyViolation}] {"Server initiated close due to policy violation."}",
+          exception.Message);
+    }
+
+    [TestMethod]
+    public async Task ReceiveAsync_WhenServerSendsCloseMessageWithoutStatus_ShouldReturnNull() {
+      var closeResult = new WebSocketReceiveResult(0, WebSocketMessageType.Close, true, null, null);
+
+      _mockWebSocket.Setup(ws => ws.State).Returns(WebSocketState.Open);
+      _mockWebSocket
+          .Setup(ws =>
+                     ws.ReceiveAsync(It.IsAny<ArraySegment<byte>>(), It.IsAny<CancellationToken>()))
+          .ReturnsAsync(closeResult);
+
+      var result = await _asyncSession.ReceiveAsync();
+
+      Assert.IsNull(result);
     }
 
     [TestMethod]

@@ -35,6 +35,16 @@ namespace Google.GenAI.Types {
     public VoiceActivityType ? VoiceActivityType { get; set; }
 
     /// <summary>
+    /// The time voice activity detected in audio time, relative to the start of the audio stream.
+    /// </summary>
+    [JsonPropertyName("audioOffset")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public string
+        ? AudioOffset {
+            get; set;
+          }
+
+    /// <summary>
     /// Deserializes a JSON string to a VoiceActivity object.
     /// </summary>
     /// <param name="jsonString">The JSON string to deserialize.</param>

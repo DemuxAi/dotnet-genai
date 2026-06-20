@@ -96,7 +96,14 @@ namespace Google.GenAI
         {
           throw new InvalidOperationException("An API key is required for Gemini API connections.");
         }
-        clientWebSocket.Options.SetRequestHeader("x-goog-api-key", _apiClient.ApiKey);
+        if (_apiClient.ApiKey.StartsWith("auth_tokens/"))
+        {
+          clientWebSocket.Options.SetRequestHeader("Authorization", "Token " + _apiClient.ApiKey);
+        }
+        else
+        {
+          clientWebSocket.Options.SetRequestHeader("x-goog-api-key", _apiClient.ApiKey);
+        }
       }
 
       foreach (var header in _apiClient?.HttpOptions?.Headers ?? new Dictionary<string, string>())
@@ -137,7 +144,18 @@ namespace Google.GenAI
         else
         {
             string apiVersion = _apiClient.HttpOptions?.ApiVersion ?? "v1beta";
-            return new Uri($"{wsBaseUrl}/ws/google.ai.generativelanguage.{apiVersion}.GenerativeService.BidiGenerateContent");
+            string method;
+            if (_apiClient.ApiKey != null && _apiClient.ApiKey.StartsWith("auth_tokens/"))
+            {
+              if (apiVersion != "v1alpha") {
+                throw new InvalidOperationException(
+                    $"The SDK's ephemeral token support is in v1alpha only. Got: {apiVersion}.");
+              }
+              method = "BidiGenerateContentConstrained";
+            } else {
+              method = "BidiGenerateContent";
+            }
+            return new Uri($"{wsBaseUrl}/ws/google.ai.generativelanguage.{apiVersion}.GenerativeService.{method}");
         }
       }
       catch (UriFormatException e)
@@ -166,7 +184,7 @@ namespace Google.GenAI
         Config = config,
       };
       LiveConverters liveConverters = new LiveConverters(_apiClient);
-      string jsonString = JsonSerializer.Serialize(parameters);
+      string jsonString = JsonSerializer.Serialize(parameters, JsonConfig.InternalSerializerOptions);
       JsonNode? parameterNode = JsonNode.Parse(jsonString);
       if (parameterNode == null)
       {
@@ -309,7 +327,7 @@ namespace Google.GenAI
       }
 
       var buffer = new byte[4096];
-      var messageBuilder = new StringBuilder();
+      using var messageStream = new MemoryStream();
       WebSocketReceiveResult result;
 
       try
@@ -319,9 +337,14 @@ namespace Google.GenAI
           result = await _webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), cancellationToken);
           if (result.MessageType == WebSocketMessageType.Close)
           {
+            if (result.CloseStatus.HasValue && result.CloseStatus != WebSocketCloseStatus.NormalClosure)
+              {
+                throw new InvalidOperationException(
+                  $"Server closed the WebSocket connection: [{result.CloseStatus}] {result.CloseStatusDescription}");
+              }
             return null;
           }
-          messageBuilder.Append(Encoding.UTF8.GetString(buffer, 0, result.Count));
+          messageStream.Write(buffer, 0, result.Count);
         }
         while (!result.EndOfMessage);
       }
@@ -330,7 +353,7 @@ namespace Google.GenAI
         return null;
       }
 
-      var messageString = messageBuilder.ToString();
+      var messageString = Encoding.UTF8.GetString(messageStream.GetBuffer(), 0, (int)messageStream.Length);
       if (string.IsNullOrEmpty(messageString))
       {
         throw new InvalidOperationException("Received an empty message from the server.");

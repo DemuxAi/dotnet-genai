@@ -23,7 +23,7 @@ using Google.GenAI.Serialization;
 
 namespace Google.GenAI.Types {
   /// <summary>
-  /// Audio transcription in Server Conent.
+  /// Audio transcription in Server Content.
   /// </summary>
 
   public record Transcription {
@@ -41,6 +41,16 @@ namespace Google.GenAI.Types {
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public bool
         ? Finished {
+            get; set;
+          }
+
+    /// <summary>
+    /// The BCP-47 language code of the transcription.
+    /// </summary>
+    [JsonPropertyName("languageCode")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public string
+        ? LanguageCode {
             get; set;
           }
 

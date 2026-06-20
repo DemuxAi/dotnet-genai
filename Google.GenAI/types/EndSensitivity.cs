@@ -34,7 +34,8 @@ namespace Google.GenAI.Types {
     }
 
     /// <summary>
-    /// The default is END_SENSITIVITY_LOW.
+    /// The default is END_SENSITIVITY_LOW for Gemini Enterprise Agent Platform and
+    /// END_SENSITIVITY_HIGH for Gemini Live.
     /// </summary>
     public static EndSensitivity EndSensitivityUnspecified {
       get;

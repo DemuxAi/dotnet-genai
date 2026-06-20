@@ -34,7 +34,8 @@ namespace Google.GenAI.Types {
     }
 
     /// <summary>
-    /// The default is START_SENSITIVITY_LOW.
+    /// The default is START_SENSITIVITY_LOW for Gemini Enterprise Agent Platform and
+    /// START_SENSITIVITY_HIGH for Gemini Live.
     /// </summary>
     public static StartSensitivity StartSensitivityUnspecified {
       get;

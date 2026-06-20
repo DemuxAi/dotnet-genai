@@ -1,5 +1,117 @@
 # Changelog
 
+## Version 1.11.0, released 2026-06-17
+
+
+### New features
+
+* Add audioOffset to VoiceActivity ([aedb860](https://github.com/googleapis/dotnet-genai/commit/aedb86021ccfd95a68e2b4f630679c8612b00673))
+* Add interimInputTranscription to LiveServerContent ([aedb860](https://github.com/googleapis/dotnet-genai/commit/aedb86021ccfd95a68e2b4f630679c8612b00673))
+* Add LanguageAuto, LanguageHints, and adaptationPhrases to AudioTranscriptionConfig ([aedb860](https://github.com/googleapis/dotnet-genai/commit/aedb86021ccfd95a68e2b4f630679c8612b00673))
+
+
+### Bug fixes
+
+* receive async surface error to user ([b6ef5cd](https://github.com/googleapis/dotnet-genai/commit/b6ef5cde7654466123315eed496d1bd4e948957d))
+
+
+### Documentation improvements
+
+* Clarify Live API START/END_SENSITIVITY_HIGH/LOW defaults are different in Gemini Live and Gemini Enterprise Agent Platform Live API ([943d826](https://github.com/googleapis/dotnet-genai/commit/943d826f2798e8116b09c35b9a2bc2c347440a23)), closes [#2555](https://github.com/googleapis/dotnet-genai/issues/2555)
+
+## Version 1.10.0, released 2026-06-08
+
+
+### New features
+
+* Add Gemini Realtime provider implementing IRealtimeClient/IRealtimeClientSession ([2b92e85](https://github.com/googleapis/dotnet-genai/commit/2b92e8588548a3fa578d5206b77dbd3717ee6296))
+* Add Gemini Realtime provider implementing IRealtimeClient/IRealtimeClientSession ([2b92e85](https://github.com/googleapis/dotnet-genai/commit/2b92e8588548a3fa578d5206b77dbd3717ee6296))
+* Add ServiceTier to UsageMetadata ([421dc32](https://github.com/googleapis/dotnet-genai/commit/421dc3271c0ec5d0c408d556a4a50a0d34184cba))
+* Add source-generated JSON serialization for AOT compatibility ([2b92e85](https://github.com/googleapis/dotnet-genai/commit/2b92e8588548a3fa578d5206b77dbd3717ee6296))
+* Add Vertex AI convenience constructor to GoogleGenAIRealtimeClient ([2b92e85](https://github.com/googleapis/dotnet-genai/commit/2b92e8588548a3fa578d5206b77dbd3717ee6296))
+
+
+### Documentation improvements
+
+* Fix typo in Dotnet README ([1dca45e](https://github.com/googleapis/dotnet-genai/commit/1dca45e6317f57a33c12bdce8dfb5d2fc4758a2c))
+
+## Version 1.9.0, released 2026-06-03
+
+
+### New features
+
+* Add Agent Platform MCP support to async generate_content ([cd69f04](https://github.com/googleapis/dotnet-genai/commit/cd69f04f56764c80121f9b5c8a89c21bd63dc694))
+* Add transcription language code. ([a5bd3a9](https://github.com/googleapis/dotnet-genai/commit/a5bd3a965ee430e35ee3e71132f6c81ce859473d))
+* Add TranslationConfig for live translation. ([7b99795](https://github.com/googleapis/dotnet-genai/commit/7b997958bd7993133b1cd47d084f8badb52073f4))
+* Support ReinforcementTuning in GenAI SDK including ValidateReward API method. ([68e5560](https://github.com/googleapis/dotnet-genai/commit/68e55600761bda0162b3e0d52662ad99f37eda43))
+
+
+### Bug fixes
+
+* Propagate CancellationToken in GoogleGenAIChatClient.GetResponseAsync ([67a9f78](https://github.com/googleapis/dotnet-genai/commit/67a9f784518fb3679bfd0cc25582c6459438a1bb))
+* Propagate CancellationToken in GoogleGenAIChatClient.GetResponseAsync ([67a9f78](https://github.com/googleapis/dotnet-genai/commit/67a9f784518fb3679bfd0cc25582c6459438a1bb))
+
+
+### Documentation improvements
+
+* A comment for field `enable_widget` in message `GoogleMaps` is changed ([89bd3db](https://github.com/googleapis/dotnet-genai/commit/89bd3db11ca5237daf8654ec83e85b2ba71f07e7))
+* A comment for field `google_maps_widget_context_token` in message `GroundingMetadata` is changed ([89bd3db](https://github.com/googleapis/dotnet-genai/commit/89bd3db11ca5237daf8654ec83e85b2ba71f07e7))
+* Fix ChatOptions setup in README.md ([2955411](https://github.com/googleapis/dotnet-genai/commit/295541159f2bde2581f112d3621843f4d7e19965))
+* Fix ChatOptions setup in README.md ([2955411](https://github.com/googleapis/dotnet-genai/commit/295541159f2bde2581f112d3621843f4d7e19965))
+
+## Version 1.8.0, released 2026-05-28
+
+
+### New features
+
+* additional computer_use field support for vertex. ([3c16fcd](https://github.com/googleapis/dotnet-genai/commit/3c16fcd26974efbe8cae3a492d480a320c9316f7))
+* Support Reinforcement Tuning in GenAI SDK ([c74822e](https://github.com/googleapis/dotnet-genai/commit/c74822eef68cf0a3581fbb20ac5270bdc738f2d6))
+* Update to Microsoft.Extensions.AI.Abstractions 10.6.0 ([81236bc](https://github.com/googleapis/dotnet-genai/commit/81236bc9f04d776dcb13a88d9ec3fca392edd557))
+* Update to Microsoft.Extensions.AI.Abstractions 10.6.0 ([81236bc](https://github.com/googleapis/dotnet-genai/commit/81236bc9f04d776dcb13a88d9ec3fca392edd557))
+
+## Version 1.7.0, released 2026-05-21
+
+
+### New features
+
+* add `enable_prompt_injection_detection` for Computer Use feature for the Gemini API. ([cfda72c](https://github.com/googleapis/dotnet-genai/commit/cfda72ceb4384257ca03bdb1c1f3d8cef5156d1b))
+
+
+## Version 1.6.2, released 2026-05-14
+
+
+### New features
+
+* [Python] Multimodal file search ([73d24ad](https://github.com/googleapis/dotnet-genai/commit/73d24ad98dc6433cc6b2c6db6a2393d62d1b0ada))
+* Add "eu" as a supported service location for Vertex AI platform. ([e1d2f36](https://github.com/googleapis/dotnet-genai/commit/e1d2f365a83c3c10c62e3d2a34302bc23ae9c7f9))
+* Add `output_info` to `BatchJob` ([5f4ca93](https://github.com/googleapis/dotnet-genai/commit/5f4ca93044b916469846b389f4d5f413af76d62b))
+* Add ImageResizeMode for GenerateVideos ([74083e6](https://github.com/googleapis/dotnet-genai/commit/74083e6aaa54277b8afcd0502675418a08dfcb0d))
+* Add Live Avatar new fields ([fd82178](https://github.com/googleapis/dotnet-genai/commit/fd82178df207ad0afd51bd43e4d11f05f9a8b7c2))
+* Add Vertex Dataset input and output options for batch jobs ([6b6c06c](https://github.com/googleapis/dotnet-genai/commit/6b6c06c04e72b8f4091abb03eb82b0313ee68cf3))
+* Add webhook_config to batches.create() and models.generate_videos() ([a1e9528](https://github.com/googleapis/dotnet-genai/commit/a1e952882d186e3196502b90858a2d35ca298a36))
+* Ephemeral token support for Live API ([4bd35cf](https://github.com/googleapis/dotnet-genai/commit/4bd35cfd39146041f6b24aa49941edd7fe9778a1))
+* introduce enterprise appearance in dotnet genai sdk ([2ff5eb7](https://github.com/googleapis/dotnet-genai/commit/2ff5eb7fc3376ca424a9e86b614f1fca0c7189c8))
+* support Blocking FunctionCall in Live API in AgentPlatform (Vertex) ([f72ca92](https://github.com/googleapis/dotnet-genai/commit/f72ca92832a3e3c1ddf16faa47a08774135b5765))
+* support custom HttpClient factory ([d1fe71d](https://github.com/googleapis/dotnet-genai/commit/d1fe71dcd7b9fbe6d3c1391b5b8530f19f39a83c)), closes [#166](https://github.com/googleapis/dotnet-genai/issues/166)
+* support speech to speech translation in Gemini Live ([e0e64a9](https://github.com/googleapis/dotnet-genai/commit/e0e64a9494d1739206ff75bffdf1cf51159cdde8))
+
+
+### Bug fixes
+
+* Streaming method doesn't handle multi-line SSE ([559dae3](https://github.com/googleapis/dotnet-genai/commit/559dae39eb45256fd60aeea509db9eb3621cc570))
+
+
+### Miscellaneous chores
+
+* release 1.6.2 ([8aa121f](https://github.com/googleapis/dotnet-genai/commit/8aa121f7c98a377c2e3640d0d789d23563c3619a))
+
+
+### Documentation improvements
+
+* replace Vertex AI with Gemini Enterprise Agent Platform ([c4ed542](https://github.com/googleapis/dotnet-genai/commit/c4ed542a75ede4dfa9c209c38e7004516e459df4))
+* update doc string to replace `Vertex AI` with `Gemini Enterprise Agent Platform`, update method error message to replace `Vertex AI` with `Gemini Enterprise Agent Platform (previously known as Vertex AI)`, update converter error message to replace `Vertex AI` with `Gemini Enterprise Agent Platform` ([5eca351](https://github.com/googleapis/dotnet-genai/commit/5eca351032f576eb2616654b6dd441aeb78b5625))
+* update Gemini Enterprise Agent Platform home page url ([d68c3a7](https://github.com/googleapis/dotnet-genai/commit/d68c3a72b12f62a7888045ffde6637ccd9949f73))
+
 ## Version 1.6.1, released 2026-03-31
 
 
