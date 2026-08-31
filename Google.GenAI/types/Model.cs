@@ -215,7 +215,7 @@ namespace Google.GenAI.Types {
     /// <returns>The deserialized Model object, or null if deserialization fails.</returns>
     public static Model ? FromJson(string jsonString, JsonSerializerOptions? options = null) {
       try {
-        return JsonSerializer.Deserialize<Model>(jsonString, options);
+        return JsonSerializer.Deserialize(jsonString, JsonConfig.TypeInfo<Model>(options));
       } catch (JsonException e) {
         Console.Error.WriteLine($"Error deserializing JSON: {e.ToString()}");
         return null;

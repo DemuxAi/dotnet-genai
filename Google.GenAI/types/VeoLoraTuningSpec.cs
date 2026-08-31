@@ -76,7 +76,8 @@ namespace Google.GenAI.Types {
     public static VeoLoraTuningSpec
         ? FromJson(string jsonString, JsonSerializerOptions? options = null) {
       try {
-        return JsonSerializer.Deserialize<VeoLoraTuningSpec>(jsonString, options);
+        return JsonSerializer.Deserialize(jsonString,
+                                          JsonConfig.TypeInfo<VeoLoraTuningSpec>(options));
       } catch (JsonException e) {
         Console.Error.WriteLine($"Error deserializing JSON: {e.ToString()}");
         return null;

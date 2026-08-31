@@ -56,7 +56,8 @@ namespace Google.GenAI.Types {
     public static GenerationConfigRoutingConfig
         ? FromJson(string jsonString, JsonSerializerOptions? options = null) {
       try {
-        return JsonSerializer.Deserialize<GenerationConfigRoutingConfig>(jsonString, options);
+        return JsonSerializer.Deserialize(
+            jsonString, JsonConfig.TypeInfo<GenerationConfigRoutingConfig>(options));
       } catch (JsonException e) {
         Console.Error.WriteLine($"Error deserializing JSON: {e.ToString()}");
         return null;

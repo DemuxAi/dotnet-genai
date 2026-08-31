@@ -62,7 +62,7 @@ public class StressTestConfig
     {
         return new StressTestConfig
         {
-            ApiKey = Environment.GetEnvironmentVariable("GOOGLE_API_KEY") ?? string.Empty,
+            ApiKey = Environment.GetEnvironmentVariable("GEMINI_API_KEY") ?? string.Empty,
             Project = Environment.GetEnvironmentVariable("GOOGLE_CLOUD_PROJECT") ?? string.Empty
         };
     }

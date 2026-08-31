@@ -8,17 +8,17 @@
     }
   }
 }
+<86 {
+  "setupComplete": {
+    "sessionId": "d47f5ca6-bcde-4a1c-94ef-92b0e3f93ab5"
+  }
+}
+
 >66 {
   "realtime_input": {
     "text": "Are you there Gemini?"
   }
 }
-<86 {
-  "setupComplete": {
-    "sessionId": "c70c8d9c-e0d8-4c91-937f-938dc77bb480"
-  }
-}
-
 <147 {
   "serverContent": {
     "modelTurn": {
@@ -32,13 +32,26 @@
   }
 }
 
-<183 {
+<150 {
   "serverContent": {
     "modelTurn": {
       "role": "model",
       "parts": [
         {
-          "text": ", I'm here. How can I help you today?\n"
+          "text": ", I am"
+        }
+      ]
+    }
+  }
+}
+
+<187 {
+  "serverContent": {
+    "modelTurn": {
+      "role": "model",
+      "parts": [
+        {
+          "text": " here. What would you like to talk about?\n"
         }
       ]
     }

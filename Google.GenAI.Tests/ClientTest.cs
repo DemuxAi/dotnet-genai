@@ -34,6 +34,7 @@ namespace Google.GenAI.Tests {
     private string? _originalProjectEnv;
     private string? _originalLocationEnv;
     private string? _originalApiKeyEnv;
+    private string? _originalGoogleApiKeyEnv;
     private string? _originalVertexBaseUrlEnv;
     private string? _originalGeminiBaseUrlEnv;
 
@@ -43,7 +44,8 @@ namespace Google.GenAI.Tests {
       _originalEnterpriseEnv = System.Environment.GetEnvironmentVariable("GOOGLE_GENAI_USE_ENTERPRISE");
       _originalProjectEnv = System.Environment.GetEnvironmentVariable("GOOGLE_CLOUD_PROJECT");
       _originalLocationEnv = System.Environment.GetEnvironmentVariable("GOOGLE_CLOUD_LOCATION");
-      _originalApiKeyEnv = System.Environment.GetEnvironmentVariable("GOOGLE_API_KEY");
+      _originalApiKeyEnv = System.Environment.GetEnvironmentVariable("GEMINI_API_KEY");
+      _originalGoogleApiKeyEnv = System.Environment.GetEnvironmentVariable("GOOGLE_API_KEY");
       _originalVertexBaseUrlEnv =
           System.Environment.GetEnvironmentVariable("GOOGLE_VERTEX_BASE_URL");
       _originalGeminiBaseUrlEnv =
@@ -53,6 +55,7 @@ namespace Google.GenAI.Tests {
       System.Environment.SetEnvironmentVariable("GOOGLE_GENAI_USE_ENTERPRISE", null);
       System.Environment.SetEnvironmentVariable("GOOGLE_CLOUD_PROJECT", null);
       System.Environment.SetEnvironmentVariable("GOOGLE_CLOUD_LOCATION", null);
+      System.Environment.SetEnvironmentVariable("GEMINI_API_KEY", null);
       System.Environment.SetEnvironmentVariable("GOOGLE_API_KEY", null);
       System.Environment.SetEnvironmentVariable("GOOGLE_VERTEX_BASE_URL", null);
       System.Environment.SetEnvironmentVariable("GOOGLE_GEMINI_BASE_URL", null);
@@ -66,7 +69,8 @@ namespace Google.GenAI.Tests {
       System.Environment.SetEnvironmentVariable("GOOGLE_GENAI_USE_ENTERPRISE", _originalEnterpriseEnv);
       System.Environment.SetEnvironmentVariable("GOOGLE_CLOUD_PROJECT", _originalProjectEnv);
       System.Environment.SetEnvironmentVariable("GOOGLE_CLOUD_LOCATION", _originalLocationEnv);
-      System.Environment.SetEnvironmentVariable("GOOGLE_API_KEY", _originalApiKeyEnv);
+      System.Environment.SetEnvironmentVariable("GEMINI_API_KEY", _originalApiKeyEnv);
+      System.Environment.SetEnvironmentVariable("GOOGLE_API_KEY", _originalGoogleApiKeyEnv);
       System.Environment.SetEnvironmentVariable("GOOGLE_VERTEX_BASE_URL",
                                                 _originalVertexBaseUrlEnv);
       System.Environment.SetEnvironmentVariable("GOOGLE_GEMINI_BASE_URL",
@@ -262,6 +266,15 @@ namespace Google.GenAI.Tests {
         Assert.IsTrue(client._apiClient.VertexAI);
     }
 
+    [TestMethod]
+    public void Constructor_Enterprise_EmptyStringByEnvironment_Fallsback()
+    {
+        System.Environment.SetEnvironmentVariable("GOOGLE_GENAI_USE_ENTERPRISE", "");
+        System.Environment.SetEnvironmentVariable("GOOGLE_GENAI_USE_VERTEXAI", "true");
+        var client = new Client(project: "project", location: "location");
+        Assert.IsTrue(client._apiClient.VertexAI);
+    }
+
 #endregion
 
 #region Constructor Warning Tests
@@ -418,7 +431,7 @@ namespace Google.GenAI.Tests {
     [TestMethod]
     public void Constructor_GeminiAI_ApiKeyFromEnv() {
       var apiKeyEnv = "env-apikey";
-      System.Environment.SetEnvironmentVariable("GOOGLE_API_KEY", apiKeyEnv);
+      System.Environment.SetEnvironmentVariable("GEMINI_API_KEY", apiKeyEnv);
 
       var client = new Client(vertexAI: false);
       Assert.IsFalse(client._apiClient.VertexAI);
@@ -428,10 +441,19 @@ namespace Google.GenAI.Tests {
     [TestMethod]
     public void Constructor_GeminiAI_ParamOverridesEnv_ApiKey() {
       var apiKeyParam = "param-apikey";
-      System.Environment.SetEnvironmentVariable("GOOGLE_API_KEY", "env-apikey");
+      System.Environment.SetEnvironmentVariable("GEMINI_API_KEY", "env-apikey");
 
       var client = new Client(vertexAI: false, apiKey: apiKeyParam);
       Assert.AreEqual(apiKeyParam, client._apiClient.ApiKey);
+    }
+
+    [TestMethod]
+    public void Constructor_ApiKey_EmptyStringByEnvironment_Fallsback()
+    {
+        System.Environment.SetEnvironmentVariable("GOOGLE_API_KEY", "");
+        System.Environment.SetEnvironmentVariable("GEMINI_API_KEY", "gemini-key");
+        var client = new Client(apiKey: null);
+        Assert.AreEqual("gemini-key", client._apiClient.ApiKey);
     }
 #endregion
 
@@ -457,7 +479,7 @@ namespace Google.GenAI.Tests {
     [TestMethod]
     public void Constructor_ProjectParamAndApiKeyEnv_UsesApiKeyModeIfVertexFalse() {
       var apiKeyParam = "env-key";
-      System.Environment.SetEnvironmentVariable("GOOGLE_API_KEY", apiKeyParam);
+      System.Environment.SetEnvironmentVariable("GEMINI_API_KEY", apiKeyParam);
       var client = new Client(project: "project", vertexAI: false); // VertexAI false overrides project parameter in Python sdk
       Assert.IsFalse(client._apiClient.VertexAI);
       Assert.AreEqual(apiKeyParam, client._apiClient.ApiKey);
@@ -515,11 +537,13 @@ namespace Google.GenAI.Tests {
     }
 
     [TestMethod]
-    public void Constructor_Error_ApiKeySet_VertexAITrue_Param() {
-      var ex = Assert.ThrowsException<ArgumentException>(
-          () => new Client(vertexAI: true, apiKey: "key", project: "project", location: "location"));
-      Assert.AreEqual("Project/location and API key are mutually exclusive in the client initializer.",
-                      ex.Message);
+    public void Constructor_ApiKeySet_VertexAITrue_Param() {
+      var client = new Client(vertexAI: true, apiKey: "key", project: "project", location: "location");
+      Assert.IsTrue(client._apiClient.VertexAI);
+      Assert.AreEqual("key", client._apiClient.ApiKey);
+      Assert.AreEqual("project", client._apiClient.Project);
+      Assert.AreEqual("location", client._apiClient.Location);
+      Assert.IsNull(client._apiClient.Credentials);
     }
 
     [TestMethod]
@@ -548,7 +572,7 @@ namespace Google.GenAI.Tests {
     [TestMethod]
     public void Constructor_VertexAI_ExplicitProjectAndEnvApiKey_MissingLocation_DefaultsToGlobal()
     {
-        System.Environment.SetEnvironmentVariable("GOOGLE_API_KEY", "env_api_key");
+        System.Environment.SetEnvironmentVariable("GEMINI_API_KEY", "env_api_key");
         var client = new Client(vertexAI: true, project: "project");
         Assert.AreEqual("global", client._apiClient.Location);
         Assert.AreEqual("project", client._apiClient.Project);
@@ -577,7 +601,7 @@ namespace Google.GenAI.Tests {
     public void Constructor_VertexAI_EnvProjectAndEnvApiKey_MissingLocation_DefaultsToGlobal()
     {
         System.Environment.SetEnvironmentVariable("GOOGLE_CLOUD_PROJECT", "project");
-        System.Environment.SetEnvironmentVariable("GOOGLE_API_KEY", "env_api_key");
+        System.Environment.SetEnvironmentVariable("GEMINI_API_KEY", "env_api_key");
         var client = new Client(vertexAI: true);
         Assert.AreEqual("global", client._apiClient.Location);
         Assert.AreEqual("project", client._apiClient.Project);
@@ -597,8 +621,30 @@ namespace Google.GenAI.Tests {
     public void Constructor_GeminiAI_MissingApiKey_ThrowsArgumentException() {
       var ex = Assert.ThrowsException<ArgumentException>(
           () => new Client(vertexAI: false));
-      Assert.AreEqual("API key must either be provided or set in the environment variable GOOGLE_API_KEY.",
+      Assert.AreEqual("API key must either be provided or set in the environment variable GEMINI_API_KEY.",
                       ex.Message);
+    }
+
+    [TestMethod]
+    public void Constructor_GeminiApiKeyEnv_UsesGeminiApiKey() {
+      System.Environment.SetEnvironmentVariable("GEMINI_API_KEY", "gemini-key");
+      var client = new Client(vertexAI: false);
+      Assert.AreEqual("gemini-key", client._apiClient.ApiKey);
+    }
+
+    [TestMethod]
+    public void Constructor_GoogleApiKeyEnv_UsesGoogleApiKey() {
+      System.Environment.SetEnvironmentVariable("GOOGLE_API_KEY", "google-key");
+      var client = new Client(vertexAI: false);
+      Assert.AreEqual("google-key", client._apiClient.ApiKey);
+    }
+
+    [TestMethod]
+    public void Constructor_BothApiKeyEnv_UsesGoogleApiKey() {
+      System.Environment.SetEnvironmentVariable("GOOGLE_API_KEY", "google-key");
+      System.Environment.SetEnvironmentVariable("GEMINI_API_KEY", "gemini-key");
+      var client = new Client(vertexAI: false);
+      Assert.AreEqual("google-key", client._apiClient.ApiKey);
     }
 
 #endregion
@@ -826,10 +872,12 @@ namespace Google.GenAI.Tests {
 
     [TestMethod]
     public void Constructor_ClientOptionsProvided_HttpClientFactory() {
-      var proxyAddress = "http://your-proxy-address:port";
-      var options =
-          new ClientOptions { HttpClientFactory = () => new HttpClient(
-                                  new HttpClientHandler { Proxy = new WebProxy(proxyAddress) }) };
+      var proxyAddress = "http://your-proxy-address:8080";
+      var options = new ClientOptions {
+        HttpClientFactory = () => {
+          return new HttpClient(new HttpClientHandler { Proxy = new WebProxy(proxyAddress) });
+        }
+      };
 
       var client = new Client(vertexAI: true, project: "project", location: "location",
                               clientOptions: options);

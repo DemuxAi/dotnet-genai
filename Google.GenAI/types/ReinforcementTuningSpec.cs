@@ -28,14 +28,14 @@ namespace Google.GenAI.Types {
 
   public record ReinforcementTuningSpec {
     /// <summary>
-    ///
+    /// Composite reward function configuration for reinforcement tuning.
     /// </summary>
     [JsonPropertyName("compositeRewardConfig")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public CompositeReinforcementTuningRewardConfig ? CompositeRewardConfig { get; set; }
 
     /// <summary>
-    /// Cloud Storage path to file containing training dataset for tuning. The dataset must be
+    /// Cloud Storage path to the file containing training dataset for tuning. The dataset must be
     /// formatted as a JSONL file.
     /// </summary>
     [JsonPropertyName("trainingDatasetUri")]
@@ -46,9 +46,8 @@ namespace Google.GenAI.Types {
           }
 
     /// <summary>
-    /// Cloud Storage path to file containing validation dataset for tuning. The dataset must be
-    /// formatted as a JSONL file. If no validation dataset is provided, by default the API splits
-    /// 25% of the training dataset or 50 examples, whichever is larger, as the validation dataset.
+    /// Cloud Storage path to the file containing validation dataset for tuning. The dataset must be
+    /// formatted as a JSONL file.
     /// </summary>
     [JsonPropertyName("validationDatasetUri")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -87,7 +86,8 @@ namespace Google.GenAI.Types {
     public static ReinforcementTuningSpec
         ? FromJson(string jsonString, JsonSerializerOptions? options = null) {
       try {
-        return JsonSerializer.Deserialize<ReinforcementTuningSpec>(jsonString, options);
+        return JsonSerializer.Deserialize(jsonString,
+                                          JsonConfig.TypeInfo<ReinforcementTuningSpec>(options));
       } catch (JsonException e) {
         Console.Error.WriteLine($"Error deserializing JSON: {e.ToString()}");
         return null;

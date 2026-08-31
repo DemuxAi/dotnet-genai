@@ -198,7 +198,7 @@ namespace Google.GenAI
       var parameterNode = new JsonObject();
       if (config != null)
       {
-          parameterNode["config"] = JsonSerializer.SerializeToNode(config);
+          parameterNode["config"] = JsonSerializer.SerializeToNode(config, JsonConfig.TypeInfo<CreateAuthTokenConfig>());
       }
 
       var converters = new TokensConverters(_apiClient);
@@ -236,7 +236,7 @@ namespace Google.GenAI
 #else
       string responseString = await response.GetEntity().ReadAsStringAsync(cancellationToken);
 #endif
-      var authToken = JsonSerializer.Deserialize<AuthToken>(responseString, JsonConfig.JsonSerializerOptions);
+      var authToken = JsonSerializer.Deserialize(responseString, JsonConfig.TypeInfo<AuthToken>());
       return authToken;
     }
   }

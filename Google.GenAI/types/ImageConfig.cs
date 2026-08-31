@@ -109,7 +109,7 @@ namespace Google.GenAI.Types {
     /// <returns>The deserialized ImageConfig object, or null if deserialization fails.</returns>
     public static ImageConfig ? FromJson(string jsonString, JsonSerializerOptions? options = null) {
       try {
-        return JsonSerializer.Deserialize<ImageConfig>(jsonString, options);
+        return JsonSerializer.Deserialize(jsonString, JsonConfig.TypeInfo<ImageConfig>(options));
       } catch (JsonException e) {
         Console.Error.WriteLine($"Error deserializing JSON: {e.ToString()}");
         return null;

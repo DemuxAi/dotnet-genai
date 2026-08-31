@@ -74,7 +74,7 @@ namespace Google.GenAI.Types {
     /// <returns>The deserialized Retrieval object, or null if deserialization fails.</returns>
     public static Retrieval ? FromJson(string jsonString, JsonSerializerOptions? options = null) {
       try {
-        return JsonSerializer.Deserialize<Retrieval>(jsonString, options);
+        return JsonSerializer.Deserialize(jsonString, JsonConfig.TypeInfo<Retrieval>(options));
       } catch (JsonException e) {
         Console.Error.WriteLine($"Error deserializing JSON: {e.ToString()}");
         return null;

@@ -35,7 +35,7 @@ namespace Google.GenAI.Types {
     /// <returns>The deserialized ImageSearch object, or null if deserialization fails.</returns>
     public static ImageSearch ? FromJson(string jsonString, JsonSerializerOptions? options = null) {
       try {
-        return JsonSerializer.Deserialize<ImageSearch>(jsonString, options);
+        return JsonSerializer.Deserialize(jsonString, JsonConfig.TypeInfo<ImageSearch>(options));
       } catch (JsonException e) {
         Console.Error.WriteLine($"Error deserializing JSON: {e.ToString()}");
         return null;

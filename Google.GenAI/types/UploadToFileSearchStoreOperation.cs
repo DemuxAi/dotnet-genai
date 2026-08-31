@@ -90,7 +90,8 @@ namespace Google.GenAI.Types {
     public static UploadToFileSearchStoreOperation
         ? FromJson(string jsonString, JsonSerializerOptions? options = null) {
       try {
-        return JsonSerializer.Deserialize<UploadToFileSearchStoreOperation>(jsonString, options);
+        return JsonSerializer.Deserialize(
+            jsonString, JsonConfig.TypeInfo<UploadToFileSearchStoreOperation>(options));
       } catch (JsonException e) {
         Console.Error.WriteLine($"Error deserializing JSON: {e.ToString()}");
         return null;

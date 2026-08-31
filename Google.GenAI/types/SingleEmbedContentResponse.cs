@@ -55,7 +55,8 @@ namespace Google.GenAI.Types {
     public static SingleEmbedContentResponse
         ? FromJson(string jsonString, JsonSerializerOptions? options = null) {
       try {
-        return JsonSerializer.Deserialize<SingleEmbedContentResponse>(jsonString, options);
+        return JsonSerializer.Deserialize(jsonString,
+                                          JsonConfig.TypeInfo<SingleEmbedContentResponse>(options));
       } catch (JsonException e) {
         Console.Error.WriteLine($"Error deserializing JSON: {e.ToString()}");
         return null;

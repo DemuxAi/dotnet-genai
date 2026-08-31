@@ -113,7 +113,7 @@ By default, tests run against a local **Mock Server** (included) to ensure zero-
 To run against the real Google Cloud API:
 ```bash
 export STRESS_TEST_MODE=live
-export GOOGLE_API_KEY="your-key"
+export GEMINI_API_KEY="your-key"
 dotnet test
 ```
 

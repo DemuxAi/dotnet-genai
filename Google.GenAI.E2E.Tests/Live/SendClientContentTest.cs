@@ -28,29 +28,15 @@ using TestServerSdk;
 
 [TestClass]
 public class SendClientContentTest {
-  private static TestServerProcess? _server;
   private Client enterpriseClient;
   private Client geminiClient;
   private string vertexModelName;
   private string geminiModelName;
   public TestContext TestContext { get; set; }
 
-  [ClassInitialize]
-  public static void ClassInit(TestContext _) {
-    _server = TestServer.StartTestServer();
-  }
-
-  [ClassCleanup]
-  public static void ClassCleanup() {
-    TestServer.StopTestServer(_server);
-  }
-
   [TestInitialize]
   public void TestInit() {
     // Test server specific setup.
-    if (_server == null) {
-      throw new InvalidOperationException("Test server is not initialized.");
-    }
     var geminiClientHttpOptions = new GoogleType.HttpOptions {
       Headers = new Dictionary<string, string> { { "Test-Name",
                                                    $"{GetType().Name}.{TestContext.TestName}" } },
@@ -66,7 +52,7 @@ public class SendClientContentTest {
     string project = System.Environment.GetEnvironmentVariable("GOOGLE_CLOUD_PROJECT");
     string location =
         System.Environment.GetEnvironmentVariable("GOOGLE_CLOUD_LOCATION") ?? "us-central1";
-    string apiKey = System.Environment.GetEnvironmentVariable("GOOGLE_API_KEY");
+    string apiKey = System.Environment.GetEnvironmentVariable("GEMINI_API_KEY");
     enterpriseClient = new Client(project: project, location: location, enterprise: true,
                               credential: TestServer.GetCredentialForTestMode(),
                               httpOptions: enterpriseClientHttpOptions);
@@ -79,6 +65,7 @@ public class SendClientContentTest {
   }
 
   [TestMethod]
+  [Timeout(60000)]
   public async Task SendClientContentSimpleTextGeminiTest() {
     var geminiSession = new SessionWithQueue(geminiClient, geminiModelName);
     await geminiSession.InitializeSessionAsync();
@@ -102,6 +89,7 @@ public class SendClientContentTest {
   }
 
   [TestMethod]
+  [Timeout(60000)]
   public async Task SendClientContentSimpleTextVertexTest() {
     var vertexSession = new SessionWithQueue(enterpriseClient, vertexModelName);
     await vertexSession.InitializeSessionAsync();
@@ -125,6 +113,7 @@ public class SendClientContentTest {
   }
 
   [TestMethod]
+  [Timeout(60000)]
   public async Task SendClientContentSystemInstructionGeminiTest() {
     var config = new GoogleType.LiveConnectConfig {
       SystemInstruction =
@@ -165,6 +154,7 @@ public class SendClientContentTest {
   }
 
   [TestMethod]
+  [Timeout(60000)]
   public async Task SendClientContentSystemInstructionVertexTest() {
     var config = new GoogleType.LiveConnectConfig {
       SystemInstruction =
@@ -205,6 +195,7 @@ public class SendClientContentTest {
   }
 
   [TestMethod]
+  [Timeout(60000)]
   public async Task SendClientContentToolsGeminiTest() {
     var config =
         new GoogleType.LiveConnectConfig {
@@ -253,6 +244,7 @@ public class SendClientContentTest {
   }
 
   [TestMethod]
+  [Timeout(60000)]
   public async Task SendClientContentToolsVertexTest() {
     var config =
         new GoogleType.LiveConnectConfig {

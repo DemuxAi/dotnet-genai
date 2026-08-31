@@ -12,7 +12,7 @@ This sample demonstrates how to register files from Google Cloud Storage (GCS) f
 Set the following environment variable:
 
 ```bash
-export GOOGLE_API_KEY="your-api-key"
+export GEMINI_API_KEY="your-api-key"
 ```
 
 Ensure you have authenticated with Google Cloud:

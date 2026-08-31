@@ -8,6 +8,12 @@
     }
   }
 }
+<86 {
+  "setupComplete": {
+    "sessionId": "f5b0cff1-d7fb-4c1f-bd8f-50df1ce8ab65"
+  }
+}
+
 >151527 {
   "realtime_input": {
     "audio": {
@@ -16,35 +22,35 @@
     }
   }
 }
-<86 {
-  "setupComplete": {
-    "sessionId": "da69dd9c-2b97-4a5f-bd02-94f0edddfb9c"
-  }
-}
-
-<148 {
+<147 {
   "serverContent": {
     "modelTurn": {
       "role": "model",
       "parts": [
         {
-          "text": "Yeah"
+          "text": "Yes"
         }
       ]
     }
   }
 }
 
-<174 {
+<180 {
   "serverContent": {
     "modelTurn": {
       "role": "model",
       "parts": [
         {
-          "text": ", loud and clear. What's up?\n"
+          "text": ", I can hear you. How are you today?"
         }
       ]
     }
+  }
+}
+
+<61 {
+  "serverContent": {
+    "generationComplete": true
   }
 }
 

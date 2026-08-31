@@ -179,7 +179,7 @@ namespace Google.GenAI.Types {
           }
 
     /// <summary>
-    ///
+    /// Tuning Spec for Reinforcement Tuning.
     /// </summary>
     [JsonPropertyName("reinforcementTuningSpec")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -384,7 +384,7 @@ namespace Google.GenAI.Types {
     /// <returns>The deserialized TuningJob object, or null if deserialization fails.</returns>
     public static TuningJob ? FromJson(string jsonString, JsonSerializerOptions? options = null) {
       try {
-        return JsonSerializer.Deserialize<TuningJob>(jsonString, options);
+        return JsonSerializer.Deserialize(jsonString, JsonConfig.TypeInfo<TuningJob>(options));
       } catch (JsonException e) {
         Console.Error.WriteLine($"Error deserializing JSON: {e.ToString()}");
         return null;

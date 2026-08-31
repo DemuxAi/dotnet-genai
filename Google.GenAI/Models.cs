@@ -175,28 +175,6 @@ namespace Google.GenAI {
       return toObject;
     }
 
-    internal JsonNode CodeExecutionResultToVertex(JsonNode fromObject, JsonObject parentObject,
-                                                  JsonNode rootObject) {
-      JsonObject toObject = new JsonObject();
-
-      if (Common.GetValueByPath(fromObject, new string[] { "outcome" }) != null) {
-        Common.SetValueByPath(toObject, new string[] { "outcome" },
-                              Common.GetValueByPath(fromObject, new string[] { "outcome" }));
-      }
-
-      if (Common.GetValueByPath(fromObject, new string[] { "output" }) != null) {
-        Common.SetValueByPath(toObject, new string[] { "output" },
-                              Common.GetValueByPath(fromObject, new string[] { "output" }));
-      }
-
-      if (!Common.IsZero(Common.GetValueByPath(fromObject, new string[] { "id" }))) {
-        throw new NotSupportedException(
-            "id parameter is only supported in Gemini Developer API mode, not in Gemini Enterprise Agent Platform mode.");
-      }
-
-      return toObject;
-    }
-
     internal JsonNode ComputeTokensParametersToVertex(ApiClient apiClient, JsonNode fromObject,
                                                       JsonObject parentObject,
                                                       JsonNode rootObject) {
@@ -241,6 +219,38 @@ namespace Google.GenAI {
       return toObject;
     }
 
+    internal JsonNode ComputerUseToVertex(JsonNode fromObject, JsonObject parentObject,
+                                          JsonNode rootObject) {
+      JsonObject toObject = new JsonObject();
+
+      if (Common.GetValueByPath(fromObject, new string[] { "environment" }) != null) {
+        Common.SetValueByPath(toObject, new string[] { "environment" },
+                              Common.GetValueByPath(fromObject, new string[] { "environment" }));
+      }
+
+      if (Common.GetValueByPath(fromObject, new string[] { "excludedPredefinedFunctions" }) !=
+          null) {
+        Common.SetValueByPath(
+            toObject, new string[] { "excludedPredefinedFunctions" },
+            Common.GetValueByPath(fromObject, new string[] { "excludedPredefinedFunctions" }));
+      }
+
+      if (Common.GetValueByPath(fromObject, new string[] { "enablePromptInjectionDetection" }) !=
+          null) {
+        Common.SetValueByPath(
+            toObject, new string[] { "enablePromptInjectionDetection" },
+            Common.GetValueByPath(fromObject, new string[] { "enablePromptInjectionDetection" }));
+      }
+
+      if (!Common.IsZero(
+              Common.GetValueByPath(fromObject, new string[] { "disabledSafetyPolicies" }))) {
+        throw new NotSupportedException(
+            "disabledSafetyPolicies parameter is only supported in Gemini Developer API mode, not in Gemini Enterprise Agent Platform mode.");
+      }
+
+      return toObject;
+    }
+
     internal JsonNode ContentEmbeddingFromVertex(JsonNode fromObject, JsonObject parentObject,
                                                  JsonNode rootObject) {
       JsonObject toObject = new JsonObject();
@@ -274,6 +284,11 @@ namespace Google.GenAI {
       if (Common.GetValueByPath(fromObject, new string[] { "token_count" }) != null) {
         Common.SetValueByPath(toObject, new string[] { "tokenCount" },
                               Common.GetValueByPath(fromObject, new string[] { "token_count" }));
+      }
+
+      if (Common.GetValueByPath(fromObject, new string[] { "tokensDetails" }) != null) {
+        Common.SetValueByPath(toObject, new string[] { "tokensDetails" },
+                              Common.GetValueByPath(fromObject, new string[] { "tokensDetails" }));
       }
 
       return toObject;
@@ -1027,6 +1042,10 @@ namespace Google.GenAI {
             stats.Add("token_count",
                       JsonNode.Parse(usageMetadata["promptTokenCount"].ToJsonString()));
           }
+          if (usageMetadata != null && usageMetadata["promptTokensDetails"] != null) {
+            stats.Add("tokensDetails",
+                      JsonNode.Parse(usageMetadata["promptTokensDetails"].ToJsonString()));
+          }
           if (truncated != null) {
             stats.Add("truncated", JsonNode.Parse(truncated.ToJsonString()));
           }
@@ -1053,28 +1072,6 @@ namespace Google.GenAI {
         Common.SetValueByPath(
             toObject, new string[] { "deployedModelId" },
             Common.GetValueByPath(fromObject, new string[] { "deployedModelId" }));
-      }
-
-      return toObject;
-    }
-
-    internal JsonNode ExecutableCodeToVertex(JsonNode fromObject, JsonObject parentObject,
-                                             JsonNode rootObject) {
-      JsonObject toObject = new JsonObject();
-
-      if (Common.GetValueByPath(fromObject, new string[] { "code" }) != null) {
-        Common.SetValueByPath(toObject, new string[] { "code" },
-                              Common.GetValueByPath(fromObject, new string[] { "code" }));
-      }
-
-      if (Common.GetValueByPath(fromObject, new string[] { "language" }) != null) {
-        Common.SetValueByPath(toObject, new string[] { "language" },
-                              Common.GetValueByPath(fromObject, new string[] { "language" }));
-      }
-
-      if (!Common.IsZero(Common.GetValueByPath(fromObject, new string[] { "id" }))) {
-        throw new NotSupportedException(
-            "id parameter is only supported in Gemini Developer API mode, not in Gemini Enterprise Agent Platform mode.");
       }
 
       return toObject;
@@ -1242,9 +1239,9 @@ namespace Google.GenAI {
       }
 
       if (Common.GetValueByPath(fromObject, new string[] { "responseJsonSchema" }) != null) {
-        Common.SetValueByPath(
-            toObject, new string[] { "responseJsonSchema" },
-            Common.GetValueByPath(fromObject, new string[] { "responseJsonSchema" }));
+        Common.SetValueByPath(toObject, new string[] { "responseJsonSchema" },
+                              Transformers.TJsonSchema(Common.GetValueByPath(
+                                  fromObject, new string[] { "responseJsonSchema" })));
       }
 
       if (!Common.IsZero(Common.GetValueByPath(fromObject, new string[] { "routingConfig" }))) {
@@ -1353,6 +1350,12 @@ namespace Google.GenAI {
                               Common.GetValueByPath(fromObject, new string[] { "serviceTier" }));
       }
 
+      if (Common.GetValueByPath(fromObject, new string[] { "audioTranscriptionConfig" }) != null) {
+        Common.SetValueByPath(
+            toObject, new string[] { "audioTranscriptionConfig" },
+            Common.GetValueByPath(fromObject, new string[] { "audioTranscriptionConfig" }));
+      }
+
       return toObject;
     }
 
@@ -1440,9 +1443,9 @@ namespace Google.GenAI {
       }
 
       if (Common.GetValueByPath(fromObject, new string[] { "responseJsonSchema" }) != null) {
-        Common.SetValueByPath(
-            toObject, new string[] { "responseJsonSchema" },
-            Common.GetValueByPath(fromObject, new string[] { "responseJsonSchema" }));
+        Common.SetValueByPath(toObject, new string[] { "responseJsonSchema" },
+                              Transformers.TJsonSchema(Common.GetValueByPath(
+                                  fromObject, new string[] { "responseJsonSchema" })));
       }
 
       if (Common.GetValueByPath(fromObject, new string[] { "routingConfig" }) != null) {
@@ -1506,9 +1509,12 @@ namespace Google.GenAI {
       }
 
       if (Common.GetValueByPath(fromObject, new string[] { "speechConfig" }) != null) {
-        Common.SetValueByPath(toObject, new string[] { "speechConfig" },
-                              Transformers.TSpeechConfig(Common.GetValueByPath(
-                                  fromObject, new string[] { "speechConfig" })));
+        Common.SetValueByPath(
+            toObject, new string[] { "speechConfig" },
+            SpeechConfigToVertex(
+                Common.ParseToJsonNode(Transformers.TSpeechConfig(
+                    Common.GetValueByPath(fromObject, new string[] { "speechConfig" }))),
+                toObject, rootObject));
       }
 
       if (Common.GetValueByPath(fromObject, new string[] { "audioTimestamp" }) != null) {
@@ -1543,6 +1549,12 @@ namespace Google.GenAI {
       if (Common.GetValueByPath(fromObject, new string[] { "serviceTier" }) != null) {
         Common.SetValueByPath(parentObject, new string[] { "serviceTier" },
                               Common.GetValueByPath(fromObject, new string[] { "serviceTier" }));
+      }
+
+      if (Common.GetValueByPath(fromObject, new string[] { "audioTranscriptionConfig" }) != null) {
+        Common.SetValueByPath(
+            toObject, new string[] { "audioTranscriptionConfig" },
+            Common.GetValueByPath(fromObject, new string[] { "audioTranscriptionConfig" }));
       }
 
       return toObject;
@@ -1711,104 +1723,6 @@ namespace Google.GenAI {
       return toObject;
     }
 
-    internal JsonNode GenerateImagesConfigToMldev(JsonNode fromObject, JsonObject parentObject,
-                                                  JsonNode rootObject) {
-      JsonObject toObject = new JsonObject();
-
-      if (!Common.IsZero(Common.GetValueByPath(fromObject, new string[] { "outputGcsUri" }))) {
-        throw new NotSupportedException(
-            "outputGcsUri parameter is only supported in Gemini Enterprise Agent Platform mode, not in Gemini Developer API mode.");
-      }
-
-      if (!Common.IsZero(Common.GetValueByPath(fromObject, new string[] { "negativePrompt" }))) {
-        throw new NotSupportedException(
-            "negativePrompt parameter is only supported in Gemini Enterprise Agent Platform mode, not in Gemini Developer API mode.");
-      }
-
-      if (Common.GetValueByPath(fromObject, new string[] { "numberOfImages" }) != null) {
-        Common.SetValueByPath(parentObject, new string[] { "parameters", "sampleCount" },
-                              Common.GetValueByPath(fromObject, new string[] { "numberOfImages" }));
-      }
-
-      if (Common.GetValueByPath(fromObject, new string[] { "aspectRatio" }) != null) {
-        Common.SetValueByPath(parentObject, new string[] { "parameters", "aspectRatio" },
-                              Common.GetValueByPath(fromObject, new string[] { "aspectRatio" }));
-      }
-
-      if (Common.GetValueByPath(fromObject, new string[] { "guidanceScale" }) != null) {
-        Common.SetValueByPath(parentObject, new string[] { "parameters", "guidanceScale" },
-                              Common.GetValueByPath(fromObject, new string[] { "guidanceScale" }));
-      }
-
-      if (!Common.IsZero(Common.GetValueByPath(fromObject, new string[] { "seed" }))) {
-        throw new NotSupportedException(
-            "seed parameter is only supported in Gemini Enterprise Agent Platform mode, not in Gemini Developer API mode.");
-      }
-
-      if (Common.GetValueByPath(fromObject, new string[] { "safetyFilterLevel" }) != null) {
-        Common.SetValueByPath(
-            parentObject, new string[] { "parameters", "safetySetting" },
-            Common.GetValueByPath(fromObject, new string[] { "safetyFilterLevel" }));
-      }
-
-      if (Common.GetValueByPath(fromObject, new string[] { "personGeneration" }) != null) {
-        Common.SetValueByPath(
-            parentObject, new string[] { "parameters", "personGeneration" },
-            Common.GetValueByPath(fromObject, new string[] { "personGeneration" }));
-      }
-
-      if (Common.GetValueByPath(fromObject, new string[] { "includeSafetyAttributes" }) != null) {
-        Common.SetValueByPath(
-            parentObject, new string[] { "parameters", "includeSafetyAttributes" },
-            Common.GetValueByPath(fromObject, new string[] { "includeSafetyAttributes" }));
-      }
-
-      if (Common.GetValueByPath(fromObject, new string[] { "includeRaiReason" }) != null) {
-        Common.SetValueByPath(
-            parentObject, new string[] { "parameters", "includeRaiReason" },
-            Common.GetValueByPath(fromObject, new string[] { "includeRaiReason" }));
-      }
-
-      if (Common.GetValueByPath(fromObject, new string[] { "language" }) != null) {
-        Common.SetValueByPath(parentObject, new string[] { "parameters", "language" },
-                              Common.GetValueByPath(fromObject, new string[] { "language" }));
-      }
-
-      if (Common.GetValueByPath(fromObject, new string[] { "outputMimeType" }) != null) {
-        Common.SetValueByPath(parentObject,
-                              new string[] { "parameters", "outputOptions", "mimeType" },
-                              Common.GetValueByPath(fromObject, new string[] { "outputMimeType" }));
-      }
-
-      if (Common.GetValueByPath(fromObject, new string[] { "outputCompressionQuality" }) != null) {
-        Common.SetValueByPath(
-            parentObject, new string[] { "parameters", "outputOptions", "compressionQuality" },
-            Common.GetValueByPath(fromObject, new string[] { "outputCompressionQuality" }));
-      }
-
-      if (!Common.IsZero(Common.GetValueByPath(fromObject, new string[] { "addWatermark" }))) {
-        throw new NotSupportedException(
-            "addWatermark parameter is only supported in Gemini Enterprise Agent Platform mode, not in Gemini Developer API mode.");
-      }
-
-      if (!Common.IsZero(Common.GetValueByPath(fromObject, new string[] { "labels" }))) {
-        throw new NotSupportedException(
-            "labels parameter is only supported in Gemini Enterprise Agent Platform mode, not in Gemini Developer API mode.");
-      }
-
-      if (Common.GetValueByPath(fromObject, new string[] { "imageSize" }) != null) {
-        Common.SetValueByPath(parentObject, new string[] { "parameters", "sampleImageSize" },
-                              Common.GetValueByPath(fromObject, new string[] { "imageSize" }));
-      }
-
-      if (!Common.IsZero(Common.GetValueByPath(fromObject, new string[] { "enhancePrompt" }))) {
-        throw new NotSupportedException(
-            "enhancePrompt parameter is only supported in Gemini Enterprise Agent Platform mode, not in Gemini Developer API mode.");
-      }
-
-      return toObject;
-    }
-
     internal JsonNode GenerateImagesConfigToVertex(JsonNode fromObject, JsonObject parentObject,
                                                    JsonNode rootObject) {
       JsonObject toObject = new JsonObject();
@@ -1907,32 +1821,6 @@ namespace Google.GenAI {
       return toObject;
     }
 
-    internal JsonNode GenerateImagesParametersToMldev(ApiClient apiClient, JsonNode fromObject,
-                                                      JsonObject parentObject,
-                                                      JsonNode rootObject) {
-      JsonObject toObject = new JsonObject();
-
-      if (Common.GetValueByPath(fromObject, new string[] { "model" }) != null) {
-        Common.SetValueByPath(
-            toObject, new string[] { "_url", "model" },
-            Transformers.TModel(this._apiClient,
-                                Common.GetValueByPath(fromObject, new string[] { "model" })));
-      }
-
-      if (Common.GetValueByPath(fromObject, new string[] { "prompt" }) != null) {
-        Common.SetValueByPath(toObject, new string[] { "instances[0]", "prompt" },
-                              Common.GetValueByPath(fromObject, new string[] { "prompt" }));
-      }
-
-      if (Common.GetValueByPath(fromObject, new string[] { "config" }) != null) {
-        _ = GenerateImagesConfigToMldev(
-            Common.ParseToJsonNode(Common.GetValueByPath(fromObject, new string[] { "config" })),
-            toObject, rootObject);
-      }
-
-      return toObject;
-    }
-
     internal JsonNode GenerateImagesParametersToVertex(ApiClient apiClient, JsonNode fromObject,
                                                        JsonObject parentObject,
                                                        JsonNode rootObject) {
@@ -1954,40 +1842,6 @@ namespace Google.GenAI {
         _ = GenerateImagesConfigToVertex(
             Common.ParseToJsonNode(Common.GetValueByPath(fromObject, new string[] { "config" })),
             toObject, rootObject);
-      }
-
-      return toObject;
-    }
-
-    internal JsonNode GenerateImagesResponseFromMldev(JsonNode fromObject, JsonObject parentObject,
-                                                      JsonNode rootObject) {
-      JsonObject toObject = new JsonObject();
-
-      if (Common.GetValueByPath(fromObject, new string[] { "sdkHttpResponse" }) != null) {
-        Common.SetValueByPath(
-            toObject, new string[] { "sdkHttpResponse" },
-            Common.GetValueByPath(fromObject, new string[] { "sdkHttpResponse" }));
-      }
-
-      if (Common.GetValueByPath(fromObject, new string[] { "predictions" }) != null) {
-        JsonArray keyArray =
-            (JsonArray)Common.GetValueByPath(fromObject, new string[] { "predictions" });
-        JsonArray result = new JsonArray();
-
-        foreach (var record in keyArray) {
-          result.Add(GeneratedImageFromMldev(Common.ParseToJsonNode(record), toObject, rootObject));
-        }
-        Common.SetValueByPath(toObject, new string[] { "generatedImages" }, result);
-      }
-
-      if (Common.GetValueByPath(fromObject, new string[] { "positivePromptSafetyAttributes" }) !=
-          null) {
-        Common.SetValueByPath(
-            toObject, new string[] { "positivePromptSafetyAttributes" },
-            SafetyAttributesFromMldev(
-                Common.ParseToJsonNode(Common.GetValueByPath(
-                    fromObject, new string[] { "positivePromptSafetyAttributes" })),
-                toObject, rootObject));
       }
 
       return toObject;
@@ -2539,34 +2393,6 @@ namespace Google.GenAI {
       return toObject;
     }
 
-    internal JsonNode GeneratedImageFromMldev(JsonNode fromObject, JsonObject parentObject,
-                                              JsonNode rootObject) {
-      JsonObject toObject = new JsonObject();
-
-      if (Common.GetValueByPath(fromObject, new string[] { "_self" }) != null) {
-        Common.SetValueByPath(toObject, new string[] { "image" },
-                              ImageFromMldev(Common.ParseToJsonNode(Common.GetValueByPath(
-                                                 fromObject, new string[] { "_self" })),
-                                             toObject, rootObject));
-      }
-
-      if (Common.GetValueByPath(fromObject, new string[] { "raiFilteredReason" }) != null) {
-        Common.SetValueByPath(
-            toObject, new string[] { "raiFilteredReason" },
-            Common.GetValueByPath(fromObject, new string[] { "raiFilteredReason" }));
-      }
-
-      if (Common.GetValueByPath(fromObject, new string[] { "_self" }) != null) {
-        Common.SetValueByPath(
-            toObject, new string[] { "safetyAttributes" },
-            SafetyAttributesFromMldev(
-                Common.ParseToJsonNode(Common.GetValueByPath(fromObject, new string[] { "_self" })),
-                toObject, rootObject));
-      }
-
-      return toObject;
-    }
-
     internal JsonNode GeneratedImageFromVertex(JsonNode fromObject, JsonObject parentObject,
                                                JsonNode rootObject) {
       JsonObject toObject = new JsonObject();
@@ -2658,9 +2484,9 @@ namespace Google.GenAI {
       }
 
       if (Common.GetValueByPath(fromObject, new string[] { "responseJsonSchema" }) != null) {
-        Common.SetValueByPath(
-            toObject, new string[] { "responseJsonSchema" },
-            Common.GetValueByPath(fromObject, new string[] { "responseJsonSchema" }));
+        Common.SetValueByPath(toObject, new string[] { "responseJsonSchema" },
+                              Transformers.TJsonSchema(Common.GetValueByPath(
+                                  fromObject, new string[] { "responseJsonSchema" })));
       }
 
       if (Common.GetValueByPath(fromObject, new string[] { "audioTimestamp" }) != null) {
@@ -2742,8 +2568,11 @@ namespace Google.GenAI {
       }
 
       if (Common.GetValueByPath(fromObject, new string[] { "speechConfig" }) != null) {
-        Common.SetValueByPath(toObject, new string[] { "speechConfig" },
-                              Common.GetValueByPath(fromObject, new string[] { "speechConfig" }));
+        Common.SetValueByPath(
+            toObject, new string[] { "speechConfig" },
+            SpeechConfigToVertex(Common.ParseToJsonNode(Common.GetValueByPath(
+                                     fromObject, new string[] { "speechConfig" })),
+                                 toObject, rootObject));
       }
 
       if (Common.GetValueByPath(fromObject, new string[] { "stopSequences" }) != null) {
@@ -2775,6 +2604,22 @@ namespace Google.GenAI {
               Common.GetValueByPath(fromObject, new string[] { "enableEnhancedCivicAnswers" }))) {
         throw new NotSupportedException(
             "enableEnhancedCivicAnswers parameter is only supported in Gemini Developer API mode, not in Gemini Enterprise Agent Platform mode.");
+      }
+
+      if (Common.GetValueByPath(fromObject, new string[] { "responseFormat" }) != null) {
+        Common.SetValueByPath(toObject, new string[] { "responseFormat" },
+                              Common.GetValueByPath(fromObject, new string[] { "responseFormat" }));
+      }
+
+      if (!Common.IsZero(Common.GetValueByPath(fromObject, new string[] { "translationConfig" }))) {
+        throw new NotSupportedException(
+            "translationConfig parameter is only supported in Gemini Developer API mode, not in Gemini Enterprise Agent Platform mode.");
+      }
+
+      if (Common.GetValueByPath(fromObject, new string[] { "audioTranscriptionConfig" }) != null) {
+        Common.SetValueByPath(
+            toObject, new string[] { "audioTranscriptionConfig" },
+            Common.GetValueByPath(fromObject, new string[] { "audioTranscriptionConfig" }));
       }
 
       return toObject;
@@ -2822,6 +2667,11 @@ namespace Google.GenAI {
       if (Common.GetValueByPath(fromObject, new string[] { "enableWidget" }) != null) {
         Common.SetValueByPath(toObject, new string[] { "enableWidget" },
                               Common.GetValueByPath(fromObject, new string[] { "enableWidget" }));
+      }
+
+      if (!Common.IsZero(Common.GetValueByPath(fromObject, new string[] { "groundingTypes" }))) {
+        throw new NotSupportedException(
+            "groundingTypes parameter is only supported in Gemini Enterprise Agent Platform mode, not in Gemini Developer API mode.");
       }
 
       return toObject;
@@ -2941,24 +2791,6 @@ namespace Google.GenAI {
         Common.SetValueByPath(
             toObject, new string[] { "imageOutputOptions" },
             Common.GetValueByPath(fromObject, new string[] { "imageOutputOptions" }));
-      }
-
-      return toObject;
-    }
-
-    internal JsonNode ImageFromMldev(JsonNode fromObject, JsonObject parentObject,
-                                     JsonNode rootObject) {
-      JsonObject toObject = new JsonObject();
-
-      if (Common.GetValueByPath(fromObject, new string[] { "bytesBase64Encoded" }) != null) {
-        Common.SetValueByPath(toObject, new string[] { "imageBytes" },
-                              Transformers.TBytes(Common.GetValueByPath(
-                                  fromObject, new string[] { "bytesBase64Encoded" })));
-      }
-
-      if (Common.GetValueByPath(fromObject, new string[] { "mimeType" }) != null) {
-        Common.SetValueByPath(toObject, new string[] { "mimeType" },
-                              Common.GetValueByPath(fromObject, new string[] { "mimeType" }));
       }
 
       return toObject;
@@ -3355,6 +3187,25 @@ namespace Google.GenAI {
       return toObject;
     }
 
+    internal JsonNode MultiSpeakerVoiceConfigToVertex(JsonNode fromObject, JsonObject parentObject,
+                                                      JsonNode rootObject) {
+      JsonObject toObject = new JsonObject();
+
+      if (Common.GetValueByPath(fromObject, new string[] { "speakerVoiceConfigs" }) != null) {
+        JsonArray keyArray =
+            (JsonArray)Common.GetValueByPath(fromObject, new string[] { "speakerVoiceConfigs" });
+        JsonArray result = new JsonArray();
+
+        foreach (var record in keyArray) {
+          result.Add(
+              SpeakerVoiceConfigToVertex(Common.ParseToJsonNode(record), toObject, rootObject));
+        }
+        Common.SetValueByPath(toObject, new string[] { "speakerVoiceConfigs" }, result);
+      }
+
+      return toObject;
+    }
+
     internal JsonNode PartToMldev(JsonNode fromObject, JsonObject parentObject,
                                   JsonNode rootObject) {
       JsonObject toObject = new JsonObject();
@@ -3439,6 +3290,18 @@ namespace Google.GenAI {
                               Common.GetValueByPath(fromObject, new string[] { "partMetadata" }));
       }
 
+      if (Common.GetValueByPath(fromObject, new string[] { "audioTranscription" }) != null) {
+        Common.SetValueByPath(
+            toObject, new string[] { "audioTranscription" },
+            Common.GetValueByPath(fromObject, new string[] { "audioTranscription" }));
+      }
+
+      if (Common.GetValueByPath(fromObject, new string[] { "mediaProcessing" }) != null) {
+        Common.SetValueByPath(
+            toObject, new string[] { "mediaProcessing" },
+            Common.GetValueByPath(fromObject, new string[] { "mediaProcessing" }));
+      }
+
       return toObject;
     }
 
@@ -3455,17 +3318,12 @@ namespace Google.GenAI {
       if (Common.GetValueByPath(fromObject, new string[] { "codeExecutionResult" }) != null) {
         Common.SetValueByPath(
             toObject, new string[] { "codeExecutionResult" },
-            CodeExecutionResultToVertex(Common.ParseToJsonNode(Common.GetValueByPath(
-                                            fromObject, new string[] { "codeExecutionResult" })),
-                                        toObject, rootObject));
+            Common.GetValueByPath(fromObject, new string[] { "codeExecutionResult" }));
       }
 
       if (Common.GetValueByPath(fromObject, new string[] { "executableCode" }) != null) {
-        Common.SetValueByPath(
-            toObject, new string[] { "executableCode" },
-            ExecutableCodeToVertex(Common.ParseToJsonNode(Common.GetValueByPath(
-                                       fromObject, new string[] { "executableCode" })),
-                                   toObject, rootObject));
+        Common.SetValueByPath(toObject, new string[] { "executableCode" },
+                              Common.GetValueByPath(fromObject, new string[] { "executableCode" }));
       }
 
       if (Common.GetValueByPath(fromObject, new string[] { "fileData" }) != null) {
@@ -3523,6 +3381,18 @@ namespace Google.GenAI {
       if (!Common.IsZero(Common.GetValueByPath(fromObject, new string[] { "partMetadata" }))) {
         throw new NotSupportedException(
             "partMetadata parameter is only supported in Gemini Developer API mode, not in Gemini Enterprise Agent Platform mode.");
+      }
+
+      if (Common.GetValueByPath(fromObject, new string[] { "audioTranscription" }) != null) {
+        Common.SetValueByPath(
+            toObject, new string[] { "audioTranscription" },
+            Common.GetValueByPath(fromObject, new string[] { "audioTranscription" }));
+      }
+
+      if (Common.GetValueByPath(fromObject, new string[] { "mediaProcessing" }) != null) {
+        Common.SetValueByPath(
+            toObject, new string[] { "mediaProcessing" },
+            Common.GetValueByPath(fromObject, new string[] { "mediaProcessing" }));
       }
 
       return toObject;
@@ -3737,27 +3607,30 @@ namespace Google.GenAI {
       return toObject;
     }
 
-    internal JsonNode SafetyAttributesFromMldev(JsonNode fromObject, JsonObject parentObject,
-                                                JsonNode rootObject) {
+    internal JsonNode ReplicatedVoiceConfigToVertex(JsonNode fromObject, JsonObject parentObject,
+                                                    JsonNode rootObject) {
       JsonObject toObject = new JsonObject();
 
-      if (Common.GetValueByPath(fromObject, new string[] { "safetyAttributes", "categories" }) !=
-          null) {
-        Common.SetValueByPath(
-            toObject, new string[] { "categories" },
-            Common.GetValueByPath(fromObject, new string[] { "safetyAttributes", "categories" }));
+      if (Common.GetValueByPath(fromObject, new string[] { "mimeType" }) != null) {
+        Common.SetValueByPath(toObject, new string[] { "mimeType" },
+                              Common.GetValueByPath(fromObject, new string[] { "mimeType" }));
       }
 
-      if (Common.GetValueByPath(fromObject, new string[] { "safetyAttributes", "scores" }) !=
-          null) {
+      if (Common.GetValueByPath(fromObject, new string[] { "voiceSampleAudio" }) != null) {
         Common.SetValueByPath(
-            toObject, new string[] { "scores" },
-            Common.GetValueByPath(fromObject, new string[] { "safetyAttributes", "scores" }));
+            toObject, new string[] { "voiceSampleAudio" },
+            Common.GetValueByPath(fromObject, new string[] { "voiceSampleAudio" }));
       }
 
-      if (Common.GetValueByPath(fromObject, new string[] { "contentType" }) != null) {
-        Common.SetValueByPath(toObject, new string[] { "contentType" },
-                              Common.GetValueByPath(fromObject, new string[] { "contentType" }));
+      if (!Common.IsZero(Common.GetValueByPath(fromObject, new string[] { "consentAudio" }))) {
+        throw new NotSupportedException(
+            "consentAudio parameter is only supported in Gemini Developer API mode, not in Gemini Enterprise Agent Platform mode.");
+      }
+
+      if (!Common.IsZero(
+              Common.GetValueByPath(fromObject, new string[] { "voiceConsentSignature" }))) {
+        throw new NotSupportedException(
+            "voiceConsentSignature parameter is only supported in Gemini Developer API mode, not in Gemini Enterprise Agent Platform mode.");
       }
 
       return toObject;
@@ -3936,6 +3809,52 @@ namespace Google.GenAI {
       return toObject;
     }
 
+    internal JsonNode SpeakerVoiceConfigToVertex(JsonNode fromObject, JsonObject parentObject,
+                                                 JsonNode rootObject) {
+      JsonObject toObject = new JsonObject();
+
+      if (Common.GetValueByPath(fromObject, new string[] { "speaker" }) != null) {
+        Common.SetValueByPath(toObject, new string[] { "speaker" },
+                              Common.GetValueByPath(fromObject, new string[] { "speaker" }));
+      }
+
+      if (Common.GetValueByPath(fromObject, new string[] { "voiceConfig" }) != null) {
+        Common.SetValueByPath(toObject, new string[] { "voiceConfig" },
+                              VoiceConfigToVertex(Common.ParseToJsonNode(Common.GetValueByPath(
+                                                      fromObject, new string[] { "voiceConfig" })),
+                                                  toObject, rootObject));
+      }
+
+      return toObject;
+    }
+
+    internal JsonNode SpeechConfigToVertex(JsonNode fromObject, JsonObject parentObject,
+                                           JsonNode rootObject) {
+      JsonObject toObject = new JsonObject();
+
+      if (Common.GetValueByPath(fromObject, new string[] { "voiceConfig" }) != null) {
+        Common.SetValueByPath(toObject, new string[] { "voiceConfig" },
+                              VoiceConfigToVertex(Common.ParseToJsonNode(Common.GetValueByPath(
+                                                      fromObject, new string[] { "voiceConfig" })),
+                                                  toObject, rootObject));
+      }
+
+      if (Common.GetValueByPath(fromObject, new string[] { "languageCode" }) != null) {
+        Common.SetValueByPath(toObject, new string[] { "languageCode" },
+                              Common.GetValueByPath(fromObject, new string[] { "languageCode" }));
+      }
+
+      if (Common.GetValueByPath(fromObject, new string[] { "multiSpeakerVoiceConfig" }) != null) {
+        Common.SetValueByPath(toObject, new string[] { "multiSpeakerVoiceConfig" },
+                              MultiSpeakerVoiceConfigToVertex(
+                                  Common.ParseToJsonNode(Common.GetValueByPath(
+                                      fromObject, new string[] { "multiSpeakerVoiceConfig" })),
+                                  toObject, rootObject));
+      }
+
+      return toObject;
+    }
+
     internal JsonNode ToolConfigToMldev(JsonNode fromObject, JsonObject parentObject,
                                         JsonNode rootObject) {
       JsonObject toObject = new JsonObject();
@@ -4060,6 +3979,11 @@ namespace Google.GenAI {
                               Common.GetValueByPath(fromObject, new string[] { "mcpServers" }));
       }
 
+      if (!Common.IsZero(Common.GetValueByPath(fromObject, new string[] { "exaAiSearch" }))) {
+        throw new NotSupportedException(
+            "exaAiSearch parameter is only supported in Gemini Enterprise Agent Platform mode, not in Gemini Developer API mode.");
+      }
+
       return toObject;
     }
 
@@ -4074,7 +3998,9 @@ namespace Google.GenAI {
 
       if (Common.GetValueByPath(fromObject, new string[] { "computerUse" }) != null) {
         Common.SetValueByPath(toObject, new string[] { "computerUse" },
-                              Common.GetValueByPath(fromObject, new string[] { "computerUse" }));
+                              ComputerUseToVertex(Common.ParseToJsonNode(Common.GetValueByPath(
+                                                      fromObject, new string[] { "computerUse" })),
+                                                  toObject, rootObject));
       }
 
       if (!Common.IsZero(Common.GetValueByPath(fromObject, new string[] { "fileSearch" }))) {
@@ -4135,6 +4061,11 @@ namespace Google.GenAI {
           result.Add(McpServerToVertex(Common.ParseToJsonNode(record), toObject, rootObject));
         }
         Common.SetValueByPath(toObject, new string[] { "mcpServers" }, result);
+      }
+
+      if (Common.GetValueByPath(fromObject, new string[] { "exaAiSearch" }) != null) {
+        Common.SetValueByPath(toObject, new string[] { "exaAiSearch" },
+                              Common.GetValueByPath(fromObject, new string[] { "exaAiSearch" }));
       }
 
       return toObject;
@@ -4531,6 +4462,27 @@ namespace Google.GenAI {
       return toObject;
     }
 
+    internal JsonNode VoiceConfigToVertex(JsonNode fromObject, JsonObject parentObject,
+                                          JsonNode rootObject) {
+      JsonObject toObject = new JsonObject();
+
+      if (Common.GetValueByPath(fromObject, new string[] { "replicatedVoiceConfig" }) != null) {
+        Common.SetValueByPath(toObject, new string[] { "replicatedVoiceConfig" },
+                              ReplicatedVoiceConfigToVertex(
+                                  Common.ParseToJsonNode(Common.GetValueByPath(
+                                      fromObject, new string[] { "replicatedVoiceConfig" })),
+                                  toObject, rootObject));
+      }
+
+      if (Common.GetValueByPath(fromObject, new string[] { "prebuiltVoiceConfig" }) != null) {
+        Common.SetValueByPath(
+            toObject, new string[] { "prebuiltVoiceConfig" },
+            Common.GetValueByPath(fromObject, new string[] { "prebuiltVoiceConfig" }));
+      }
+
+      return toObject;
+    }
+
     public Models(ApiClient apiClient) {
       _apiClient = apiClient;
     }
@@ -4549,7 +4501,8 @@ namespace Google.GenAI {
       if (!Common.IsZero(config)) {
         parameter.Config = config;
       }
-      string jsonString = JsonSerializer.Serialize(parameter);
+      string jsonString =
+          JsonSerializer.Serialize(parameter, JsonConfig.TypeInfo<GenerateContentParameters>());
       JsonNode? parameterNode = JsonNode.Parse(jsonString);
       if (parameterNode == null) {
         throw new NotSupportedException("Failed to parse GenerateContentParameters to JsonNode.");
@@ -4576,9 +4529,9 @@ namespace Google.GenAI {
       }
       HttpOptions? requestHttpOptions = config?.HttpOptions;
 
-      ApiResponse response =
-          await this._apiClient.RequestAsync(HttpMethod.Post, path, JsonSerializer.Serialize(body),
-                                             requestHttpOptions, cancellationToken);
+      ApiResponse response = await this._apiClient.RequestAsync(
+          HttpMethod.Post, path, body?.ToJsonString(JsonConfig.InternalSerializerOptions),
+          requestHttpOptions, cancellationToken);
       HttpContent httpContent = response.GetEntity();
 #if NETSTANDARD2_0
       string contentString = await httpContent.ReadAsStringAsync();
@@ -4601,7 +4554,7 @@ namespace Google.GenAI {
             GenerateContentResponseFromMldev(httpContentNode, new JsonObject(), parameterNode);
       }
 
-      return responseNode.Deserialize<GenerateContentResponse>() ??
+      return responseNode.Deserialize(JsonConfig.TypeInfo<GenerateContentResponse>()) ??
              throw new InvalidOperationException(
                  "Failed to deserialize Task<GenerateContentResponse>.");
     }
@@ -4620,7 +4573,8 @@ namespace Google.GenAI {
       if (!Common.IsZero(config)) {
         parameter.Config = config;
       }
-      string jsonString = JsonSerializer.Serialize(parameter);
+      string jsonString =
+          JsonSerializer.Serialize(parameter, JsonConfig.TypeInfo<GenerateContentParameters>());
       JsonNode? parameterNode = JsonNode.Parse(jsonString);
       if (parameterNode == null) {
         throw new NotSupportedException("Failed to parse GenerateContentParameters to JsonNode.");
@@ -4648,8 +4602,9 @@ namespace Google.GenAI {
       HttpOptions? requestHttpOptions = config?.HttpOptions;
 
       await foreach (ApiResponse apiResponse in this._apiClient.RequestStreamAsync(
-                         HttpMethod.Post, path, JsonSerializer.Serialize(body), requestHttpOptions,
-                         cancellationToken)) {
+                         HttpMethod.Post, path,
+                         body?.ToJsonString(JsonConfig.InternalSerializerOptions),
+                         requestHttpOptions, cancellationToken)) {
 #if NETSTANDARD2_0
         string chunkJson = await apiResponse.GetEntity().ReadAsStringAsync();
 #else
@@ -4666,7 +4621,8 @@ namespace Google.GenAI {
           responseNode =
               GenerateContentResponseFromMldev(chunkNode, new JsonObject(), parameterNode);
         }
-        var chunkResponse = responseNode.Deserialize<GenerateContentResponse>();
+        var chunkResponse =
+            responseNode.Deserialize(JsonConfig.TypeInfo<GenerateContentResponse>());
         yield return chunkResponse;
       }
     }
@@ -4705,7 +4661,8 @@ namespace Google.GenAI {
       if (!Common.IsZero(config)) {
         parameter.Config = config;
       }
-      string jsonString = JsonSerializer.Serialize(parameter);
+      string jsonString =
+          JsonSerializer.Serialize(parameter, JsonConfig.TypeInfo<EmbedContentParametersPrivate>());
       JsonNode? parameterNode = JsonNode.Parse(jsonString);
       if (parameterNode == null) {
         throw new NotSupportedException(
@@ -4737,9 +4694,9 @@ namespace Google.GenAI {
       }
       HttpOptions? requestHttpOptions = config?.HttpOptions;
 
-      ApiResponse response =
-          await this._apiClient.RequestAsync(HttpMethod.Post, path, JsonSerializer.Serialize(body),
-                                             requestHttpOptions, cancellationToken);
+      ApiResponse response = await this._apiClient.RequestAsync(
+          HttpMethod.Post, path, body?.ToJsonString(JsonConfig.InternalSerializerOptions),
+          requestHttpOptions, cancellationToken);
       HttpContent httpContent = response.GetEntity();
 #if NETSTANDARD2_0
       string contentString = await httpContent.ReadAsStringAsync();
@@ -4762,7 +4719,7 @@ namespace Google.GenAI {
             EmbedContentResponseFromMldev(httpContentNode, new JsonObject(), parameterNode);
       }
 
-      return responseNode.Deserialize<EmbedContentResponse>() ??
+      return responseNode.Deserialize(JsonConfig.TypeInfo<EmbedContentResponse>()) ??
              throw new InvalidOperationException(
                  "Failed to deserialize Task<EmbedContentResponse>.");
     }
@@ -4781,7 +4738,8 @@ namespace Google.GenAI {
       if (!Common.IsZero(config)) {
         parameter.Config = config;
       }
-      string jsonString = JsonSerializer.Serialize(parameter);
+      string jsonString =
+          JsonSerializer.Serialize(parameter, JsonConfig.TypeInfo<GenerateImagesParameters>());
       JsonNode? parameterNode = JsonNode.Parse(jsonString);
       if (parameterNode == null) {
         throw new NotSupportedException("Failed to parse GenerateImagesParameters to JsonNode.");
@@ -4794,9 +4752,8 @@ namespace Google.GenAI {
                                                 parameterNode);
         path = Common.FormatMap("{model}:predict", body["_url"]);
       } else {
-        body = GenerateImagesParametersToMldev(this._apiClient, parameterNode, new JsonObject(),
-                                               parameterNode);
-        path = Common.FormatMap("{model}:predict", body["_url"]);
+        throw new NotSupportedException(
+            "This method is only supported in Gemini Enterprise Agent Platform mode, not in Gemini Developer API mode.");
       }
       JsonObject? bodyObj = body?.AsObject();
       bodyObj?.Remove("_url");
@@ -4808,9 +4765,9 @@ namespace Google.GenAI {
       }
       HttpOptions? requestHttpOptions = config?.HttpOptions;
 
-      ApiResponse response =
-          await this._apiClient.RequestAsync(HttpMethod.Post, path, JsonSerializer.Serialize(body),
-                                             requestHttpOptions, cancellationToken);
+      ApiResponse response = await this._apiClient.RequestAsync(
+          HttpMethod.Post, path, body?.ToJsonString(JsonConfig.InternalSerializerOptions),
+          requestHttpOptions, cancellationToken);
       HttpContent httpContent = response.GetEntity();
 #if NETSTANDARD2_0
       string contentString = await httpContent.ReadAsStringAsync();
@@ -4829,11 +4786,11 @@ namespace Google.GenAI {
       }
 
       if (!this._apiClient.VertexAI) {
-        responseNode =
-            GenerateImagesResponseFromMldev(httpContentNode, new JsonObject(), parameterNode);
+        throw new NotSupportedException(
+            "This method is only supported in Gemini Enterprise Agent Platform mode, not in Gemini Developer API mode.");
       }
 
-      return responseNode.Deserialize<GenerateImagesResponse>() ??
+      return responseNode.Deserialize(JsonConfig.TypeInfo<GenerateImagesResponse>()) ??
              throw new InvalidOperationException(
                  "Failed to deserialize Task<GenerateImagesResponse>.");
     }
@@ -4855,7 +4812,8 @@ namespace Google.GenAI {
       if (!Common.IsZero(config)) {
         parameter.Config = config;
       }
-      string jsonString = JsonSerializer.Serialize(parameter);
+      string jsonString =
+          JsonSerializer.Serialize(parameter, JsonConfig.TypeInfo<EditImageParameters>());
       JsonNode? parameterNode = JsonNode.Parse(jsonString);
       if (parameterNode == null) {
         throw new NotSupportedException("Failed to parse EditImageParameters to JsonNode.");
@@ -4881,9 +4839,9 @@ namespace Google.GenAI {
       }
       HttpOptions? requestHttpOptions = config?.HttpOptions;
 
-      ApiResponse response =
-          await this._apiClient.RequestAsync(HttpMethod.Post, path, JsonSerializer.Serialize(body),
-                                             requestHttpOptions, cancellationToken);
+      ApiResponse response = await this._apiClient.RequestAsync(
+          HttpMethod.Post, path, body?.ToJsonString(JsonConfig.InternalSerializerOptions),
+          requestHttpOptions, cancellationToken);
       HttpContent httpContent = response.GetEntity();
 #if NETSTANDARD2_0
       string contentString = await httpContent.ReadAsStringAsync();
@@ -4906,7 +4864,7 @@ namespace Google.GenAI {
             "This method is only supported in Gemini Enterprise Agent Platform mode, not in Gemini Developer API mode.");
       }
 
-      return responseNode.Deserialize<EditImageResponse>() ??
+      return responseNode.Deserialize(JsonConfig.TypeInfo<EditImageResponse>()) ??
              throw new InvalidOperationException("Failed to deserialize Task<EditImageResponse>.");
     }
 
@@ -4927,7 +4885,8 @@ namespace Google.GenAI {
       if (!Common.IsZero(config)) {
         parameter.Config = config;
       }
-      string jsonString = JsonSerializer.Serialize(parameter);
+      string jsonString =
+          JsonSerializer.Serialize(parameter, JsonConfig.TypeInfo<UpscaleImageAPIParameters>());
       JsonNode? parameterNode = JsonNode.Parse(jsonString);
       if (parameterNode == null) {
         throw new NotSupportedException("Failed to parse UpscaleImageAPIParameters to JsonNode.");
@@ -4953,9 +4912,9 @@ namespace Google.GenAI {
       }
       HttpOptions? requestHttpOptions = config?.HttpOptions;
 
-      ApiResponse response =
-          await this._apiClient.RequestAsync(HttpMethod.Post, path, JsonSerializer.Serialize(body),
-                                             requestHttpOptions, cancellationToken);
+      ApiResponse response = await this._apiClient.RequestAsync(
+          HttpMethod.Post, path, body?.ToJsonString(JsonConfig.InternalSerializerOptions),
+          requestHttpOptions, cancellationToken);
       HttpContent httpContent = response.GetEntity();
 #if NETSTANDARD2_0
       string contentString = await httpContent.ReadAsStringAsync();
@@ -4978,7 +4937,7 @@ namespace Google.GenAI {
             "This method is only supported in Gemini Enterprise Agent Platform mode, not in Gemini Developer API mode.");
       }
 
-      return responseNode.Deserialize<UpscaleImageResponse>() ??
+      return responseNode.Deserialize(JsonConfig.TypeInfo<UpscaleImageResponse>()) ??
              throw new InvalidOperationException(
                  "Failed to deserialize Task<UpscaleImageResponse>.");
     }
@@ -4997,7 +4956,8 @@ namespace Google.GenAI {
       if (!Common.IsZero(config)) {
         parameter.Config = config;
       }
-      string jsonString = JsonSerializer.Serialize(parameter);
+      string jsonString =
+          JsonSerializer.Serialize(parameter, JsonConfig.TypeInfo<RecontextImageParameters>());
       JsonNode? parameterNode = JsonNode.Parse(jsonString);
       if (parameterNode == null) {
         throw new NotSupportedException("Failed to parse RecontextImageParameters to JsonNode.");
@@ -5023,9 +4983,9 @@ namespace Google.GenAI {
       }
       HttpOptions? requestHttpOptions = config?.HttpOptions;
 
-      ApiResponse response =
-          await this._apiClient.RequestAsync(HttpMethod.Post, path, JsonSerializer.Serialize(body),
-                                             requestHttpOptions, cancellationToken);
+      ApiResponse response = await this._apiClient.RequestAsync(
+          HttpMethod.Post, path, body?.ToJsonString(JsonConfig.InternalSerializerOptions),
+          requestHttpOptions, cancellationToken);
       HttpContent httpContent = response.GetEntity();
 #if NETSTANDARD2_0
       string contentString = await httpContent.ReadAsStringAsync();
@@ -5048,7 +5008,7 @@ namespace Google.GenAI {
             "This method is only supported in Gemini Enterprise Agent Platform mode, not in Gemini Developer API mode.");
       }
 
-      return responseNode.Deserialize<RecontextImageResponse>() ??
+      return responseNode.Deserialize(JsonConfig.TypeInfo<RecontextImageResponse>()) ??
              throw new InvalidOperationException(
                  "Failed to deserialize Task<RecontextImageResponse>.");
     }
@@ -5067,7 +5027,8 @@ namespace Google.GenAI {
       if (!Common.IsZero(config)) {
         parameter.Config = config;
       }
-      string jsonString = JsonSerializer.Serialize(parameter);
+      string jsonString =
+          JsonSerializer.Serialize(parameter, JsonConfig.TypeInfo<SegmentImageParameters>());
       JsonNode? parameterNode = JsonNode.Parse(jsonString);
       if (parameterNode == null) {
         throw new NotSupportedException("Failed to parse SegmentImageParameters to JsonNode.");
@@ -5093,9 +5054,9 @@ namespace Google.GenAI {
       }
       HttpOptions? requestHttpOptions = config?.HttpOptions;
 
-      ApiResponse response =
-          await this._apiClient.RequestAsync(HttpMethod.Post, path, JsonSerializer.Serialize(body),
-                                             requestHttpOptions, cancellationToken);
+      ApiResponse response = await this._apiClient.RequestAsync(
+          HttpMethod.Post, path, body?.ToJsonString(JsonConfig.InternalSerializerOptions),
+          requestHttpOptions, cancellationToken);
       HttpContent httpContent = response.GetEntity();
 #if NETSTANDARD2_0
       string contentString = await httpContent.ReadAsStringAsync();
@@ -5118,7 +5079,7 @@ namespace Google.GenAI {
             "This method is only supported in Gemini Enterprise Agent Platform mode, not in Gemini Developer API mode.");
       }
 
-      return responseNode.Deserialize<SegmentImageResponse>() ??
+      return responseNode.Deserialize(JsonConfig.TypeInfo<SegmentImageResponse>()) ??
              throw new InvalidOperationException(
                  "Failed to deserialize Task<SegmentImageResponse>.");
     }
@@ -5137,7 +5098,8 @@ namespace Google.GenAI {
       if (!Common.IsZero(config)) {
         parameter.Config = config;
       }
-      string jsonString = JsonSerializer.Serialize(parameter);
+      string jsonString =
+          JsonSerializer.Serialize(parameter, JsonConfig.TypeInfo<GetModelParameters>());
       JsonNode? parameterNode = JsonNode.Parse(jsonString);
       if (parameterNode == null) {
         throw new NotSupportedException("Failed to parse GetModelParameters to JsonNode.");
@@ -5164,9 +5126,9 @@ namespace Google.GenAI {
       }
       HttpOptions? requestHttpOptions = config?.HttpOptions;
 
-      ApiResponse response =
-          await this._apiClient.RequestAsync(HttpMethod.Get, path, JsonSerializer.Serialize(body),
-                                             requestHttpOptions, cancellationToken);
+      ApiResponse response = await this._apiClient.RequestAsync(
+          HttpMethod.Get, path, body?.ToJsonString(JsonConfig.InternalSerializerOptions),
+          requestHttpOptions, cancellationToken);
       HttpContent httpContent = response.GetEntity();
 #if NETSTANDARD2_0
       string contentString = await httpContent.ReadAsStringAsync();
@@ -5187,7 +5149,7 @@ namespace Google.GenAI {
         responseNode = ModelFromMldev(httpContentNode, new JsonObject(), parameterNode);
       }
 
-      return responseNode.Deserialize<Model>() ??
+      return responseNode.Deserialize(JsonConfig.TypeInfo<Model>()) ??
              throw new InvalidOperationException("Failed to deserialize Task<Model>.");
     }
 
@@ -5198,7 +5160,8 @@ namespace Google.GenAI {
       if (!Common.IsZero(config)) {
         parameter.Config = config;
       }
-      string jsonString = JsonSerializer.Serialize(parameter);
+      string jsonString =
+          JsonSerializer.Serialize(parameter, JsonConfig.TypeInfo<ListModelsParameters>());
       JsonNode? parameterNode = JsonNode.Parse(jsonString);
       if (parameterNode == null) {
         throw new NotSupportedException("Failed to parse ListModelsParameters to JsonNode.");
@@ -5225,9 +5188,9 @@ namespace Google.GenAI {
       }
       HttpOptions? requestHttpOptions = config?.HttpOptions;
 
-      ApiResponse response =
-          await this._apiClient.RequestAsync(HttpMethod.Get, path, JsonSerializer.Serialize(body),
-                                             requestHttpOptions, cancellationToken);
+      ApiResponse response = await this._apiClient.RequestAsync(
+          HttpMethod.Get, path, body?.ToJsonString(JsonConfig.InternalSerializerOptions),
+          requestHttpOptions, cancellationToken);
       HttpContent httpContent = response.GetEntity();
 #if NETSTANDARD2_0
       string contentString = await httpContent.ReadAsStringAsync();
@@ -5250,7 +5213,7 @@ namespace Google.GenAI {
             ListModelsResponseFromMldev(httpContentNode, new JsonObject(), parameterNode);
       }
 
-      return responseNode.Deserialize<ListModelsResponse>() ??
+      return responseNode.Deserialize(JsonConfig.TypeInfo<ListModelsResponse>()) ??
              throw new InvalidOperationException("Failed to deserialize Task<ListModelsResponse>.");
     }
 
@@ -5274,7 +5237,8 @@ namespace Google.GenAI {
       if (!Common.IsZero(config)) {
         parameter.Config = config;
       }
-      string jsonString = JsonSerializer.Serialize(parameter);
+      string jsonString =
+          JsonSerializer.Serialize(parameter, JsonConfig.TypeInfo<UpdateModelParameters>());
       JsonNode? parameterNode = JsonNode.Parse(jsonString);
       if (parameterNode == null) {
         throw new NotSupportedException("Failed to parse UpdateModelParameters to JsonNode.");
@@ -5302,8 +5266,8 @@ namespace Google.GenAI {
       HttpOptions? requestHttpOptions = config?.HttpOptions;
 
       ApiResponse response = await this._apiClient.RequestAsync(
-          new HttpMethod("PATCH"), path, JsonSerializer.Serialize(body), requestHttpOptions,
-          cancellationToken);
+          new HttpMethod("PATCH"), path, body?.ToJsonString(JsonConfig.InternalSerializerOptions),
+          requestHttpOptions, cancellationToken);
       HttpContent httpContent = response.GetEntity();
 #if NETSTANDARD2_0
       string contentString = await httpContent.ReadAsStringAsync();
@@ -5324,7 +5288,7 @@ namespace Google.GenAI {
         responseNode = ModelFromMldev(httpContentNode, new JsonObject(), parameterNode);
       }
 
-      return responseNode.Deserialize<Model>() ??
+      return responseNode.Deserialize(JsonConfig.TypeInfo<Model>()) ??
              throw new InvalidOperationException("Failed to deserialize Task<Model>.");
     }
 
@@ -5343,7 +5307,8 @@ namespace Google.GenAI {
       if (!Common.IsZero(config)) {
         parameter.Config = config;
       }
-      string jsonString = JsonSerializer.Serialize(parameter);
+      string jsonString =
+          JsonSerializer.Serialize(parameter, JsonConfig.TypeInfo<DeleteModelParameters>());
       JsonNode? parameterNode = JsonNode.Parse(jsonString);
       if (parameterNode == null) {
         throw new NotSupportedException("Failed to parse DeleteModelParameters to JsonNode.");
@@ -5371,8 +5336,8 @@ namespace Google.GenAI {
       HttpOptions? requestHttpOptions = config?.HttpOptions;
 
       ApiResponse response = await this._apiClient.RequestAsync(
-          HttpMethod.Delete, path, JsonSerializer.Serialize(body), requestHttpOptions,
-          cancellationToken);
+          HttpMethod.Delete, path, body?.ToJsonString(JsonConfig.InternalSerializerOptions),
+          requestHttpOptions, cancellationToken);
       HttpContent httpContent = response.GetEntity();
 #if NETSTANDARD2_0
       string contentString = await httpContent.ReadAsStringAsync();
@@ -5395,7 +5360,7 @@ namespace Google.GenAI {
             DeleteModelResponseFromMldev(httpContentNode, new JsonObject(), parameterNode);
       }
 
-      return responseNode.Deserialize<DeleteModelResponse>() ??
+      return responseNode.Deserialize(JsonConfig.TypeInfo<DeleteModelResponse>()) ??
              throw new InvalidOperationException(
                  "Failed to deserialize Task<DeleteModelResponse>.");
     }
@@ -5426,7 +5391,8 @@ namespace Google.GenAI {
       if (!Common.IsZero(config)) {
         parameter.Config = config;
       }
-      string jsonString = JsonSerializer.Serialize(parameter);
+      string jsonString =
+          JsonSerializer.Serialize(parameter, JsonConfig.TypeInfo<CountTokensParameters>());
       JsonNode? parameterNode = JsonNode.Parse(jsonString);
       if (parameterNode == null) {
         throw new NotSupportedException("Failed to parse CountTokensParameters to JsonNode.");
@@ -5453,9 +5419,9 @@ namespace Google.GenAI {
       }
       HttpOptions? requestHttpOptions = config?.HttpOptions;
 
-      ApiResponse response =
-          await this._apiClient.RequestAsync(HttpMethod.Post, path, JsonSerializer.Serialize(body),
-                                             requestHttpOptions, cancellationToken);
+      ApiResponse response = await this._apiClient.RequestAsync(
+          HttpMethod.Post, path, body?.ToJsonString(JsonConfig.InternalSerializerOptions),
+          requestHttpOptions, cancellationToken);
       HttpContent httpContent = response.GetEntity();
 #if NETSTANDARD2_0
       string contentString = await httpContent.ReadAsStringAsync();
@@ -5478,7 +5444,7 @@ namespace Google.GenAI {
             CountTokensResponseFromMldev(httpContentNode, new JsonObject(), parameterNode);
       }
 
-      return responseNode.Deserialize<CountTokensResponse>() ??
+      return responseNode.Deserialize(JsonConfig.TypeInfo<CountTokensResponse>()) ??
              throw new InvalidOperationException(
                  "Failed to deserialize Task<CountTokensResponse>.");
     }
@@ -5510,7 +5476,8 @@ namespace Google.GenAI {
       if (!Common.IsZero(config)) {
         parameter.Config = config;
       }
-      string jsonString = JsonSerializer.Serialize(parameter);
+      string jsonString =
+          JsonSerializer.Serialize(parameter, JsonConfig.TypeInfo<ComputeTokensParameters>());
       JsonNode? parameterNode = JsonNode.Parse(jsonString);
       if (parameterNode == null) {
         throw new NotSupportedException("Failed to parse ComputeTokensParameters to JsonNode.");
@@ -5536,9 +5503,9 @@ namespace Google.GenAI {
       }
       HttpOptions? requestHttpOptions = config?.HttpOptions;
 
-      ApiResponse response =
-          await this._apiClient.RequestAsync(HttpMethod.Post, path, JsonSerializer.Serialize(body),
-                                             requestHttpOptions, cancellationToken);
+      ApiResponse response = await this._apiClient.RequestAsync(
+          HttpMethod.Post, path, body?.ToJsonString(JsonConfig.InternalSerializerOptions),
+          requestHttpOptions, cancellationToken);
       HttpContent httpContent = response.GetEntity();
 #if NETSTANDARD2_0
       string contentString = await httpContent.ReadAsStringAsync();
@@ -5561,7 +5528,7 @@ namespace Google.GenAI {
             "This method is only supported in Gemini Enterprise Agent Platform mode, not in Gemini Developer API mode.");
       }
 
-      return responseNode.Deserialize<ComputeTokensResponse>() ??
+      return responseNode.Deserialize(JsonConfig.TypeInfo<ComputeTokensResponse>()) ??
              throw new InvalidOperationException(
                  "Failed to deserialize Task<ComputeTokensResponse>.");
     }
@@ -5589,7 +5556,8 @@ namespace Google.GenAI {
       if (!Common.IsZero(config)) {
         parameter.Config = config;
       }
-      string jsonString = JsonSerializer.Serialize(parameter);
+      string jsonString =
+          JsonSerializer.Serialize(parameter, JsonConfig.TypeInfo<GenerateVideosParameters>());
       JsonNode? parameterNode = JsonNode.Parse(jsonString);
       if (parameterNode == null) {
         throw new NotSupportedException("Failed to parse GenerateVideosParameters to JsonNode.");
@@ -5616,9 +5584,9 @@ namespace Google.GenAI {
       }
       HttpOptions? requestHttpOptions = config?.HttpOptions;
 
-      ApiResponse response =
-          await this._apiClient.RequestAsync(HttpMethod.Post, path, JsonSerializer.Serialize(body),
-                                             requestHttpOptions, cancellationToken);
+      ApiResponse response = await this._apiClient.RequestAsync(
+          HttpMethod.Post, path, body?.ToJsonString(JsonConfig.InternalSerializerOptions),
+          requestHttpOptions, cancellationToken);
       HttpContent httpContent = response.GetEntity();
 #if NETSTANDARD2_0
       string contentString = await httpContent.ReadAsStringAsync();
@@ -5641,10 +5609,13 @@ namespace Google.GenAI {
             GenerateVideosOperationFromMldev(httpContentNode, new JsonObject(), parameterNode);
       }
 
-      return responseNode.Deserialize<GenerateVideosOperation>() ??
+      return responseNode.Deserialize(JsonConfig.TypeInfo<GenerateVideosOperation>()) ??
              throw new InvalidOperationException(
                  "Failed to deserialize Task<GenerateVideosOperation>.");
     }
+
+    private static int _loggedGenerateImagesWarning = 0;
+    private static int _loggedEditImageWarning = 0;
 
     /// <summary>
     /// Generates content given a GenAI model and a list of content.
@@ -5769,6 +5740,10 @@ namespace Google.GenAI {
     public async Task<GenerateImagesResponse> GenerateImagesAsync(
         string model, string prompt, GenerateImagesConfig? config = null,
         CancellationToken cancellationToken = default) {
+      if (Interlocked.CompareExchange(ref _loggedGenerateImagesWarning, 1, 0) == 0) {
+        Console.WriteLine(
+            "The GenerateImagesAsync method is deprecated and will be removed in the next major release (not before Jan. 1 2027). Please use the GenerateContentAsync method with image models instead. See https://ai.google.dev/gemini-api/docs/deprecations#imagen-models and https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/capabilities/image-generation#generate-images");
+      }
       GenerateImagesResponse apiResponse =
           await PrivateGenerateImagesAsync(model, prompt, config, cancellationToken);
       SafetyAttributes? positivePromptSafetyAttributes = null;
@@ -5796,6 +5771,11 @@ namespace Google.GenAI {
     public async Task<EditImageResponse> EditImageAsync(
         String model, String prompt, List<IReferenceImage> referenceImages,
         EditImageConfig? config = null, CancellationToken cancellationToken = default) {
+      if (Interlocked.CompareExchange(ref _loggedEditImageWarning, 1, 0) == 0) {
+        Console.WriteLine(
+            "The EditImageAsync method is deprecated and will be removed in the next major release (not before Jan. 1 2027). Please use the GenerateContentAsync method with image models instead. See https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/capabilities/gemini-edit-images#edit-an-image");
+      }
+
       List<ReferenceImageAPI> referenceImagesAPI =
           referenceImages.Select(i => ((IReferenceImageInternal)i).ToReferenceImageAPI()).ToList();
 

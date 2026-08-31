@@ -108,12 +108,15 @@ namespace Google.GenAI
 
       string projectEnv = Environment.GetEnvironmentVariable("GOOGLE_CLOUD_PROJECT");
       string locationEnv = Environment.GetEnvironmentVariable("GOOGLE_CLOUD_LOCATION");
-      string apiKeyEnv = Environment.GetEnvironmentVariable("GOOGLE_API_KEY");
+
+      string googleApiKeyEnv = Environment.GetEnvironmentVariable("GOOGLE_API_KEY");
+      string geminiApiKeyEnv = Environment.GetEnvironmentVariable("GEMINI_API_KEY");
+      // Resolve silently here, ApiClient will warn if both are set.
+      string? resolvedApiKeyEnv = googleApiKeyEnv ?? geminiApiKeyEnv;
 
       if ((project != null || location != null) && !useCloudPlatform)
       {
-        if (apiKeyEnv == null && apiKey == null)
-        {
+        if (string.IsNullOrEmpty(resolvedApiKeyEnv) && string.IsNullOrEmpty(apiKey)) {
           throw new ArgumentException(
               "project/location is present, but neither enterprise nor vertexAI is set to true. project/location can only be used for a cloud platform. Please set enterprise to be true.");
         }

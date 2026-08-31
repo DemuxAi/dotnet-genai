@@ -8,36 +8,42 @@
     }
   }
 }
+<27 {
+  "setupComplete": {}
+}
+
 >66 {
   "realtime_input": {
     "text": "Are you there Gemini?"
   }
 }
-<27 {
-  "setupComplete": {}
-}
-
-<124 {
+<128 {
   "serverContent": {
     "modelTurn": {
       "parts": [
         {
-          "text": "Yes"
+          "text": "Yes, I'"
         }
       ]
     }
   }
 }
 
-<179 {
+<154 {
   "serverContent": {
     "modelTurn": {
       "parts": [
         {
-          "text": ", I am here and ready to help! How can I assist you today?"
+          "text": "m here. How can I help you today?"
         }
       ]
     }
+  }
+}
+
+<61 {
+  "serverContent": {
+    "generationComplete": true
   }
 }
 

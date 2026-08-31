@@ -66,7 +66,7 @@ namespace Google.GenAI.Types {
     /// <returns>The deserialized Blob object, or null if deserialization fails.</returns>
     public static Blob ? FromJson(string jsonString, JsonSerializerOptions? options = null) {
       try {
-        return JsonSerializer.Deserialize<Blob>(jsonString, options);
+        return JsonSerializer.Deserialize(jsonString, JsonConfig.TypeInfo<Blob>(options));
       } catch (JsonException e) {
         Console.Error.WriteLine($"Error deserializing JSON: {e.ToString()}");
         return null;

@@ -47,7 +47,8 @@ namespace Google.GenAI.Types {
     public static GenerateVideosOperation
         ? FromJson(string jsonString, JsonSerializerOptions? options = null) {
       try {
-        return JsonSerializer.Deserialize<GenerateVideosOperation>(jsonString, options);
+        return JsonSerializer.Deserialize(jsonString,
+                                          JsonConfig.TypeInfo<GenerateVideosOperation>(options));
       } catch (JsonException e) {
         Console.Error.WriteLine($"Error deserializing JSON: {e.ToString()}");
         return null;
@@ -57,9 +58,8 @@ namespace Google.GenAI.Types {
     /// <summary>
     /// Creates a new GenerateVideosOperation object from an API response.
     /// </summary>
-    public override GenerateVideosOperation
-        ? FromApiResponse(JsonNode apiResponse, bool isVertexAI) {
-      var operationsConverters = new OperationsConverters(null);
+    public override GenerateVideosOperation FromApiResponse(JsonNode apiResponse, bool isVertexAI) {
+      var operationsConverters = new OperationsConverters(null!);
       JsonNode response;
       if (isVertexAI) {
         response =
@@ -68,8 +68,8 @@ namespace Google.GenAI.Types {
         response =
             operationsConverters.GenerateVideosOperationFromMldev(apiResponse, new JsonObject());
       }
-      return JsonSerializer.Deserialize<GenerateVideosOperation>(response.ToJsonString(),
-                                                                 (JsonSerializerOptions?)null) ??
+      return JsonSerializer.Deserialize(response.ToJsonString(),
+                                        JsonConfig.TypeInfo<GenerateVideosOperation>()) ??
              throw new InvalidOperationException("Failed to deserialize GenerateVideosOperation.");
     }
   }

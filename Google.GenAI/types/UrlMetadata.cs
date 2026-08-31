@@ -52,7 +52,7 @@ namespace Google.GenAI.Types {
     /// <returns>The deserialized UrlMetadata object, or null if deserialization fails.</returns>
     public static UrlMetadata ? FromJson(string jsonString, JsonSerializerOptions? options = null) {
       try {
-        return JsonSerializer.Deserialize<UrlMetadata>(jsonString, options);
+        return JsonSerializer.Deserialize(jsonString, JsonConfig.TypeInfo<UrlMetadata>(options));
       } catch (JsonException e) {
         Console.Error.WriteLine($"Error deserializing JSON: {e.ToString()}");
         return null;

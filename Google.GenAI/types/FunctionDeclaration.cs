@@ -105,9 +105,9 @@ namespace Google.GenAI.Types {
           }
 
     /// <summary>
-    /// Optional. Specifies the function Behavior. Currently only non-blocking functions are
-    /// supported. If not specified, the system keeps the current function call behavior. This field
-    /// is currently only supported by the BidiGenerateContent method.
+    /// Optional. Specifies the function Behavior. If not specified, the system keeps the current
+    /// function call behavior. This field is currently only supported by the BidiGenerateContent
+    /// method.
     /// </summary>
     [JsonPropertyName("behavior")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -126,7 +126,8 @@ namespace Google.GenAI.Types {
     public static FunctionDeclaration
         ? FromJson(string jsonString, JsonSerializerOptions? options = null) {
       try {
-        return JsonSerializer.Deserialize<FunctionDeclaration>(jsonString, options);
+        return JsonSerializer.Deserialize(jsonString,
+                                          JsonConfig.TypeInfo<FunctionDeclaration>(options));
       } catch (JsonException e) {
         Console.Error.WriteLine($"Error deserializing JSON: {e.ToString()}");
         return null;

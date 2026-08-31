@@ -66,7 +66,7 @@ namespace Google.GenAI.Types {
     /// <returns>The deserialized Image object, or null if deserialization fails.</returns>
     public static Image ? FromJson(string jsonString, JsonSerializerOptions? options = null) {
       try {
-        return JsonSerializer.Deserialize<Image>(jsonString, options);
+        return JsonSerializer.Deserialize(jsonString, JsonConfig.TypeInfo<Image>(options));
       } catch (JsonException e) {
         Console.Error.WriteLine($"Error deserializing JSON: {e.ToString()}");
         return null;

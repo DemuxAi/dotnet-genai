@@ -22,7 +22,7 @@ using System.Text.Json;
 
 namespace Google.GenAI.Types {
   /// <summary>
-  /// Defines how to parse sample response.
+  /// Defines the type for parsing sample response. This enum is not supported in Gemini API.
   /// </summary>
 
   [JsonConverter(typeof(ResponseParseTypeConverter))]
@@ -34,19 +34,22 @@ namespace Google.GenAI.Types {
     }
 
     /// <summary>
-    /// Default value. This value is unused.
+    /// Default value. Fallback to IDENTITY
     /// </summary>
     public static ResponseParseType ResponseParseTypeUnspecified {
       get;
     } = new("RESPONSE_PARSE_TYPE_UNSPECIFIED");
 
     /// <summary>
-    /// Use the sample response as is.
+    /// Returns the sample response as is.
     /// </summary>
     public static ResponseParseType Identity { get; } = new("IDENTITY");
 
     /// <summary>
-    /// Use regex to extract the important part of sample response.
+    /// Uses regex to extract the important part of sample response. Similar to GoogleSQL
+    /// (https://cloud.google.com/bigquery/docs/reference/standard-sql/string_functions#regexp_extract)
+    /// `REGEX_EXTRACT(response, regex_extract_expression)`, but different in that if there are
+    /// multiple matches, the last match will be returned.
     /// </summary>
     public static ResponseParseType RegexExtract { get; } = new("REGEX_EXTRACT");
 

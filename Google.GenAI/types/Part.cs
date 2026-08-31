@@ -180,6 +180,26 @@ namespace Google.GenAI.Types {
           }
 
     /// <summary>
+    /// Output only. The transcription of the audio part.
+    /// </summary>
+    [JsonPropertyName("audioTranscription")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public Transcription
+        ? AudioTranscription {
+            get; set;
+          }
+
+    /// <summary>
+    /// How the model processes this part's media for understanding.
+    /// </summary>
+    [JsonPropertyName("mediaProcessing")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public MediaProcessing
+        ? MediaProcessing {
+            get; set;
+          }
+
+    /// <summary>
     /// Deserializes a JSON string to a Part object.
     /// </summary>
     /// <param name="jsonString">The JSON string to deserialize.</param>
@@ -187,7 +207,7 @@ namespace Google.GenAI.Types {
     /// <returns>The deserialized Part object, or null if deserialization fails.</returns>
     public static Part ? FromJson(string jsonString, JsonSerializerOptions? options = null) {
       try {
-        return JsonSerializer.Deserialize<Part>(jsonString, options);
+        return JsonSerializer.Deserialize(jsonString, JsonConfig.TypeInfo<Part>(options));
       } catch (JsonException e) {
         Console.Error.WriteLine($"Error deserializing JSON: {e.ToString()}");
         return null;

@@ -62,6 +62,7 @@ namespace Google.GenAI
         await clientWebSocket.SendAsync(new ArraySegment<byte>(buffer), WebSocketMessageType.Text, true, cancellationToken);
 
         var session = new AsyncSession(clientWebSocket, _apiClient);
+        await session.ReadSetupCompleteAsync(cancellationToken);
         success = true;
         return session;
       }
@@ -74,7 +75,7 @@ namespace Google.GenAI
       }
     }
 
-    private async Task SetRequestHeadersAsync(ClientWebSocket clientWebSocket, CancellationToken cancellationToken = default)
+    internal async Task SetRequestHeadersAsync(ClientWebSocket clientWebSocket, CancellationToken cancellationToken = default)
     {
       if (_apiClient.VertexAI)
       {
@@ -108,7 +109,15 @@ namespace Google.GenAI
 
       foreach (var header in _apiClient?.HttpOptions?.Headers ?? new Dictionary<string, string>())
       {
-        clientWebSocket.Options.SetRequestHeader(header.Key, header.Value);
+        try
+        {
+          clientWebSocket.Options.SetRequestHeader(header.Key, header.Value);
+        }
+        catch (ArgumentException)
+        {
+          // In older versions of .NET Framework, setting restricted headers like "Content-Type"
+          // and "User-Agent" on ClientWebSocketOptions throws an ArgumentException.
+        }
       }
     }
 
@@ -184,7 +193,7 @@ namespace Google.GenAI
         Config = config,
       };
       LiveConverters liveConverters = new LiveConverters(_apiClient);
-      string jsonString = JsonSerializer.Serialize(parameters, JsonConfig.InternalSerializerOptions);
+      string jsonString = JsonSerializer.Serialize(parameters, JsonConfig.TypeInfo<LiveConnectParameters>());
       JsonNode? parameterNode = JsonNode.Parse(jsonString);
       if (parameterNode == null)
       {
@@ -200,7 +209,7 @@ namespace Google.GenAI
         body = liveConverters.LiveConnectParametersToMldev(_apiClient, parameterNode, new JsonObject());
       }
       body?.AsObject().Remove("config");
-      return JsonSerializer.Serialize(body, JsonConfig.JsonSerializerOptions);
+      return body?.ToJsonString(JsonConfig.JsonSerializerOptions) ?? "null";
     }
 
   }
@@ -214,11 +223,24 @@ namespace Google.GenAI
     private readonly WebSocket _webSocket;
     private readonly ApiClient _apiClient;
     private int _isDisposed = 0; // 0 = false, 1 = true. Used with Interlocked.
+    private LiveServerMessage? _bufferedMessage;
 
     public AsyncSession(WebSocket webSocket, ApiClient apiClient)
     {
       _webSocket = webSocket;
       _apiClient = apiClient;
+    }
+
+    public LiveServerSetupComplete? SetupComplete { get; private set; }
+
+    internal async Task ReadSetupCompleteAsync(CancellationToken cancellationToken = default)
+    {
+      var message = await ReceiveAsync(cancellationToken);
+      if (message?.SetupComplete != null)
+      {
+        SetupComplete = message.SetupComplete;
+      }
+      _bufferedMessage = message;
     }
 
     /// <summary>
@@ -311,6 +333,13 @@ namespace Google.GenAI
     /// <exception cref="WebSocketException">Thrown for underlying WebSocket errors that are not a graceful close.</exception>
     public async Task<LiveServerMessage?> ReceiveAsync(CancellationToken cancellationToken = default)
     {
+      if (_bufferedMessage != null)
+      {
+        var msg = _bufferedMessage;
+        _bufferedMessage = null;
+        return msg;
+      }
+
       if (_isDisposed == 1)
       {
         return null;
@@ -374,7 +403,7 @@ namespace Google.GenAI
       {
         transformedNode = liveConverters.LiveServerMessageFromMldev(serverMessageNode, new JsonObject());
       }
-      var serverMessage = JsonSerializer.Deserialize<LiveServerMessage>(transformedNode, JsonConfig.JsonSerializerOptions);
+      var serverMessage = JsonSerializer.Deserialize(transformedNode, JsonConfig.TypeInfo<LiveServerMessage>(JsonConfig.JsonSerializerOptions));
       if (serverMessage == null)
       {
         throw new InvalidOperationException("Failed to deserialize server message because it is null.");
@@ -431,7 +460,7 @@ namespace Google.GenAI
 
     private async Task send(LiveClientMessage liveClientMessage, CancellationToken cancellationToken = default)
     {
-      JsonNode? liveClientMessageNode = JsonNode.Parse(JsonSerializer.Serialize(liveClientMessage, JsonConfig.JsonSerializerOptions));
+      JsonNode? liveClientMessageNode = JsonSerializer.SerializeToNode(liveClientMessage, JsonConfig.TypeInfo<LiveClientMessage>(JsonConfig.JsonSerializerOptions));
       if (liveClientMessageNode == null)
       {
         throw new InvalidOperationException("Failed to parse liveClientMessage into a JsonNode.");
@@ -446,7 +475,7 @@ namespace Google.GenAI
       {
         body = liveConverters.LiveClientMessageToMldev(liveClientMessageNode, new JsonObject());
       }
-      string jsonMessage = JsonSerializer.Serialize(body, JsonConfig.JsonSerializerOptions);
+      string jsonMessage = body?.ToJsonString(JsonConfig.JsonSerializerOptions) ?? string.Empty;
       byte[] buffer = Encoding.UTF8.GetBytes(jsonMessage);
 
       if (_webSocket.State != WebSocketState.Open)

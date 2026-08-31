@@ -23,8 +23,9 @@ using Google.GenAI.Serialization;
 
 namespace Google.GenAI.Types {
   /// <summary>
-  /// Scores responses by directly converting parsed autorater response to float reward (reward is
-  /// clipped to be within [-1, 1]).
+  /// Scores responses by directly converting the parsed autorater response to a float reward. Note:
+  /// Reward is clipped to be within `[-1, 1]`, i.e., `reward = max(min(reward, 1.0), -1.0)`. This
+  /// data type is not supported in Gemini API.
   /// </summary>
 
   public record ReinforcementTuningAutoraterScorerParsedResponseConversionScorer {
@@ -39,9 +40,10 @@ namespace Google.GenAI.Types {
     public static ReinforcementTuningAutoraterScorerParsedResponseConversionScorer
         ? FromJson(string jsonString, JsonSerializerOptions? options = null) {
       try {
-        return JsonSerializer
-            .Deserialize<ReinforcementTuningAutoraterScorerParsedResponseConversionScorer>(
-                jsonString, options);
+        return JsonSerializer.Deserialize(
+            jsonString,
+            JsonConfig.TypeInfo<ReinforcementTuningAutoraterScorerParsedResponseConversionScorer>(
+                options));
       } catch (JsonException e) {
         Console.Error.WriteLine($"Error deserializing JSON: {e.ToString()}");
         return null;

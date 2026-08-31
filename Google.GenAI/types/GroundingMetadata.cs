@@ -88,7 +88,9 @@ namespace Google.GenAI.Types {
           }
 
     /// <summary>
-    /// Optional. Output only. A token that can be used to render a Google Maps widget with the
+    /// Optional. Output only. Deprecated: The Google Maps contextual widget behavior in Grounding
+    /// with Google Maps is being deprecated; this field is planned for removal and will no longer
+    /// be populated once removed. A token that can be used to render a Google Maps widget with the
     /// contextual data. This field is populated only when the grounding source is Google Maps.
     /// </summary>
     [JsonPropertyName("googleMapsWidgetContextToken")]
@@ -132,7 +134,8 @@ namespace Google.GenAI.Types {
     public static GroundingMetadata
         ? FromJson(string jsonString, JsonSerializerOptions? options = null) {
       try {
-        return JsonSerializer.Deserialize<GroundingMetadata>(jsonString, options);
+        return JsonSerializer.Deserialize(jsonString,
+                                          JsonConfig.TypeInfo<GroundingMetadata>(options));
       } catch (JsonException e) {
         Console.Error.WriteLine($"Error deserializing JSON: {e.ToString()}");
         return null;

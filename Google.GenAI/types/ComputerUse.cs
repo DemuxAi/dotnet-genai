@@ -35,10 +35,11 @@ namespace Google.GenAI.Types {
     public Environment ? Environment { get; set; }
 
     /// <summary>
-    /// By default, predefined functions are included in the final model call. Some of them can be
-    /// explicitly excluded from being automatically included. This can serve two purposes:  1.
-    /// Using a more restricted / different action space.  2. Improving the definitions /
-    /// instructions of predefined functions.
+    /// Optional. By default, predefined functions
+    /// (https://cloud.google.com/vertex-ai/generative-ai/docs/computer-use#supported-actions) are
+    /// included in the final model call. Some of them can be explicitly excluded from being
+    /// automatically included. This can serve two purposes: 1. Using a more restricted / different
+    /// action space. 2. Improving the definitions / instructions of predefined functions.
     /// </summary>
     [JsonPropertyName("excludedPredefinedFunctions")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -48,12 +49,23 @@ namespace Google.GenAI.Types {
           }
 
     /// <summary>
-    /// Optional. Whether enable the prompt injection detection check on computer-use request.
+    /// Optional. Enables the prompt injection detection check on computer-use request.
     /// </summary>
     [JsonPropertyName("enablePromptInjectionDetection")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public bool
         ? EnablePromptInjectionDetection {
+            get; set;
+          }
+
+    /// <summary>
+    /// Optional. Disabled safety policies for computer use. This field is not supported in Vertex
+    /// AI.
+    /// </summary>
+    [JsonPropertyName("disabledSafetyPolicies")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public List<SafetyPolicy>
+        ? DisabledSafetyPolicies {
             get; set;
           }
 
@@ -65,7 +77,7 @@ namespace Google.GenAI.Types {
     /// <returns>The deserialized ComputerUse object, or null if deserialization fails.</returns>
     public static ComputerUse ? FromJson(string jsonString, JsonSerializerOptions? options = null) {
       try {
-        return JsonSerializer.Deserialize<ComputerUse>(jsonString, options);
+        return JsonSerializer.Deserialize(jsonString, JsonConfig.TypeInfo<ComputerUse>(options));
       } catch (JsonException e) {
         Console.Error.WriteLine($"Error deserializing JSON: {e.ToString()}");
         return null;

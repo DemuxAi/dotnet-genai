@@ -53,7 +53,7 @@ namespace Google.GenAI.Types {
     /// <returns>The deserialized VoiceConfig object, or null if deserialization fails.</returns>
     public static VoiceConfig ? FromJson(string jsonString, JsonSerializerOptions? options = null) {
       try {
-        return JsonSerializer.Deserialize<VoiceConfig>(jsonString, options);
+        return JsonSerializer.Deserialize(jsonString, JsonConfig.TypeInfo<VoiceConfig>(options));
       } catch (JsonException e) {
         Console.Error.WriteLine($"Error deserializing JSON: {e.ToString()}");
         return null;

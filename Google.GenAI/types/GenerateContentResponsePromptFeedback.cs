@@ -66,8 +66,8 @@ namespace Google.GenAI.Types {
     public static GenerateContentResponsePromptFeedback
         ? FromJson(string jsonString, JsonSerializerOptions? options = null) {
       try {
-        return JsonSerializer.Deserialize<GenerateContentResponsePromptFeedback>(jsonString,
-                                                                                 options);
+        return JsonSerializer.Deserialize(
+            jsonString, JsonConfig.TypeInfo<GenerateContentResponsePromptFeedback>(options));
       } catch (JsonException e) {
         Console.Error.WriteLine($"Error deserializing JSON: {e.ToString()}");
         return null;

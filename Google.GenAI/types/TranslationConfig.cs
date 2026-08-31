@@ -28,8 +28,9 @@ namespace Google.GenAI.Types {
 
   public record TranslationConfig {
     /// <summary>
-    /// If true, the model will generate audio when the target language is spoken, essentially it
-    /// will parrot the input. If false, we will not produce audio for the target language.
+    /// Optional. If true, the model will generate audio when the target language is spoken,
+    /// essentially it will parrot the input. If false, we will not produce audio for the target
+    /// language.
     /// </summary>
     [JsonPropertyName("echoTargetLanguage")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -56,7 +57,8 @@ namespace Google.GenAI.Types {
     public static TranslationConfig
         ? FromJson(string jsonString, JsonSerializerOptions? options = null) {
       try {
-        return JsonSerializer.Deserialize<TranslationConfig>(jsonString, options);
+        return JsonSerializer.Deserialize(jsonString,
+                                          JsonConfig.TypeInfo<TranslationConfig>(options));
       } catch (JsonException e) {
         Console.Error.WriteLine($"Error deserializing JSON: {e.ToString()}");
         return null;

@@ -72,7 +72,7 @@ namespace Google.GenAI.Types {
     /// <summary>
     /// Optional. If enabled, the model will detect emotions and adapt its responses accordingly.
     /// For example, if the model detects that the user is frustrated, it may provide a more
-    /// empathetic response. This field is not supported in Gemini API.
+    /// empathetic response.
     /// </summary>
     [JsonPropertyName("enableAffectiveDialog")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -160,7 +160,7 @@ namespace Google.GenAI.Types {
     /// Optional. The IANA standard MIME type of the response. The model will generate output that
     /// conforms to this MIME type. Supported values include 'text/plain' (default) and
     /// 'application/json'. The model needs to be prompted to output the appropriate response type,
-    /// otherwise the behavior is undefined.
+    /// otherwise the behavior is undefined. Deprecated: Use `response_format` instead.
     /// </summary>
     [JsonPropertyName("responseMimeType")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -186,7 +186,8 @@ namespace Google.GenAI.Types {
     /// conforms to a particular structure. This is useful for generating structured data such as
     /// JSON. The schema is a subset of the OpenAPI 3.0 schema object
     /// (https://spec.openapis.org/oas/v3.0.3#schema) object. When this field is set, you must also
-    /// set the `response_mime_type` to `application/json`.
+    /// set the `response_mime_type` to `application/json`. Deprecated: Use `response_format`
+    /// instead.
     /// </summary>
     [JsonPropertyName("responseSchema")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -306,6 +307,37 @@ namespace Google.GenAI.Types {
           }
 
     /// <summary>
+    /// Optional. New response format field for the model to configure output formatting and
+    /// delivery.
+    /// </summary>
+    [JsonPropertyName("responseFormat")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public List<ResponseFormat>
+        ? ResponseFormat {
+            get; set;
+          }
+
+    /// <summary>
+    /// Optional. Config for translation. This field is not supported in Vertex AI.
+    /// </summary>
+    [JsonPropertyName("translationConfig")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public TranslationConfig
+        ? TranslationConfig {
+            get; set;
+          }
+
+    /// <summary>
+    /// Optional. Configuration for audio transcription (speech recognition).
+    /// </summary>
+    [JsonPropertyName("audioTranscriptionConfig")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public AudioTranscriptionConfig
+        ? AudioTranscriptionConfig {
+            get; set;
+          }
+
+    /// <summary>
     /// Deserializes a JSON string to a GenerationConfig object.
     /// </summary>
     /// <param name="jsonString">The JSON string to deserialize.</param>
@@ -315,7 +347,8 @@ namespace Google.GenAI.Types {
     public static GenerationConfig
         ? FromJson(string jsonString, JsonSerializerOptions? options = null) {
       try {
-        return JsonSerializer.Deserialize<GenerationConfig>(jsonString, options);
+        return JsonSerializer.Deserialize(jsonString,
+                                          JsonConfig.TypeInfo<GenerationConfig>(options));
       } catch (JsonException e) {
         Console.Error.WriteLine($"Error deserializing JSON: {e.ToString()}");
         return null;

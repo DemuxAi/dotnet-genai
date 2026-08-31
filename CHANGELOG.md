@@ -1,5 +1,95 @@
 # Changelog
 
+## Version 1.20.0, released 2026-08-25
+
+
+### New features
+
+* Add AudioTranscriptionConfigMode ([cc087b0](https://github.com/googleapis/dotnet-genai/commit/cc087b0456bf4584a803c4ca36ba021bcf31cf1a))
+
+## Version 1.19.0, released 2026-08-19
+
+
+### New features
+
+* Add `mode` enum (`VERBATIM`, `SMART`) to `AudioTranscriptionConfig` and `TranscriptionConfig`. ([ef959af](https://github.com/googleapis/dotnet-genai/commit/ef959af2c6a06e6893013ca4f67ad6a7f594e873))
+* Add enable_data_retention to ToolParallelAiSearch, Add step_count to ReinforcementTuningHyperParameters, Add BidiGenerateContentSetup ([1b9d1d4](https://github.com/googleapis/dotnet-genai/commit/1b9d1d402e6bfd50017135924cae93caff5dc77f))
+* Add IDLE state to live connection status enum and mark REQUIRES_ACTION as deprecated. ([2120ad1](https://github.com/googleapis/dotnet-genai/commit/2120ad1d9fbd7472753b4324568d4e0f1c6d1970))
+
+## Version 1.18.0, released 2026-08-12
+
+
+### New features
+
+* add HTTP retry support via HttpOptions.RetryOptions ([1479fff](https://github.com/googleapis/dotnet-genai/commit/1479fffec906814ec07ce8dc26ca6a9b7e4a159f))
+* Add interaction_status to LiveServerContent ([e621622](https://github.com/googleapis/dotnet-genai/commit/e6216222b547d546ce2aed9ec970ba5c21e6cca8))
+* support API key with project/location in Vertex AI mode (Express Mode) ([f01e173](https://github.com/googleapis/dotnet-genai/commit/f01e173216442ac9a100f4be3712e314ce8058c7))
+
+## Version 1.17.0, released 2026-08-06
+
+
+### New features
+
+* Add TOO_MANY_TOOL_CALLS to FinishReason enum. ([c5d5a53](https://github.com/googleapis/dotnet-genai/commit/c5d5a53d820c63d299bfae0f16b69001a1da98f7))
+* Support GoogleMaps Tool grounding_types places and routing ([056b631](https://github.com/googleapis/dotnet-genai/commit/056b631a8d197714feebf11e7a5ebc65b677c12b))
+
+
+### Bug fixes
+
+* Add propertyOrdering auto-population for ResponseSchema and ResponseJsonSchema for Dotnet SDK ([e765485](https://github.com/googleapis/dotnet-genai/commit/e765485e13e58e07176744dfb0e4532e856310b8))
+
+## Version 1.16.0, released 2026-07-28
+
+
+### New features
+
+* [GenerateContentConfig] Add GenerationConfig.audio_transcription_config and Part.audio_transcription. ([f7234c6](https://github.com/googleapis/dotnet-genai/commit/f7234c64ec35f0c2419d8a640be8f13fe8f38c46))
+* Add flat `language_codes` field to `AudioTranscriptionConfig`. ([5e7e99e](https://github.com/googleapis/dotnet-genai/commit/5e7e99efe8bb0353f089ece50d380e55b29d91aa))
+
+## Version 1.15.0, released 2026-07-21
+
+
+### New features
+
+* A new field `custom_vocabulary` is added to message `.google.cloud.aiplatform.v1beta1.BidiGenerateContentSetup` ([56ed30c](https://github.com/googleapis/dotnet-genai/commit/56ed30cadd25c15a06d228e689b45ab17806faa6))
+
+
+### Bug fixes
+
+* add deprecation warnings to Imagen generate_images, edit_images, generate_videos (if using prompt/text/image args), LiveConnectConfig.GenerationConfig which will be removed in the next major version ([97cd617](https://github.com/googleapis/dotnet-genai/commit/97cd6170ccd69f03ff480d18e3238957e969c460))
+* Gracefully handle protected headers in Live.ConnectAsync ([b4d4050](https://github.com/googleapis/dotnet-genai/commit/b4d4050c6ef5a27972586334d783ae6531cf8d34)), closes [#377](https://github.com/googleapis/dotnet-genai/issues/377)
+
+## Version 1.14.0, released 2026-07-15
+
+
+### New features
+
+* Add history config. ([c6e26d3](https://github.com/googleapis/dotnet-genai/commit/c6e26d3c205af0201cfe6564b92361b8270cd473))
+* Pass in serializer options to be AOT compliant ([6020fe5](https://github.com/googleapis/dotnet-genai/commit/6020fe5575f1b75bfb3c9d031bc99fb90aa904b0))
+* Populate per-modality prompt token count in embedding responses for gemini-embedding-2 ([ab46864](https://github.com/googleapis/dotnet-genai/commit/ab46864b384c831ea976271362a507b7bed4e5d5))
+
+## Version 1.13.0, released 2026-07-08
+
+
+### New features
+
+* Add response_format and Translation_config in GenerationConfig ([de24c0d](https://github.com/googleapis/dotnet-genai/commit/de24c0d0447dc6b640721248892e8c318d2148b3))
+* Add Tool.exa_ai_search for Gemini Enterprise API ([de24c0d](https://github.com/googleapis/dotnet-genai/commit/de24c0d0447dc6b640721248892e8c318d2148b3))
+* Support GEMINI_API_KEY in dotnet. If both keys are supplied, use GOOGLE_API_KEY ([92fad5c](https://github.com/googleapis/dotnet-genai/commit/92fad5c9533288b635e8d9f83cfce9639503e646))
+* voice consent signature types across all SDK languages. ([273a79d](https://github.com/googleapis/dotnet-genai/commit/273a79dcd97de3b5a85211ce22ebf46420c5753e))
+
+## Version 1.12.0, released 2026-06-24
+
+
+### New features
+
+* Add ComputerUse.disabled_safety_policies ([e175c3e](https://github.com/googleapis/dotnet-genai/commit/e175c3e62f342141fa018877c123c68faf7e2c79))
+
+
+### Documentation improvements
+
+* fix typos across docstrings ([d617c05](https://github.com/googleapis/dotnet-genai/commit/d617c05d0f817d94ff9b98d38062ea28f25396e4))
+
 ## Version 1.11.0, released 2026-06-17
 
 

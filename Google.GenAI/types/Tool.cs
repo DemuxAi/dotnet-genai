@@ -157,6 +157,18 @@ namespace Google.GenAI.Types {
           }
 
     /// <summary>
+    /// Optional. Uses Exa.ai to search for information to answer user queries. The search results
+    /// will be grounded on Exa.ai and presented to the model for response generation. This field is
+    /// not supported in Gemini API.
+    /// </summary>
+    [JsonPropertyName("exaAiSearch")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public ToolExaAiSearch
+        ? ExaAiSearch {
+            get; set;
+          }
+
+    /// <summary>
     /// Deserializes a JSON string to a Tool object.
     /// </summary>
     /// <param name="jsonString">The JSON string to deserialize.</param>
@@ -164,7 +176,7 @@ namespace Google.GenAI.Types {
     /// <returns>The deserialized Tool object, or null if deserialization fails.</returns>
     public static Tool ? FromJson(string jsonString, JsonSerializerOptions? options = null) {
       try {
-        return JsonSerializer.Deserialize<Tool>(jsonString, options);
+        return JsonSerializer.Deserialize(jsonString, JsonConfig.TypeInfo<Tool>(options));
       } catch (JsonException e) {
         Console.Error.WriteLine($"Error deserializing JSON: {e.ToString()}");
         return null;

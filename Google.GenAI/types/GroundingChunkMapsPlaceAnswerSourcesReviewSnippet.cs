@@ -106,8 +106,9 @@ namespace Google.GenAI.Types {
     public static GroundingChunkMapsPlaceAnswerSourcesReviewSnippet
         ? FromJson(string jsonString, JsonSerializerOptions? options = null) {
       try {
-        return JsonSerializer.Deserialize<GroundingChunkMapsPlaceAnswerSourcesReviewSnippet>(
-            jsonString, options);
+        return JsonSerializer.Deserialize(
+            jsonString,
+            JsonConfig.TypeInfo<GroundingChunkMapsPlaceAnswerSourcesReviewSnippet>(options));
       } catch (JsonException e) {
         Console.Error.WriteLine($"Error deserializing JSON: {e.ToString()}");
         return null;

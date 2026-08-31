@@ -53,7 +53,7 @@ namespace Google.GenAI.Types {
     /// <returns>The deserialized McpServer object, or null if deserialization fails.</returns>
     public static McpServer ? FromJson(string jsonString, JsonSerializerOptions? options = null) {
       try {
-        return JsonSerializer.Deserialize<McpServer>(jsonString, options);
+        return JsonSerializer.Deserialize(jsonString, JsonConfig.TypeInfo<McpServer>(options));
       } catch (JsonException e) {
         Console.Error.WriteLine($"Error deserializing JSON: {e.ToString()}");
         return null;

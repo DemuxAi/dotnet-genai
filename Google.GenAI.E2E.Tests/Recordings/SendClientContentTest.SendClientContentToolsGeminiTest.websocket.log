@@ -25,6 +25,10 @@
     ]
   }
 }
+<27 {
+  "setupComplete": {}
+}
+
 >209 {
   "clientContent": {
     "turns": [
@@ -39,10 +43,6 @@
     "turnComplete": true
   }
 }
-<27 {
-  "setupComplete": {}
-}
-
 <259 {
   "serverContent": {
     "modelTurn": {
@@ -58,7 +58,7 @@
   }
 }
 
-<223 {
+<222 {
   "toolCall": {
     "functionCalls": [
       {
@@ -66,7 +66,7 @@
         "args": {
           "location": "Redmond, WA"
         },
-        "id": "function-call-18067616153683755698"
+        "id": "function-call-5713999604813989424"
       }
     ]
   }

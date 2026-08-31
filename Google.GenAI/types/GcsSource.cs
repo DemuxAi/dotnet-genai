@@ -44,7 +44,7 @@ namespace Google.GenAI.Types {
     /// <returns>The deserialized GcsSource object, or null if deserialization fails.</returns>
     public static GcsSource ? FromJson(string jsonString, JsonSerializerOptions? options = null) {
       try {
-        return JsonSerializer.Deserialize<GcsSource>(jsonString, options);
+        return JsonSerializer.Deserialize(jsonString, JsonConfig.TypeInfo<GcsSource>(options));
       } catch (JsonException e) {
         Console.Error.WriteLine($"Error deserializing JSON: {e.ToString()}");
         return null;

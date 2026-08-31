@@ -285,7 +285,8 @@ namespace Google.GenAI {
       if (!Common.IsZero(config)) {
         parameter.Config = config;
       }
-      string jsonString = JsonSerializer.Serialize(parameter);
+      string jsonString =
+          JsonSerializer.Serialize(parameter, JsonConfig.TypeInfo<GetOperationParameters>());
       JsonNode? parameterNode = JsonNode.Parse(jsonString);
       if (parameterNode == null) {
         throw new NotSupportedException("Failed to parse GetOperationParameters to JsonNode.");
@@ -310,9 +311,9 @@ namespace Google.GenAI {
       }
       HttpOptions? requestHttpOptions = config?.HttpOptions;
 
-      ApiResponse response =
-          await this._apiClient.RequestAsync(HttpMethod.Get, path, JsonSerializer.Serialize(body),
-                                             requestHttpOptions, cancellationToken);
+      ApiResponse response = await this._apiClient.RequestAsync(
+          HttpMethod.Get, path, body?.ToJsonString(JsonConfig.InternalSerializerOptions),
+          requestHttpOptions, cancellationToken);
       HttpContent httpContent = response.GetEntity();
 #if NETSTANDARD2_0
       string contentString = await httpContent.ReadAsStringAsync();
@@ -342,7 +343,8 @@ namespace Google.GenAI {
       if (!Common.IsZero(config)) {
         parameter.Config = config;
       }
-      string jsonString = JsonSerializer.Serialize(parameter);
+      string jsonString = JsonSerializer.Serialize(
+          parameter, JsonConfig.TypeInfo<FetchPredictOperationParameters>());
       JsonNode? parameterNode = JsonNode.Parse(jsonString);
       if (parameterNode == null) {
         throw new NotSupportedException(
@@ -368,9 +370,9 @@ namespace Google.GenAI {
       }
       HttpOptions? requestHttpOptions = config?.HttpOptions;
 
-      ApiResponse response =
-          await this._apiClient.RequestAsync(HttpMethod.Post, path, JsonSerializer.Serialize(body),
-                                             requestHttpOptions, cancellationToken);
+      ApiResponse response = await this._apiClient.RequestAsync(
+          HttpMethod.Post, path, body?.ToJsonString(JsonConfig.InternalSerializerOptions),
+          requestHttpOptions, cancellationToken);
       HttpContent httpContent = response.GetEntity();
 #if NETSTANDARD2_0
       string contentString = await httpContent.ReadAsStringAsync();

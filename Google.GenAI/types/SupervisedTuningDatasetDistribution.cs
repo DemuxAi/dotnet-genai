@@ -126,7 +126,8 @@ namespace Google.GenAI.Types {
     public static SupervisedTuningDatasetDistribution
         ? FromJson(string jsonString, JsonSerializerOptions? options = null) {
       try {
-        return JsonSerializer.Deserialize<SupervisedTuningDatasetDistribution>(jsonString, options);
+        return JsonSerializer.Deserialize(
+            jsonString, JsonConfig.TypeInfo<SupervisedTuningDatasetDistribution>(options));
       } catch (JsonException e) {
         Console.Error.WriteLine($"Error deserializing JSON: {e.ToString()}");
         return null;

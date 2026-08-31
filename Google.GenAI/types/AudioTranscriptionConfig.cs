@@ -28,14 +28,16 @@ namespace Google.GenAI.Types {
 
   public record AudioTranscriptionConfig {
     /// <summary>
-    /// Deprecated: use LanguageAuto or LanguageHints instead.
+    /// BCP-47 language codes providing hints about the languages present in the audio. If omitted
+    /// or empty, defaults to automatic language detection.
     /// </summary>
     [JsonPropertyName("languageCodes")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public List<string> ? LanguageCodes { get; set; }
 
     /// <summary>
-    /// The model will detect the language automatically. Do not use together with LanguageHints.
+    /// Deprecated: Auto-detection is now the default when language_codes is omitted. This field
+    /// will be removed in a future version.
     /// </summary>
     [JsonPropertyName("languageAuto")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -45,7 +47,8 @@ namespace Google.GenAI.Types {
           }
 
     /// <summary>
-    /// Specifies one or more languages in the audio. Do not use together with LanguageAuto.
+    /// Deprecated: Use top-level language_codes instead. This field will be removed in a future
+    /// version.
     /// </summary>
     [JsonPropertyName("languageHints")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -55,13 +58,59 @@ namespace Google.GenAI.Types {
           }
 
     /// <summary>
-    /// A list of phrases used for speech adaptation, which biases the ASR model to improve
-    /// recognition of these specific terms.
+    /// A list of custom vocabulary phrases, which biases the ASR model to improve recognition of
+    /// these specific terms.
+    /// </summary>
+    [JsonPropertyName("customVocabulary")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public List<string>
+        ? CustomVocabulary {
+            get; set;
+          }
+
+    /// <summary>
+    /// Deprecated. A list of phrases used for speech adaptation, which biases the ASR model to
+    /// improve recognition of these specific terms.
     /// </summary>
     [JsonPropertyName("adaptationPhrases")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public List<string>
         ? AdaptationPhrases {
+            get; set;
+          }
+
+    /// <summary>
+    /// Configures speaker diarization.
+    /// </summary>
+    [JsonPropertyName("diarization")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public bool
+        ? Diarization {
+            get; set;
+          }
+
+    /// <summary>
+    /// Configures word-level timestamp generation.
+    /// </summary>
+    [JsonPropertyName("wordTimestamp")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public bool
+        ? WordTimestamp {
+            get; set;
+          }
+
+    /// <summary>
+    /// Optional. Configures transcription mode. Supported values: `VERBATIM`, `SMART`. If
+    /// unspecified, defaults to `VERBATIM` transcription. In `SMART` mode, the model performs
+    /// disfluency removal (eliminating filler words, repetitions, and false starts), light
+    /// grammatical cleanup, automatic formatting (paragraphs, bullet points, numbered lists), and
+    /// minor user edits (inline self-corrections). Timestamps and diarization are incompatible with
+    /// mode `SMART`.
+    /// </summary>
+    [JsonPropertyName("mode")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public AudioTranscriptionConfigMode
+        ? Mode {
             get; set;
           }
 
@@ -75,7 +124,8 @@ namespace Google.GenAI.Types {
     public static AudioTranscriptionConfig
         ? FromJson(string jsonString, JsonSerializerOptions? options = null) {
       try {
-        return JsonSerializer.Deserialize<AudioTranscriptionConfig>(jsonString, options);
+        return JsonSerializer.Deserialize(jsonString,
+                                          JsonConfig.TypeInfo<AudioTranscriptionConfig>(options));
       } catch (JsonException e) {
         Console.Error.WriteLine($"Error deserializing JSON: {e.ToString()}");
         return null;

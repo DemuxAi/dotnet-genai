@@ -65,8 +65,9 @@ namespace Google.GenAI.Types {
     public static GroundingChunkMapsPlaceAnswerSourcesAuthorAttribution
         ? FromJson(string jsonString, JsonSerializerOptions? options = null) {
       try {
-        return JsonSerializer.Deserialize<GroundingChunkMapsPlaceAnswerSourcesAuthorAttribution>(
-            jsonString, options);
+        return JsonSerializer.Deserialize(
+            jsonString,
+            JsonConfig.TypeInfo<GroundingChunkMapsPlaceAnswerSourcesAuthorAttribution>(options));
       } catch (JsonException e) {
         Console.Error.WriteLine($"Error deserializing JSON: {e.ToString()}");
         return null;

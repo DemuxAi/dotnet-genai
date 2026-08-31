@@ -8,6 +8,10 @@
     }
   }
 }
+<27 {
+  "setupComplete": {}
+}
+
 >151527 {
   "realtime_input": {
     "audio": {
@@ -16,10 +20,6 @@
     }
   }
 }
-<27 {
-  "setupComplete": {}
-}
-
 <124 {
   "serverContent": {
     "modelTurn": {
@@ -32,15 +32,21 @@
   }
 }
 
-<174 {
+<168 {
   "serverContent": {
     "modelTurn": {
       "parts": [
         {
-          "text": ", I can hear you loud and clear. What's on your mind?"
+          "text": ", I can hear you clearly. How may I assist you?"
         }
       ]
     }
+  }
+}
+
+<61 {
+  "serverContent": {
+    "generationComplete": true
   }
 }
 

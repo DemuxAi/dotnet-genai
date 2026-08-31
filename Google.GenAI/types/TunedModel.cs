@@ -68,7 +68,7 @@ namespace Google.GenAI.Types {
     /// <returns>The deserialized TunedModel object, or null if deserialization fails.</returns>
     public static TunedModel ? FromJson(string jsonString, JsonSerializerOptions? options = null) {
       try {
-        return JsonSerializer.Deserialize<TunedModel>(jsonString, options);
+        return JsonSerializer.Deserialize(jsonString, JsonConfig.TypeInfo<TunedModel>(options));
       } catch (JsonException e) {
         Console.Error.WriteLine($"Error deserializing JSON: {e.ToString()}");
         return null;

@@ -44,7 +44,7 @@ namespace Google.GenAI.Types {
     /// <returns>The deserialized ApiAuth object, or null if deserialization fails.</returns>
     public static ApiAuth ? FromJson(string jsonString, JsonSerializerOptions? options = null) {
       try {
-        return JsonSerializer.Deserialize<ApiAuth>(jsonString, options);
+        return JsonSerializer.Deserialize(jsonString, JsonConfig.TypeInfo<ApiAuth>(options));
       } catch (JsonException e) {
         Console.Error.WriteLine($"Error deserializing JSON: {e.ToString()}");
         return null;

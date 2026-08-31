@@ -82,12 +82,12 @@ public abstract class StressTestBase
             await MockServer.StartAsync();
             Console.WriteLine($"[StressTestBase] Mock mode enabled, server at: {MockServer.BaseUrl}");
 
-            // Ensure GOOGLE_API_KEY is set to avoid Client validation error
+            // Ensure GEMINI_API_KEY is set to avoid Client validation error
             // when GOOGLE_CLOUD_PROJECT/LOCATION are present in the environment
-            if (string.IsNullOrEmpty(Environment.GetEnvironmentVariable("GOOGLE_API_KEY")))
+            if (string.IsNullOrEmpty(Environment.GetEnvironmentVariable("GEMINI_API_KEY")))
             {
-                Environment.SetEnvironmentVariable("GOOGLE_API_KEY", "mock-api-key");
-                Console.WriteLine("[StressTestBase] Set mock GOOGLE_API_KEY to satisfy Client validation");
+                Environment.SetEnvironmentVariable("GEMINI_API_KEY", "mock-api-key");
+                Console.WriteLine("[StressTestBase] Set mock GEMINI_API_KEY to satisfy Client validation");
             }
         }
         else

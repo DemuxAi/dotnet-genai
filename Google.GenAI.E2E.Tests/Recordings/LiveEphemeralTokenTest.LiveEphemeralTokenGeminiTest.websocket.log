@@ -3,6 +3,10 @@
     "model": "models/gemini-live-2.5-flash-preview"
   }
 }
+<27 {
+  "setupComplete": {}
+}
+
 >171 {
   "clientContent": {
     "turns": [

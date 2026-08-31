@@ -36,7 +36,7 @@ namespace Google.GenAI.Types {
     /// <returns>The deserialized ActivityEnd object, or null if deserialization fails.</returns>
     public static ActivityEnd ? FromJson(string jsonString, JsonSerializerOptions? options = null) {
       try {
-        return JsonSerializer.Deserialize<ActivityEnd>(jsonString, options);
+        return JsonSerializer.Deserialize(jsonString, JsonConfig.TypeInfo<ActivityEnd>(options));
       } catch (JsonException e) {
         Console.Error.WriteLine($"Error deserializing JSON: {e.ToString()}");
         return null;

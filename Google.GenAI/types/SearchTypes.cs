@@ -52,7 +52,7 @@ namespace Google.GenAI.Types {
     /// <returns>The deserialized SearchTypes object, or null if deserialization fails.</returns>
     public static SearchTypes ? FromJson(string jsonString, JsonSerializerOptions? options = null) {
       try {
-        return JsonSerializer.Deserialize<SearchTypes>(jsonString, options);
+        return JsonSerializer.Deserialize(jsonString, JsonConfig.TypeInfo<SearchTypes>(options));
       } catch (JsonException e) {
         Console.Error.WriteLine($"Error deserializing JSON: {e.ToString()}");
         return null;

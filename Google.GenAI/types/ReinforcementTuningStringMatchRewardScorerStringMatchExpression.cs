@@ -23,21 +23,29 @@ using Google.GenAI.Serialization;
 
 namespace Google.GenAI.Types {
   /// <summary>
-  /// Evaluates parsed response using match type against expression.
+  /// Evaluates parsed response using match type against the expression. Returns `true` if
+  /// `MatchOperation(target, expression)` evaluates to `true`, and `false` otherwise. This data
+  /// type is not supported in Gemini API.
   /// </summary>
 
   public record ReinforcementTuningStringMatchRewardScorerStringMatchExpression {
     /// <summary>
-    /// Match operation to use for evaluation.
+    /// Match operation to use for evaluating rewards.
     /// </summary>
     [JsonPropertyName("matchOperation")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public MatchOperation ? MatchOperation { get; set; }
 
     /// <summary>
-    /// String or regular expression to match against. Customer can also provide a references map
-    /// (key/value pairs) whose value will be substituted into the expression by referencing
-    /// `references.key_name` (wrapped in double curly braces).
+    /// A string or a regular expression to match against for evaluating rewards. Users can also
+    /// provide a references map of `{key: value}` whose `value` will be used to replace the
+    /// placeholder {{references.key}} in the expression. For example, if the following `references`
+    /// are defined in the training / validation dataset: ``` { "systemInstruction": ...,
+    /// "contents": ..., "references": { "concise_answer": "Yes", "verbose_answer": "The answer is
+    /// Yes" } } ``` and if users define the following StringMatchExpression: { "matchOperation":
+    /// "REGEX_CONTAINS", "expression": ".*{{references.concise_answer}}.*" } On evaluating the
+    /// reward for each sample response, this StringMatchExpression will be substituted as: ``` {
+    /// "matchOperation": "REGEX_CONTAINS", "expression": ".*Yes.*" } ```
     /// </summary>
     [JsonPropertyName("expression")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -57,9 +65,10 @@ namespace Google.GenAI.Types {
     public static ReinforcementTuningStringMatchRewardScorerStringMatchExpression
         ? FromJson(string jsonString, JsonSerializerOptions? options = null) {
       try {
-        return JsonSerializer
-            .Deserialize<ReinforcementTuningStringMatchRewardScorerStringMatchExpression>(
-                jsonString, options);
+        return JsonSerializer.Deserialize(
+            jsonString,
+            JsonConfig.TypeInfo<ReinforcementTuningStringMatchRewardScorerStringMatchExpression>(
+                options));
       } catch (JsonException e) {
         Console.Error.WriteLine($"Error deserializing JSON: {e.ToString()}");
         return null;

@@ -35,7 +35,7 @@ namespace Google.GenAI.Types {
     public ReinforcementTuningAutoraterScorer ? AutoraterScorer { get; set; }
 
     /// <summary>
-    /// A unique reward name used to identify each single reinforcement tuning reward.
+    /// A unique reward name for identifying each single reinforcement tuning reward.
     /// </summary>
     [JsonPropertyName("rewardName")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -45,7 +45,11 @@ namespace Google.GenAI.Types {
           }
 
     /// <summary>
-    /// Defines how to parse sample response.
+    /// Defines how to parse sample response. For example, given a sample response for evaluating
+    /// the reward, users might want to extract the text only between `` and `` in the sample
+    /// response, and keeps only the last one in case there are multiple such tags. To achieve such
+    /// a purpose, they can define a regex `".*(.*?)"` using the
+    /// ReinforcementTuningParseResponseConfig.ResponseParseType.REGEX_EXTRACT parse type.
     /// </summary>
     [JsonPropertyName("parseResponseConfig")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -55,7 +59,8 @@ namespace Google.GenAI.Types {
           }
 
     /// <summary>
-    /// Scores parsed responses for code execution use cases.
+    /// ReinforcementTuningCodeExecutionRewardScorer is used to score parsed responses for code
+    /// execution use cases.
     /// </summary>
     [JsonPropertyName("codeExecutionRewardScorer")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -65,8 +70,8 @@ namespace Google.GenAI.Types {
           }
 
     /// <summary>
-    /// Scores parsed responses for simple string matching use cases against reference answer
-    /// without writing python code.
+    /// ReinforcementTuningStringMatchRewardScorer is used to score parsed responses for simple
+    /// string matching use cases against reference answers.
     /// </summary>
     [JsonPropertyName("stringMatchRewardScorer")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -76,7 +81,8 @@ namespace Google.GenAI.Types {
           }
 
     /// <summary>
-    /// Scores parsed responses by calling a Cloud Run service.
+    /// ReinforcementTuningCloudRunRewardScorer is used to score parsed responses by calling a Cloud
+    /// Run service.
     /// </summary>
     [JsonPropertyName("cloudRunRewardScorer")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -95,8 +101,8 @@ namespace Google.GenAI.Types {
     public static SingleReinforcementTuningRewardConfig
         ? FromJson(string jsonString, JsonSerializerOptions? options = null) {
       try {
-        return JsonSerializer.Deserialize<SingleReinforcementTuningRewardConfig>(jsonString,
-                                                                                 options);
+        return JsonSerializer.Deserialize(
+            jsonString, JsonConfig.TypeInfo<SingleReinforcementTuningRewardConfig>(options));
       } catch (JsonException e) {
         Console.Error.WriteLine($"Error deserializing JSON: {e.ToString()}");
         return null;

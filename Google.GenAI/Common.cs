@@ -16,6 +16,7 @@
 
 using System.Text.Json;
 using System.Text.Json.Nodes;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Google.GenAI
 {
@@ -63,7 +64,7 @@ namespace Google.GenAI
               arrayNode.Clear();
               for (int j = 0; j < listValue.Count; j++)
               {
-                arrayNode.Add(new JsonObject());
+                arrayNode.Add((JsonNode)new JsonObject());
               }
             }
             for (int j = 0; j < arrayNode.Count; j++)
@@ -78,7 +79,7 @@ namespace Google.GenAI
           {
             if (arrayNode.Count == 0)
             {
-              arrayNode.Add(new JsonObject());
+              arrayNode.Add((JsonNode)new JsonObject());
             }
             for (int j = 0; j < arrayNode.Count; j++)
             {
@@ -276,6 +277,10 @@ namespace Google.GenAI
     /// already a JsonNode to avoid the expensive serialize-to-string-then-parse round-trip
     /// that causes OutOfMemoryException with large payloads (e.g. base64 inline image data).
     /// </summary>
+#if NET8_0_OR_GREATER
+    [UnconditionalSuppressMessage("Trimming", "IL2026", Justification = "Fallback reflection-based serialization.")]
+    [UnconditionalSuppressMessage("AOT", "IL3050", Justification = "Fallback reflection-based serialization.")]
+#endif
     internal static JsonNode? ParseToJsonNode(object? value)
     {
         if (value == null)
@@ -406,6 +411,10 @@ namespace Google.GenAI
       return false;
     }
 
+#if NET8_0_OR_GREATER
+    [UnconditionalSuppressMessage("Trimming", "IL2026", Justification = "Fallback reflection-based serialization.")]
+    [UnconditionalSuppressMessage("AOT", "IL3050", Justification = "Fallback reflection-based serialization.")]
+#endif
     private static JsonNode? ToJsonNode(object value)
     {
       // TODO: evaluate using System.Text.Json to handle conversion of object to JSON.
@@ -433,7 +442,7 @@ namespace Google.GenAI
           }
           return array;
         default:
-          return JsonNode.Parse(JsonSerializer.Serialize(value, JsonConfig.InternalSerializerOptions));
+          return JsonSerializer.SerializeToNode(value, JsonConfig.InternalSerializerOptions);
       }
     }
 

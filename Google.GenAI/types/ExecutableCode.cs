@@ -48,7 +48,7 @@ namespace Google.GenAI.Types {
 
     /// <summary>
     /// Optional. Unique identifier of the `ExecutableCode` part. The server returns the
-    /// `CodeExecutionResult` with the matching `id`. This field is not supported in Vertex AI.
+    /// `CodeExecutionResult` with the matching `id`.
     /// </summary>
     [JsonPropertyName("id")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -66,7 +66,7 @@ namespace Google.GenAI.Types {
     public static ExecutableCode
         ? FromJson(string jsonString, JsonSerializerOptions? options = null) {
       try {
-        return JsonSerializer.Deserialize<ExecutableCode>(jsonString, options);
+        return JsonSerializer.Deserialize(jsonString, JsonConfig.TypeInfo<ExecutableCode>(options));
       } catch (JsonException e) {
         Console.Error.WriteLine($"Error deserializing JSON: {e.ToString()}");
         return null;

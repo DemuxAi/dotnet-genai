@@ -63,7 +63,7 @@ namespace Google.GenAI.Types {
     /// <returns>The deserialized TokensInfo object, or null if deserialization fails.</returns>
     public static TokensInfo ? FromJson(string jsonString, JsonSerializerOptions? options = null) {
       try {
-        return JsonSerializer.Deserialize<TokensInfo>(jsonString, options);
+        return JsonSerializer.Deserialize(jsonString, JsonConfig.TypeInfo<TokensInfo>(options));
       } catch (JsonException e) {
         Console.Error.WriteLine($"Error deserializing JSON: {e.ToString()}");
         return null;

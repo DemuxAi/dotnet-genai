@@ -94,7 +94,7 @@ namespace Google.GenAI.Types {
     /// <returns>The deserialized PartialArg object, or null if deserialization fails.</returns>
     public static PartialArg ? FromJson(string jsonString, JsonSerializerOptions? options = null) {
       try {
-        return JsonSerializer.Deserialize<PartialArg>(jsonString, options);
+        return JsonSerializer.Deserialize(jsonString, JsonConfig.TypeInfo<PartialArg>(options));
       } catch (JsonException e) {
         Console.Error.WriteLine($"Error deserializing JSON: {e.ToString()}");
         return null;

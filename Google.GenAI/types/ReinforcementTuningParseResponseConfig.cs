@@ -23,20 +23,27 @@ using Google.GenAI.Serialization;
 
 namespace Google.GenAI.Types {
   /// <summary>
-  /// Defines how to parse sample response for reinforcement tuning.
+  /// Defines how to parse sample response config for reinforcement tuning. The parsed response
+  /// (i.e., substring) will be passed to the reward functions. For example, the input prompt might
+  /// be: > "Perform step-by-step thoughts first to problem A, finally output answer in the
+  /// &lt;ans&gt; &lt;/ans&gt; block." The sample response from the model under tuning might look
+  /// like: > "&lt;ans&gt;Yes&lt;/ans&gt;" Here, users can define the following parse config: ``` {
+  /// "parseType": "REGEX_EXTRACT", "regexExtractExpression": ".*(.*?)" } ``` The resulting parsed
+  /// response would be `"Yes"` and will be passed to the reward functions for evaluating rewards.
+  /// This data type is not supported in Gemini API.
   /// </summary>
 
   public record ReinforcementTuningParseResponseConfig {
     /// <summary>
-    /// Defines how to parse sample response.
+    /// Defines the type for parsing sample response.
     /// </summary>
     [JsonPropertyName("parseType")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public ResponseParseType ? ParseType { get; set; }
 
     /// <summary>
-    /// Defines the regex to extract the important part of sample response. This field is only used
-    /// when `parse_type` is `REGEX_EXTRACT`.
+    /// Defines the regex for extracting the important part of sample response. This field is only
+    /// used when parse_type is ResponseParseType.REGEX_EXTRACT.
     /// </summary>
     [JsonPropertyName("regexExtractExpression")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -55,8 +62,8 @@ namespace Google.GenAI.Types {
     public static ReinforcementTuningParseResponseConfig
         ? FromJson(string jsonString, JsonSerializerOptions? options = null) {
       try {
-        return JsonSerializer.Deserialize<ReinforcementTuningParseResponseConfig>(jsonString,
-                                                                                  options);
+        return JsonSerializer.Deserialize(
+            jsonString, JsonConfig.TypeInfo<ReinforcementTuningParseResponseConfig>(options));
       } catch (JsonException e) {
         Console.Error.WriteLine($"Error deserializing JSON: {e.ToString()}");
         return null;

@@ -15,6 +15,12 @@
     }
   }
 }
+<86 {
+  "setupComplete": {
+    "sessionId": "5d46adb4-335d-4032-bdf6-4975848defd5"
+  }
+}
+
 >203 {
   "clientContent": {
     "turns": [
@@ -29,32 +35,39 @@
     "turnComplete": true
   }
 }
-<86 {
-  "setupComplete": {
-    "sessionId": "42eb6c88-f1ff-4af1-9f87-bfa2548ebb9d"
-  }
-}
-
 <147 {
   "serverContent": {
     "modelTurn": {
       "role": "model",
       "parts": [
         {
-          "text": "The"
+          "text": "Did"
         }
       ]
     }
   }
 }
 
-<204 {
+<223 {
   "serverContent": {
     "modelTurn": {
       "role": "model",
       "parts": [
         {
-          "text": " ocean is so big that over 95% of it remains unexplored. Did"
+          "text": " you know that the ocean contains around 20 million tons of gold? Unfortunately"
+        }
+      ]
+    }
+  }
+}
+
+<210 {
+  "serverContent": {
+    "modelTurn": {
+      "role": "model",
+      "parts": [
+        {
+          "text": ", it's so diluted that it would be nearly impossible to extract.\n"
         }
       ]
     }

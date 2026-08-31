@@ -73,7 +73,7 @@ namespace Google.GenAI.Types {
     /// <returns>The deserialized RagChunk object, or null if deserialization fails.</returns>
     public static RagChunk ? FromJson(string jsonString, JsonSerializerOptions? options = null) {
       try {
-        return JsonSerializer.Deserialize<RagChunk>(jsonString, options);
+        return JsonSerializer.Deserialize(jsonString, JsonConfig.TypeInfo<RagChunk>(options));
       } catch (JsonException e) {
         Console.Error.WriteLine($"Error deserializing JSON: {e.ToString()}");
         return null;

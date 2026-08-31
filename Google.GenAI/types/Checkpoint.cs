@@ -64,7 +64,7 @@ namespace Google.GenAI.Types {
     /// <returns>The deserialized Checkpoint object, or null if deserialization fails.</returns>
     public static Checkpoint ? FromJson(string jsonString, JsonSerializerOptions? options = null) {
       try {
-        return JsonSerializer.Deserialize<Checkpoint>(jsonString, options);
+        return JsonSerializer.Deserialize(jsonString, JsonConfig.TypeInfo<Checkpoint>(options));
       } catch (JsonException e) {
         Console.Error.WriteLine($"Error deserializing JSON: {e.ToString()}");
         return null;

@@ -49,7 +49,8 @@ namespace Google.GenAI.Types {
     public static AuthConfigHttpBasicAuthConfig
         ? FromJson(string jsonString, JsonSerializerOptions? options = null) {
       try {
-        return JsonSerializer.Deserialize<AuthConfigHttpBasicAuthConfig>(jsonString, options);
+        return JsonSerializer.Deserialize(
+            jsonString, JsonConfig.TypeInfo<AuthConfigHttpBasicAuthConfig>(options));
       } catch (JsonException e) {
         Console.Error.WriteLine($"Error deserializing JSON: {e.ToString()}");
         return null;

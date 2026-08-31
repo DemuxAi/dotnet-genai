@@ -66,8 +66,8 @@ namespace Google.GenAI.Types {
     public static DatasetDistributionDistributionBucket
         ? FromJson(string jsonString, JsonSerializerOptions? options = null) {
       try {
-        return JsonSerializer.Deserialize<DatasetDistributionDistributionBucket>(jsonString,
-                                                                                 options);
+        return JsonSerializer.Deserialize(
+            jsonString, JsonConfig.TypeInfo<DatasetDistributionDistributionBucket>(options));
       } catch (JsonException e) {
         Console.Error.WriteLine($"Error deserializing JSON: {e.ToString()}");
         return null;

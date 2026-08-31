@@ -72,7 +72,7 @@ namespace Google.GenAI.E2E.Tests.Files
             string project = System.Environment.GetEnvironmentVariable("GOOGLE_CLOUD_PROJECT");
             string location =
                 System.Environment.GetEnvironmentVariable("GOOGLE_CLOUD_LOCATION") ?? "us-central1";
-            string apiKey = System.Environment.GetEnvironmentVariable("GOOGLE_API_KEY");
+            string apiKey = System.Environment.GetEnvironmentVariable("GEMINI_API_KEY");
             vertexClient = new Client(project: project, location: location, vertexAI: true,
                                       credential: TestServer.GetCredentialForTestMode(),
                                       httpOptions: vertexClientHttpOptions);

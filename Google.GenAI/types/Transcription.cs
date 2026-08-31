@@ -55,6 +55,26 @@ namespace Google.GenAI.Types {
           }
 
     /// <summary>
+    /// A label identifying the speaker of this audio segment (e.g. "spk_1", "spk_2").
+    /// </summary>
+    [JsonPropertyName("speakerLabel")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public string
+        ? SpeakerLabel {
+            get; set;
+          }
+
+    /// <summary>
+    /// Detailed word-level transcriptions and timing details.
+    /// </summary>
+    [JsonPropertyName("words")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public List<WordInfo>
+        ? Words {
+            get; set;
+          }
+
+    /// <summary>
     /// Deserializes a JSON string to a Transcription object.
     /// </summary>
     /// <param name="jsonString">The JSON string to deserialize.</param>
@@ -63,7 +83,7 @@ namespace Google.GenAI.Types {
     public static Transcription
         ? FromJson(string jsonString, JsonSerializerOptions? options = null) {
       try {
-        return JsonSerializer.Deserialize<Transcription>(jsonString, options);
+        return JsonSerializer.Deserialize(jsonString, JsonConfig.TypeInfo<Transcription>(options));
       } catch (JsonException e) {
         Console.Error.WriteLine($"Error deserializing JSON: {e.ToString()}");
         return null;

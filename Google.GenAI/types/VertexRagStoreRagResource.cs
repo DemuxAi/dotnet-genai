@@ -55,7 +55,8 @@ namespace Google.GenAI.Types {
     public static VertexRagStoreRagResource
         ? FromJson(string jsonString, JsonSerializerOptions? options = null) {
       try {
-        return JsonSerializer.Deserialize<VertexRagStoreRagResource>(jsonString, options);
+        return JsonSerializer.Deserialize(jsonString,
+                                          JsonConfig.TypeInfo<VertexRagStoreRagResource>(options));
       } catch (JsonException e) {
         Console.Error.WriteLine($"Error deserializing JSON: {e.ToString()}");
         return null;

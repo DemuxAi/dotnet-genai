@@ -65,7 +65,7 @@ namespace Google.GenAI.Types {
     /// <returns>The deserialized FileSearch object, or null if deserialization fails.</returns>
     public static FileSearch ? FromJson(string jsonString, JsonSerializerOptions? options = null) {
       try {
-        return JsonSerializer.Deserialize<FileSearch>(jsonString, options);
+        return JsonSerializer.Deserialize(jsonString, JsonConfig.TypeInfo<FileSearch>(options));
       } catch (JsonException e) {
         Console.Error.WriteLine($"Error deserializing JSON: {e.ToString()}");
         return null;

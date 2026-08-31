@@ -23,12 +23,12 @@ using Google.GenAI.Serialization;
 
 namespace Google.GenAI.Types {
   /// <summary>
-  /// Provides hints to the model about possible languages present in the audio.
+  /// Deprecated: Use AudioTranscriptionConfig.language_codes instead.
   /// </summary>
 
   public record LanguageHints {
     /// <summary>
-    /// BCP-47 language codes. At least one must be specified.
+    /// Deprecated. BCP-47 language codes.
     /// </summary>
     [JsonPropertyName("languageCodes")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -43,7 +43,7 @@ namespace Google.GenAI.Types {
     public static LanguageHints
         ? FromJson(string jsonString, JsonSerializerOptions? options = null) {
       try {
-        return JsonSerializer.Deserialize<LanguageHints>(jsonString, options);
+        return JsonSerializer.Deserialize(jsonString, JsonConfig.TypeInfo<LanguageHints>(options));
       } catch (JsonException e) {
         Console.Error.WriteLine($"Error deserializing JSON: {e.ToString()}");
         return null;

@@ -35,8 +35,9 @@ namespace Google.GenAI.Types {
     public AutoraterConfig ? AutoraterConfig { get; set; }
 
     /// <summary>
-    /// Allows substituting `prompt`, `response`, `system_instruction` and `references.reference`
-    /// (each wrapped in double curly braces) into the autorater prompt.
+    /// The prompt for an autorater to scorer the parsed sample response. This field supports the
+    /// following placeholders that will be replaced before scoring: - {{prompt}} - {{response}} -
+    /// {{system_instruction}} - {{references.key}}
     /// </summary>
     [JsonPropertyName("autoraterPrompt")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -46,7 +47,9 @@ namespace Google.GenAI.Types {
           }
 
     /// <summary>
-    /// Parses autorater returned response.
+    /// Parses autorater returned response for scoring. For example, if the autorater response has
+    /// reward stored in the `2.0` block, defining a parsing response config using regex `".*(.*?)"`
+    /// will return a score `"2.0"`.
     /// </summary>
     [JsonPropertyName("autoraterResponseParseConfig")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -56,7 +59,9 @@ namespace Google.GenAI.Types {
           }
 
     /// <summary>
-    /// Scores autorater responses by directly converting parsed autorater response to float reward.
+    /// Scores autorater responses by directly converting parsed autorater response to a float
+    /// reward. Note: Reward is clipped to be within `[-1, 1]`, i.e., `reward =
+    /// max(min(reward, 1.0), -1.0)`.
     /// </summary>
     [JsonPropertyName("parsedResponseConversionScorer")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -66,7 +71,7 @@ namespace Google.GenAI.Types {
           }
 
     /// <summary>
-    /// Scores autorater responses by using exact string match reward scorer.
+    /// Scores autorater responses by using string match reward scorer.
     /// </summary>
     [JsonPropertyName("exactMatchScorer")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -85,7 +90,8 @@ namespace Google.GenAI.Types {
     public static ReinforcementTuningAutoraterScorer
         ? FromJson(string jsonString, JsonSerializerOptions? options = null) {
       try {
-        return JsonSerializer.Deserialize<ReinforcementTuningAutoraterScorer>(jsonString, options);
+        return JsonSerializer.Deserialize(
+            jsonString, JsonConfig.TypeInfo<ReinforcementTuningAutoraterScorer>(options));
       } catch (JsonException e) {
         Console.Error.WriteLine($"Error deserializing JSON: {e.ToString()}");
         return null;

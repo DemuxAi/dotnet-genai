@@ -20,7 +20,7 @@ using Google.Apis.Auth.OAuth2;
 
 public class RegisterFiles {
   public static async Task SendRequestAsync() {
-    string apiKey = System.Environment.GetEnvironmentVariable("GOOGLE_API_KEY");
+    string apiKey = System.Environment.GetEnvironmentVariable("GEMINI_API_KEY");
     // Gemini Developer API client.
     var geminiClient = new Client(apiKey: apiKey);
 

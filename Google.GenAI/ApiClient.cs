@@ -36,6 +36,131 @@ namespace Google.GenAI
         "eu"
     };
 
+    // Default HTTP retry configuration. Keep aligned with _api_client.py in the Python SDK.
+    private const int DefaultRetryAttempts = 5;  // Including the initial call.
+    private const double DefaultRetryInitialDelay = 1.0;  // Seconds.
+    private const double DefaultRetryMaxDelay = 60.0;  // Seconds.
+    private const double DefaultRetryExpBase = 2.0;
+    private const double DefaultRetryJitter = 1.0;
+
+    private static readonly IReadOnlyList<int> DefaultRetryHttpStatusCodes = new List<int>
+    {
+        408,
+        429,
+        500,
+        502,
+        503,
+        504,
+    };
+
+#if NET
+    private static Random RetryRandom => Random.Shared;
+#else
+    // Random.Shared is net6.0+, and Random is not thread-safe.
+    private static readonly ThreadLocal<Random> ThreadLocalRetryRandom =
+        new ThreadLocal<Random>(() => new Random());
+
+    private static Random RetryRandom => ThreadLocalRetryRandom.Value!;
+#endif
+
+    /// <summary>
+    /// Sends an HTTP request, retrying according to <paramref name="retryOptions"/>. A null
+    /// value means a single attempt. <paramref name="requestFactory"/> builds a fresh message
+    /// per attempt, since an HttpRequestMessage cannot be sent twice.
+    /// </summary>
+    protected async Task<HttpResponseMessage> SendWithRetryAsync(
+        Func<Task<HttpRequestMessage>> requestFactory,
+        HttpCompletionOption completionOption,
+        Types.HttpRetryOptions? retryOptions,
+        CancellationToken cancellationToken)
+    {
+      int attempts;
+      if (retryOptions == null)
+      {
+        attempts = 1;
+      }
+      else
+      {
+        attempts = retryOptions.Attempts ?? DefaultRetryAttempts;
+        if (attempts < 1)
+        {
+          attempts = 1;
+        }
+      }
+
+      IReadOnlyList<int> retryableCodes = DefaultRetryHttpStatusCodes;
+      if (retryOptions?.HttpStatusCodes != null && retryOptions.HttpStatusCodes.Count > 0)
+      {
+        retryableCodes = retryOptions.HttpStatusCodes;
+      }
+
+      for (int attempt = 1; ; attempt++)
+      {
+        HttpRequestMessage request = await requestFactory();
+        HttpResponseMessage? response = null;
+        Exception? transportFailure = null;
+        try
+        {
+          response = await HttpClient.SendAsync(request, completionOption, cancellationToken);
+        }
+        catch (Exception e) when (IsRetryableTransportFailure(e, cancellationToken))
+        {
+          transportFailure = e;
+        }
+
+        if (attempt >= attempts)
+        {
+          if (transportFailure != null)
+          {
+            throw transportFailure;
+          }
+          return response!;
+        }
+
+        if (transportFailure == null &&
+            (response!.IsSuccessStatusCode || !retryableCodes.Contains((int)response.StatusCode)))
+        {
+          return response;
+        }
+
+        response?.Dispose();
+
+        await Task.Delay(ComputeRetryDelay(attempt, retryOptions!), cancellationToken)
+            .ConfigureAwait(false);
+      }
+    }
+
+    /// <summary>
+    /// Reports whether a failed send is worth repeating. A caller cancellation is not.
+    /// </summary>
+    private static bool IsRetryableTransportFailure(Exception e, CancellationToken cancellationToken)
+    {
+      if (cancellationToken.IsCancellationRequested)
+      {
+        return false;
+      }
+      return e is HttpRequestException || e is OperationCanceledException;
+    }
+
+    /// <summary>
+    /// Returns how long to wait before the attempt following <paramref name="attempt"/>, as
+    /// <c>min(initialDelay * expBase^(attempt-1) + U(0, jitter), maxDelay)</c>.
+    /// </summary>
+    internal static TimeSpan ComputeRetryDelay(int attempt, Types.HttpRetryOptions retryOptions)
+    {
+      double initialDelay = retryOptions.InitialDelay ?? DefaultRetryInitialDelay;
+      double maxDelay = retryOptions.MaxDelay ?? DefaultRetryMaxDelay;
+      double expBase = retryOptions.ExpBase ?? DefaultRetryExpBase;
+      double jitter = retryOptions.Jitter ?? DefaultRetryJitter;
+
+      double seconds = (initialDelay * Math.Pow(expBase, attempt - 1))
+          + (RetryRandom.NextDouble() * jitter);
+      // Math.Clamp is not available on netstandard2.0.
+      seconds = Math.Min(seconds, maxDelay);
+      seconds = Math.Max(seconds, 0.0);
+      return TimeSpan.FromSeconds(seconds);
+    }
+
     private HttpClient? _httpClient;
     private readonly object _httpClientLock = new object();
 
@@ -124,7 +249,20 @@ namespace Google.GenAI
 
       var envProject = System.Environment.GetEnvironmentVariable("GOOGLE_CLOUD_PROJECT");
       var envLocation = System.Environment.GetEnvironmentVariable("GOOGLE_CLOUD_LOCATION");
-      var envApiKey = System.Environment.GetEnvironmentVariable("GOOGLE_API_KEY");
+
+      var googleApiKeyEnv = System.Environment.GetEnvironmentVariable("GOOGLE_API_KEY");
+      var geminiApiKeyEnv = System.Environment.GetEnvironmentVariable("GEMINI_API_KEY");
+      string? envApiKey = null;
+
+      if (googleApiKeyEnv != null && geminiApiKeyEnv != null)
+      {
+        System.Diagnostics.Trace.TraceWarning("Both GOOGLE_API_KEY and GEMINI_API_KEY are set. Using GOOGLE_API_KEY.");
+        envApiKey = googleApiKeyEnv;
+      }
+      else
+      {
+        envApiKey = googleApiKeyEnv ?? geminiApiKeyEnv;
+      }
 
       this.Project = project ?? envProject;
       this.Location = location ?? envLocation;
@@ -139,7 +277,7 @@ namespace Google.GenAI
             "base_url must be set when base_url_resource_scope is set.");
       }
 
-      if ((project != null || location != null) && apiKey != null)
+      if ((project != null || location != null) && apiKey != null && !this.VertexAI)
       {
         throw new ArgumentException(
             "Project/location and API key are mutually exclusive in the client initializer.");
@@ -152,22 +290,27 @@ namespace Google.GenAI
 
       if (this.VertexAI)
       {
-        if (credentials != null && !string.IsNullOrEmpty(envApiKey))
+        bool explicitApiKeyAndProject = apiKey != null && (project != null || location != null);
+
+        if (!explicitApiKeyAndProject)
         {
-          this.ApiKey = null;
-        }
-        else if ((!string.IsNullOrEmpty(envLocation) || !string.IsNullOrEmpty(envProject)) && !string.IsNullOrEmpty(apiKey))
-        {
-          this.Project = null;
-          this.Location = null;
-        }
-        else if ((!string.IsNullOrEmpty(project) || !string.IsNullOrEmpty(location)) && !string.IsNullOrEmpty(envApiKey))
-        {
-          this.ApiKey = null;
-        }
-        else if ((!string.IsNullOrEmpty(envLocation) || !string.IsNullOrEmpty(envProject)) && !string.IsNullOrEmpty(envApiKey))
-        {
-          this.ApiKey = null;
+          if (credentials != null && !string.IsNullOrEmpty(envApiKey))
+          {
+            this.ApiKey = null;
+          }
+          else if ((!string.IsNullOrEmpty(envLocation) || !string.IsNullOrEmpty(envProject)) && !string.IsNullOrEmpty(apiKey))
+          {
+            this.Project = null;
+            this.Location = null;
+          }
+          else if ((!string.IsNullOrEmpty(project) || !string.IsNullOrEmpty(location)) && !string.IsNullOrEmpty(envApiKey))
+          {
+            this.ApiKey = null;
+          }
+          else if ((!string.IsNullOrEmpty(envLocation) || !string.IsNullOrEmpty(envProject)) && !string.IsNullOrEmpty(envApiKey))
+          {
+            this.ApiKey = null;
+          }
         }
 
         if (string.IsNullOrEmpty(this.Location) && string.IsNullOrEmpty(this.ApiKey))
@@ -193,7 +336,7 @@ namespace Google.GenAI
           this.ApiKey = null;
         }
 
-        if (!string.IsNullOrEmpty(this.Project) && !string.IsNullOrEmpty(this.Location))
+        if (!string.IsNullOrEmpty(this.Project) && !string.IsNullOrEmpty(this.Location) && string.IsNullOrEmpty(this.ApiKey))
         {
           this.Credentials ??= GetDefaultCredentials();
         }
@@ -207,7 +350,7 @@ namespace Google.GenAI
         if (string.IsNullOrEmpty(this.ApiKey))
         {
           throw new ArgumentException(
-              "API key must either be provided or set in the environment variable GOOGLE_API_KEY.");
+              "API key must either be provided or set in the environment variable GEMINI_API_KEY.");
         }
       }
 
@@ -218,6 +361,8 @@ namespace Google.GenAI
         this.HttpOptions = MergeHttpOptions(customHttpOptions);
       }
 
+      // Must be assigned before anything reads this.HttpClient, whose getter caches
+      // the client and consults ClientOptions.HttpClientFactory.
       this.ClientOptions = clientOptions ?? new Google.GenAI.Types.ClientOptions();
     }
 
@@ -312,6 +457,14 @@ namespace Google.GenAI
       if (optionsToApply?.BaseUrlResourceScope != null)
       {
         mergedOptions.BaseUrlResourceScope = optionsToApply?.BaseUrlResourceScope;
+      }
+      if (optionsToApply?.RetryOptions != null)
+      {
+        mergedOptions.RetryOptions = optionsToApply?.RetryOptions;
+      }
+      if (!string.IsNullOrEmpty(optionsToApply?.RequestUrl))
+      {
+        mergedOptions.RequestUrl = optionsToApply?.RequestUrl;
       }
 
       var currentHeaders = this.HttpOptions.Headers ?? new Dictionary<string, string>();

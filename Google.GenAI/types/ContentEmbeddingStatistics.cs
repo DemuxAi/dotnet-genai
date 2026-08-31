@@ -46,6 +46,17 @@ namespace Google.GenAI.Types {
           }
 
     /// <summary>
+    /// Gemini Enterprise Agent Platform only. List of modalities and their token count for the
+    /// input content.
+    /// </summary>
+    [JsonPropertyName("tokensDetails")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public List<ModalityTokenCount>
+        ? TokensDetails {
+            get; set;
+          }
+
+    /// <summary>
     /// Deserializes a JSON string to a ContentEmbeddingStatistics object.
     /// </summary>
     /// <param name="jsonString">The JSON string to deserialize.</param>
@@ -55,7 +66,8 @@ namespace Google.GenAI.Types {
     public static ContentEmbeddingStatistics
         ? FromJson(string jsonString, JsonSerializerOptions? options = null) {
       try {
-        return JsonSerializer.Deserialize<ContentEmbeddingStatistics>(jsonString, options);
+        return JsonSerializer.Deserialize(jsonString,
+                                          JsonConfig.TypeInfo<ContentEmbeddingStatistics>(options));
       } catch (JsonException e) {
         Console.Error.WriteLine($"Error deserializing JSON: {e.ToString()}");
         return null;

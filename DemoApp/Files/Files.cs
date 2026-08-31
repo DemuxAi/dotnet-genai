@@ -19,7 +19,7 @@ using Google.GenAI.Types;
 
 public class Files {
   public static async Task SendRequestAsync() {
-    string apiKey = System.Environment.GetEnvironmentVariable("GOOGLE_API_KEY");
+    string apiKey = System.Environment.GetEnvironmentVariable("GEMINI_API_KEY");
     var geminiClient = new Client(apiKey: apiKey);
     try {
       var uploadResponse1 = await geminiClient.Files.UploadAsync(filePath: "./google.png");

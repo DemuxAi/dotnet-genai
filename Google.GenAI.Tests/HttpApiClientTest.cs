@@ -30,15 +30,17 @@ namespace Google.GenAI.Tests {
   [TestClass]
   public class HttpApiClientTests {
     private const string TestApiKey = "test-api-key";
-    private const string EnvApiKeyName = "GOOGLE_API_KEY";
+    private const string EnvApiKeyName = "GEMINI_API_KEY";
     private const string TestProject = "test-project";
     private const string TestLocation = "us-central1";
     private const string EnvProjectName = "GOOGLE_CLOUD_PROJECT";
     private const string EnvLocationName = "GOOGLE_CLOUD_LOCATION";
+    private const string EnvGoogleApiKeyName = "GOOGLE_API_KEY";
 
     [TestCleanup]
     public void Cleanup() {
       System.Environment.SetEnvironmentVariable(EnvApiKeyName, null);
+      System.Environment.SetEnvironmentVariable(EnvGoogleApiKeyName, null);
       System.Environment.SetEnvironmentVariable(EnvProjectName, null);
       System.Environment.SetEnvironmentVariable(EnvLocationName, null);
     }
@@ -97,7 +99,7 @@ namespace Google.GenAI.Tests {
 
       var ex = Assert.ThrowsException<ArgumentException>(() => new HttpApiClient(vertexAI: false));
       Assert.IsTrue(ex.Message.Contains(
-          "API key must either be provided or set in the environment variable GOOGLE_API_KEY."));
+          "API key must either be provided or set in the environment variable GEMINI_API_KEY."));
     }
 
     [TestMethod]
@@ -106,7 +108,7 @@ namespace Google.GenAI.Tests {
 
       var ex = Assert.ThrowsException<ArgumentException>(() => new HttpApiClient(vertexAI: false, apiKey: ""));
       Assert.IsTrue(ex.Message.Contains(
-          "API key must either be provided or set in the environment variable GOOGLE_API_KEY."));
+          "API key must either be provided or set in the environment variable GEMINI_API_KEY."));
     }
 
     [TestMethod]
@@ -369,6 +371,15 @@ namespace Google.GenAI.Tests {
       var request = await InvokeCreateHttpRequestAsync(client, System.Net.Http.HttpMethod.Post, "some/path", "{}", null);
 
       Assert.AreEqual("https://my-location-aiplatform.googleapis.com/v1beta1/projects/my-project/locations/my-location/some/path", request.RequestUri!.ToString());
+    }
+
+    [TestMethod]
+    public async System.Threading.Tasks.Task CreateHttpRequestAsync_Vertex_ApiKeyWithProjectLocation_PrependsPath() {
+      var client = new HttpApiClient(vertexAI: true, apiKey: "my-key", project: "my-project", location: "us-central1");
+
+      var request = await InvokeCreateHttpRequestAsync(client, System.Net.Http.HttpMethod.Post, "some/path", "{}", null);
+
+      Assert.AreEqual("https://us-central1-aiplatform.googleapis.com/v1beta1/projects/my-project/locations/us-central1/some/path", request.RequestUri!.ToString());
     }
 
     [TestMethod]

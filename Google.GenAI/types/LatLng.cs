@@ -54,7 +54,7 @@ namespace Google.GenAI.Types {
     /// <returns>The deserialized LatLng object, or null if deserialization fails.</returns>
     public static LatLng ? FromJson(string jsonString, JsonSerializerOptions? options = null) {
       try {
-        return JsonSerializer.Deserialize<LatLng>(jsonString, options);
+        return JsonSerializer.Deserialize(jsonString, JsonConfig.TypeInfo<LatLng>(options));
       } catch (JsonException e) {
         Console.Error.WriteLine($"Error deserializing JSON: {e.ToString()}");
         return null;

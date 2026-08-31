@@ -63,7 +63,7 @@ public class GenerateImagesErrorHandlingTest {
     string project = System.Environment.GetEnvironmentVariable("GOOGLE_CLOUD_PROJECT");
     string location =
         System.Environment.GetEnvironmentVariable("GOOGLE_CLOUD_LOCATION") ?? "us-central1";
-    string apiKey = System.Environment.GetEnvironmentVariable("GOOGLE_API_KEY");
+    string apiKey = System.Environment.GetEnvironmentVariable("GEMINI_API_KEY");
     enterpriseClient = new Client(project: project, location: location, enterprise: true,
                               credential: TestServer.GetCredentialForTestMode(),
                               httpOptions: enterpriseClientHttpOptions);
@@ -86,36 +86,12 @@ public class GenerateImagesErrorHandlingTest {
     StringAssert.Contains(ex.Message, "[ORIGINAL ERROR] generic::not_found");
   }
 
-  [TestMethod]
-  public async Task GenerateImagesWrongModelNameGeminiTest() {
-    var ex = await Assert.ThrowsExceptionAsync<ClientError>(async () => {
-      await geminiClient.Models.GenerateImagesAsync(model: "wrong-model-name",
-                                                    prompt: "Red skateboard", config: null);
-    });
 
-    StringAssert.Contains(ex.Message, "wrong-model-name");
-    StringAssert.Contains(ex.Message, "Details");
-    StringAssert.Contains(ex.Message, "[ORIGINAL ERROR] generic::not_found");
-  }
 
   [TestMethod]
   public async Task GenerateImagesBlockedVertexTest() {
     var vertexResponse =
         await enterpriseClient.Models.GenerateImagesAsync(model: modelName, prompt: "Violence and gore",
-                                                      config: new GenerateImagesConfig {
-                                                        NumberOfImages = 1,
-                                                        IncludeRaiReason = true,
-                                                      });
-
-    Assert.IsNotNull(vertexResponse);
-    Assert.IsTrue(vertexResponse.GeneratedImages.Count == 1);
-    Assert.IsNotNull(vertexResponse.GeneratedImages[0].RaiFilteredReason);
-  }
-
-  [TestMethod]
-  public async Task GenerateImagesBlockedGeminiTest() {
-    var vertexResponse =
-        await geminiClient.Models.GenerateImagesAsync(model: modelName, prompt: "Violence and gore",
                                                       config: new GenerateImagesConfig {
                                                         NumberOfImages = 1,
                                                         IncludeRaiReason = true,

@@ -149,6 +149,16 @@ namespace Google.GenAI.Types {
           }
 
     /// <summary>
+    /// The current activity status of the live session. Always sent alongside `turn_complete`.
+    /// </summary>
+    [JsonPropertyName("interactionStatus")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public InteractionStatus
+        ? InteractionStatus {
+            get; set;
+          }
+
+    /// <summary>
     /// Deserializes a JSON string to a LiveServerContent object.
     /// </summary>
     /// <param name="jsonString">The JSON string to deserialize.</param>
@@ -158,7 +168,8 @@ namespace Google.GenAI.Types {
     public static LiveServerContent
         ? FromJson(string jsonString, JsonSerializerOptions? options = null) {
       try {
-        return JsonSerializer.Deserialize<LiveServerContent>(jsonString, options);
+        return JsonSerializer.Deserialize(jsonString,
+                                          JsonConfig.TypeInfo<LiveServerContent>(options));
       } catch (JsonException e) {
         Console.Error.WriteLine($"Error deserializing JSON: {e.ToString()}");
         return null;

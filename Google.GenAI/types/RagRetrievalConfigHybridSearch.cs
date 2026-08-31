@@ -46,7 +46,8 @@ namespace Google.GenAI.Types {
     public static RagRetrievalConfigHybridSearch
         ? FromJson(string jsonString, JsonSerializerOptions? options = null) {
       try {
-        return JsonSerializer.Deserialize<RagRetrievalConfigHybridSearch>(jsonString, options);
+        return JsonSerializer.Deserialize(
+            jsonString, JsonConfig.TypeInfo<RagRetrievalConfigHybridSearch>(options));
       } catch (JsonException e) {
         Console.Error.WriteLine($"Error deserializing JSON: {e.ToString()}");
         return null;

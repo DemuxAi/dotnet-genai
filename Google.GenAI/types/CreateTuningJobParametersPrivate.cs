@@ -75,7 +75,8 @@ namespace Google.GenAI.Types {
     public static CreateTuningJobParametersPrivate
         ? FromJson(string jsonString, JsonSerializerOptions? options = null) {
       try {
-        return JsonSerializer.Deserialize<CreateTuningJobParametersPrivate>(jsonString, options);
+        return JsonSerializer.Deserialize(
+            jsonString, JsonConfig.TypeInfo<CreateTuningJobParametersPrivate>(options));
       } catch (JsonException e) {
         Console.Error.WriteLine($"Error deserializing JSON: {e.ToString()}");
         return null;

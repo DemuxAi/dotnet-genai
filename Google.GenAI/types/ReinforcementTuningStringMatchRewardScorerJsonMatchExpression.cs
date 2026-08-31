@@ -23,20 +23,24 @@ using Google.GenAI.Serialization;
 
 namespace Google.GenAI.Types {
   /// <summary>
-  /// Converts parsed responses to JSON format, finds the first-level matching key, then performs
-  /// StringMatchExpression on the value.
+  /// JsonMatchExpression supports converting the parsed responses to JSON format, finding the value
+  /// in the JSON response that matches the key_name in the first level, and performing
+  /// StringMatchExpression operation on the matched JSON value. This data type is not supported in
+  /// Gemini API.
   /// </summary>
 
   public record ReinforcementTuningStringMatchRewardScorerJsonMatchExpression {
     /// <summary>
-    /// Json key name to find the value to match against.
+    /// The key name to find the value in the parsed response that's in JSON format. Only
+    /// first-level key matching is supported.
     /// </summary>
     [JsonPropertyName("keyName")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public string ? KeyName { get; set; }
 
     /// <summary>
-    /// String match expression to match against the value of json key.
+    /// String match expression to match against the extracted value from the JSON representation of
+    /// the parsed response.
     /// </summary>
     [JsonPropertyName("valueStringMatchExpression")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -56,9 +60,10 @@ namespace Google.GenAI.Types {
     public static ReinforcementTuningStringMatchRewardScorerJsonMatchExpression
         ? FromJson(string jsonString, JsonSerializerOptions? options = null) {
       try {
-        return JsonSerializer
-            .Deserialize<ReinforcementTuningStringMatchRewardScorerJsonMatchExpression>(jsonString,
-                                                                                        options);
+        return JsonSerializer.Deserialize(
+            jsonString,
+            JsonConfig.TypeInfo<ReinforcementTuningStringMatchRewardScorerJsonMatchExpression>(
+                options));
       } catch (JsonException e) {
         Console.Error.WriteLine($"Error deserializing JSON: {e.ToString()}");
         return null;

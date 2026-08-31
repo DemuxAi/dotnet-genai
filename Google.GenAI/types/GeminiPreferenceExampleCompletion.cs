@@ -54,7 +54,8 @@ namespace Google.GenAI.Types {
     public static GeminiPreferenceExampleCompletion
         ? FromJson(string jsonString, JsonSerializerOptions? options = null) {
       try {
-        return JsonSerializer.Deserialize<GeminiPreferenceExampleCompletion>(jsonString, options);
+        return JsonSerializer.Deserialize(
+            jsonString, JsonConfig.TypeInfo<GeminiPreferenceExampleCompletion>(options));
       } catch (JsonException e) {
         Console.Error.WriteLine($"Error deserializing JSON: {e.ToString()}");
         return null;

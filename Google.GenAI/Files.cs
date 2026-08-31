@@ -186,7 +186,8 @@ namespace Google.GenAI {
       if (!Common.IsZero(config)) {
         parameter.Config = config;
       }
-      string jsonString = JsonSerializer.Serialize(parameter);
+      string jsonString =
+          JsonSerializer.Serialize(parameter, JsonConfig.TypeInfo<ListFilesParameters>());
       JsonNode? parameterNode = JsonNode.Parse(jsonString);
       if (parameterNode == null) {
         throw new NotSupportedException("Failed to parse ListFilesParameters to JsonNode.");
@@ -211,9 +212,9 @@ namespace Google.GenAI {
       }
       HttpOptions? requestHttpOptions = config?.HttpOptions;
 
-      ApiResponse response =
-          await this._apiClient.RequestAsync(HttpMethod.Get, path, JsonSerializer.Serialize(body),
-                                             requestHttpOptions, cancellationToken);
+      ApiResponse response = await this._apiClient.RequestAsync(
+          HttpMethod.Get, path, body?.ToJsonString(JsonConfig.InternalSerializerOptions),
+          requestHttpOptions, cancellationToken);
       HttpContent httpContent = response.GetEntity();
 #if NETSTANDARD2_0
       string contentString = await httpContent.ReadAsStringAsync();
@@ -235,7 +236,7 @@ namespace Google.GenAI {
         responseNode = httpContentNode;
       }
 
-      return responseNode.Deserialize<ListFilesResponse>() ??
+      return responseNode.Deserialize(JsonConfig.TypeInfo<ListFilesResponse>()) ??
              throw new InvalidOperationException("Failed to deserialize Task<ListFilesResponse>.");
     }
 
@@ -250,7 +251,8 @@ namespace Google.GenAI {
       if (!Common.IsZero(config)) {
         parameter.Config = config;
       }
-      string jsonString = JsonSerializer.Serialize(parameter);
+      string jsonString =
+          JsonSerializer.Serialize(parameter, JsonConfig.TypeInfo<CreateFileParameters>());
       JsonNode? parameterNode = JsonNode.Parse(jsonString);
       if (parameterNode == null) {
         throw new NotSupportedException("Failed to parse CreateFileParameters to JsonNode.");
@@ -275,9 +277,9 @@ namespace Google.GenAI {
       }
       HttpOptions? requestHttpOptions = config?.HttpOptions;
 
-      ApiResponse response =
-          await this._apiClient.RequestAsync(HttpMethod.Post, path, JsonSerializer.Serialize(body),
-                                             requestHttpOptions, cancellationToken);
+      ApiResponse response = await this._apiClient.RequestAsync(
+          HttpMethod.Post, path, body?.ToJsonString(JsonConfig.InternalSerializerOptions),
+          requestHttpOptions, cancellationToken);
       HttpContent httpContent = response.GetEntity();
 #if NETSTANDARD2_0
       string contentString = await httpContent.ReadAsStringAsync();
@@ -316,7 +318,7 @@ namespace Google.GenAI {
         responseNode = httpContentNode;
       }
 
-      return responseNode.Deserialize<CreateFileResponse>() ??
+      return responseNode.Deserialize(JsonConfig.TypeInfo<CreateFileResponse>()) ??
              throw new InvalidOperationException("Failed to deserialize Task<CreateFileResponse>.");
     }
 
@@ -330,7 +332,8 @@ namespace Google.GenAI {
       if (!Common.IsZero(config)) {
         parameter.Config = config;
       }
-      string jsonString = JsonSerializer.Serialize(parameter);
+      string jsonString =
+          JsonSerializer.Serialize(parameter, JsonConfig.TypeInfo<GetFileParameters>());
       JsonNode? parameterNode = JsonNode.Parse(jsonString);
       if (parameterNode == null) {
         throw new NotSupportedException("Failed to parse GetFileParameters to JsonNode.");
@@ -355,9 +358,9 @@ namespace Google.GenAI {
       }
       HttpOptions? requestHttpOptions = config?.HttpOptions;
 
-      ApiResponse response =
-          await this._apiClient.RequestAsync(HttpMethod.Get, path, JsonSerializer.Serialize(body),
-                                             requestHttpOptions, cancellationToken);
+      ApiResponse response = await this._apiClient.RequestAsync(
+          HttpMethod.Get, path, body?.ToJsonString(JsonConfig.InternalSerializerOptions),
+          requestHttpOptions, cancellationToken);
       HttpContent httpContent = response.GetEntity();
 #if NETSTANDARD2_0
       string contentString = await httpContent.ReadAsStringAsync();
@@ -379,7 +382,7 @@ namespace Google.GenAI {
         responseNode = httpContentNode;
       }
 
-      return responseNode.Deserialize<Google.GenAI.Types.File>() ??
+      return responseNode.Deserialize(JsonConfig.TypeInfo<Google.GenAI.Types.File>()) ??
              throw new InvalidOperationException(
                  "Failed to deserialize Task<Google.GenAI.Types.File>.");
     }
@@ -395,7 +398,8 @@ namespace Google.GenAI {
       if (!Common.IsZero(config)) {
         parameter.Config = config;
       }
-      string jsonString = JsonSerializer.Serialize(parameter);
+      string jsonString =
+          JsonSerializer.Serialize(parameter, JsonConfig.TypeInfo<DeleteFileParameters>());
       JsonNode? parameterNode = JsonNode.Parse(jsonString);
       if (parameterNode == null) {
         throw new NotSupportedException("Failed to parse DeleteFileParameters to JsonNode.");
@@ -421,8 +425,8 @@ namespace Google.GenAI {
       HttpOptions? requestHttpOptions = config?.HttpOptions;
 
       ApiResponse response = await this._apiClient.RequestAsync(
-          HttpMethod.Delete, path, JsonSerializer.Serialize(body), requestHttpOptions,
-          cancellationToken);
+          HttpMethod.Delete, path, body?.ToJsonString(JsonConfig.InternalSerializerOptions),
+          requestHttpOptions, cancellationToken);
       HttpContent httpContent = response.GetEntity();
 #if NETSTANDARD2_0
       string contentString = await httpContent.ReadAsStringAsync();
@@ -444,7 +448,7 @@ namespace Google.GenAI {
         responseNode = httpContentNode;
       }
 
-      return responseNode.Deserialize<DeleteFileResponse>() ??
+      return responseNode.Deserialize(JsonConfig.TypeInfo<DeleteFileResponse>()) ??
              throw new InvalidOperationException("Failed to deserialize Task<DeleteFileResponse>.");
     }
 
@@ -459,7 +463,8 @@ namespace Google.GenAI {
       if (!Common.IsZero(config)) {
         parameter.Config = config;
       }
-      string jsonString = JsonSerializer.Serialize(parameter);
+      string jsonString = JsonSerializer.Serialize(
+          parameter, JsonConfig.TypeInfo<InternalRegisterFilesParameters>());
       JsonNode? parameterNode = JsonNode.Parse(jsonString);
       if (parameterNode == null) {
         throw new NotSupportedException(
@@ -485,9 +490,9 @@ namespace Google.GenAI {
       }
       HttpOptions? requestHttpOptions = config?.HttpOptions;
 
-      ApiResponse response =
-          await this._apiClient.RequestAsync(HttpMethod.Post, path, JsonSerializer.Serialize(body),
-                                             requestHttpOptions, cancellationToken);
+      ApiResponse response = await this._apiClient.RequestAsync(
+          HttpMethod.Post, path, body?.ToJsonString(JsonConfig.InternalSerializerOptions),
+          requestHttpOptions, cancellationToken);
       HttpContent httpContent = response.GetEntity();
 #if NETSTANDARD2_0
       string contentString = await httpContent.ReadAsStringAsync();
@@ -526,7 +531,7 @@ namespace Google.GenAI {
         responseNode = httpContentNode;
       }
 
-      return responseNode.Deserialize<RegisterFilesResponse>() ??
+      return responseNode.Deserialize(JsonConfig.TypeInfo<RegisterFilesResponse>()) ??
              throw new InvalidOperationException(
                  "Failed to deserialize Task<RegisterFilesResponse>.");
     }
@@ -857,7 +862,8 @@ namespace Google.GenAI {
         throw new InvalidOperationException("Upload response does not contain file object");
       }
 
-      return JsonSerializer.Deserialize<Google.GenAI.Types.File>(fileNode.ToString()) ??
+      return JsonSerializer.Deserialize(fileNode.ToString(),
+                                        JsonConfig.TypeInfo<Google.GenAI.Types.File>()) ??
              throw new InvalidOperationException("Failed to deserialize File");
     }
 

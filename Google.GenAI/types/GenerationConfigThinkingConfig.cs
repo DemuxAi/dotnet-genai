@@ -38,7 +38,7 @@ namespace Google.GenAI.Types {
     /// fails.</returns>
     public static new GenerationConfigThinkingConfig ? FromJson(string jsonString, JsonSerializerOptions? options = null) {
       try {
-        return JsonSerializer.Deserialize<GenerationConfigThinkingConfig>(jsonString, options);
+        return JsonSerializer.Deserialize(jsonString, JsonConfig.TypeInfo<GenerationConfigThinkingConfig>(options));
       } catch (JsonException e) {
         Console.Error.WriteLine($"Error deserializing JSON: {e.ToString()}");
         return null;

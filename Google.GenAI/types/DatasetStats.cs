@@ -131,6 +131,38 @@ namespace Google.GenAI.Types {
           }
 
     /// <summary>
+    /// Output only. Dataset distributions for the number of contents per example.
+    /// </summary>
+    [JsonPropertyName("contentsPerExampleDistribution")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public DatasetDistribution
+        ? ContentsPerExampleDistribution {
+            get; set;
+          }
+
+    /// <summary>
+    /// Output only. Sample user dataset examples in the training dataset uri for Reinforcement
+    /// Tuning.
+    /// </summary>
+    [JsonPropertyName("reinforcementTuningUserDatasetExamples")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public ReinforcementTuningUserDatasetExamples
+        ? ReinforcementTuningUserDatasetExamples {
+            get; set;
+          }
+
+    /// <summary>
+    /// Output only. Number of billable tokens in the tuning dataset.
+    /// </summary>
+    [JsonPropertyName("totalBillableTokenCount")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    [JsonConverter(typeof(StringToNullableLongConverter))]
+    public long
+        ? TotalBillableTokenCount {
+            get; set;
+          }
+
+    /// <summary>
     /// Deserializes a JSON string to a DatasetStats object.
     /// </summary>
     /// <param name="jsonString">The JSON string to deserialize.</param>
@@ -139,7 +171,7 @@ namespace Google.GenAI.Types {
     public static DatasetStats
         ? FromJson(string jsonString, JsonSerializerOptions? options = null) {
       try {
-        return JsonSerializer.Deserialize<DatasetStats>(jsonString, options);
+        return JsonSerializer.Deserialize(jsonString, JsonConfig.TypeInfo<DatasetStats>(options));
       } catch (JsonException e) {
         Console.Error.WriteLine($"Error deserializing JSON: {e.ToString()}");
         return null;

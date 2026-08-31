@@ -85,7 +85,8 @@ namespace Google.GenAI.Types {
     public static EmbedContentParametersPrivate
         ? FromJson(string jsonString, JsonSerializerOptions? options = null) {
       try {
-        return JsonSerializer.Deserialize<EmbedContentParametersPrivate>(jsonString, options);
+        return JsonSerializer.Deserialize(
+            jsonString, JsonConfig.TypeInfo<EmbedContentParametersPrivate>(options));
       } catch (JsonException e) {
         Console.Error.WriteLine($"Error deserializing JSON: {e.ToString()}");
         return null;

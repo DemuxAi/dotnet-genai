@@ -12,7 +12,7 @@ playback, enabling a seamless conversational experience.
 2. `gcloud auth login` and follow the prompt to set up application default credential.
 3. set your Google cloud project to env var `GOOGLE_CLOUD_PROJECT`.
 4. set your Google cloud location to env var `GOOGLE_CLOUD_LOCATION`.
-5. set your api key to env var `GOOGLE_API_KEY`.
+5. set your api key to env var `GEMINI_API_KEY`.
 5. run `dotnet run` to test Gemini API endpoint
 6. run `dotnet run --vertex true` to test Vertex endpoint
 7. click to http://localhost:5000 url in the terminal.

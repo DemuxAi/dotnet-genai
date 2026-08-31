@@ -66,7 +66,7 @@ namespace Google.GenAI.Types {
     /// <returns>The deserialized ToolCall object, or null if deserialization fails.</returns>
     public static ToolCall ? FromJson(string jsonString, JsonSerializerOptions? options = null) {
       try {
-        return JsonSerializer.Deserialize<ToolCall>(jsonString, options);
+        return JsonSerializer.Deserialize(jsonString, JsonConfig.TypeInfo<ToolCall>(options));
       } catch (JsonException e) {
         Console.Error.WriteLine($"Error deserializing JSON: {e.ToString()}");
         return null;

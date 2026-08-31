@@ -163,6 +163,16 @@ namespace Google.GenAI.Types {
           }
 
     /// <summary>
+    /// Configures the exchange of history between the client and the server.
+    /// </summary>
+    [JsonPropertyName("historyConfig")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public HistoryConfig
+        ? HistoryConfig {
+            get; set;
+          }
+
+    /// <summary>
     /// Deserializes a JSON string to a LiveClientSetup object.
     /// </summary>
     /// <param name="jsonString">The JSON string to deserialize.</param>
@@ -172,7 +182,8 @@ namespace Google.GenAI.Types {
     public static LiveClientSetup
         ? FromJson(string jsonString, JsonSerializerOptions? options = null) {
       try {
-        return JsonSerializer.Deserialize<LiveClientSetup>(jsonString, options);
+        return JsonSerializer.Deserialize(jsonString,
+                                          JsonConfig.TypeInfo<LiveClientSetup>(options));
       } catch (JsonException e) {
         Console.Error.WriteLine($"Error deserializing JSON: {e.ToString()}");
         return null;

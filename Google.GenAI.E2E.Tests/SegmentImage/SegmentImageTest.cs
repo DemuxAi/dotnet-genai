@@ -61,7 +61,7 @@ public class SegmentImageTest {
     string project = System.Environment.GetEnvironmentVariable("GOOGLE_CLOUD_PROJECT");
     string location =
         System.Environment.GetEnvironmentVariable("GOOGLE_CLOUD_LOCATION") ?? "us-central1";
-    string apiKey = System.Environment.GetEnvironmentVariable("GOOGLE_API_KEY");
+    string apiKey = System.Environment.GetEnvironmentVariable("GEMINI_API_KEY");
     Client.setDefaultBaseUrl(vertexBaseUrl: "http://localhost:1454",
                              geminiBaseUrl: "http://localhost:1453");
     vertexClient = new Client(project: project, location: location, vertexAI: true,

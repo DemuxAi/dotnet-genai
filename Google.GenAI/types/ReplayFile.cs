@@ -52,7 +52,7 @@ namespace Google.GenAI.Types {
     /// <returns>The deserialized ReplayFile object, or null if deserialization fails.</returns>
     public static ReplayFile ? FromJson(string jsonString, JsonSerializerOptions? options = null) {
       try {
-        return JsonSerializer.Deserialize<ReplayFile>(jsonString, options);
+        return JsonSerializer.Deserialize(jsonString, JsonConfig.TypeInfo<ReplayFile>(options));
       } catch (JsonException e) {
         Console.Error.WriteLine($"Error deserializing JSON: {e.ToString()}");
         return null;

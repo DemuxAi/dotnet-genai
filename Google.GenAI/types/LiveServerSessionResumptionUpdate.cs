@@ -54,10 +54,10 @@ namespace Google.GenAI.Types {
     /// Presence of this index allows users to transparently reconnect and avoid issue of losing
     /// some part of realtime audio input/video. If client wishes to temporarily disconnect (for
     /// example as result of receiving GoAway) they can do it without losing state by buffering
-    /// messages sent since last `SessionResmumptionTokenUpdate`. This field will enable them to
+    /// messages sent since last `SessionResumptionTokenUpdate`. This field will enable them to
     /// limit buffering (avoid keeping all requests in RAM).  Note: This should not be used for when
-    /// resuming a session at some time later -- in those cases partial audio and video frames
-    /// arelikely not needed.
+    /// resuming a session at some time later -- in those cases partial audio and video frames are
+    /// likely not needed.
     /// </summary>
     [JsonPropertyName("lastConsumedClientMessageIndex")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -77,7 +77,8 @@ namespace Google.GenAI.Types {
     public static LiveServerSessionResumptionUpdate
         ? FromJson(string jsonString, JsonSerializerOptions? options = null) {
       try {
-        return JsonSerializer.Deserialize<LiveServerSessionResumptionUpdate>(jsonString, options);
+        return JsonSerializer.Deserialize(
+            jsonString, JsonConfig.TypeInfo<LiveServerSessionResumptionUpdate>(options));
       } catch (JsonException e) {
         Console.Error.WriteLine($"Error deserializing JSON: {e.ToString()}");
         return null;

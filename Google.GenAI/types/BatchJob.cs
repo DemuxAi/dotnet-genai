@@ -164,7 +164,7 @@ namespace Google.GenAI.Types {
     /// <returns>The deserialized BatchJob object, or null if deserialization fails.</returns>
     public static BatchJob ? FromJson(string jsonString, JsonSerializerOptions? options = null) {
       try {
-        return JsonSerializer.Deserialize<BatchJob>(jsonString, options);
+        return JsonSerializer.Deserialize(jsonString, JsonConfig.TypeInfo<BatchJob>(options));
       } catch (JsonException e) {
         Console.Error.WriteLine($"Error deserializing JSON: {e.ToString()}");
         return null;

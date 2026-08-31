@@ -990,7 +990,7 @@ public sealed class GoogleGenAIRealtimeSession : IRealtimeClientSession
         "number" => Google.GenAI.Types.Type.Number,
         "boolean" => Google.GenAI.Types.Type.Boolean,
         "array" => Google.GenAI.Types.Type.Array,
-        _ => null
+        _ => (Google.GenAI.Types.Type?)null
       };
     }
 

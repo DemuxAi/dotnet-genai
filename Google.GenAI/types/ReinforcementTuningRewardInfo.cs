@@ -35,7 +35,10 @@ namespace Google.GenAI.Types {
     public double ? Reward { get; set; }
 
     /// <summary>
-    /// Output only. The user-requested auxiliary info for the reward function.
+    /// Output only. The user-requested auxiliary info for the reward function. This field is set
+    /// only if the Cloud Run reward function configured by user returns a
+    /// "user_requested_aux_info". Refer to ReinforcementTuningCloudRunRewardScorer for more
+    /// details.
     /// </summary>
     [JsonPropertyName("userRequestedAuxInfo")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -54,7 +57,8 @@ namespace Google.GenAI.Types {
     public static ReinforcementTuningRewardInfo
         ? FromJson(string jsonString, JsonSerializerOptions? options = null) {
       try {
-        return JsonSerializer.Deserialize<ReinforcementTuningRewardInfo>(jsonString, options);
+        return JsonSerializer.Deserialize(
+            jsonString, JsonConfig.TypeInfo<ReinforcementTuningRewardInfo>(options));
       } catch (JsonException e) {
         Console.Error.WriteLine($"Error deserializing JSON: {e.ToString()}");
         return null;

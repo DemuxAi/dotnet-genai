@@ -26,29 +26,15 @@ using TestServerSdk;
 
 [TestClass]
 public class SendToolResponseTest {
-  private static TestServerProcess? _server;
   private Client enterpriseClient;
   private Client geminiClient;
   private string vertexModelName;
   private string geminiModelName;
   public TestContext TestContext { get; set; }
 
-  [ClassInitialize]
-  public static void ClassInit(TestContext _) {
-    _server = TestServer.StartTestServer();
-  }
-
-  [ClassCleanup]
-  public static void ClassCleanup() {
-    TestServer.StopTestServer(_server);
-  }
-
   [TestInitialize]
   public void TestInit() {
     // Test server specific setup.
-    if (_server == null) {
-      throw new InvalidOperationException("Test server is not initialized.");
-    }
     var geminiClientHttpOptions = new GoogleType.HttpOptions {
       Headers = new Dictionary<string, string> { { "Test-Name",
                                                    $"{GetType().Name}.{TestContext.TestName}" } },
@@ -63,7 +49,7 @@ public class SendToolResponseTest {
     string project = System.Environment.GetEnvironmentVariable("GOOGLE_CLOUD_PROJECT");
     string location =
         System.Environment.GetEnvironmentVariable("GOOGLE_CLOUD_LOCATION") ?? "us-central1";
-    string apiKey = System.Environment.GetEnvironmentVariable("GOOGLE_API_KEY");
+    string apiKey = System.Environment.GetEnvironmentVariable("GEMINI_API_KEY");
     enterpriseClient = new Client(project: project, location: location, enterprise: true,
                               credential: TestServer.GetCredentialForTestMode(),
                               httpOptions: enterpriseClientHttpOptions);
@@ -76,6 +62,7 @@ public class SendToolResponseTest {
   }
 
   [TestMethod]
+  [Timeout(60000)]
   public async Task SendToolResponseFunctionResponseGeminiTest() {
     var geminiSession = new SessionWithQueue(geminiClient, geminiModelName);
     await geminiSession.InitializeSessionAsync();
@@ -98,6 +85,7 @@ public class SendToolResponseTest {
   }
 
   [TestMethod]
+  [Timeout(60000)]
   public async Task SendToolResponseFunctionResponseVertexTest() {
     var vertexSession = new SessionWithQueue(enterpriseClient, vertexModelName);
     await vertexSession.InitializeSessionAsync();

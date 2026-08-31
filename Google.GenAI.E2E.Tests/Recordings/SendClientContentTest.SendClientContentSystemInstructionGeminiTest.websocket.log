@@ -15,6 +15,10 @@
     }
   }
 }
+<27 {
+  "setupComplete": {}
+}
+
 >227 {
   "clientContent": {
     "turns": [
@@ -30,10 +34,6 @@
     "turnComplete": true
   }
 }
-<27 {
-  "setupComplete": {}
-}
-
 <138 {
   "serverContent": {
     "modelTurn": {
@@ -46,12 +46,24 @@
   }
 }
 
-<196 {
+<181 {
   "serverContent": {
     "modelTurn": {
       "parts": [
         {
-          "text": " the **Pacific Ocean is wider than the Moon**? The Moon's diameter is about"
+          "text": " the **ocean produces over half of the world's oxygen**? It'"
+        }
+      ]
+    }
+  }
+}
+
+<288 {
+  "serverContent": {
+    "modelTurn": {
+      "parts": [
+        {
+          "text": "s true! Tiny marine plants called **phytoplankton** are responsible for this amazing feat through photosynthesis. So, every other breath you take comes from the ocean!"
         }
       ]
     }

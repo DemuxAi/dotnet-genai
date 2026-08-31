@@ -46,7 +46,7 @@ namespace Google.GenAI.Types {
           }
 
     /// <summary>
-    /// Corresponds to `system_instruction` in user-facing GenerateContentRequest.
+    /// Corresponds to system_instruction in user-facing GenerateContentRequest.
     /// </summary>
     [JsonPropertyName("systemInstruction")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -65,7 +65,8 @@ namespace Google.GenAI.Types {
     public static ReinforcementTuningExample
         ? FromJson(string jsonString, JsonSerializerOptions? options = null) {
       try {
-        return JsonSerializer.Deserialize<ReinforcementTuningExample>(jsonString, options);
+        return JsonSerializer.Deserialize(jsonString,
+                                          JsonConfig.TypeInfo<ReinforcementTuningExample>(options));
       } catch (JsonException e) {
         Console.Error.WriteLine($"Error deserializing JSON: {e.ToString()}");
         return null;

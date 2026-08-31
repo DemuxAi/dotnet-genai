@@ -53,7 +53,7 @@ You can create a client by configuring the necessary environment variables.
 Configuration setup instructions depends on whether you're using the Gemini
 Developer API or the Gemini Enterprise Agent Platform.
 
-**Gemini Developer API:** Set the `GOOGLE_API_KEY`. It will automatically be
+**Gemini Developer API:** Set the `GEMINI_API_KEY`. It will automatically be
 picked up by the client.
 
 ```bash

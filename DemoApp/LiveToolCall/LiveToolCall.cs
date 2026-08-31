@@ -58,10 +58,10 @@ public static class LiveToolCall {
       client = new Client(project: project, location: location, vertexAI: true);
       model = "gemini-2.0-flash-live-preview-04-09";
     } else {
-      string apiKey = System.Environment.GetEnvironmentVariable("GOOGLE_API_KEY");
+      string apiKey = System.Environment.GetEnvironmentVariable("GEMINI_API_KEY");
       if (string.IsNullOrEmpty(apiKey))
         throw new InvalidOperationException(
-            "API key is not set in the environment variable GOOGLE_API_KEY.");
+            "API key is not set in the environment variable GEMINI_API_KEY.");
       client = new Client(apiKey: apiKey, vertexAI: false);
       model = "gemini-2.5-flash-native-audio-preview-12-2025";
     }

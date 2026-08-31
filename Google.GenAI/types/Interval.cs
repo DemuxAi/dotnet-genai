@@ -57,7 +57,7 @@ namespace Google.GenAI.Types {
     /// <returns>The deserialized Interval object, or null if deserialization fails.</returns>
     public static Interval ? FromJson(string jsonString, JsonSerializerOptions? options = null) {
       try {
-        return JsonSerializer.Deserialize<Interval>(jsonString, options);
+        return JsonSerializer.Deserialize(jsonString, JsonConfig.TypeInfo<Interval>(options));
       } catch (JsonException e) {
         Console.Error.WriteLine($"Error deserializing JSON: {e.ToString()}");
         return null;

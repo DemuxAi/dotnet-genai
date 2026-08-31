@@ -45,7 +45,8 @@ namespace Google.GenAI.Types {
     public static RagRetrievalConfigRankingLlmRanker
         ? FromJson(string jsonString, JsonSerializerOptions? options = null) {
       try {
-        return JsonSerializer.Deserialize<RagRetrievalConfigRankingLlmRanker>(jsonString, options);
+        return JsonSerializer.Deserialize(
+            jsonString, JsonConfig.TypeInfo<RagRetrievalConfigRankingLlmRanker>(options));
       } catch (JsonException e) {
         Console.Error.WriteLine($"Error deserializing JSON: {e.ToString()}");
         return null;

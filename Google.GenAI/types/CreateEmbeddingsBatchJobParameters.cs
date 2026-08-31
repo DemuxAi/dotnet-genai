@@ -64,7 +64,8 @@ namespace Google.GenAI.Types {
     public static CreateEmbeddingsBatchJobParameters
         ? FromJson(string jsonString, JsonSerializerOptions? options = null) {
       try {
-        return JsonSerializer.Deserialize<CreateEmbeddingsBatchJobParameters>(jsonString, options);
+        return JsonSerializer.Deserialize(
+            jsonString, JsonConfig.TypeInfo<CreateEmbeddingsBatchJobParameters>(options));
       } catch (JsonException e) {
         Console.Error.WriteLine($"Error deserializing JSON: {e.ToString()}");
         return null;

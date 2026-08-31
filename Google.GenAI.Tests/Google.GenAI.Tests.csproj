@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <Import Project="../ReleaseVersion.xml" />
   <PropertyGroup>
@@ -9,6 +9,10 @@
     <LangVersion>latest</LangVersion>
     <NoWarn>$(NoWarn);MEAI001</NoWarn>
   </PropertyGroup>
+
+  <ItemGroup>
+    <RuntimeHostConfigurationOption Include="System.Text.Json.Serialization.IsReflectionEnabledByDefault" Value="false" />
+  </ItemGroup>
 
   <ItemGroup>
     <Compile Remove="Netstandard2_0Tests\**" />

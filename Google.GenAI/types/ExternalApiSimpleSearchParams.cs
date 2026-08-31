@@ -38,7 +38,8 @@ namespace Google.GenAI.Types {
     public static ExternalApiSimpleSearchParams
         ? FromJson(string jsonString, JsonSerializerOptions? options = null) {
       try {
-        return JsonSerializer.Deserialize<ExternalApiSimpleSearchParams>(jsonString, options);
+        return JsonSerializer.Deserialize(
+            jsonString, JsonConfig.TypeInfo<ExternalApiSimpleSearchParams>(options));
       } catch (JsonException e) {
         Console.Error.WriteLine($"Error deserializing JSON: {e.ToString()}");
         return null;

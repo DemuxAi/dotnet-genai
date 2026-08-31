@@ -25,6 +25,12 @@
     ]
   }
 }
+<86 {
+  "setupComplete": {
+    "sessionId": "2ad16169-9684-4820-a88f-ff48b4ab1b94"
+  }
+}
+
 >209 {
   "clientContent": {
     "turns": [
@@ -39,20 +45,15 @@
     "turnComplete": true
   }
 }
-<86 {
-  "setupComplete": {
-    "sessionId": "862a4019-163c-4441-b7a4-dcb9ef1652bb"
-  }
-}
-
-<171 {
+<225 {
   "toolCall": {
     "functionCalls": [
       {
         "name": "GetCurrentWeather",
         "args": {
           "location": "Redmond, WA"
-        }
+        },
+        "id": "ce66f4cf-8568-4e7e-8aee-48b474405c84"
       }
     ]
   }
@@ -61,6 +62,33 @@
 <61 {
   "serverContent": {
     "generationComplete": true
+  }
+}
+
+<451 {
+  "serverContent": {
+    "turnComplete": true,
+    "groundingMetadata": {}
+  },
+  "usageMetadata": {
+    "promptTokenCount": 7,
+    "candidatesTokenCount": 7,
+    "totalTokenCount": 14,
+    "promptTokensDetails": [
+      {
+        "modality": "TEXT",
+        "tokenCount": 7
+      }
+    ],
+    "candidatesTokensDetails": [
+      {
+        "modality": "TEXT",
+        "tokenCount": 7
+      },
+      {
+        "modality": "AUDIO"
+      }
+    ]
   }
 }
 

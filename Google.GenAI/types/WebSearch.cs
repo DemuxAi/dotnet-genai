@@ -35,7 +35,7 @@ namespace Google.GenAI.Types {
     /// <returns>The deserialized WebSearch object, or null if deserialization fails.</returns>
     public static WebSearch ? FromJson(string jsonString, JsonSerializerOptions? options = null) {
       try {
-        return JsonSerializer.Deserialize<WebSearch>(jsonString, options);
+        return JsonSerializer.Deserialize(jsonString, JsonConfig.TypeInfo<WebSearch>(options));
       } catch (JsonException e) {
         Console.Error.WriteLine($"Error deserializing JSON: {e.ToString()}");
         return null;

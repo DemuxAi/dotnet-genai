@@ -53,7 +53,7 @@ namespace Google.GenAI.Types {
     /// <returns>The deserialized EntityLabel object, or null if deserialization fails.</returns>
     public static EntityLabel ? FromJson(string jsonString, JsonSerializerOptions? options = null) {
       try {
-        return JsonSerializer.Deserialize<EntityLabel>(jsonString, options);
+        return JsonSerializer.Deserialize(jsonString, JsonConfig.TypeInfo<EntityLabel>(options));
       } catch (JsonException e) {
         Console.Error.WriteLine($"Error deserializing JSON: {e.ToString()}");
         return null;

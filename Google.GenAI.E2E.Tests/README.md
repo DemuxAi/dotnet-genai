@@ -15,7 +15,7 @@ should contain the test suite code for the end to end tests
 ## Test preparation
 1. `export GOOGLE_CLOUD_PROJECT=YOUR_CLOUD_PROJECT`
 2. `export GOOGLE_CLOUD_LOCATION=YOUR_CLOUD_LOCATION`
-3. `export GOOGLE_API_KEY=YOUR_API_KEY_FOR_GEMINI_API`
+3. `export GEMINI_API_KEY=YOUR_API_KEY_FOR_GEMINI_API`
 4. `gcloud auth application-default login`
 
 ## Writing Tests

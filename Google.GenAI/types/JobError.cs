@@ -64,7 +64,7 @@ namespace Google.GenAI.Types {
     /// <returns>The deserialized JobError object, or null if deserialization fails.</returns>
     public static JobError ? FromJson(string jsonString, JsonSerializerOptions? options = null) {
       try {
-        return JsonSerializer.Deserialize<JobError>(jsonString, options);
+        return JsonSerializer.Deserialize(jsonString, JsonConfig.TypeInfo<JobError>(options));
       } catch (JsonException e) {
         Console.Error.WriteLine($"Error deserializing JSON: {e.ToString()}");
         return null;

@@ -62,7 +62,7 @@ namespace Google.GenAI.Types {
     /// <returns>The deserialized Video object, or null if deserialization fails.</returns>
     public static Video ? FromJson(string jsonString, JsonSerializerOptions? options = null) {
       try {
-        return JsonSerializer.Deserialize<Video>(jsonString, options);
+        return JsonSerializer.Deserialize(jsonString, JsonConfig.TypeInfo<Video>(options));
       } catch (JsonException e) {
         Console.Error.WriteLine($"Error deserializing JSON: {e.ToString()}");
         return null;

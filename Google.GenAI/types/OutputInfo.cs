@@ -44,7 +44,7 @@ namespace Google.GenAI.Types {
     /// <returns>The deserialized OutputInfo object, or null if deserialization fails.</returns>
     public static OutputInfo ? FromJson(string jsonString, JsonSerializerOptions? options = null) {
       try {
-        return JsonSerializer.Deserialize<OutputInfo>(jsonString, options);
+        return JsonSerializer.Deserialize(jsonString, JsonConfig.TypeInfo<OutputInfo>(options));
       } catch (JsonException e) {
         Console.Error.WriteLine($"Error deserializing JSON: {e.ToString()}");
         return null;

@@ -35,6 +35,14 @@ namespace Google.GenAI.Types {
     public string ? BaseUrl { get; set; }
 
     /// <summary>
+    /// Full request URL. When set, the SDK-generated path
+    /// (<c>{model}:streamGenerateContent</c>) is not appended.
+    /// </summary>
+    [JsonPropertyName("requestUrl")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public string ? RequestUrl { get; set; }
+
+    /// <summary>
     /// The resource scope used to constructing the resource name when base_url is set
     /// </summary>
     [JsonPropertyName("baseUrlResourceScope")]
@@ -75,6 +83,16 @@ namespace Google.GenAI.Types {
           }
 
     /// <summary>
+    /// HTTP retry options for the request.
+    /// </summary>
+    [JsonPropertyName("retryOptions")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public HttpRetryOptions
+        ? RetryOptions {
+            get; set;
+          }
+
+    /// <summary>
     /// Deserializes a JSON string to a HttpOptions object.
     /// </summary>
     /// <param name="jsonString">The JSON string to deserialize.</param>
@@ -82,7 +100,7 @@ namespace Google.GenAI.Types {
     /// <returns>The deserialized HttpOptions object, or null if deserialization fails.</returns>
     public static HttpOptions ? FromJson(string jsonString, JsonSerializerOptions? options = null) {
       try {
-        return JsonSerializer.Deserialize<HttpOptions>(jsonString, options);
+        return JsonSerializer.Deserialize(jsonString, JsonConfig.TypeInfo<HttpOptions>(options));
       } catch (JsonException e) {
         Console.Error.WriteLine($"Error deserializing JSON: {e.ToString()}");
         return null;

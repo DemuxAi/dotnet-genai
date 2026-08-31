@@ -102,8 +102,11 @@ namespace Google.GenAI
         Types.HttpOptions? requestHttpOptions,
         CancellationToken cancellationToken = default)
     {
-      HttpRequestMessage request = await CreateHttpRequestAsync(httpMethod, path, requestJson, requestHttpOptions);
-      HttpResponseMessage response = await HttpClient.SendAsync(request, cancellationToken);
+      HttpResponseMessage response = await SendWithRetryAsync(
+          () => CreateHttpRequestAsync(httpMethod, path, requestJson, requestHttpOptions),
+          HttpCompletionOption.ResponseContentRead,
+          MergeHttpOptions(requestHttpOptions).RetryOptions,
+          cancellationToken);
       if (!response.IsSuccessStatusCode)
       {
         try
@@ -126,8 +129,11 @@ namespace Google.GenAI
         Types.HttpOptions? requestHttpOptions,
         CancellationToken cancellationToken = default)
     {
-      HttpRequestMessage request = await CreateHttpRequestAsync(httpMethod, url, requestBytes, requestHttpOptions);
-      HttpResponseMessage response = await HttpClient.SendAsync(request, cancellationToken);
+      HttpResponseMessage response = await SendWithRetryAsync(
+          () => CreateHttpRequestAsync(httpMethod, url, requestBytes, requestHttpOptions),
+          HttpCompletionOption.ResponseContentRead,
+          MergeHttpOptions(requestHttpOptions).RetryOptions,
+          cancellationToken);
       if (!response.IsSuccessStatusCode)
       {
         try
@@ -150,13 +156,12 @@ namespace Google.GenAI
         Types.HttpOptions? requestHttpOptions,
         [EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
-      HttpRequestMessage request =
-          await CreateHttpRequestAsync(httpMethod, path, requestJson, requestHttpOptions);
-
-      HttpResponseMessage response = await HttpClient.SendAsync(
-        request,
+      // Only the initial send is retried; a stream cannot be restarted mid-flight.
+      HttpResponseMessage response = await SendWithRetryAsync(
+        () => CreateHttpRequestAsync(httpMethod, path, requestJson, requestHttpOptions),
         // Use ResponseHeadersRead to avoid buffering the entire response
         HttpCompletionOption.ResponseHeadersRead,
+        MergeHttpOptions(requestHttpOptions).RetryOptions,
         cancellationToken);
       if (!response.IsSuccessStatusCode)
       {
@@ -187,7 +192,7 @@ namespace Google.GenAI
     private bool ShouldPrependVertexProjectPath(Types.HttpOptions mergedHttpOptions)
     {
       if (!this.VertexAI) return false;
-      if (!string.IsNullOrEmpty(this.ApiKey)) return false;
+      if (!string.IsNullOrEmpty(this.ApiKey) && (string.IsNullOrEmpty(this.Project) || string.IsNullOrEmpty(this.Location))) return false;
       if (string.IsNullOrEmpty(this.Project) && string.IsNullOrEmpty(this.Location)) return false;
       if (mergedHttpOptions.BaseUrlResourceScope == Types.ResourceScope.Collection && !string.IsNullOrEmpty(mergedHttpOptions.BaseUrl)) return false;
       return true;
@@ -203,7 +208,12 @@ namespace Google.GenAI
             path = $"projects/{Project}/locations/{Location}/{path}";
         }
         string requestUrl;
-        if (path.StartsWith("http://", StringComparison.OrdinalIgnoreCase) ||
+        if (!string.IsNullOrEmpty(mergedHttpOptions.RequestUrl))
+        {
+            requestUrl = mergedHttpOptions.RequestUrl!;
+            requestJson = EnsureModelInJsonBody(requestJson, path);
+        }
+        else if (path.StartsWith("http://", StringComparison.OrdinalIgnoreCase) ||
               path.StartsWith("https://", StringComparison.OrdinalIgnoreCase))
         {
             // If the path is an absolute URL (typical for resumable file upload sessions), 
@@ -432,7 +442,20 @@ namespace Google.GenAI
 
       if (!string.IsNullOrEmpty(ApiKey))
       {
-        request.Headers.TryAddWithoutValidation("x-goog-api-key", ApiKey);
+        var hasAuthorization = false;
+        if (mergedHttpOptions.Headers != null)
+        {
+          foreach (var key in mergedHttpOptions.Headers.Keys)
+          {
+            if (string.Equals(key, "Authorization", StringComparison.OrdinalIgnoreCase))
+            {
+              hasAuthorization = true;
+              break;
+            }
+          }
+        }
+        if (!hasAuthorization)
+          request.Headers.TryAddWithoutValidation("x-goog-api-key", ApiKey);
       }
       else
       {
@@ -491,6 +514,39 @@ namespace Google.GenAI
     /// Rewrites an absolute URL (e.g. from a resumable upload session) to use the
     /// custom BaseUrl if one is provided. This ensures custom proxies are honored for file uploads.
     /// </summary>
+    /// <summary>
+    /// Custom <see cref="Types.HttpOptions.RequestUrl"/> drops the SDK path, so
+    /// the model id that lived in <c>{model}:streamGenerateContent</c> is written
+    /// back into the JSON body (Factory <c>/api/llm/g/v1/generate</c> reads it there).
+    /// </summary>
+    private static string EnsureModelInJsonBody(string requestJson, string path)
+    {
+      JsonObject? node;
+      try { node = JsonNode.Parse(requestJson)?.AsObject(); }
+      catch (JsonException) { return requestJson; }
+      if (node is null || node["model"] != null) return requestJson;
+
+      var model = ExtractModelFromGeneratePath(path);
+      if (string.IsNullOrEmpty(model)) return requestJson;
+      node["model"] = model;
+      return node.ToJsonString();
+    }
+
+    private static string? ExtractModelFromGeneratePath(string path)
+    {
+      var q = path.IndexOf('?', StringComparison.Ordinal);
+      if (q >= 0) path = path[..q];
+      var colon = path.LastIndexOf(':');
+      if (colon < 0) return null;
+      var left = path[..colon];
+      if (left.StartsWith("models/", StringComparison.Ordinal))
+        left = left["models/".Length..];
+      else if (left.StartsWith("tunedModels/", StringComparison.Ordinal))
+        left = left["tunedModels/".Length..];
+      var slash = left.LastIndexOf('/');
+      return slash >= 0 ? left[(slash + 1)..] : left;
+    }
+
     private string RewriteIfAbsoluteUrl(string url, Types.HttpOptions mergedHttpOptions)
     {
         if (string.IsNullOrEmpty(mergedHttpOptions.BaseUrl) ||

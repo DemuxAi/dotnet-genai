@@ -49,6 +49,17 @@ namespace Google.GenAI.Types {
           }
 
     /// <summary>
+    /// Optional. Specifies the types of Google Maps grounding to enable. Defaults to `places` when
+    /// unset. This field is not supported in Gemini API.
+    /// </summary>
+    [JsonPropertyName("groundingTypes")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public GoogleMapsGroundingTypes
+        ? GroundingTypes {
+            get; set;
+          }
+
+    /// <summary>
     /// Deserializes a JSON string to a GoogleMaps object.
     /// </summary>
     /// <param name="jsonString">The JSON string to deserialize.</param>
@@ -56,7 +67,7 @@ namespace Google.GenAI.Types {
     /// <returns>The deserialized GoogleMaps object, or null if deserialization fails.</returns>
     public static GoogleMaps ? FromJson(string jsonString, JsonSerializerOptions? options = null) {
       try {
-        return JsonSerializer.Deserialize<GoogleMaps>(jsonString, options);
+        return JsonSerializer.Deserialize(jsonString, JsonConfig.TypeInfo<GoogleMaps>(options));
       } catch (JsonException e) {
         Console.Error.WriteLine($"Error deserializing JSON: {e.ToString()}");
         return null;

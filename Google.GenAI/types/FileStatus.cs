@@ -64,7 +64,7 @@ namespace Google.GenAI.Types {
     /// <returns>The deserialized FileStatus object, or null if deserialization fails.</returns>
     public static FileStatus ? FromJson(string jsonString, JsonSerializerOptions? options = null) {
       try {
-        return JsonSerializer.Deserialize<FileStatus>(jsonString, options);
+        return JsonSerializer.Deserialize(jsonString, JsonConfig.TypeInfo<FileStatus>(options));
       } catch (JsonException e) {
         Console.Error.WriteLine($"Error deserializing JSON: {e.ToString()}");
         return null;

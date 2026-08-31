@@ -92,10 +92,9 @@ public sealed class GoogleGenAIRealtimeClient : IRealtimeClient
 
     try
     {
-      // The Google SDK's ConnectAsync sends the setup message but does NOT wait
-      // for the server's SetupComplete acknowledgment. We must drain it here so
-      // the session is fully ready (tools configured, modalities set) before the
-      // caller starts sending audio or text.
+      // The Google SDK's ConnectAsync awaits the server's SetupComplete acknowledgment
+      // and buffers it. We consume the buffered message here so that the session is
+      // ready and subsequent receives only yield actual session messages.
       var setupResponse = await asyncSession.ReceiveAsync(cancellationToken).ConfigureAwait(false);
       if (setupResponse?.SetupComplete is null)
       {

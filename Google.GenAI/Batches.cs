@@ -1054,9 +1054,9 @@ namespace Google.GenAI {
       }
 
       if (Common.GetValueByPath(fromObject, new string[] { "responseJsonSchema" }) != null) {
-        Common.SetValueByPath(
-            toObject, new string[] { "responseJsonSchema" },
-            Common.GetValueByPath(fromObject, new string[] { "responseJsonSchema" }));
+        Common.SetValueByPath(toObject, new string[] { "responseJsonSchema" },
+                              Transformers.TJsonSchema(Common.GetValueByPath(
+                                  fromObject, new string[] { "responseJsonSchema" })));
       }
 
       if (!Common.IsZero(Common.GetValueByPath(fromObject, new string[] { "routingConfig" }))) {
@@ -1164,6 +1164,12 @@ namespace Google.GenAI {
                               Common.GetValueByPath(fromObject, new string[] { "serviceTier" }));
       }
 
+      if (Common.GetValueByPath(fromObject, new string[] { "audioTranscriptionConfig" }) != null) {
+        Common.SetValueByPath(
+            toObject, new string[] { "audioTranscriptionConfig" },
+            Common.GetValueByPath(fromObject, new string[] { "audioTranscriptionConfig" }));
+      }
+
       return toObject;
     }
 
@@ -1257,6 +1263,11 @@ namespace Google.GenAI {
       if (Common.GetValueByPath(fromObject, new string[] { "enableWidget" }) != null) {
         Common.SetValueByPath(toObject, new string[] { "enableWidget" },
                               Common.GetValueByPath(fromObject, new string[] { "enableWidget" }));
+      }
+
+      if (!Common.IsZero(Common.GetValueByPath(fromObject, new string[] { "groundingTypes" }))) {
+        throw new NotSupportedException(
+            "groundingTypes parameter is only supported in Gemini Enterprise Agent Platform mode, not in Gemini Developer API mode.");
       }
 
       return toObject;
@@ -1605,6 +1616,18 @@ namespace Google.GenAI {
                               Common.GetValueByPath(fromObject, new string[] { "partMetadata" }));
       }
 
+      if (Common.GetValueByPath(fromObject, new string[] { "audioTranscription" }) != null) {
+        Common.SetValueByPath(
+            toObject, new string[] { "audioTranscription" },
+            Common.GetValueByPath(fromObject, new string[] { "audioTranscription" }));
+      }
+
+      if (Common.GetValueByPath(fromObject, new string[] { "mediaProcessing" }) != null) {
+        Common.SetValueByPath(
+            toObject, new string[] { "mediaProcessing" },
+            Common.GetValueByPath(fromObject, new string[] { "mediaProcessing" }));
+      }
+
       return toObject;
     }
 
@@ -1726,6 +1749,11 @@ namespace Google.GenAI {
                               Common.GetValueByPath(fromObject, new string[] { "mcpServers" }));
       }
 
+      if (!Common.IsZero(Common.GetValueByPath(fromObject, new string[] { "exaAiSearch" }))) {
+        throw new NotSupportedException(
+            "exaAiSearch parameter is only supported in Gemini Enterprise Agent Platform mode, not in Gemini Developer API mode.");
+      }
+
       return toObject;
     }
 
@@ -1784,7 +1812,8 @@ namespace Google.GenAI {
       if (!Common.IsZero(config)) {
         parameter.Config = config;
       }
-      string jsonString = JsonSerializer.Serialize(parameter);
+      string jsonString =
+          JsonSerializer.Serialize(parameter, JsonConfig.TypeInfo<CreateBatchJobParameters>());
       JsonNode? parameterNode = JsonNode.Parse(jsonString);
       if (parameterNode == null) {
         throw new NotSupportedException("Failed to parse CreateBatchJobParameters to JsonNode.");
@@ -1809,9 +1838,9 @@ namespace Google.GenAI {
       }
       HttpOptions? requestHttpOptions = config?.HttpOptions;
 
-      ApiResponse response =
-          await this._apiClient.RequestAsync(HttpMethod.Post, path, JsonSerializer.Serialize(body),
-                                             requestHttpOptions, cancellationToken);
+      ApiResponse response = await this._apiClient.RequestAsync(
+          HttpMethod.Post, path, body?.ToJsonString(JsonConfig.InternalSerializerOptions),
+          requestHttpOptions, cancellationToken);
       HttpContent httpContent = response.GetEntity();
 #if NETSTANDARD2_0
       string contentString = await httpContent.ReadAsStringAsync();
@@ -1832,7 +1861,7 @@ namespace Google.GenAI {
         responseNode = BatchJobFromMldev(httpContentNode, new JsonObject());
       }
 
-      return responseNode.Deserialize<BatchJob>() ??
+      return responseNode.Deserialize(JsonConfig.TypeInfo<BatchJob>()) ??
              throw new InvalidOperationException("Failed to deserialize Task<BatchJob>.");
     }
 
@@ -1850,7 +1879,8 @@ namespace Google.GenAI {
       if (!Common.IsZero(config)) {
         parameter.Config = config;
       }
-      string jsonString = JsonSerializer.Serialize(parameter);
+      string jsonString = JsonSerializer.Serialize(
+          parameter, JsonConfig.TypeInfo<CreateEmbeddingsBatchJobParameters>());
       JsonNode? parameterNode = JsonNode.Parse(jsonString);
       if (parameterNode == null) {
         throw new NotSupportedException(
@@ -1877,9 +1907,9 @@ namespace Google.GenAI {
       }
       HttpOptions? requestHttpOptions = config?.HttpOptions;
 
-      ApiResponse response =
-          await this._apiClient.RequestAsync(HttpMethod.Post, path, JsonSerializer.Serialize(body),
-                                             requestHttpOptions, cancellationToken);
+      ApiResponse response = await this._apiClient.RequestAsync(
+          HttpMethod.Post, path, body?.ToJsonString(JsonConfig.InternalSerializerOptions),
+          requestHttpOptions, cancellationToken);
       HttpContent httpContent = response.GetEntity();
 #if NETSTANDARD2_0
       string contentString = await httpContent.ReadAsStringAsync();
@@ -1901,7 +1931,7 @@ namespace Google.GenAI {
         responseNode = BatchJobFromMldev(httpContentNode, new JsonObject());
       }
 
-      return responseNode.Deserialize<BatchJob>() ??
+      return responseNode.Deserialize(JsonConfig.TypeInfo<BatchJob>()) ??
              throw new InvalidOperationException("Failed to deserialize Task<BatchJob>.");
     }
 
@@ -1927,7 +1957,8 @@ namespace Google.GenAI {
       if (!Common.IsZero(config)) {
         parameter.Config = config;
       }
-      string jsonString = JsonSerializer.Serialize(parameter);
+      string jsonString =
+          JsonSerializer.Serialize(parameter, JsonConfig.TypeInfo<GetBatchJobParameters>());
       JsonNode? parameterNode = JsonNode.Parse(jsonString);
       if (parameterNode == null) {
         throw new NotSupportedException("Failed to parse GetBatchJobParameters to JsonNode.");
@@ -1952,9 +1983,9 @@ namespace Google.GenAI {
       }
       HttpOptions? requestHttpOptions = config?.HttpOptions;
 
-      ApiResponse response =
-          await this._apiClient.RequestAsync(HttpMethod.Get, path, JsonSerializer.Serialize(body),
-                                             requestHttpOptions, cancellationToken);
+      ApiResponse response = await this._apiClient.RequestAsync(
+          HttpMethod.Get, path, body?.ToJsonString(JsonConfig.InternalSerializerOptions),
+          requestHttpOptions, cancellationToken);
       HttpContent httpContent = response.GetEntity();
 #if NETSTANDARD2_0
       string contentString = await httpContent.ReadAsStringAsync();
@@ -1975,7 +2006,7 @@ namespace Google.GenAI {
         responseNode = BatchJobFromMldev(httpContentNode, new JsonObject());
       }
 
-      return responseNode.Deserialize<BatchJob>() ??
+      return responseNode.Deserialize(JsonConfig.TypeInfo<BatchJob>()) ??
              throw new InvalidOperationException("Failed to deserialize Task<BatchJob>.");
     }
 
@@ -2001,7 +2032,8 @@ namespace Google.GenAI {
       if (!Common.IsZero(config)) {
         parameter.Config = config;
       }
-      string jsonString = JsonSerializer.Serialize(parameter);
+      string jsonString =
+          JsonSerializer.Serialize(parameter, JsonConfig.TypeInfo<CancelBatchJobParameters>());
       JsonNode? parameterNode = JsonNode.Parse(jsonString);
       if (parameterNode == null) {
         throw new NotSupportedException("Failed to parse CancelBatchJobParameters to JsonNode.");
@@ -2026,9 +2058,9 @@ namespace Google.GenAI {
       }
       HttpOptions? requestHttpOptions = config?.HttpOptions;
 
-      ApiResponse response =
-          await this._apiClient.RequestAsync(HttpMethod.Post, path, JsonSerializer.Serialize(body),
-                                             requestHttpOptions, cancellationToken);
+      ApiResponse response = await this._apiClient.RequestAsync(
+          HttpMethod.Post, path, body?.ToJsonString(JsonConfig.InternalSerializerOptions),
+          requestHttpOptions, cancellationToken);
       HttpContent httpContent = response.GetEntity();
 #if NETSTANDARD2_0
       string contentString = await httpContent.ReadAsStringAsync();
@@ -2059,7 +2091,8 @@ namespace Google.GenAI {
       if (!Common.IsZero(config)) {
         parameter.Config = config;
       }
-      string jsonString = JsonSerializer.Serialize(parameter);
+      string jsonString =
+          JsonSerializer.Serialize(parameter, JsonConfig.TypeInfo<ListBatchJobsParameters>());
       JsonNode? parameterNode = JsonNode.Parse(jsonString);
       if (parameterNode == null) {
         throw new NotSupportedException("Failed to parse ListBatchJobsParameters to JsonNode.");
@@ -2084,9 +2117,9 @@ namespace Google.GenAI {
       }
       HttpOptions? requestHttpOptions = config?.HttpOptions;
 
-      ApiResponse response =
-          await this._apiClient.RequestAsync(HttpMethod.Get, path, JsonSerializer.Serialize(body),
-                                             requestHttpOptions, cancellationToken);
+      ApiResponse response = await this._apiClient.RequestAsync(
+          HttpMethod.Get, path, body?.ToJsonString(JsonConfig.InternalSerializerOptions),
+          requestHttpOptions, cancellationToken);
       HttpContent httpContent = response.GetEntity();
 #if NETSTANDARD2_0
       string contentString = await httpContent.ReadAsStringAsync();
@@ -2107,7 +2140,7 @@ namespace Google.GenAI {
         responseNode = ListBatchJobsResponseFromMldev(httpContentNode, new JsonObject());
       }
 
-      return responseNode.Deserialize<ListBatchJobsResponse>() ??
+      return responseNode.Deserialize(JsonConfig.TypeInfo<ListBatchJobsResponse>()) ??
              throw new InvalidOperationException(
                  "Failed to deserialize Task<ListBatchJobsResponse>.");
     }
@@ -2135,7 +2168,8 @@ namespace Google.GenAI {
       if (!Common.IsZero(config)) {
         parameter.Config = config;
       }
-      string jsonString = JsonSerializer.Serialize(parameter);
+      string jsonString =
+          JsonSerializer.Serialize(parameter, JsonConfig.TypeInfo<DeleteBatchJobParameters>());
       JsonNode? parameterNode = JsonNode.Parse(jsonString);
       if (parameterNode == null) {
         throw new NotSupportedException("Failed to parse DeleteBatchJobParameters to JsonNode.");
@@ -2161,8 +2195,8 @@ namespace Google.GenAI {
       HttpOptions? requestHttpOptions = config?.HttpOptions;
 
       ApiResponse response = await this._apiClient.RequestAsync(
-          HttpMethod.Delete, path, JsonSerializer.Serialize(body), requestHttpOptions,
-          cancellationToken);
+          HttpMethod.Delete, path, body?.ToJsonString(JsonConfig.InternalSerializerOptions),
+          requestHttpOptions, cancellationToken);
       HttpContent httpContent = response.GetEntity();
 #if NETSTANDARD2_0
       string contentString = await httpContent.ReadAsStringAsync();
@@ -2183,7 +2217,7 @@ namespace Google.GenAI {
         responseNode = DeleteResourceJobFromMldev(httpContentNode, new JsonObject());
       }
 
-      return responseNode.Deserialize<DeleteResourceJob>() ??
+      return responseNode.Deserialize(JsonConfig.TypeInfo<DeleteResourceJob>()) ??
              throw new InvalidOperationException("Failed to deserialize Task<DeleteResourceJob>.");
     }
 
