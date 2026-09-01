@@ -159,10 +159,11 @@ Class ClientOptions  <a class="header-action link-secondary" title="View source"
 
   <h3 id="Google_GenAI_Types_ClientOptions_HttpClientFactory" data-uid="Google.GenAI.Types.ClientOptions.HttpClientFactory">
   HttpClientFactory
-  <a class="header-action link-secondary" title="View source" href="https://github.com/DemuxAi/dotnet-genai/blob/main/Google.GenAI/types/ClientOptions.cs/#L35"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/DemuxAi/dotnet-genai/blob/main/Google.GenAI/types/ClientOptions.cs/#L36"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"><p>The factory to use for creating the custom HttpClient.</p>
+  <div class="markdown level1 summary"><p>Supplies the HttpClient. The caller keeps ownership — ApiClient.Dispose
+will not dispose a client that came from this factory.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
 
@@ -197,7 +198,7 @@ public Func&lt;HttpClient&gt;? HttpClientFactory { get; set; }</code></pre>
 
   <h3 id="Google_GenAI_Types_ClientOptions_FromJson_System_String_System_Text_Json_JsonSerializerOptions_" data-uid="Google.GenAI.Types.ClientOptions.FromJson(System.String,System.Text.Json.JsonSerializerOptions)">
   FromJson(string, JsonSerializerOptions?)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/DemuxAi/dotnet-genai/blob/main/Google.GenAI/types/ClientOptions.cs/#L45"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/DemuxAi/dotnet-genai/blob/main/Google.GenAI/types/ClientOptions.cs/#L46"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Deserializes a JSON string to a ClientOptions object.</p>
