@@ -884,6 +884,26 @@ namespace Google.GenAI.Tests {
 
       Assert.AreSame(options.HttpClientFactory, client._apiClient.ClientOptions.HttpClientFactory);
     }
+
+    [TestMethod]
+    public void Dispose_DoesNotDisposeFactoryProvidedHttpClient() {
+      using var shared = new HttpClient();
+      var client = new Client(
+          vertexAI: false, apiKey: "key",
+          clientOptions: new ClientOptions { HttpClientFactory = () => shared });
+
+      var cached = typeof(ApiClient)
+          .GetProperty("HttpClient",
+                       System.Reflection.BindingFlags.Instance |
+                       System.Reflection.BindingFlags.NonPublic)
+          !.GetValue(client._apiClient);
+      Assert.AreSame(shared, cached);
+
+      client.Dispose();
+
+      // Accessing a disposed HttpClient throws ObjectDisposedException.
+      Assert.IsNotNull(shared.DefaultRequestHeaders);
+    }
 #endregion
 
 #region Successful Instantiation(all modules)

@@ -162,6 +162,9 @@ namespace Google.GenAI
     }
 
     private HttpClient? _httpClient;
+    // Factory 交出的是调用方的共享实例（号池 HttpClient），Dispose 时不能带走。
+    // 只有本类 new 出来的客户端才归这里管。
+    private bool _ownsHttpClient;
     private readonly object _httpClientLock = new object();
 
     protected HttpClient HttpClient
@@ -176,7 +179,7 @@ namespace Google.GenAI
                     {
                         throw new ObjectDisposedException(nameof(ApiClient));
                     }
-                    _httpClient ??= CreateHttpClient(this.HttpOptions, this.ClientOptions);
+                    _httpClient ??= CreateHttpClient();
                 }
             }
             return _httpClient;
@@ -366,23 +369,20 @@ namespace Google.GenAI
       this.ClientOptions = clientOptions ?? new Google.GenAI.Types.ClientOptions();
     }
 
-    private static HttpClient CreateHttpClient(
-        HttpOptions httpOptions, Google.GenAI.Types.ClientOptions? clientOptions = null
-    )
+    private HttpClient CreateHttpClient()
     {
-      HttpClient client = null;
-      if (clientOptions != null)
+      HttpClient? client = this.ClientOptions?.HttpClientFactory?.Invoke();
+      if (client != null)
       {
-        client = clientOptions.HttpClientFactory?.Invoke();
+        _ownsHttpClient = false;
+        return client;
       }
-      // If no factory was provided, create a default client and apply SDK options
-      if (client == null)
+
+      _ownsHttpClient = true;
+      client = new HttpClient();
+      if (this.HttpOptions.Timeout != null)
       {
-        client = new HttpClient();
-        if (httpOptions.Timeout != null)
-        {
-          client.Timeout = System.TimeSpan.FromMilliseconds(httpOptions.Timeout.Value);
-        }
+        client.Timeout = System.TimeSpan.FromMilliseconds(this.HttpOptions.Timeout.Value);
       }
       return client;
     }
@@ -570,7 +570,7 @@ namespace Google.GenAI
       {
         return;
       }
-      if (disposing)
+      if (disposing && _ownsHttpClient)
       {
         _httpClient?.Dispose();
       }

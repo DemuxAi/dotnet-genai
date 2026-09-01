@@ -30,7 +30,8 @@ namespace Google.GenAI.Types {
 
   public record ClientOptions {
     /// <summary>
-    /// The factory to use for creating the custom HttpClient.
+    /// Supplies the HttpClient. The caller keeps ownership — ApiClient.Dispose
+    /// will not dispose a client that came from this factory.
     /// </summary>
     [JsonPropertyName("httpClientFactory")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
