@@ -146,6 +146,13 @@ Using this client to make a request to Gemini Developer API or Vertex AI API.</p
 </dd>
     </dl>
     <dl class="jumplist">
+      <dt><a class="xref" href="Google.GenAI.HttpRetryScope.html">HttpRetryScope</a></dt>
+      <dd><p>Counts extra HTTP attempts on the current async flow. The caller holds the
+scope; <a class="xref" href="Google.GenAI.ApiClient.html">ApiClient</a> writes into that same object, so the count
+is visible after the send returns. No scope means nobody is listening.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
       <dt><a class="xref" href="Google.GenAI.Live.html">Live</a></dt>
       <dd><p>Live class encapsulates the logic for connecting to Google's GenAI Live API.
 Use <a class="xref" href="Google.GenAI.Live.html#Google_GenAI_Live_ConnectAsync_System_String_Google_GenAI_Types_LiveConnectConfig_System_Threading_CancellationToken_">ConnectAsync(string, LiveConnectConfig, CancellationToken)</a> to establish a websocket connection session.</p>

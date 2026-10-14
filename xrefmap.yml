@@ -1303,6 +1303,51 @@ references:
   isSpec: "True"
   fullName: Google.GenAI.HttpApiResponse.GetHeaders
   nameWithType: HttpApiResponse.GetHeaders
+- uid: Google.GenAI.HttpRetryScope
+  name: HttpRetryScope
+  href: api/Google.GenAI.HttpRetryScope.html
+  commentId: T:Google.GenAI.HttpRetryScope
+  fullName: Google.GenAI.HttpRetryScope
+  nameWithType: HttpRetryScope
+- uid: Google.GenAI.HttpRetryScope.Begin
+  name: Begin()
+  href: api/Google.GenAI.HttpRetryScope.html#Google_GenAI_HttpRetryScope_Begin
+  commentId: M:Google.GenAI.HttpRetryScope.Begin
+  fullName: Google.GenAI.HttpRetryScope.Begin()
+  nameWithType: HttpRetryScope.Begin()
+- uid: Google.GenAI.HttpRetryScope.Begin*
+  name: Begin
+  href: api/Google.GenAI.HttpRetryScope.html#Google_GenAI_HttpRetryScope_Begin_
+  commentId: Overload:Google.GenAI.HttpRetryScope.Begin
+  isSpec: "True"
+  fullName: Google.GenAI.HttpRetryScope.Begin
+  nameWithType: HttpRetryScope.Begin
+- uid: Google.GenAI.HttpRetryScope.Dispose
+  name: Dispose()
+  href: api/Google.GenAI.HttpRetryScope.html#Google_GenAI_HttpRetryScope_Dispose
+  commentId: M:Google.GenAI.HttpRetryScope.Dispose
+  fullName: Google.GenAI.HttpRetryScope.Dispose()
+  nameWithType: HttpRetryScope.Dispose()
+- uid: Google.GenAI.HttpRetryScope.Dispose*
+  name: Dispose
+  href: api/Google.GenAI.HttpRetryScope.html#Google_GenAI_HttpRetryScope_Dispose_
+  commentId: Overload:Google.GenAI.HttpRetryScope.Dispose
+  isSpec: "True"
+  fullName: Google.GenAI.HttpRetryScope.Dispose
+  nameWithType: HttpRetryScope.Dispose
+- uid: Google.GenAI.HttpRetryScope.Retries
+  name: Retries
+  href: api/Google.GenAI.HttpRetryScope.html#Google_GenAI_HttpRetryScope_Retries
+  commentId: P:Google.GenAI.HttpRetryScope.Retries
+  fullName: Google.GenAI.HttpRetryScope.Retries
+  nameWithType: HttpRetryScope.Retries
+- uid: Google.GenAI.HttpRetryScope.Retries*
+  name: Retries
+  href: api/Google.GenAI.HttpRetryScope.html#Google_GenAI_HttpRetryScope_Retries_
+  commentId: Overload:Google.GenAI.HttpRetryScope.Retries
+  isSpec: "True"
+  fullName: Google.GenAI.HttpRetryScope.Retries
+  nameWithType: HttpRetryScope.Retries
 - uid: Google.GenAI.Live
   name: Live
   href: api/Google.GenAI.Live.html

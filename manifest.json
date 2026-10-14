@@ -1,4 +1,5 @@
 {
+  "docfx_version": "2.81.0+ba844df625370a6bd7c1ecab0d0ec4d1d9128ac4",
   "source_base_path": "/home/runner/work/dotnet-genai/dotnet-genai",
   "xrefmap": "xrefmap.yml",
   "files": [
@@ -165,6 +166,20 @@
       "IsMRef": true,
       "Title": "Google.GenAI.HttpApiResponse",
       "Summary": "<p sourcefile=\"api/Google.GenAI.HttpApiResponse.yml\" sourcestartlinenumber=\"1\">Wraps a real HTTP response (HttpResponseMessage) to expose the methods needed by the GenAI SDK.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Google.GenAI.HttpRetryScope.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Google.GenAI.HttpRetryScope.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Google.GenAI.HttpRetryScope",
+      "Summary": "<p sourcefile=\"api/Google.GenAI.HttpRetryScope.yml\" sourcestartlinenumber=\"1\">Counts extra HTTP attempts on the current async flow. The caller holds the\nscope; <xref href=\"Google.GenAI.ApiClient\" data-throw-if-not-resolved=\"false\"></xref> writes into that same object, so the count\nis visible after the send returns. No scope means nobody is listening.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -7474,11 +7489,11 @@
       "type": "Toc",
       "source_relative_path": "api/toc.yml",
       "output": {
-        ".json": {
-          "relative_path": "api/toc.json"
-        },
         ".html": {
           "relative_path": "api/toc.html"
+        },
+        ".json": {
+          "relative_path": "api/toc.json"
         }
       },
       "version": ""
@@ -7497,11 +7512,11 @@
       "type": "Toc",
       "source_relative_path": "toc.yml",
       "output": {
-        ".json": {
-          "relative_path": "toc.json"
-        },
         ".html": {
           "relative_path": "toc.html"
+        },
+        ".json": {
+          "relative_path": "toc.json"
         }
       },
       "version": ""
