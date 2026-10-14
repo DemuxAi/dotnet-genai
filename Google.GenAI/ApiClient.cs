@@ -110,6 +110,7 @@ namespace Google.GenAI
 
         if (attempt >= attempts)
         {
+          NoteRetries(attempt);
           if (transportFailure != null)
           {
             throw transportFailure;
@@ -120,6 +121,7 @@ namespace Google.GenAI
         if (transportFailure == null &&
             (response!.IsSuccessStatusCode || !retryableCodes.Contains((int)response.StatusCode)))
         {
+          NoteRetries(attempt);
           return response;
         }
 
@@ -129,6 +131,9 @@ namespace Google.GenAI
             .ConfigureAwait(false);
       }
     }
+
+    /// <summary>Extra attempts after the first. A listening <see cref="HttpRetryScope"/> keeps the count.</summary>
+    private static void NoteRetries(int attempt) => HttpRetryScope.Record(attempt - 1);
 
     /// <summary>
     /// Reports whether a failed send is worth repeating. A caller cancellation is not.
