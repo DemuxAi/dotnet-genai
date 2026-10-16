@@ -46,6 +46,16 @@ namespace Google.GenAI.Types {
           }
 
     /// <summary>
+    /// The speaker identifier for synthesis.
+    /// </summary>
+    [JsonPropertyName("voice")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public string
+        ? Voice {
+            get; set;
+          }
+
+    /// <summary>
     /// Deserializes a JSON string to a VoiceConfig object.
     /// </summary>
     /// <param name="jsonString">The JSON string to deserialize.</param>

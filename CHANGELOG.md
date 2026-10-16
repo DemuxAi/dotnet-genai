@@ -1,5 +1,88 @@
 # Changelog
 
+## Version 1.26.1, released 2026-10-14
+
+
+### Bug fixes
+
+* clear continuation state and preserve prompt feedback when continuation hop returns no candidates ([6b4a712](https://github.com/googleapis/dotnet-genai/commit/6b4a7123e15a92b0cb661a3648ab7032cb00bff3))
+* fix the grounding metadata merging for automatic continuation in generate content and generate content stream ([24e77d2](https://github.com/googleapis/dotnet-genai/commit/24e77d2df49ab5f311fac5e0d1ece7e0bb3f620a))
+* make continuation streams retry dropped hops, stop on prompt_feedback, and keep real errors in generate_content ([71b3539](https://github.com/googleapis/dotnet-genai/commit/71b3539b1671626027b0fece1a8c1987ac4b1845))
+
+## Version 1.26.0, released 2026-10-13
+
+
+### New features
+
+* accumulate streaming continuation usage and expose InitialPromptTokenCount ([77bb16c](https://github.com/googleapis/dotnet-genai/commit/77bb16c45c477a222201e28f8f2e760c21883ef9))
+* Add startOffset/endOffset to Transcription and interimTranscriptTimestampEnabled to RealtimeInputConfig ([57dc2b0](https://github.com/googleapis/dotnet-genai/commit/57dc2b045caab11596047ec8bafc42f5f74d3d8d))
+* **cli:** update Speakeasy generator to v2.948.0, bump CLI to v0.4.2, and apply CLI overlay fixes ([1398a5c](https://github.com/googleapis/dotnet-genai/commit/1398a5c28864fbad946a63bbc07227b7b6a01c08))
+* Support automatic continuation (long decoding) ([0f18069](https://github.com/googleapis/dotnet-genai/commit/0f18069b5f6713ac33c7cb1a04ce669f239d88be))
+
+
+### Bug fixes
+
+* clear intermediate CONTINUATION FinishReason in streaming continuation ([b5d5ee4](https://github.com/googleapis/dotnet-genai/commit/b5d5ee4e19c76d619458a1575c19667287c652e6))
+* Raise default HTTP timeouts so long-running requests aren't killed client-side ([53e4ea1](https://github.com/googleapis/dotnet-genai/commit/53e4ea17687ab1fdf2e9c26771f9cdc093d0faf4))
+* resume streaming generation from the latest checkpoint continuation token on mid-stream errors or cutoffs ([eefb99d](https://github.com/googleapis/dotnet-genai/commit/eefb99deea084aa999ba36d79de99bf52029aefb))
+
+## Version 1.25.0, released 2026-10-07
+
+
+### New features
+
+* update discovery doc ([3facc36](https://github.com/googleapis/dotnet-genai/commit/3facc36efb5da2dbda7e1e57e6cae8bd23bc218e))
+
+
+### Documentation improvements
+
+* update generated SDK docstring examples to use gemini-flash-latest ([002b76b](https://github.com/googleapis/dotnet-genai/commit/002b76b5427b5a9c955863e2526bc63377dad3f5))
+
+## Version 1.24.0, released 2026-10-01
+
+
+### New features
+
+* support continuation_token in GenerateContent ([8aeda26](https://github.com/googleapis/dotnet-genai/commit/8aeda26a35eb53fbd9fbe1b97ba512af4837ad3f))
+
+## Version 1.23.0, released 2026-09-29
+
+
+### New features
+
+* add gcs_metrics_uri for exporting tuning job metrics. ([f50cea2](https://github.com/googleapis/dotnet-genai/commit/f50cea2e8a0454e8d8d360448b2ed5c06a91ee81))
+* include labels for LiveClientSetup ([1714599](https://github.com/googleapis/dotnet-genai/commit/1714599d6553038c31cb6c251c854584672c2866))
+
+## Version 1.22.0, released 2026-09-22
+
+
+### New features
+
+* **dotnet:** unify exception hierarchy ([9994576](https://github.com/googleapis/dotnet-genai/commit/99945768d08321457d4ee92ff3f16776478d9f25))
+* expose SpeechMetadata, VoiceConfig.voice, and SpeechAnnotation in public GenAI SDKs ([49d72c2](https://github.com/googleapis/dotnet-genai/commit/49d72c22b1738af9b82437d979265bfc567e0315))
+* pass RetryOptions (backoff timing + num attempts) to gaos ([b45b7a9](https://github.com/googleapis/dotnet-genai/commit/b45b7a921d05f7cff66847c0754e6220eb8b4247))
+* support labels for Gemini API GenerateContent ([2c48284](https://github.com/googleapis/dotnet-genai/commit/2c4828406f8a95af43830839c559ff41a4952fa6))
+* update discovery doc ([3078fc9](https://github.com/googleapis/dotnet-genai/commit/3078fc9e3558d27d4c91c57190686023449fef96))
+
+
+### Documentation improvements
+
+* update GenAI SDK README files to use gemini-flash-latest ([009ce28](https://github.com/googleapis/dotnet-genai/commit/009ce287d80fdc9b2c851bc1aab01e40eb17e2bb))
+
+## Version 1.21.1, released 2026-09-11
+
+
+### Bug fixes
+
+* Supply options with a resolver that covers System.String in Transformers ([68fa69f](https://github.com/googleapis/dotnet-genai/commit/68fa69f10aa07f46e966fed6985cd57558a623d0)), refs [#421](https://github.com/googleapis/dotnet-genai/issues/421)
+
+## Version 1.21.0, released 2026-08-31
+
+
+### New features
+
+* Add translation_config SDK support for GEAP. ([87555fd](https://github.com/googleapis/dotnet-genai/commit/87555fdde3fc63a934000f259f73eaf8c1021911))
+
 ## Version 1.20.0, released 2026-08-25
 
 

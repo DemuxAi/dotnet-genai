@@ -78,28 +78,6 @@ namespace Google.GenAI {
       return toObject;
     }
 
-    internal JsonNode BlobToMldev(JsonNode fromObject, JsonObject parentObject,
-                                  JsonNode rootObject) {
-      JsonObject toObject = new JsonObject();
-
-      if (Common.GetValueByPath(fromObject, new string[] { "data" }) != null) {
-        Common.SetValueByPath(toObject, new string[] { "data" },
-                              Common.GetValueByPath(fromObject, new string[] { "data" }));
-      }
-
-      if (!Common.IsZero(Common.GetValueByPath(fromObject, new string[] { "displayName" }))) {
-        throw new NotSupportedException(
-            "displayName parameter is only supported in Gemini Enterprise Agent Platform mode, not in Gemini Developer API mode.");
-      }
-
-      if (Common.GetValueByPath(fromObject, new string[] { "mimeType" }) != null) {
-        Common.SetValueByPath(toObject, new string[] { "mimeType" },
-                              Common.GetValueByPath(fromObject, new string[] { "mimeType" }));
-      }
-
-      return toObject;
-    }
-
     internal JsonNode CandidateFromMldev(JsonNode fromObject, JsonObject parentObject,
                                          JsonNode rootObject) {
       JsonObject toObject = new JsonObject();
@@ -159,6 +137,12 @@ namespace Google.GenAI {
             Common.GetValueByPath(fromObject, new string[] { "urlContextMetadata" }));
       }
 
+      if (Common.GetValueByPath(fromObject, new string[] { "continuationToken" }) != null) {
+        Common.SetValueByPath(
+            toObject, new string[] { "continuationToken" },
+            Common.GetValueByPath(fromObject, new string[] { "continuationToken" }));
+      }
+
       return toObject;
     }
 
@@ -214,38 +198,6 @@ namespace Google.GenAI {
       if (Common.GetValueByPath(fromObject, new string[] { "tokensInfo" }) != null) {
         Common.SetValueByPath(toObject, new string[] { "tokensInfo" },
                               Common.GetValueByPath(fromObject, new string[] { "tokensInfo" }));
-      }
-
-      return toObject;
-    }
-
-    internal JsonNode ComputerUseToVertex(JsonNode fromObject, JsonObject parentObject,
-                                          JsonNode rootObject) {
-      JsonObject toObject = new JsonObject();
-
-      if (Common.GetValueByPath(fromObject, new string[] { "environment" }) != null) {
-        Common.SetValueByPath(toObject, new string[] { "environment" },
-                              Common.GetValueByPath(fromObject, new string[] { "environment" }));
-      }
-
-      if (Common.GetValueByPath(fromObject, new string[] { "excludedPredefinedFunctions" }) !=
-          null) {
-        Common.SetValueByPath(
-            toObject, new string[] { "excludedPredefinedFunctions" },
-            Common.GetValueByPath(fromObject, new string[] { "excludedPredefinedFunctions" }));
-      }
-
-      if (Common.GetValueByPath(fromObject, new string[] { "enablePromptInjectionDetection" }) !=
-          null) {
-        Common.SetValueByPath(
-            toObject, new string[] { "enablePromptInjectionDetection" },
-            Common.GetValueByPath(fromObject, new string[] { "enablePromptInjectionDetection" }));
-      }
-
-      if (!Common.IsZero(
-              Common.GetValueByPath(fromObject, new string[] { "disabledSafetyPolicies" }))) {
-        throw new NotSupportedException(
-            "disabledSafetyPolicies parameter is only supported in Gemini Developer API mode, not in Gemini Enterprise Agent Platform mode.");
       }
 
       return toObject;
@@ -1077,28 +1029,6 @@ namespace Google.GenAI {
       return toObject;
     }
 
-    internal JsonNode FileDataToMldev(JsonNode fromObject, JsonObject parentObject,
-                                      JsonNode rootObject) {
-      JsonObject toObject = new JsonObject();
-
-      if (!Common.IsZero(Common.GetValueByPath(fromObject, new string[] { "displayName" }))) {
-        throw new NotSupportedException(
-            "displayName parameter is only supported in Gemini Enterprise Agent Platform mode, not in Gemini Developer API mode.");
-      }
-
-      if (Common.GetValueByPath(fromObject, new string[] { "fileUri" }) != null) {
-        Common.SetValueByPath(toObject, new string[] { "fileUri" },
-                              Common.GetValueByPath(fromObject, new string[] { "fileUri" }));
-      }
-
-      if (Common.GetValueByPath(fromObject, new string[] { "mimeType" }) != null) {
-        Common.SetValueByPath(toObject, new string[] { "mimeType" },
-                              Common.GetValueByPath(fromObject, new string[] { "mimeType" }));
-      }
-
-      return toObject;
-    }
-
     internal JsonNode FunctionCallToMldev(JsonNode fromObject, JsonObject parentObject,
                                           JsonNode rootObject) {
       JsonObject toObject = new JsonObject();
@@ -1285,9 +1215,9 @@ namespace Google.GenAI {
                                                 toObject, rootObject));
       }
 
-      if (!Common.IsZero(Common.GetValueByPath(fromObject, new string[] { "labels" }))) {
-        throw new NotSupportedException(
-            "labels parameter is only supported in Gemini Enterprise Agent Platform mode, not in Gemini Developer API mode.");
+      if (Common.GetValueByPath(fromObject, new string[] { "labels" }) != null) {
+        Common.SetValueByPath(parentObject, new string[] { "labels" },
+                              Common.GetValueByPath(fromObject, new string[] { "labels" }));
       }
 
       if (Common.GetValueByPath(fromObject, new string[] { "cachedContent" }) != null) {
@@ -1354,6 +1284,12 @@ namespace Google.GenAI {
         Common.SetValueByPath(
             toObject, new string[] { "audioTranscriptionConfig" },
             Common.GetValueByPath(fromObject, new string[] { "audioTranscriptionConfig" }));
+      }
+
+      if (Common.GetValueByPath(fromObject, new string[] { "continuationToken" }) != null) {
+        Common.SetValueByPath(
+            parentObject, new string[] { "continuationToken" },
+            Common.GetValueByPath(fromObject, new string[] { "continuationToken" }));
       }
 
       return toObject;
@@ -1555,6 +1491,12 @@ namespace Google.GenAI {
         Common.SetValueByPath(
             toObject, new string[] { "audioTranscriptionConfig" },
             Common.GetValueByPath(fromObject, new string[] { "audioTranscriptionConfig" }));
+      }
+
+      if (Common.GetValueByPath(fromObject, new string[] { "continuationToken" }) != null) {
+        Common.SetValueByPath(
+            parentObject, new string[] { "continuationToken" },
+            Common.GetValueByPath(fromObject, new string[] { "continuationToken" }));
       }
 
       return toObject;
@@ -2611,9 +2553,10 @@ namespace Google.GenAI {
                               Common.GetValueByPath(fromObject, new string[] { "responseFormat" }));
       }
 
-      if (!Common.IsZero(Common.GetValueByPath(fromObject, new string[] { "translationConfig" }))) {
-        throw new NotSupportedException(
-            "translationConfig parameter is only supported in Gemini Developer API mode, not in Gemini Enterprise Agent Platform mode.");
+      if (Common.GetValueByPath(fromObject, new string[] { "translationConfig" }) != null) {
+        Common.SetValueByPath(
+            toObject, new string[] { "translationConfig" },
+            Common.GetValueByPath(fromObject, new string[] { "translationConfig" }));
       }
 
       if (Common.GetValueByPath(fromObject, new string[] { "audioTranscriptionConfig" }) != null) {
@@ -3229,9 +3172,7 @@ namespace Google.GenAI {
 
       if (Common.GetValueByPath(fromObject, new string[] { "fileData" }) != null) {
         Common.SetValueByPath(toObject, new string[] { "fileData" },
-                              FileDataToMldev(Common.ParseToJsonNode(Common.GetValueByPath(
-                                                  fromObject, new string[] { "fileData" })),
-                                              toObject, rootObject));
+                              Common.GetValueByPath(fromObject, new string[] { "fileData" }));
       }
 
       if (Common.GetValueByPath(fromObject, new string[] { "functionCall" }) != null) {
@@ -3249,9 +3190,7 @@ namespace Google.GenAI {
 
       if (Common.GetValueByPath(fromObject, new string[] { "inlineData" }) != null) {
         Common.SetValueByPath(toObject, new string[] { "inlineData" },
-                              BlobToMldev(Common.ParseToJsonNode(Common.GetValueByPath(
-                                              fromObject, new string[] { "inlineData" })),
-                                          toObject, rootObject));
+                              Common.GetValueByPath(fromObject, new string[] { "inlineData" }));
       }
 
       if (Common.GetValueByPath(fromObject, new string[] { "text" }) != null) {
@@ -3300,6 +3239,11 @@ namespace Google.GenAI {
         Common.SetValueByPath(
             toObject, new string[] { "mediaProcessing" },
             Common.GetValueByPath(fromObject, new string[] { "mediaProcessing" }));
+      }
+
+      if (Common.GetValueByPath(fromObject, new string[] { "speechMetadata" }) != null) {
+        Common.SetValueByPath(toObject, new string[] { "speechMetadata" },
+                              Common.GetValueByPath(fromObject, new string[] { "speechMetadata" }));
       }
 
       return toObject;
@@ -3393,6 +3337,11 @@ namespace Google.GenAI {
         Common.SetValueByPath(
             toObject, new string[] { "mediaProcessing" },
             Common.GetValueByPath(fromObject, new string[] { "mediaProcessing" }));
+      }
+
+      if (Common.GetValueByPath(fromObject, new string[] { "speechMetadata" }) != null) {
+        Common.SetValueByPath(toObject, new string[] { "speechMetadata" },
+                              Common.GetValueByPath(fromObject, new string[] { "speechMetadata" }));
       }
 
       return toObject;
@@ -3998,9 +3947,7 @@ namespace Google.GenAI {
 
       if (Common.GetValueByPath(fromObject, new string[] { "computerUse" }) != null) {
         Common.SetValueByPath(toObject, new string[] { "computerUse" },
-                              ComputerUseToVertex(Common.ParseToJsonNode(Common.GetValueByPath(
-                                                      fromObject, new string[] { "computerUse" })),
-                                                  toObject, rootObject));
+                              Common.GetValueByPath(fromObject, new string[] { "computerUse" }));
       }
 
       if (!Common.IsZero(Common.GetValueByPath(fromObject, new string[] { "fileSearch" }))) {
@@ -4478,6 +4425,11 @@ namespace Google.GenAI {
         Common.SetValueByPath(
             toObject, new string[] { "prebuiltVoiceConfig" },
             Common.GetValueByPath(fromObject, new string[] { "prebuiltVoiceConfig" }));
+      }
+
+      if (Common.GetValueByPath(fromObject, new string[] { "voice" }) != null) {
+        Common.SetValueByPath(toObject, new string[] { "voice" },
+                              Common.GetValueByPath(fromObject, new string[] { "voice" }));
       }
 
       return toObject;
@@ -5627,11 +5579,42 @@ namespace Google.GenAI {
     /// cref="CancellationToken"/> to cancel the operation.</param> <returns>A <see
     /// cref="Task{GenerateContentResponse}"/> that represents the asynchronous operation. The task
     /// result contains a <see cref="GenerateContentResponse"/> instance with response contents and
-    /// other metadata.</returns>
+    /// other metadata.</returns> <remarks> A response that stops with finish reason <see
+    /// cref="FinishReason.Continuation"/> is continued automatically: the same request is sent
+    /// again with the response's continuation token until the model finishes. The responses are
+    /// returned merged into one, with their parts concatenated and their usage metadata summed.
+    /// Each request is billed, including any that succeeded before a later one failed. Set <see
+    /// cref="GenerateContentConfig.AutomaticContinuation"/> to <see langword="false"/> to turn this
+    /// off.
+    /// </remarks>
     public async Task<GenerateContentResponse> GenerateContentAsync(
         string model, List<Content> contents, GenerateContentConfig? config = null,
         CancellationToken cancellationToken = default) {
-      return await PrivateGenerateContentAsync(model, contents, config, cancellationToken);
+      bool enableContinuation =
+          ContinuationHelper.ShouldEnableAutomaticContinuation(config, defaultEnabled: true);
+
+      GenerateContentResponse response =
+          await PrivateGenerateContentAsync(model, contents, config, cancellationToken);
+
+      if (!enableContinuation) {
+        return response;
+      }
+
+      List<GenerateContentResponse> hopResponses = new() { response };
+      byte[]? nextToken;
+      while ((nextToken = ContinuationHelper.ShouldContinueGeneration(response)) != null) {
+        GenerateContentConfig callConfig =
+            ContinuationHelper.PrepareContinuationConfig(config, nextToken);
+        response =
+            await PrivateGenerateContentAsync(model, contents, callConfig, cancellationToken);
+        hopResponses.Add(response);
+      }
+
+      if (hopResponses.Count > 1) {
+        response = ContinuationHelper.MergeContinuationResponses(hopResponses);
+      }
+
+      return response;
     }
 
     /// <summary>
@@ -5644,7 +5627,9 @@ namespace Google.GenAI {
     /// cref="CancellationToken"/> to cancel the operation.</param> <returns>A <see
     /// cref="Task{GenerateContentResponse}"/> that represents the asynchronous operation. The task
     /// result contains a <see cref="GenerateContentResponse"/> instance with response contents and
-    /// other metadata.</returns>
+    /// other metadata.</returns> <remarks> Automatic continuation works as described on the
+    /// overload taking a list of content.
+    /// </remarks>
     public async Task<GenerateContentResponse> GenerateContentAsync(
         string model, Content contents, GenerateContentConfig? config = null,
         CancellationToken cancellationToken = default) {
@@ -5662,7 +5647,9 @@ namespace Google.GenAI {
     /// cref="CancellationToken"/> to cancel the operation.</param> <returns>A <see
     /// cref="Task{GenerateContentResponse}"/> that represents the asynchronous operation. The task
     /// result contains a <see cref="GenerateContentResponse"/> instance with response contents and
-    /// other metadata.</returns>
+    /// other metadata.</returns> <remarks> Automatic continuation works as described on the
+    /// overload taking a list of content.
+    /// </remarks>
     public async Task<GenerateContentResponse> GenerateContentAsync(
         string model, string contents, GenerateContentConfig? config = null,
         CancellationToken cancellationToken = default) {
@@ -5678,13 +5665,46 @@ namespace Google.GenAI {
     /// model.</param> <param name="config">A <see cref="GenerateContentConfig"/> instance that
     /// specifies the optional configurations.</param> <param name="cancellationToken">A <see
     /// cref="CancellationToken"/> to cancel the operation.</param> <returns>An async enumerable of
-    /// <see cref="GenerateContentResponse"/> chunks.</returns>
+    /// <see cref="GenerateContentResponse"/> chunks.</returns> <remarks> A response that stops with
+    /// finish reason <see cref="FinishReason.Continuation"/> is continued automatically: the same
+    /// request is sent again with the response's continuation token until the model finishes, and
+    /// the chunks of every request are emitted in order. The usage metadata in a chunk is
+    /// accumulated across continuation requests. Each request is billed, including any that
+    /// succeeded before a later one failed. Set <see
+    /// cref="GenerateContentConfig.AutomaticContinuation"/> to <see langword="false"/> to turn this
+    /// off.
+    /// </remarks>
     public async IAsyncEnumerable<GenerateContentResponse> GenerateContentStreamAsync(
         string model, List<Content> contents, GenerateContentConfig? config = null,
         [EnumeratorCancellation] CancellationToken cancellationToken = default) {
-      await foreach (var response in PrivateGenerateContentStreamAsync(model, contents, config,
-                                                                       cancellationToken)) {
-        yield return response;
+      var state = new StreamContinuation(config);
+      while (true) {
+        GenerateContentConfig? callConfig = state.StartHop();
+        System.Runtime.ExceptionServices.ExceptionDispatchInfo? error = null;
+
+        await using var enumerator =
+            PrivateGenerateContentStreamAsync(model, contents, callConfig, cancellationToken)
+                .GetAsyncEnumerator(cancellationToken);
+        while (true) {
+          GenerateContentResponse chunk;
+          try {
+            if (!await enumerator.MoveNextAsync()) {
+              break;
+            }
+            chunk = enumerator.Current;
+          } catch (Exception ex) when (!cancellationToken.IsCancellationRequested) {
+            // An OperationCanceledException here, with the caller's token not cancelled,
+            // is the HttpOptions.Timeout deadline firing mid-stream: treat it as a dropped hop.
+            error = System.Runtime.ExceptionServices.ExceptionDispatchInfo.Capture(ex);
+            break;
+          }
+          yield return state.Observe(chunk);
+        }
+
+        // Rethrows error if the stream can't be resumed.
+        if (!state.EndHop(error)) {
+          yield break;
+        }
       }
     }
 
@@ -5696,7 +5716,9 @@ namespace Google.GenAI {
     /// model.</param> <param name="config">A <see cref="GenerateContentConfig"/> instance that
     /// specifies the optional configurations.</param> <param name="cancellationToken">A <see
     /// cref="CancellationToken"/> to cancel the operation.</param> <returns>An async enumerable of
-    /// <see cref="GenerateContentResponse"/> chunks.</returns>
+    /// <see cref="GenerateContentResponse"/> chunks.</returns> <remarks> Automatic continuation
+    /// works as described on the overload taking a list of content.
+    /// </remarks>
     public async IAsyncEnumerable<GenerateContentResponse> GenerateContentStreamAsync(
         string model, Content contents, GenerateContentConfig? config = null,
         [EnumeratorCancellation] CancellationToken cancellationToken = default) {
@@ -5715,7 +5737,9 @@ namespace Google.GenAI {
     /// <param name="config">A <see cref="GenerateContentConfig"/> instance that specifies the
     /// optional configurations.</param> <param name="cancellationToken">A <see
     /// cref="CancellationToken"/> to cancel the operation.</param> <returns>An async enumerable of
-    /// <see cref="GenerateContentResponse"/> chunks.</returns>
+    /// <see cref="GenerateContentResponse"/> chunks.</returns> <remarks> Automatic continuation
+    /// works as described on the overload taking a list of content.
+    /// </remarks>
     public async IAsyncEnumerable<GenerateContentResponse> GenerateContentStreamAsync(
         string model, string contents, GenerateContentConfig? config = null,
         [EnumeratorCancellation] CancellationToken cancellationToken = default) {

@@ -29,57 +29,27 @@ namespace Google.GenAI
   /// <summary>
   /// Represents a client error (4xx HTTP status codes) from the API.
   /// </summary>
-  public class ClientError : HttpRequestException
+  public class ClientError : ApiException
   {
-    public int StatusCode { get; }
-    public string? Status { get; }
-
-    public ClientError(string message) : base(message)
+    public ClientError(string message, Exception? innerException = null) : base(message, innerException)
     {
     }
 
-    public ClientError(string message, int statusCode, string? status = null) : base(message)
+    public ClientError(string message, int statusCode, string? status = null, Exception? innerException = null) : base(message, statusCode, status, innerException)
     {
-      StatusCode = statusCode;
-      Status = status;
-    }
-
-    public ClientError(string message, Exception innerException) : base(message, innerException)
-    {
-    }
-
-    public ClientError(string message, int statusCode, string? status, Exception innerException) : base(message, innerException)
-    {
-      StatusCode = statusCode;
-      Status = status;
     }
   }
   /// <summary>
   /// Represents a server error (5xx HTTP status codes) from the API.
   /// </summary>
-  public class ServerError : HttpRequestException
+  public class ServerError : ApiException
   {
-    public int StatusCode { get; }
-    public string? Status { get; }
-
-    public ServerError(string message) : base(message)
+    public ServerError(string message, Exception? innerException = null) : base(message, innerException)
     {
     }
 
-    public ServerError(string message, int statusCode, string? status = null) : base(message)
+    public ServerError(string message, int statusCode, string? status = null, Exception? innerException = null) : base(message, statusCode, status, innerException)
     {
-      StatusCode = statusCode;
-      Status = status;
-    }
-
-    public ServerError(string message, Exception innerException) : base(message, innerException)
-    {
-    }
-
-    public ServerError(string message, int statusCode, string? status, Exception innerException) : base(message, innerException)
-    {
-      StatusCode = statusCode;
-      Status = status;
     }
   }
   public class HttpApiClient : ApiClient
@@ -102,11 +72,15 @@ namespace Google.GenAI
         Types.HttpOptions? requestHttpOptions,
         CancellationToken cancellationToken = default)
     {
-      HttpResponseMessage response = await SendWithRetryAsync(
+      Types.HttpOptions mergedHttpOptions = MergeHttpOptions(requestHttpOptions);
+      var (response, attemptTimeout) = await SendWithRetryAsync(
           () => CreateHttpRequestAsync(httpMethod, path, requestJson, requestHttpOptions),
           HttpCompletionOption.ResponseContentRead,
-          MergeHttpOptions(requestHttpOptions).RetryOptions,
+          mergedHttpOptions.RetryOptions,
+          GetEffectiveTimeout(requestHttpOptions),
           cancellationToken);
+      // ResponseContentRead has already buffered the body, so the deadline is no longer needed.
+      attemptTimeout?.Dispose();
       if (!response.IsSuccessStatusCode)
       {
         try
@@ -129,11 +103,15 @@ namespace Google.GenAI
         Types.HttpOptions? requestHttpOptions,
         CancellationToken cancellationToken = default)
     {
-      HttpResponseMessage response = await SendWithRetryAsync(
+      Types.HttpOptions mergedHttpOptions = MergeHttpOptions(requestHttpOptions);
+      var (response, attemptTimeout) = await SendWithRetryAsync(
           () => CreateHttpRequestAsync(httpMethod, url, requestBytes, requestHttpOptions),
           HttpCompletionOption.ResponseContentRead,
-          MergeHttpOptions(requestHttpOptions).RetryOptions,
+          mergedHttpOptions.RetryOptions,
+          GetEffectiveTimeout(requestHttpOptions),
           cancellationToken);
+      // ResponseContentRead has already buffered the body, so the deadline is no longer needed.
+      attemptTimeout?.Dispose();
       if (!response.IsSuccessStatusCode)
       {
         try
@@ -156,13 +134,20 @@ namespace Google.GenAI
         Types.HttpOptions? requestHttpOptions,
         [EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
+      Types.HttpOptions mergedHttpOptions = MergeHttpOptions(requestHttpOptions);
+
       // Only the initial send is retried; a stream cannot be restarted mid-flight.
-      HttpResponseMessage response = await SendWithRetryAsync(
+      var (response, attemptTimeout) = await SendWithRetryAsync(
         () => CreateHttpRequestAsync(httpMethod, path, requestJson, requestHttpOptions),
         // Use ResponseHeadersRead to avoid buffering the entire response
         HttpCompletionOption.ResponseHeadersRead,
-        MergeHttpOptions(requestHttpOptions).RetryOptions,
+        mergedHttpOptions.RetryOptions,
+        GetEffectiveTimeout(requestHttpOptions),
         cancellationToken);
+      // The successful attempt's deadline also covers reading the stream body, so it is a
+      // total deadline for that attempt's whole stream, not just its headers.
+      using var attemptTimeoutScope = attemptTimeout;
+      CancellationToken effectiveToken = attemptTimeout?.Token ?? cancellationToken;
       if (!response.IsSuccessStatusCode)
       {
         try
@@ -179,10 +164,10 @@ namespace Google.GenAI
 #if NETSTANDARD2_0_OR_GREATER
       using (var stream = await response.Content.ReadAsStreamAsync())
 #else
-      using (var stream = await response.Content.ReadAsStreamAsync(cancellationToken))
+      using (var stream = await response.Content.ReadAsStreamAsync(effectiveToken))
 #endif
       {
-        await foreach (string chunk in ProcessStreamResponse(stream, cancellationToken))
+        await foreach (string chunk in ProcessStreamResponse(stream, effectiveToken))
         {
           yield return new StreamingApiResponse(chunk, response);
         }

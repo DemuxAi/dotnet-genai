@@ -270,7 +270,7 @@ namespace Google.GenAI.Types {
           }
 
     /// <summary>
-    /// Labels with user-defined metadata to break down billed charges.
+    /// Labels with user-defined metadata for the request.
     /// </summary>
     [JsonPropertyName("labels")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -389,6 +389,29 @@ namespace Google.GenAI.Types {
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public AudioTranscriptionConfig
         ? AudioTranscriptionConfig {
+            get; set;
+          }
+
+    /// <summary>
+    /// An opaque continuation token used to resume generation from a previous response that stopped
+    /// with `finish_reason` set to `CONTINUATION`.
+    /// </summary>
+    [JsonPropertyName("continuationToken")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public byte[]
+        ? ContinuationToken {
+            get; set;
+          }
+
+    /// <summary>
+    /// Defaults to true. When a response ends with finish reason `CONTINUATION`, the SDK sends the
+    /// same request again with the response's continuation token until the model finishes.
+    /// Timeouts, retries and billing apply to each request. Set to false to turn this off.
+    /// </summary>
+    [JsonPropertyName("automaticContinuation")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public bool
+        ? AutomaticContinuation {
             get; set;
           }
 

@@ -25,7 +25,7 @@ namespace Google.GenAI.E2E.Tests.Shared
         protected Client geminiClient;
 
         /// <summary>Flash is cheaper and faster than the corpus GEMINI_MODEL for API-mode runs.</summary>
-        protected string modelName = "gemini-3.6-flash";
+        protected string modelName = "gemini-3.8-flash";
 
         /// <summary>
         /// Region a test class needs its Vertex client pinned to, or null to use
@@ -45,9 +45,9 @@ namespace Google.GenAI.E2E.Tests.Shared
         private static HttpRetryOptions NewSharedTestRetryOptions() =>
             new HttpRetryOptions
             {
-                Attempts = 3,
-                InitialDelay = 1.0,
-                MaxDelay = 10.0,
+                Attempts = 5,
+                InitialDelay = 2.0,
+                MaxDelay = 16.0,
                 ExpBase = 2.0,
                 HttpStatusCodes = new List<int> { 408, 429, 500, 502, 503, 504 },
             };
