@@ -29,6 +29,20 @@
     },
     {
       "type": "ManagedReference",
+      "source_relative_path": "api/Google.GenAI.ApiException.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Google.GenAI.ApiException.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Google.GenAI.ApiException",
+      "Summary": "<p sourcefile=\"api/Google.GenAI.ApiException.yml\" sourcestartlinenumber=\"1\">Base exception for API errors. Root of the unified error hierarchy: both the\nnative <xref href=\"Google.GenAI.ClientError\" data-throw-if-not-resolved=\"false\"></xref>/<xref href=\"Google.GenAI.ServerError\" data-throw-if-not-resolved=\"false\"></xref> tree (model calls)\nand the embedded gaos error tree derive from it, so a single\n<code>catch (ApiException)</code> covers every API error.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
       "source_relative_path": "api/Google.GenAI.ApiResponse.yml",
       "output": {
         ".html": {
@@ -4295,7 +4309,7 @@
       "Uid": null,
       "IsMRef": true,
       "Title": "Google.GenAI.Types.McpServer",
-      "Summary": "<p sourcefile=\"api/Google.GenAI.Types.McpServer.yml\" sourcestartlinenumber=\"1\">A MCPServer is a server that can be called by the model to perform actions. It is a server\nthat implements the MCP protocol. Next ID: 6. This data type is not supported in Vertex AI.</p>\n"
+      "Summary": "<p sourcefile=\"api/Google.GenAI.Types.McpServer.yml\" sourcestartlinenumber=\"1\">A MCPServer is a server that can be called by the model to perform actions. It is a server\nthat implements the MCP protocol. Next ID: 7. This data type is not supported in Vertex AI.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -5892,6 +5906,20 @@
       "IsMRef": true,
       "Title": "Google.GenAI.Types.SpeechConfig",
       "Summary": "<p sourcefile=\"api/Google.GenAI.Types.SpeechConfig.yml\" sourcestartlinenumber=\"1\">Config for speech generation and transcription.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Google.GenAI.Types.SpeechMetadata.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Google.GenAI.Types.SpeechMetadata.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Google.GenAI.Types.SpeechMetadata",
+      "Summary": "<p sourcefile=\"api/Google.GenAI.Types.SpeechMetadata.yml\" sourcestartlinenumber=\"1\">Extra metadata associated with the part for speech synthesis.</p>\n"
     },
     {
       "type": "ManagedReference",
